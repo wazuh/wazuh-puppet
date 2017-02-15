@@ -75,13 +75,8 @@ class wazuh::repo (
             $repotype = 'CentOS > 5'
             $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
             $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-            }
-          }
-        } elsif ( $::os[name] == 'Fedora' ) {
-            $repotype = 'Fedora'
-            $baseurl  = 'https://packages.wazuh.com/yum/fc/$releasever/$basearch'
-            $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-          }
+          } 
+       }
       }
       # Set up OSSEC repo
       yumrepo { 'wazuh':

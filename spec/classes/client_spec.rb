@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'ossec::client' do
+describe 'wazuh::client' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let (:facts) do
@@ -18,7 +18,7 @@ describe 'ossec::client' do
           }
         end
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to contain_class('ossec::client') }
+        it { is_expected.to contain_class('wazuh::client') }
         it { is_expected.not_to contain_Concat__Fragment('ossec.conf_10').with_content(/<server-hostname>local.test<\/server-hostname>/) }
         it { is_expected.to contain_Concat__Fragment('ossec.conf_10').with_content(/<server-ip>127.0.0.1<\/server-ip>/) }
       end
@@ -30,7 +30,7 @@ describe 'ossec::client' do
           }
         end
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to contain_class('ossec::client') }
+        it { is_expected.to contain_class('wazuh::client') }
         it { is_expected.not_to contain_Concat__Fragment('ossec.conf_10').with_content(/<server-ip>127.0.0.1<\/server-ip>/) }
         it { is_expected.to contain_Concat__Fragment('ossec.conf_10').with_content(/<server-hostname>local.test<\/server-hostname>/) }
       end

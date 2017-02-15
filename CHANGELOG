@@ -194,7 +194,7 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Add MariaDB support ( (pull reques #3 thanks @ialokin)
   * Permit admin to disable auto_ignore for files which change more than three times. (pull request #24 thanks @cmblong)
   * Change fqdn_rand(3000) to a variable to allow us to increase the number of available clients. (pull request #25 thanks @cmblong)
-  * Can now set a minimal activeresponse entry containing just repeated_offenders by defining $ar_repeated_offenders in the ossec::client. (pull request #26 thanks @ialokin)
+  * Can now set a minimal activeresponse entry containing just repeated_offenders by defining $ar_repeated_offenders in the wazuh::client. (pull request #26 thanks @ialokin)
   * Add variable to enable prefilter command.  (pull request #27 thanks @cmblong)
   * Set service provider to redhat on Redhat systems. (pull request #28 thanks @cmblong))
 

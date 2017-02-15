@@ -17,7 +17,7 @@
   "manifests/export_agent_key.pp": "adf99aa28d00c23d21c4eeb6e3f85955",
   "manifests/init.pp": "7169001dff13c2989a2f5109a7308647",
   "manifests/params.pp": "7b6cd556d27d3db53e81a52bacfd156b",
-  "manifests/repo.pp": "cc178f7ddc90b3770113c7c592d63f04",
+  "manifests/repo.pp": "83a349f3b2679a4dab009589e46f268c",
   "manifests/server.pp": "9fd894d694d487ead4b145bef98f91fd",
   "metadata.json": "209e386718cb5881e0380429ba78962c",
   "spec/classes/client_spec.rb": "debe7cdc42dc55ab30039c84b81b16bd",

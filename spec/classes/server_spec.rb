@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'ossec::server' do
+describe 'wazuh::server' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let (:facts) do
@@ -18,7 +18,7 @@ describe 'ossec::server' do
           }
         end
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to contain_class('ossec::server') }
+        it { is_expected.to contain_class('wazuh::server') }
       end
     end
   end

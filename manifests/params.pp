@@ -1,5 +1,5 @@
 # Paramas file
-class ossec::params {
+class wazuh::params {
   case $::kernel {
     'Linux': {
 
@@ -23,7 +23,7 @@ class ossec::params {
 
           $agent_service  = 'ossec'
 
-          $agent_package  = 'ossec-hids-agent'
+          $agent_package  = 'wazuh-agent'
 
           $service_has_status  = false
 
@@ -40,12 +40,12 @@ class ossec::params {
 
           case $::lsbdistcodename {
             /(precise|trusty|vivid|wily|xenial)/: {
-              $server_service = 'ossec'
-              $server_package = 'ossec-hids'
+              $server_service = 'wazuh-manager'
+              $server_package = 'wazuh-manager'
             }
             /^(jessie|wheezy|stretch|sid)$/: {
-              $server_service = 'ossec'
-              $server_package = 'ossec-hids'
+              $server_service = 'wazuh-manager'
+              $server_package = 'wazuh-manager'
             }
             default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
           }
@@ -53,13 +53,13 @@ class ossec::params {
         }
         'Linux', 'RedHat': {
 
-          $agent_service  = 'ossec-hids-agent'
+          $agent_service  = 'wazuh-agent'
 
-          $agent_package  = 'ossec-hids-agent'
+          $agent_package  = 'wazuh-agent'
 
-          $server_service = 'ossec-hids'
+          $server_service = 'wazuh-manager'
 
-          $server_package = 'ossec-hids'
+          $server_package = 'wazuh-manager'
 
           $service_has_status  = true
 

@@ -1,4 +1,4 @@
 # Class to collect the agent keys
-class ossec::collect_agent_keys {
-  Ossec::Agentkey<<| |>>
+class wazuh::collect_agent_keys {
+  Wazuh::Agentkey<<| |>>
 }

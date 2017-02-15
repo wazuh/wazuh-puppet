@@ -1,12 +1,12 @@
 # Define an email alert
-define ossec::email_alert(
+define wazuh::email_alert(
   $alert_email,
   $alert_group = false
 ) {
-  require ossec::params
+  require wazuh::params
 
   concat::fragment { $name:
-    target  => $ossec::params::config_file,
+    target  => $wazuh::params::config_file,
     order   => 65,
     content => template('ossec/email_alert.erb'),
   }
