@@ -7,7 +7,21 @@
   "source": "https://github.com/wazuh/wazuh-puppet",
   "project_page": "https://github.com/wazuh/wazuh-puppet",
   "issues_url": "https://github.com/wazuh/wazuh-puppet/issues",
-  "tags": ["ossec", "hids", "2.0", "wazuh"],
+  "dependencies": [
+    {"name":"puppetlabs/stdlib"},
+    {"name":"puppetlabs/concat"},
+    {"name":"stahnma/epel"},
+    {"name":"puppetlabs/apt"},
+    {"name":"jfryman/selinux"},
+    {"name":"puppetlabs/mysql"}
+  ],
+  "data_provider": null,
+  "tags": [
+    "ossec",
+    "hids",
+    "2.0",
+    "wazuh"
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Windows",
@@ -20,7 +34,7 @@
         "Windows 10"
       ]
     },
-   {
+    {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "5",
@@ -55,32 +69,6 @@
         "Stretch",
         "Sid"
       ]
-    }
-  ],
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_range": ">= 1.0.0"
-    },
-    {
-      "name": "puppetlabs/concat",
-      "version_range": ">= 1.0.0"
-    },
-    {
-      "name": "stahnma/epel",
-      "version_range": ">= 1.0.0"
-    },
-    {
-      "name": "puppetlabs/apt",
-      "version_range": ">= 2.0.0"
-    },
-    {
-      "name": "jfryman/selinux",
-      "version_range": ">= 0.2.3"
-    },
-    { 
-      "name": "puppetlabs/mysql",
-      "version_range": ">= 2.0.0"
     }
   ]
 }
