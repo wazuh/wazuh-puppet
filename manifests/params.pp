@@ -21,7 +21,7 @@ class wazuh::params {
       case $::osfamily {
         'Debian': {
 
-          $agent_service  = 'ossec'
+          $agent_service  = 'wazuh-agent'
           $agent_package  = 'wazuh-agent'
           $service_has_status  = false
           $ossec_service_provider = undef
