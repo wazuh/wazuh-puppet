@@ -22,11 +22,8 @@ class wazuh::params {
         'Debian': {
 
           $agent_service  = 'ossec'
-
           $agent_package  = 'wazuh-agent'
-
           $service_has_status  = false
-
           $ossec_service_provider = undef
 
           $default_local_files = {
@@ -54,15 +51,10 @@ class wazuh::params {
         'Linux', 'RedHat': {
 
           $agent_service  = 'wazuh-agent'
-
           $agent_package  = 'wazuh-agent'
-
           $server_service = 'wazuh-manager'
-
           $server_package = 'wazuh-manager'
-
           $service_has_status  = true
-
           $ossec_service_provider = 'redhat'
 
           $default_local_files = {
@@ -88,13 +80,9 @@ class wazuh::params {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-
       $agent_package  = 'OSSEC HIDS 2.8.3'
-
       $server_service = ''
-
       $server_package = ''
-
       $service_has_status  = true
 
       # Pushed by shared agent config now

@@ -1,2 +1,2 @@
 # Blank container class
-class ossec { }
+class wazuh { }
