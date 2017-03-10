@@ -1,5 +1,9 @@
 # This file managed by Puppet.
 # Any changes will be overwritten
-<% if @syslog_output == true then -%>
+<% if @syslog_output -%>
 CSYSLOG_DAEMON=ossec-csyslogd
+<% end -%>
+
+<% if @use_mysql -%>
+DB_DAEMON=ossec-dbd
 <% end -%>

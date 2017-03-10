@@ -1,0 +1,69 @@
+  <global>
+    <jsonout_output>yes</jsonout_output>
+    <alerts_log>yes</alerts_log>
+    <logall>no</logall>
+    <logall_json>no</logall_json>
+  <% if @ossec_emailnotification -%>
+    <email_notification>yes</email_notification>
+    <% @ossec_emailto.each do |emailto| -%>
+    <email_to><%= emailto %></email_to>
+    <% end -%>
+    <smtp_server><%= @smtp_server %></smtp_server>
+    <email_from><%= @ossec_emailfrom %></email_from>
+    <email_maxperhour><%= @ossec_email_maxperhour %></email_maxperhour>
+    <%- unless @ossec_email_idsname.nil? -%>
+    <email_idsname><%= @ossec_email_idsname %></email_idsname>
+    <%- end -%>
+  <%- else -%>
+  <email_notification>no</email_notification>
+  <%- end -%>
+    <stats><%= @ossec_global_stat_level %></stats>
+    <host_information><%= @ossec_global_host_information_level %></host_information>
+    <%- @ossec_white_list.each do |ipaddress| -%><white_list><%= ipaddress %></white_list>
+    <%- end -%>
+  </global>
+  
+<%- if @syslog_output -%>
+  <syslog_output>
+    <server><%= @syslog_output_server %></server>
+    <format><%= @syslog_output_format %></format>
+  </syslog_output>
+<%- end -%>
+<%- if @use_mysql -%>
+  <database_output>
+    <hostname><%= @mysql_hostname %></hostname>
+    <username><%= @mysql_username %></username>
+    <password><%= @mysql_password %></password>
+    <database><%= @mysql_name %></database>
+    <type>mysql</type>
+  </database_output>
+<%- end -%>
+  <ruleset>
+    <!-- Default ruleset -->
+    <decoder_dir>ruleset/decoders</decoder_dir>
+    <rule_dir>ruleset/rules</rule_dir>
+    <rule_exclude>0215-policy_rules.xml</rule_exclude>
+    <list>etc/lists/audit-keys</list>
+
+    <!-- User-defined ruleset -->
+    <decoder_dir>etc/decoders</decoder_dir>
+    <rule_dir>etc/rules</rule_dir>
+  </ruleset>
+
+  <remote>
+    <connection>secure</connection>
+    <port><%= @ossec_server_port %></port>
+    <protocol>udp</protocol>
+  </remote>
+
+<%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
+
+<%- if @enable_wodle_openscap -%>
+<%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
+<%- end -%>
+
+
+  <alerts>
+    <log_alert_level>3</log_alert_level>
+    <email_alert_level><%= @ossec_email_alert_level %></email_alert_level>
+  </alerts>

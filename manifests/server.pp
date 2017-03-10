@@ -1,8 +1,8 @@
 # Main ossec server config
 class wazuh::server (
-  $mailserver_ip,
-  $ossec_emailto,
-  $ossec_emailfrom                     = "ossec@${::domain}",
+  $smtp_server                         = undef,
+  $ossec_emailto                       = undef,
+  $ossec_emailfrom                     = "wazuh@${::domain}",
   $ossec_active_response               = true,
   $ossec_rootcheck                     = true,
   $ossec_global_host_information_level = 8,
@@ -13,10 +13,11 @@ class wazuh::server (
   $ossec_white_list                    = [],
   $ossec_extra_rules_config            = [],
   $ossec_local_files                   = $::wazuh::params::default_local_files,
-  $ossec_emailnotification             = 'yes',
+  $ossec_emailnotification             = true,
   $ossec_email_maxperhour              = '12',
   $ossec_email_idsname                 = undef,
-  $ossec_check_frequency               = 79200,
+  $ossec_syscheck_frequency            = 79200,
+  $ossec_rootcheck_frequency           = 43200,
   $ossec_auto_ignore                   = 'yes',
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
@@ -30,10 +31,13 @@ class wazuh::server (
   $server_package_version              = 'installed',
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
-  $manage_client_keys                  = true,
+  $manage_client_keys                  = 'export',
+  $agent_auth_password                 = undef,
+  $ar_repeated_offenders               = '',
   $syslog_output                       = false,
   $syslog_output_server                = undef,
   $syslog_output_format                = undef,
+  $enable_wodle_openscap               = true,
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $local_rules_template                = 'wazuh/local_rules.xml.erb'
 ) inherits wazuh::params {
@@ -43,8 +47,15 @@ class wazuh::server (
   )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  #validate_integer($ossec_check_frequency, undef, 1800)
   validate_array($ossec_ignorepaths)
+  if ( $ossec_emailnotification ) {
+    if $smtp_server == undef {
+      fail('$ossec_emailnotification is enabled but $ossec_emailnotification was not set')
+    }
+    validate_string($smtp_server)
+    validate_string($ossec_emailfrom)
+    validate_array($ossec_emailto)
+  }
 
   if $::osfamily == 'windows' {
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
@@ -57,6 +68,10 @@ class wazuh::server (
   }
 
   if $use_mysql {
+    validate_string($mysql_hostname)
+    validate_string($mysql_name)
+    validate_string($mysql_password)
+    validate_string($mysql_username)
     # Relies on mysql module specified in metadata.json
     if $mariadb {
       # if mariadb is true, then force the usage of the mariadb-client package
@@ -72,6 +87,24 @@ class wazuh::server (
     ensure  => $server_package_version
   }
 
+  file {
+    default:
+      owner        => $wazuh::params::config_owner,
+      group        => $wazuh::params::config_group,
+      mode         => $wazuh::params::config_mode,
+      notify       => Service[$wazuh::params::server_service],
+      require      => Package[$wazuh::params::server_package];
+   $wazuh::params::shared_agent_config_file:
+      validate_cmd => $wazuh::params::validate_cmd_shared_conf,
+      content      => template('wazuh/ossec_shared_agent.conf.erb');
+   '/var/ossec/etc/rules/local_rules.xml':
+      content      => template($local_rules_template);
+   '/var/ossec/etc/decoders/local_decoder.xml':
+      content      => template($local_decoder_template);
+    $wazuh::params::processlist_file:
+      content      => template('wazuh/process_list.erb');
+  }
+
   service { $wazuh::params::server_service:
     ensure    => running,
     enable    => true,
@@ -81,67 +114,32 @@ class wazuh::server (
     require   => Package[$wazuh::params::server_package],
   }
 
-  # configure ossec process list
-  concat { $wazuh::params::processlist_file:
-    owner   => $wazuh::params::config_owner,
-    group   => $wazuh::params::config_group,
-    mode    => $wazuh::params::config_mode,
-    require => Package[$wazuh::params::server_package],
-    notify  => Service[$wazuh::params::server_service]
-  }
-  concat::fragment { 'ossec_process_list_10' :
-    target  => $wazuh::params::processlist_file,
-    content => template('wazuh/10_process_list.erb'),
-    order   => 10,
-    notify  => Service[$wazuh::params::server_service]
+  concat { 'ossec.conf':
+    path         => $wazuh::params::config_file,
+    owner        => $wazuh::params::config_owner,
+    group        => $wazuh::params::config_group,
+    mode         => $wazuh::params::config_mode,
+    require      => Package[$wazuh::params::server_package],
+    notify       => Service[$wazuh::params::server_service],
+    #validate_cmd => $wazuh::params::validate_cmd_ossec_conf, # not yet implemented, see https://github.com/wazuh/wazuh/issues/86
   }
 
-  # configure ossec
-  concat { $wazuh::params::config_file:
-    owner   => $wazuh::params::config_owner,
-    group   => $wazuh::params::config_group,
-    mode    => $wazuh::params::config_mode,
-    require => Package[$wazuh::params::server_package],
-    notify  => Service[$wazuh::params::server_service]
-  }
-  concat::fragment { 'ossec.conf_10' :
-    target  => $wazuh::params::config_file,
-    content => template('wazuh/10_ossec.conf.erb'),
-    order   => 10,
-    notify  => Service[$wazuh::params::server_service]
-  }
-
-  if $use_mysql {
-    validate_string($mysql_hostname)
-    validate_string($mysql_name)
-    validate_string($mysql_password)
-    validate_string($mysql_username)
-
-    # Enable the database in the config
-    concat::fragment { 'ossec.conf_80' :
-      target  => $wazuh::params::config_file,
-      content => template('wazuh/80_ossec.conf.erb'),
-      order   => 80,
-      notify  => Service[$wazuh::params::server_service]
-    }
-
-    # Enable the database daemon in the .process_list
-    concat::fragment { 'ossec_process_list_20' :
-      target  => $wazuh::params::processlist_file,
-      content => template('wazuh/20_process_list.erb'),
-      order   => 20,
-      notify  => Service[$wazuh::params::server_service]
-    }
+  concat::fragment {
+    default:
+      target  => 'ossec.conf',
+      notify  => Service[$wazuh::params::server_service];
+    'ossec.conf_header':
+      order   => 00,
+      content => "<ossec_config>\n";
+    'ossec.conf_agent':
+      order  => 10,
+      content => template('wazuh/wazuh_manager.conf.erb');
+    'ossec.conf_footer':
+      order   => 99,
+      content => '</ossec_config>';
   }
 
-  concat::fragment { 'ossec.conf_90' :
-    target  => $wazuh::params::config_file,
-    content => template('wazuh/90_ossec.conf.erb'),
-    order   => 90,
-    notify  => Service[$wazuh::params::server_service]
-  }
-
-  if ( $manage_client_keys == true ) {
+  if ( $manage_client_keys == 'export' ) {
     concat { $wazuh::params::keys_file:
       owner   => $wazuh::params::keys_owner,
       group   => $wazuh::params::keys_group,
@@ -155,37 +153,23 @@ class wazuh::server (
       content => "\n",
       notify  => Service[$wazuh::params::server_service]
     }
-  }
-
-  file { '/var/ossec/etc/shared/agent.conf':
-    content => template('wazuh/ossec_shared_agent.conf.erb'),
-    owner   => $wazuh::params::config_owner,
-    group   => $wazuh::params::config_group,
-    mode    => $wazuh::params::config_mode,
-    notify  => Service[$wazuh::params::server_service],
-    require => Package[$wazuh::params::server_package]
-  }
-
-  file { '/var/ossec/etc/rules/local_rules.xml':
-    content => template($local_rules_template),
-    owner   => $wazuh::params::config_owner,
-    group   => $wazuh::params::config_group,
-    mode    => $wazuh::params::config_mode,
-    notify  => Service[$wazuh::params::server_service],
-    require => Package[$wazuh::params::server_package]
-  }
-
-  file { '/var/ossec/etc/decoders/local_decoder.xml':
-    content => template($local_decoder_template),
-    owner   => $wazuh::params::config_owner,
-    group   => $wazuh::params::config_group,
-    mode    => $wazuh::params::config_mode,
-    notify  => Service[$wazuh::params::server_service],
-    require => Package[$wazuh::params::server_package]
-  }
-
-  if ( $manage_client_keys == true ) {
     # A separate module to avoid storeconfigs warnings when not managing keys
     include wazuh::collect_agent_keys
   }
+
+
+
+  if ( $manage_client_keys == 'authd') {
+    # TODO: ensure the authd service is started if manage_client_keys == authd
+    # (see https://github.com/wazuh/wazuh/issues/80)
+
+    file { $wazuh::params::authd_pass_file:
+      owner   => $wazuh::params::keys_owner,
+      group   => $wazuh::params::keys_group,
+      mode    => $wazuh::params::keys_mode,
+      content => $agent_auth_password,
+      require => Package[$wazuh::params::server_package],
+    }
+  }
+
 }

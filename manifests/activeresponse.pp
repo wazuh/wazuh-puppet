@@ -10,8 +10,8 @@ define wazuh::activeresponse(
   require wazuh::params
 
   concat::fragment { $name:
-    target  => $wazuh::params::config_file,
+    target  => 'ossec.conf',
     order   => 55,
-    content => template('ossec/activeresponse.erb')
+    content => template('wazuh/fragments/_activeresponse.erb')
   }
 }

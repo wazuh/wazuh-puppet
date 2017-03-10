@@ -1,29 +1,35 @@
 # Setup for ossec client
 class wazuh::client(
-  $ossec_active_response   = true,
-  $ossec_rootcheck         = true,
-  $ossec_server_ip         = undef,
-  $ossec_server_hostname   = undef,
-  $ossec_server_port       = '1514',
-  $ossec_scanpaths         = [],
-  $ossec_emailnotification = 'yes',
-  $ossec_ignorepaths       = [],
-  $ossec_local_files       = $::wazuh::params::default_local_files,
-  $ossec_check_frequency   = 79200,
-  $ossec_prefilter         = false,
-  $ossec_service_provider  = $::wazuh::params::ossec_service_provider,
-  $selinux                 = false,
-  $agent_name              = $::hostname,
-  $agent_ip_address        = $::ipaddress,
-  $manage_repo             = true,
-  $manage_epel_repo        = true,
-  $agent_package_name      = $::wazuh::params::agent_package,
-  $agent_package_version   = 'installed',
-  $agent_service_name      = $::wazuh::params::agent_service,
-  $manage_client_keys      = true,
-  $max_clients             = 3000,
-  $ar_repeated_offenders   = '',
-  $service_has_status      = $::wazuh::params::service_has_status,
+  $ossec_active_response     = true,
+  $ossec_rootcheck           = true,
+  $ossec_server_ip           = undef,
+  $ossec_server_hostname     = undef,
+  $ossec_server_port         = '1514',
+  $ossec_scanpaths           = [],
+  $ossec_emailnotification   = 'yes',
+  $ossec_ignorepaths         = [],
+  $ossec_local_files         = $::wazuh::params::default_local_files,
+  $ossec_syscheck_frequency  = 43200,
+  $ossec_rootcheck_frequency = 43200,
+  $ossec_prefilter           = false,
+  $ossec_service_provider    = $::wazuh::params::ossec_service_provider,
+  $ossec_config_profiles     = [],
+  $selinux                   = false,
+  $agent_name                = $::hostname,
+  $agent_ip_address          = $::ipaddress,
+  $manage_repo               = true,
+  $manage_epel_repo          = true,
+  $agent_package_name        = $::wazuh::params::agent_package,
+  $agent_package_version     = 'installed',
+  $agent_service_name        = $::wazuh::params::agent_service,
+  $manage_client_keys        = 'export',
+  $agent_auth_password       = undef,
+  $agent_seed                = undef,
+  $max_clients               = 3000,
+  $ar_repeated_offenders     = '',
+  $enable_wodle_openscap     = true,
+  $wodle_openscap_content    = $::wazuh::params::wodle_openscap_content,
+  $service_has_status        = $::wazuh::params::service_has_status,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
@@ -31,7 +37,6 @@ class wazuh::client(
   )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  #validate_integer($ossec_check_frequency, undef, 1800)
   validate_array($ossec_ignorepaths)
   validate_string($agent_package_name)
   validate_string($agent_service_name)
@@ -43,28 +48,23 @@ class wazuh::client(
   case $::kernel {
     'Linux' : {
       if $manage_repo {
-      class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
-      Class['wazuh::repo'] -> Package[$agent_package_name]
-        package { $agent_package_name:
-          ensure  => $agent_package_version
+        class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
+        Class['wazuh::repo'] -> Package[$agent_package_name]
       }
-
-      } else {
       package { $agent_package_name:
         ensure => $agent_package_version
-      }
       }
     }
     'windows' : {
 
-          file {
-          'C:/ossec-win32-agent-2.8.3.exe':
+      file {
+        'C:/ossec-win32-agent-2.8.3.exe':
           owner              => 'Administrators',
           group              => 'Administrators',
           mode               => '0774',
           source             => 'puppet:///modules/ossec/ossec-win32-agent-2.8.3.exe',
           source_permissions => ignore
-          }
+      }
 
       package { $agent_package_name:
         ensure          => $agent_package_version,
@@ -85,7 +85,8 @@ class wazuh::client(
     require   => Package[$agent_package_name],
   }
 
-  concat { $wazuh::params::config_file:
+  concat { 'ossec.conf':
+    path    => $wazuh::params::config_file,
     owner   => $wazuh::params::config_owner,
     group   => $wazuh::params::config_group,
     mode    => $wazuh::params::config_mode,
@@ -93,30 +94,22 @@ class wazuh::client(
     notify  => Service[$agent_service_name],
   }
 
-  concat::fragment { 'ossec.conf_10' :
-    target  => $wazuh::params::config_file,
-    content => template('ossec/10_ossec_agent.conf.erb'),
-    order   => 10,
-    notify  => Service[$agent_service_name]
+  concat::fragment {
+    default:
+      target  => 'ossec.conf',
+      notify  => Service[$agent_service_name];
+    'ossec.conf_header':
+      order   => 00,
+      content => "<ossec_config>\n";
+    'ossec.conf_agent':
+      order  => 10,
+      content => template('wazuh/wazuh_agent.conf.erb');
+    'ossec.conf_footer':
+      order   => 99,
+      content => '</ossec_config>';
   }
 
-  if ( $ar_repeated_offenders != '' and $ossec_active_response == true ) {
-    concat::fragment { 'repeated_offenders' :
-      target  => $wazuh::params::config_file,
-      content => template('ossec/ar_repeated_offenders.erb'),
-      order   => 55,
-      notify  => Service[$agent_service_name]
-    }
-  }
-
-  concat::fragment { 'ossec.conf_99' :
-    target  => $wazuh::params::config_file,
-    content => template('ossec/99_ossec_agent.conf.erb'),
-    order   => 99,
-    notify  => Service[$agent_service_name]
-  }
-
-  if ( $manage_client_keys == true ) {
+  if ( $manage_client_keys == 'export' ) {
     concat { $wazuh::params::keys_file:
       owner   => $wazuh::params::keys_owner,
       group   => $wazuh::params::keys_group,
@@ -129,24 +122,37 @@ class wazuh::client(
       max_clients      => $max_clients,
       agent_name       => $agent_name,
       agent_ip_address => $agent_ip_address,
+      agent_seed       => $agent_seed,
     }
-  } elsif ($::kernel == 'Linux') {
+  } elsif ($manage_client_keys == 'authd') {
+    if ($::kernel != 'Linux') {
+      fail('key generation using agent-auth via puppet is not supported on this platform yet')
+    }
     # Is this really Linux only?
     $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
-    exec { 'agent-auth':
-      command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${::fqdn} -D /var/ossec/",
-      creates => '/var/ossec/etc/client.keys',
-      require => Package[$agent_package_name],
+    if $agent_auth_password {
+      exec { 'agent-auth-with-pwd':
+        command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -P '${agent_auth_password}' -D /var/ossec/",
+        creates => '/var/ossec/etc/client.keys',
+        require => Package[$agent_package_name],
+        notify  => Service[$agent_service_name],
+      }
+    } else {
+      exec { 'agent-auth-without-pwd':
+        command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/",
+        creates => '/var/ossec/etc/client.keys',
+        require => Package[$agent_package_name],
+        notify  => Service[$agent_service_name],
+      }
     }
   }
 
-    # SELinux
-    # Requires selinux module specified in metadata.json
-    if ($::osfamily == 'RedHat' and $selinux == true) {
-      selinux::module { 'ossec-logrotate':
-        ensure => 'present',
-        source => 'puppet:///modules/ossec/ossec-logrotate.te',
-      }
+  # SELinux
+  # Requires selinux module specified in metadata.json
+  if ($::osfamily == 'RedHat' and $selinux == true) {
+    selinux::module { 'ossec-logrotate':
+      ensure => 'present',
+      source => 'puppet:///modules/ossec/ossec-logrotate.te',
     }
   }
 }

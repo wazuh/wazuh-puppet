@@ -3,11 +3,12 @@ define wazuh::agentkey(
   $agent_id,
   $agent_name,
   $agent_ip_address,
-  $agent_seed = 'xaeS7ahf',
+  $agent_seed,
 ) {
   require wazuh::params
 
-  if ! $agent_id { fail("wazuh::agentkey: ${agent_id} is missing")}
+  if ! $agent_id { fail('wazuh::agentkey: $agent_id is missing')}
+  if ! $agent_seed { fail('wazuh::agentkey: $agent_seed is missing')}
 
   $agentKey1 = md5("${agent_id} ${agent_seed}")
   $agentKey2 = md5("${agent_name} ${agent_ip_address} ${agent_seed}")

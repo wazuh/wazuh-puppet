@@ -1,0 +1,43 @@
+  <!-- Most of these rules are defined in the shared agent config -->
+  <syscheck>
+    <!-- Frequency that syscheck is executed -->
+    <frequency><%= @ossec_syscheck_frequency %></frequency>
+    <scan_on_start>yes</scan_on_start>
+    <alert_new_files>yes</alert_new_files>
+    <auto_ignore><%= @ossec_auto_ignore %></auto_ignore>
+
+    <!-- Directories to check  (perform all possible verifications) -->
+    <%- @ossec_scanpaths.each do |scanpath| -%>    <directories check_all="yes" report_changes="<%= scanpath["report_changes"] %>" realtime="<%= scanpath['realtime'] %>"><%= scanpath['path']  %></directories>
+<%- end -%>
+
+    <!-- Files/directories to ignore (parameterized) -->
+  <%- @ossec_ignorepaths.each do |path| -%>
+    <ignore><%= path %></ignore>
+  <%- end -%>
+  <%- if @ossec_prefilter == true then %>
+    <prefilter_cmd>/usr/sbin/prelink -y</prefilter_cmd>
+  <%- end -%>
+  </syscheck>
+  <%- if @ossec_rootcheck == false then -%>
+  <rootcheck>
+    <disabled>yes</disabled>
+  </rootcheck>
+  <%- end -%>
+<%- if @ar_repeated_offenders != '' and @ossec_active_response -%>
+  <active-response>
+    <repeated_offenders><%= @ar_repeated_offenders %></repeated_offenders>
+  </active-response>
+<%- elsif !@ossec_active_response -%>
+  <active-response>
+    <disabled>yes</disabled>
+  </active-response>
+<%- end -%>
+
+
+  <!-- Files to monitor (localfiles) -->
+<%- @ossec_local_files.sort.each do |path, format| -%>
+  <localfile>
+    <log_format><%= format %></log_format>
+    <location><%= path %></location>
+  </localfile>
+<%- end %>
