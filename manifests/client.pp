@@ -133,14 +133,14 @@ class wazuh::client(
     if $agent_auth_password {
       exec { 'agent-auth-with-pwd':
         command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -P '${agent_auth_password}' -D /var/ossec/",
-        creates => '/var/ossec/etc/client.keys',
+        unless => "/bin/egrep -q '.' ${keys_file}",
         require => Package[$agent_package_name],
         notify  => Service[$agent_service_name],
       }
     } else {
       exec { 'agent-auth-without-pwd':
         command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/",
-        creates => '/var/ossec/etc/client.keys',
+        unless => "/bin/egrep -q '.' ${keys_file}",
         require => Package[$agent_package_name],
         notify  => Service[$agent_service_name],
       }

@@ -23,24 +23,6 @@
     <location>/var/ossec/logs/active-responses.log</location>
   </localfile>
 
-  <localfile>
-    <log_format>command</log_format>
-    <command>df -P</command>
-    <frequency>360</frequency>
-  </localfile>
-
-  <localfile>
-    <log_format>full_command</log_format>
-    <command>netstat -tln | grep -v 127.0.0.1 | sort</command>
-    <frequency>360</frequency>
-  </localfile>
-
-  <localfile>
-    <log_format>full_command</log_format>
-    <command>last -n 20</command>
-    <frequency>360</frequency>
-  </localfile>
-
 </agent_config>
 
 <agent_config os="Windows">
