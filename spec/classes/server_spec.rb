@@ -7,13 +7,13 @@ describe 'wazuh::server' do
       end
       context 'with defaults for all parameters' do
         it do
-          expect { is_expected.to compile.with_all_deps }.to raise_error(/Must pass mailserver_ip/)
+          expect { is_expected.to compile.with_all_deps }.to raise_error(/Must pass smtp_server/)
         end
       end
       context 'with valid paramaters' do
         let (:params) do
           {
-            :mailserver_ip => '127.0.0.1',
+            :smtp_server => '127.0.0.1',
             :ossec_emailto => 'root@localhost.localdomain',
           }
         end

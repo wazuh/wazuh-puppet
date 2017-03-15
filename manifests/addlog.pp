@@ -1,24 +1,15 @@
 #Define a log-file to add to ossec
 define wazuh::addlog(
   $logfile,
-  $agent_log = false,
-  $logtype = 'syslog',
+  $logtype   = 'syslog',
+  $frequency = undef,
 ) {
   require wazuh::params
-# Issue #30
-  if $agent_log
-  {
-    $ossec_notify = Service[$wazuh::params::agent_service]
-  } else {
-    $ossec_notify = Service[$wazuh::params::server_service]
-  }
 
-
-  concat::fragment { "ossec.conf_20-${logfile}":
-    target  => $wazuh::params::config_file,
-    content => template('ossec/20_ossecLogfile.conf.erb'),
+  concat::fragment { "ossec.conf_localfile-${logfile}":
+    target  => 'ossec.conf',
+    content => template('wazuh/fragments/_localfile.erb'),
     order   => 20,
-    notify  => $ossec_notify
   }
 
 }

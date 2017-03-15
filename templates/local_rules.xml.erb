@@ -1,33 +1,17 @@
-<!-- @(#) $Id: ./etc/rules/local_rules.xml, 2011/09/08 dcid Exp $
-
-  -  Example of local rules for OSSEC.
-  -
-  -  Copyright (C) 2009 Trend Micro Inc.
-  -  All rights reserved.
-  -
-  -  This program is a free software; you can redistribute it
-  -  and/or modify it under the terms of the GNU General Public
-  -  License (version 2) as published by the FSF - Free Software
-  -  Foundation.
-  -
-  -  License details: http://www.ossec.net/en/licensing.html
-  -->
-
-
 <!-- Modify it at your will. -->
 
-<group name="local,syslog,">
+<group name="local,syslog,sshd,">
 
   <!-- Note that rule id 5711 is defined at the ssh_rules file
     -  as a ssh failed login. This is just an example
     -  since ip 1.1.1.1 shouldn't be used anywhere.
     -  Level 0 means ignore.
     -->
-  <rule id="100001" level="0">
-    <if_sid>5711</if_sid>
+  <rule id="100001" level="5">
+    <if_sid>5716</if_sid>
     <srcip>1.1.1.1</srcip>
-    <description>Example of rule that will ignore sshd </description>
-    <description>failed logins from IP 1.1.1.1.</description>
+    <description>sshd: authentication failed from IP 1.1.1.1.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
   </rule>
 
 

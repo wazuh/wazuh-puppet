@@ -1,0 +1,7 @@
+  <localfile>
+    <log_format><%= @logtype %></log_format>
+    <location><%= @logfile %></location>
+    <%- if @frequency -%>
+    <frequency><%= @frequency %></frequency>
+    <%- end -%>
+  </localfile>

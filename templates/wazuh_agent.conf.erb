@@ -1,0 +1,18 @@
+  <client>
+  <%- if @ossec_server_ip then -%>
+    <server-ip><%= @ossec_server_ip %></server-ip>
+  <%- end -%>
+  <%- if @ossec_server_hostname then -%>
+    <server-hostname><%= @ossec_server_hostname %></server-hostname>
+  <%- end -%>
+    <port><%= @ossec_server_port %></port>
+  <%- if @ossec_config_profiles then -%>
+    <config-profile><%= @ossec_config_profiles.join(',') %></config-profile>
+  <%- end -%>
+  </client>
+
+  <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
+
+  <%- if @enable_wodle_openscap -%>
+  <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
+  <%- end -%>
