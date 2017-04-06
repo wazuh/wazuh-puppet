@@ -96,13 +96,13 @@ class wazuh::client(
 
   concat::fragment {
     default:
-      target  => 'ossec.conf',
-      notify  => Service[$agent_service_name];
+      target => 'ossec.conf',
+      notify => Service[$agent_service_name];
     'ossec.conf_header':
       order   => 00,
       content => "<ossec_config>\n";
     'ossec.conf_agent':
-      order  => 10,
+      order   => 10,
       content => template('wazuh/wazuh_agent.conf.erb');
     'ossec.conf_footer':
       order   => 99,
@@ -130,19 +130,28 @@ class wazuh::client(
     }
     # Is this really Linux only?
     $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
+
+    file { $::wazuh::params::keys_file:
+      owner => $wazuh::params::keys_owner,
+      group => $wazuh::params::keys_group,
+      mode  => $wazuh::params::keys_mode,
+    }
+
     if $agent_auth_password {
       exec { 'agent-auth-with-pwd':
         command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -P '${agent_auth_password}' -D /var/ossec/",
-        unless => "/bin/egrep -q '.' ${keys_file}",
+        unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
         require => Package[$agent_package_name],
         notify  => Service[$agent_service_name],
+        before  => File[$wazuh::params::keys_file]
       }
     } else {
       exec { 'agent-auth-without-pwd':
         command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/",
-        unless => "/bin/egrep -q '.' ${keys_file}",
+        unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
         require => Package[$agent_package_name],
         notify  => Service[$agent_service_name],
+        before  => File[$wazuh::params::keys_file],
       }
     }
   }
