@@ -155,7 +155,7 @@ class wazuh::params {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'OSSEC HIDS 2.8.3'
+      $agent_package  = 'Wazuh Agent 2.0'
       $server_service = ''
       $server_package = ''
       $service_has_status  = true
