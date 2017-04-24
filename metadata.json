@@ -84,8 +84,8 @@
       "version_range": ">= 2.0.0"
     },
     {
-      "name": "jfryman/selinux",
-      "version_range": ">= 0.2.3"
+      "name": "puppet/selinux",
+      "version_range": ">= 0.8.0"
     }
   ]
 }
