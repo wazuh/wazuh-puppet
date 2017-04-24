@@ -21,6 +21,16 @@
   <%- if @ossec_rootcheck == false then -%>
   <rootcheck>
     <disabled>yes</disabled>
+  <rootcheck>
+  <%- if @ossec_rootcheck_frequency then -%>
+    <frequency><%= @ossec_rootcheck_frequency %></frequency>
+  <%- end -%>
+  <%- if @ossec_rootcheck_checkports == false then -%>
+    <check_ports>no</check_ports>
+  <%- end -%>
+  <%- if @ossec_rootcheck_checkfiles == false then -%>
+    <check_files>no</check_files>
+  <%- end -%>
   </rootcheck>
   <%- end -%>
 <%- if @ar_repeated_offenders != '' and @ossec_active_response -%>

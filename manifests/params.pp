@@ -71,7 +71,9 @@ class wazuh::params {
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
             }
-            default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
+        default: {
+          fail("Module ${module_name} is not supported on ${::operatingsystem}")
+        }
           }
 
         }
@@ -135,10 +137,12 @@ class wazuh::params {
               }
               }
             }
+            default: { fail('This ossec module has not been tested on your distribution') }
             }
           }
+        default: { fail('This ossec module has not been tested on your distribution') }
         }
-    }
+  }
     'windows': {
       $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
       $shared_agent_config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/shared/agent.conf'), '\\\\', '/')
@@ -161,8 +165,7 @@ class wazuh::params {
       $validate_cmd_shared_conf = undef
       # Pushed by shared agent config now
       $default_local_files = {}
-
     }
-    default: { fail('This ossec module has not been tested on your distribution') }
+  default: { fail('This ossec module has not been tested on your distribution') }
   }
 }

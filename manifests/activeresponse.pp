@@ -7,6 +7,7 @@ define wazuh::activeresponse(
   $ar_timeout            = 300,
   $ar_repeated_offenders = '',
 ) {
+
   require wazuh::params
 
   concat::fragment { $name:

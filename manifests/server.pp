@@ -5,6 +5,9 @@ class wazuh::server (
   $ossec_emailfrom                     = "wazuh@${::domain}",
   $ossec_active_response               = true,
   $ossec_rootcheck                     = true,
+  $ossec_rootcheck_frequency           = 36000,
+  $ossec_rootcheck_checkports          = true,
+  $ossec_rootcheck_checkfiles          = true,
   $ossec_global_host_information_level = 8,
   $ossec_global_stat_level             = 8,
   $ossec_email_alert_level             = 7,
@@ -17,7 +20,6 @@ class wazuh::server (
   $ossec_email_maxperhour              = '12',
   $ossec_email_idsname                 = undef,
   $ossec_syscheck_frequency            = 79200,
-  $ossec_rootcheck_frequency           = 43200,
   $ossec_auto_ignore                   = 'yes',
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
@@ -33,7 +35,8 @@ class wazuh::server (
   $syslog_output_format                = undef,
   $enable_wodle_openscap               = false,
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
-  $local_rules_template                = 'wazuh/local_rules.xml.erb'
+  $local_rules_template                = 'wazuh/local_rules.xml.erb',
+  $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
@@ -68,17 +71,17 @@ class wazuh::server (
 
   file {
     default:
-      owner        => $wazuh::params::config_owner,
-      group        => $wazuh::params::config_group,
-      mode         => $wazuh::params::config_mode,
-      notify       => Service[$wazuh::params::server_service],
-      require      => Package[$wazuh::params::server_package];
-   $wazuh::params::shared_agent_config_file:
+      owner   => $wazuh::params::config_owner,
+      group   => $wazuh::params::config_group,
+      mode    => $wazuh::params::config_mode,
+      notify  => Service[$wazuh::params::server_service],
+      require => Package[$wazuh::params::server_package];
+    $wazuh::params::shared_agent_config_file:
       validate_cmd => $wazuh::params::validate_cmd_shared_conf,
-      content      => template('wazuh/ossec_shared_agent.conf.erb');
-   '/var/ossec/etc/rules/local_rules.xml':
+      content      => template($shared_agent_template);
+    '/var/ossec/etc/rules/local_rules.xml':
       content      => template($local_rules_template);
-   '/var/ossec/etc/decoders/local_decoder.xml':
+    '/var/ossec/etc/decoders/local_decoder.xml':
       content      => template($local_decoder_template);
     $wazuh::params::processlist_file:
       content      => template('wazuh/process_list.erb');
@@ -94,24 +97,24 @@ class wazuh::server (
   }
 
   concat { 'ossec.conf':
-    path         => $wazuh::params::config_file,
-    owner        => $wazuh::params::config_owner,
-    group        => $wazuh::params::config_group,
-    mode         => $wazuh::params::config_mode,
-    require      => Package[$wazuh::params::server_package],
-    notify       => Service[$wazuh::params::server_service],
+    path    => $wazuh::params::config_file,
+    owner   => $wazuh::params::config_owner,
+    group   => $wazuh::params::config_group,
+    mode    => $wazuh::params::config_mode,
+    require => Package[$wazuh::params::server_package],
+    notify  => Service[$wazuh::params::server_service],
     #validate_cmd => $wazuh::params::validate_cmd_ossec_conf, # not yet implemented, see https://github.com/wazuh/wazuh/issues/86
   }
 
   concat::fragment {
     default:
-      target  => 'ossec.conf',
-      notify  => Service[$wazuh::params::server_service];
+      target => 'ossec.conf',
+      notify => Service[$wazuh::params::server_service];
     'ossec.conf_header':
       order   => 00,
       content => "<ossec_config>\n";
     'ossec.conf_agent':
-      order  => 10,
+      order   => 10,
       content => template('wazuh/wazuh_manager.conf.erb');
     'ossec.conf_footer':
       order   => 99,
