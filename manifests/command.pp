@@ -9,7 +9,7 @@ define wazuh::command(
 
   if ($timeout_allowed) { $command_timeout_allowed='yes' } else { $command_timeout_allowed='no' }
   concat::fragment { $name:
-    target  => $wazuh::params::config_file,
+    target  => 'ossec.conf',
     order   => 45,
     content => template('wazuh/command.erb'),
   }

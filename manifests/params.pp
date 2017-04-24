@@ -92,9 +92,52 @@ class wazuh::params {
             '/var/log/httpd/access_log' => 'apache',
             '/var/log/httpd/error_log'  => 'apache'
           }
-
+          case $::os[name] {
+            'CentOS': {
+              if ( $::operatingsystemrelease =~ /^6.*/ ) {
+                $wodle_openscap_content = {
+                  'ssg-centos-6-ds.xml' => {
+                    type => 'xccdf',
+                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
+                }
+              }
+              }
+              if ( $::operatingsystemrelease =~ /^7.*/ ) {
+                $wodle_openscap_content = {
+                  'ssg-centos-7-ds.xml' => {
+                    type => 'xccdf',
+                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
+                }
+              }
+              }
+            }
+            'Redhat': {
+              if ( $::operatingsystemrelease =~ /^6.*/ ) {
+                $wodle_openscap_content = {
+                  'ssg-rhel-6-ds.xml' => {
+                    type => 'xccdf',
+                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
+                },
+                'cve-redhat-6-ds.xml' => {
+                type => 'xccdf',
+                  }
+              }
+              }
+              if ( $::operatingsystemrelease =~ /^7.*/ ) {
+                $wodle_openscap_content = {
+                  'ssg-rhel-7-ds.xml' => {
+                    type => 'xccdf',
+                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common',]
+                },
+                'cve-redhat-7-ds.xml' => {
+                type => 'xccdf',
+                  }
+              }
+              }
+            }
+            }
+          }
         }
-      }
     }
     'windows': {
       $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
