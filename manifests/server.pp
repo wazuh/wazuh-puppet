@@ -31,7 +31,7 @@ class wazuh::server (
   $syslog_output                       = false,
   $syslog_output_server                = undef,
   $syslog_output_format                = undef,
-  $enable_wodle_openscap               = true,
+  $enable_wodle_openscap               = false,
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $local_rules_template                = 'wazuh/local_rules.xml.erb'
 ) inherits wazuh::params {
