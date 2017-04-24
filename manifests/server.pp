@@ -22,12 +22,6 @@ class wazuh::server (
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
   $ossec_server_port                   = '1514',
-  $use_mysql                           = false,
-  $mariadb                             = false,
-  $mysql_hostname                      = undef,
-  $mysql_name                          = undef,
-  $mysql_password                      = undef,
-  $mysql_username                      = undef,
   $server_package_version              = 'installed',
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
@@ -43,7 +37,7 @@ class wazuh::server (
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
-    $use_mysql, $manage_repos, $manage_epel_repo, $syslog_output
+    $manage_repos, $manage_epel_repo, $syslog_output
   )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
@@ -65,21 +59,6 @@ class wazuh::server (
     # TODO: Allow filtering of EPEL requirement
     class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
     Class['wazuh::repo'] -> Package[$wazuh::params::server_package]
-  }
-
-  if $use_mysql {
-    validate_string($mysql_hostname)
-    validate_string($mysql_name)
-    validate_string($mysql_password)
-    validate_string($mysql_username)
-    # Relies on mysql module specified in metadata.json
-    if $mariadb {
-      # if mariadb is true, then force the usage of the mariadb-client package
-      class { 'mysql::client': package_name => 'mariadb-client' }
-    } else {
-      include mysql::client
-    }
-    Class['mysql::client'] ~> Service[$wazuh::params::server_service]
   }
 
   # install package
