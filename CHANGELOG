@@ -248,10 +248,20 @@ Jose Luis Ruiz <jose@wazuh.com>:
 
   * Fixed typo in the windows package, this type made the deploy fails under windows.
 
-2017-02-xx Jose Luis Ruiz  - 2.0.21
+2017-04-24 Jose Luis Ruiz  - 2.0.21
 ===========================================================
 
-  * Fix apt deprecation warnings. (pull request #58 thanks @kdole)
-  * Avoid warnings when storeconfigs are not available. (pull request #59 thanks @kdole)
-  * Use default local_files setting. (pull request #60 thanks @kdole)
-  * Making ossec server port configurable. (pull request #62 thanks @edge-records)
+  * Fix apt deprecation warnings. (thanks @kdole)
+  * Avoid warnings when storeconfigs are not available. (thanks @kdole)
+  * Use default local_files setting. (thanks @kdole)
+  * Making ossec server port configurable. (thanks @edge-records)
+  * Allow custom agent configurations (thanks @ffleming)
+  * Fixed issec #66 (thanks @thedawidbalut)
+  * Adds options to control rootcheck feature. (thanks @netman2k)
+  * Use puppet-selinux instead of jfryman-selinux (thanks @netman2k)
+  * Allow custom ossec.conf in agent and server template (thanks @sam-wouters)
+  * Fixed issue #71. (Thanks for reporting it @sc-chad)
+  * Fixed issue #72. (Thanks for reporting it @sc-chad)
+  * Clean code and added new OpenScap option (thanks @0x2A)
+  * module refactored/adapted for wazuh 2.0 (thanks @0x2A)
+  * New wazuh-agent-2.0.exe for Windows.
