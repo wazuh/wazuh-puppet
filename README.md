@@ -1,4 +1,4 @@
-# OSSEC Puppet module
+# Wazuh Puppet module
 
 This module installs and configure OSSEC HIDS agent and manager.
 
