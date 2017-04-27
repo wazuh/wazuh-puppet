@@ -97,10 +97,12 @@ class wazuh::client(
     notify  => Service[$agent_service_name],
   }
 
+  Concat::Fragment {
+    target => 'ossec.conf',
+    notify => Service[$agent_service_name]
+  }
+
   concat::fragment {
-    default:
-      target => 'ossec.conf',
-      notify => Service[$agent_service_name];
     'ossec.conf_header':
       order   => 00,
       content => "<ossec_config>\n";
