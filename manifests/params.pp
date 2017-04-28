@@ -57,7 +57,7 @@ class wazuh::params {
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = {
                 'ssg-debian-8-ds.xml' => {
-                  type => 'xccdf',
+                  'type' => 'xccdf',
                   profiles => ['xccdf_org.ssgproject.content_profile_common'],
                 },
                 'cve-debian-oval.xml' => {
@@ -93,7 +93,7 @@ class wazuh::params {
             '/var/log/httpd/access_log' => 'apache',
             '/var/log/httpd/error_log'  => 'apache'
           }
-          case $::os[name] {
+          case $::operatingsystem {
             'CentOS': {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {
@@ -120,7 +120,7 @@ class wazuh::params {
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
                 },
                 'cve-redhat-6-ds.xml' => {
-                type => 'xccdf',
+                'type' => 'xccdf',
                   }
               }
               }
