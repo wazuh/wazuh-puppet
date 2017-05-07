@@ -10,7 +10,7 @@ This module installs and configure OSSEC HIDS agent and manager.
 
 ## Credits and thank you
 
-This Puppet module has been authored by Nicolas Zin, and updated by Jonathan Gazeley and Michael Porter. Wazuh has forked it with the purpose of maintaing it. Thank you to the authors for the contribution.
+This Puppet module has been authored by Nicolas Zin, and updated by Jonathan Gazeley and Michael Porter. Wazuh has forked it with the purpose of maintaining it. Thank you to the authors for the contribution.
 
 ## References
 
