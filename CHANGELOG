@@ -270,4 +270,4 @@ Jose Luis Ruiz <jose@wazuh.com>:
 ===========================================================
 
   * Added some changes in order to do this module compatible. (pull request #5 thanks elisano)
-  * Changed metadata.json in order to install the modules comaptibles with puppet 3.8 
+  * Changed metadata.json in order to install the modules comaptibles with puppet 3.8.

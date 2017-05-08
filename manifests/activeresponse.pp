@@ -3,6 +3,7 @@ define wazuh::activeresponse(
   $command_name,
   $ar_location           = 'local',
   $ar_level              = 7,
+  $ar_agent_id           = '',
   $ar_rules_id           = [],
   $ar_timeout            = 300,
   $ar_repeated_offenders = '',
