@@ -138,7 +138,7 @@ class wazuh::params {
               }
             }
             'Fedora': {
-              if ( $::operatingsystemrelease =~ /^24.*/ ) {
+              if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
                 $wodle_openscap_content = {
                   'ssg-fedora-ds.xml' => {
                     type => 'xccdf',
