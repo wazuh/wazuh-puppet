@@ -269,5 +269,7 @@ Jose Luis Ruiz <jose@wazuh.com>:
 2017--5-24  Jose Luis Ruiz  - 2.0.xx
 ===========================================================
 
+  * Fixed issue #3. (Thanks for reporting it @ddholstad99)
+  * Fixed issue #4. (Thanks for reporting it @elisiano)
   * Added some changes in order to do this module compatible. (pull request #5 thanks elisano)
   * Changed metadata.json in order to install the modules comaptibles with puppet 3.8.
