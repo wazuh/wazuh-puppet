@@ -47,7 +47,7 @@ class wazuh::params {
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = {
                 'ssg-ubuntu-1604-ds.xml' => {
-                  type => 'xccdf',
+                  'type' => 'xccdf',
                   profiles => ['xccdf_org.ssgproject.content_profile_common'],
                 },
               }
@@ -61,7 +61,7 @@ class wazuh::params {
                   profiles => ['xccdf_org.ssgproject.content_profile_common'],
                 },
                 'cve-debian-oval.xml' => {
-                  type => 'oval',
+                  'type' => 'oval',
                 }
               }
             }
@@ -98,7 +98,7 @@ class wazuh::params {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-centos-6-ds.xml' => {
-                    type => 'xccdf',
+                    'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
                 }
               }
@@ -106,7 +106,7 @@ class wazuh::params {
               if ( $::operatingsystemrelease =~ /^7.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-centos-7-ds.xml' => {
-                    type => 'xccdf',
+                    'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
                 }
               }
@@ -116,7 +116,7 @@ class wazuh::params {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-rhel-6-ds.xml' => {
-                    type => 'xccdf',
+                    'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
                 },
                 'cve-redhat-6-ds.xml' => {
@@ -127,11 +127,11 @@ class wazuh::params {
               if ( $::operatingsystemrelease =~ /^7.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-rhel-7-ds.xml' => {
-                    type => 'xccdf',
+                    'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common',]
                 },
                 'cve-redhat-7-ds.xml' => {
-                type => 'xccdf',
+                'type' => 'xccdf',
                   }
               }
               }
