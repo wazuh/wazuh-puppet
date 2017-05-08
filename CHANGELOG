@@ -266,7 +266,7 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * module refactored/adapted for wazuh 2.0 (thanks @0x2A)
   * New wazuh-agent-2.0.exe for Windows.
 
-2017--5-24  Jose Luis Ruiz  - 2.0.xx
+2017-5-24  Jose Luis Ruiz  - 2.0.xx
 ===========================================================
 
   * Fixed issue #3. (Thanks for reporting it @ddholstad99)
