@@ -265,3 +265,9 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Clean code and added new OpenScap option (thanks @0x2A)
   * module refactored/adapted for wazuh 2.0 (thanks @0x2A)
   * New wazuh-agent-2.0.exe for Windows.
+
+2017--5-24  Jose Luis Ruiz  - 2.0.xx
+===========================================================
+
+  * Added some changes in order to do this module compatible. (pull request #5 thanks elisano)
+  * Changed metadata.json in order to install the modules comaptibles with puppet 3.8 

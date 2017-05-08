@@ -50,11 +50,11 @@ class wazuh::repo (
           }
           'Redhat': {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $repotype = 'CentOS 5'
+              $repotype = 'Redhat 5'
               $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
               $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
             } else {
-              $repotype = 'CentOS > 5'
+              $repotype = 'Redhat > 5'
               $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
