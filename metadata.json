@@ -10,10 +10,10 @@
   "dependencies": [
     {"name":"puppetlabs/stdlib"},
     {"name":"puppetlabs/concat",
-     "version_range": = "2.2.1"},
+     "version_range":  "= 2.2.1"},
     {"name":"stahnma/epel"},
     {"name":"puppetlabs/apt",
-     "version_range": = "2.4.0"},
+     "version_range":  "= 2.4.0"},
     {"name":"puppet/selinux"}
   ],
   "data_provider": null,
