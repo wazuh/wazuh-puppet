@@ -94,7 +94,7 @@ class wazuh::params {
             '/var/log/httpd/access_log' => 'apache',
             '/var/log/httpd/error_log'  => 'apache'
           }
-          case $::os[name] {
+          case $::operatingsystem {
             'CentOS': {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {

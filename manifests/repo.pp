@@ -11,7 +11,7 @@ class wazuh::repo (
         source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
       }
       case $::lsbdistcodename {
-        /(precise|trusty|vivid|wily|xenial|yakketi)/: {
+        /(precise|trusty|vivid|wily|xenial|yakketi|jessie|wheezy|stretch|sid)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
@@ -26,19 +26,6 @@ class wazuh::repo (
           }
 
         }
-        /^(jessie|wheezy|stretch|sid)$/: {
-          apt::source { 'wazuh':
-            ensure   => present,
-            comment  => 'This is the WAZUH Debian repository',
-            location => 'https://packages.wazuh.com/apt',
-            release  => $::lsbdistcodename,
-            repos    => 'main',
-            include  => {
-              'src' => false,
-              'deb' => true,
-            },
-          }
-        }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
       }
     }
@@ -49,7 +36,7 @@ class wazuh::repo (
         $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
       }
       else {
-        case $::os[name] {
+        case $::operatingsystem {
           'CentOS': {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
               $repotype = 'CentOS 5'
@@ -86,17 +73,6 @@ class wazuh::repo (
         gpgcheck => 1,
         gpgkey   => $gpgkey,
         baseurl  => $baseurl
-      }
-
-      if $redhat_manage_epel {
-        # Set up EPEL repo
-        # NOTE: This relies on the 'epel' module referenced in metadata.json
-        package { 'inotify-tools':
-          ensure  => present
-        }
-        include epel
-
-        Class['epel'] -> Package['inotify-tools']
       }
     }
     default: { fail('This ossec module has not been tested on your distribution') }
