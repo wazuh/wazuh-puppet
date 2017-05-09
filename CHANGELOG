@@ -265,3 +265,8 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Clean code and added new OpenScap option (thanks @0x2A)
   * module refactored/adapted for wazuh 2.0 (thanks @0x2A)
   * New wazuh-agent-2.0.exe for Windows.
+
+2017-xx-xx Jose Luis Ruiz  - 2.0.22
+===========================================================
+
+  * Explicitly use the windows package provider pull request #11 (Thanks @damoxc)
