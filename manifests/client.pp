@@ -71,6 +71,7 @@ class wazuh::client(
 
       package { $agent_package_name:
         ensure          => $agent_package_version,
+        provider        => 'windows',
         source          => 'C:/wazuh-agent-2.0.exe',
         install_options => [ '/S' ],  # Nullsoft installer silent installation
         require         => File['C:/wazuh-agent-2.0.exe'],
