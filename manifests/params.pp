@@ -137,6 +137,16 @@ class wazuh::params {
               }
               }
             }
+            'Fedora': {
+              if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
+                $wodle_openscap_content = {
+                  'ssg-fedora-ds.xml' => {
+                    type => 'xccdf',
+                    profiles => ['xccdf_org.ssgproject.content_profile_standard', 'xccdf_org.ssgproject.content_profile_common',]
+                },
+              }
+              }
+            }
             default: { fail('This ossec module has not been tested on your distribution') }
             }
           }
