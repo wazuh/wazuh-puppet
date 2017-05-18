@@ -79,7 +79,7 @@ class wazuh::server (
 
   file {
     $wazuh::params::shared_agent_config_file:
-      validate_cmd => $wazuh::params::validate_cmd_shared_conf,
+      validate_cmd => $wazuh::params::validate_cmd_conf,
       content      => template($shared_agent_template);
     '/var/ossec/etc/rules/local_rules.xml':
       content      => template($local_rules_template);
@@ -105,7 +105,7 @@ class wazuh::server (
     mode    => $wazuh::params::config_mode,
     require => Package[$wazuh::params::server_package],
     notify  => Service[$wazuh::params::server_service],
-    #validate_cmd => $wazuh::params::validate_cmd_ossec_conf, # not yet implemented, see https://github.com/wazuh/wazuh/issues/86
+    #validate_cmd => $wazuh::params::validate_cmd_conf, # not yet implemented, see https://github.com/wazuh/wazuh/issues/86
   }
 
   Concat::Fragment {

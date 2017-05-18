@@ -17,8 +17,7 @@ class wazuh::params {
 
       $authd_pass_file = '/var/ossec/etc/authd.pass'
 
-      $validate_cmd_shared_conf = "/var/ossec/bin/verify-agent-conf -f ${shared_agent_config_file}"
-      $validate_cmd_ossec_conf = "/var/ossec/bin/verify-agent-conf -f ${config_file}"
+      $validate_cmd_conf = "/var/ossec/bin/verify-agent-conf -f %"
 
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0440'
@@ -161,8 +160,7 @@ class wazuh::params {
       $service_has_status  = true
 
       # TODO
-      $validate_cmd_ossec_conf = undef
-      $validate_cmd_shared_conf = undef
+      $validate_cmd_conf = undef
       # Pushed by shared agent config now
       $default_local_files = {}
     }
