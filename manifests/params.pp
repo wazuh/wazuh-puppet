@@ -150,7 +150,7 @@ class wazuh::params {
             }
           }
         default: { fail('This ossec module has not been tested on your distribution') }
-        }
+        } 
   }
     'windows': {
       $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
