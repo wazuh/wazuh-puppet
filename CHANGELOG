@@ -276,4 +276,3 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Fix for issue Fix for #6 validate_cmd pull request #12 (Thanks @dakine1111)
   * Add $wodle_openscap_content parameter to server.pp pull request #12 (Thanks hex2a)
   * Added some changes in order to do this module compatible. (pull request #5 thanks elisano)
-  * Changed metadata.json in order to install the modules comaptibles with puppet 3.8.
