@@ -17,7 +17,7 @@ class wazuh::params {
 
       $authd_pass_file = '/var/ossec/etc/authd.pass'
 
-      $validate_cmd_conf = "/var/ossec/bin/verify-agent-conf -f %"
+      $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
 
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0440'
@@ -150,7 +150,7 @@ class wazuh::params {
             }
           }
         default: { fail('This ossec module has not been tested on your distribution') }
-        } 
+    }
   }
     'windows': {
       $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
