@@ -271,3 +271,5 @@ Jose Luis Ruiz <jose@wazuh.com>:
 
   * Explicitly use the windows package provider pull request #11 (Thanks @damoxc)
   * Enable fedora 23/24/25 for pull request #9 (Thanks @ddholstad99)
+  * Fix for issue Fix for #6 validate_cmd pull request #12 (Thanks @dakine1111)
+  * Add $wodle_openscap_content parameter to server.pp pull request #12 (Thanks hex2a)
