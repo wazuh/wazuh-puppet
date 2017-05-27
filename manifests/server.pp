@@ -34,6 +34,7 @@ class wazuh::server (
   $syslog_output_server                = undef,
   $syslog_output_format                = undef,
   $enable_wodle_openscap               = false,
+  $wodle_openscap_content              = $::wazuh::params::wodle_openscap_content,
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
