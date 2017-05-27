@@ -269,6 +269,8 @@ Jose Luis Ruiz <jose@wazuh.com>:
 2017-xx-xx support@wazuh.com  - 2.0.22
 ===========================================================
 
+  * Fixed issue #3. (Thanks for reporting it @ddholstad99)
+  * Fixed issue #4. (Thanks for reporting it @elisiano)
   * Explicitly use the windows package provider pull request #11 (Thanks @damoxc)
   * Enable fedora 23/24/25 for pull request #9 (Thanks @ddholstad99)
   * Fix for issue Fix for #6 validate_cmd pull request #12 (Thanks @dakine1111)
