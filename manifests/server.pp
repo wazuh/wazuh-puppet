@@ -48,7 +48,7 @@ class wazuh::server (
   validate_array($ossec_ignorepaths)
   if ( $ossec_emailnotification ) {
     if $smtp_server == undef {
-      fail('$ossec_emailnotification is enabled but $ossec_emailnotification was not set')
+      fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
     validate_string($smtp_server)
     validate_string($ossec_emailfrom)
