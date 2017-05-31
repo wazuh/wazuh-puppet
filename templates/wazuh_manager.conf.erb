@@ -62,13 +62,6 @@
 <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
 <%- end -%>
 
-<%- if @enable_reports -%>
-  <reports>
-    <level><%= @ossec_reports_level %></level>
-    <title><%= @ossec_reports_title %></title>
-    <email_to><%= @ossec_reports_email_to %></email_to>
-  </reports>
-<%- end -%>
 
   <alerts>
     <log_alert_level>3</log_alert_level>

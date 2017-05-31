@@ -38,10 +38,6 @@ class wazuh::server (
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
-  $enable_reports                      = false,
-  $ossec_reports_level                 = 7,
-  $ossec_reports_title                 = '',
-  $ossec_reports_email_to              = undef,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
