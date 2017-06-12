@@ -17,6 +17,11 @@
   <%- if @ossec_prefilter == true then %>
     <prefilter_cmd>/usr/sbin/prelink -y</prefilter_cmd>
   <%- end -%>
+  <%- if @ossec_nodiff then -%>
+    <%- @ossec_nodiff.each do |path| -%>
+    <nodiff><%= path %></nodiff>
+    <%- end -%>
+  <%- end -%>
   </syscheck>
   <%- if @ossec_rootcheck == false then -%>
   <rootcheck>
