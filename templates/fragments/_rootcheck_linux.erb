@@ -1,14 +1,14 @@
   <!-- Rootcheck files (static) -->
   <rootcheck>
     <disabled>no</disabled>
-    <check_unixaudit>yes</check_unixaudit>
-    <check_files>yes</check_files>
-    <check_trojans>yes</check_trojans>
-    <check_dev>yes</check_dev>
-    <check_sys>yes</check_sys>
-    <check_pids>yes</check_pids>
-    <check_ports>yes</check_ports>
-    <check_if>yes</check_if>
+    <check_unixaudit><%= @ossec_rootcheck_check_unixaudit %></check_unixaudit>
+    <check_files><%= @ossec_rootcheck_check_files %></check_files>
+    <check_trojans><%= @ossec_rootcheck_check_trojans %></check_trojans>
+    <check_dev><%= @ossec_rootcheck_check_dev %></check_dev>
+    <check_sys><%= @ossec_rootcheck_check_sys %></check_sys>
+    <check_pids><%= @ossec_rootcheck_check_pids %></check_pids>
+    <check_ports><%= @ossec_rootcheck_check_ports %></check_ports>
+    <check_if><%= @ossec_rootcheck_check_if %></check_if>
     <!-- Frequency that rootcheck is executed - every 12 hours -->
     <frequency><%= @ossec_rootcheck_frequency %></frequency>
 
