@@ -6,8 +6,6 @@ class wazuh::server (
   $ossec_active_response               = true,
   $ossec_rootcheck                     = true,
   $ossec_rootcheck_frequency           = 36000,
-  $ossec_rootcheck_checkports          = yes,
-  $ossec_rootcheck_checkfiles          = yes,
   $ossec_rootcheck_check_unixaudit     = yes,
   $ossec_rootcheck_check_files         = yes,
   $ossec_rootcheck_check_trojans       = yes,
