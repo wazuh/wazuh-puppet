@@ -38,6 +38,9 @@
   <%- end -%>
   </rootcheck>
   <%- end -%>
+  <%- if @ossec_rootcheck == true then -%>
+    <%= scope.function_template(["wazuh/fragments/_rootcheck_linux.erb"]) %>
+  <%- end -%>
 <%- if @ar_repeated_offenders != '' and @ossec_active_response -%>
   <active-response>
     <repeated_offenders><%= @ar_repeated_offenders %></repeated_offenders>
