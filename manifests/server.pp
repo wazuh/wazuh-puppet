@@ -28,6 +28,7 @@ class wazuh::server (
   $ossec_email_maxperhour              = '12',
   $ossec_email_idsname                 = undef,
   $ossec_syscheck_frequency            = 79200,
+  $ossec_syscheck_scan_on_start        = 'yes',
   $ossec_auto_ignore                   = 'yes',
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,

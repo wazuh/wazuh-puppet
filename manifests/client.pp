@@ -23,6 +23,7 @@ class wazuh::client(
   $ossec_ignorepaths                   = [],
   $ossec_local_files                   = $::wazuh::params::default_local_files,
   $ossec_syscheck_frequency            = 43200,
+  $ossec_syscheck_scan_on_start        = 'yes',
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
   $ossec_config_profiles               = [],

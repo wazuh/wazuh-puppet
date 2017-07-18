@@ -2,7 +2,7 @@
   <syscheck>
     <!-- Frequency that syscheck is executed -->
     <frequency><%= @ossec_syscheck_frequency %></frequency>
-    <scan_on_start>yes</scan_on_start>
+    <scan_on_start><%= @ossec_syscheck_scan_on_start %></scan_on_start>
     <alert_new_files>yes</alert_new_files>
     <auto_ignore><%= @ossec_auto_ignore %></auto_ignore>
 
