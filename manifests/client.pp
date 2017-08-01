@@ -61,20 +61,20 @@ class wazuh::client(
     'windows' : {
 
       file {
-        'C:/wazuh-agent-2.0.exe':
+        'C:/wazuh-winagent-v2.0.1-1.exe':
           owner              => 'Administrators',
           group              => 'Administrators',
           mode               => '0774',
-          source             => 'puppet:///modules/wazuh/wazuh-agent-2.0.exe',
+          source             => 'puppet:///modules/wazuh/wazuh-winagent-v2.0.1-1.exe',
           source_permissions => ignore
       }
 
       package { $agent_package_name:
         ensure          => $agent_package_version,
         provider        => 'windows',
-        source          => 'C:/wazuh-agent-2.0.exe',
+        source          => 'C:/wazuh-winagent-v2.0.1-1.exe',
         install_options => [ '/S' ],  # Nullsoft installer silent installation
-        require         => File['C:/wazuh-agent-2.0.exe'],
+        require         => File['C:/wazuh-winagent-v2.0.1-1.exe'],
       }
     }
     default: { fail('OS not supported') }
