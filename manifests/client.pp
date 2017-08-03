@@ -52,7 +52,11 @@ class wazuh::client(
     'Linux' : {
       if $manage_repo {
         class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
-        Class['wazuh::repo'] -> Package[$agent_package_name]
+        if $::osfamily == 'Debian' {
+          Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
+        } else {
+          Class['wazuh::repo'] -> Package[$agent_package_name]
+        }
       }
       package { $agent_package_name:
         ensure => $agent_package_version
