@@ -169,7 +169,7 @@ class wazuh::client(
   if ($::osfamily == 'RedHat' and $selinux == true) {
     selinux::module { 'ossec-logrotate':
       ensure => 'present',
-      source_te => 'puppet:///modules/ossec/ossec-logrotate.te',
+      source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',
     }
   }
 }
