@@ -63,7 +63,11 @@ class wazuh::client(
     'Linux' : {
       if $manage_repo {
         class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
-        Class['wazuh::repo'] -> Package[$agent_package_name]
+        if $::osfamily == 'Debian' {
+          Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
+        } else {
+          Class['wazuh::repo'] -> Package[$agent_package_name]
+        }
       }
       package { $agent_package_name:
         ensure => $agent_package_version
@@ -72,20 +76,20 @@ class wazuh::client(
     'windows' : {
 
       file {
-        'C:/wazuh-agent-2.0.exe':
+        'C:/wazuh-winagent-v2.0.1-1.exe':
           owner              => 'Administrators',
           group              => 'Administrators',
           mode               => '0774',
-          source             => 'puppet:///modules/wazuh/wazuh-agent-2.0.exe',
+          source             => 'puppet:///modules/wazuh/wazuh-winagent-v2.0.1-1.exe',
           source_permissions => ignore
       }
 
       package { $agent_package_name:
         ensure          => $agent_package_version,
         provider        => 'windows',
-        source          => 'C:/wazuh-agent-2.0.exe',
+        source          => 'C:/wazuh-winagent-v2.0.1-1.exe',
         install_options => [ '/S' ],  # Nullsoft installer silent installation
-        require         => File['C:/wazuh-agent-2.0.exe'],
+        require         => File['C:/wazuh-winagent-v2.0.1-1.exe'],
       }
     }
     default: { fail('OS not supported') }
@@ -176,7 +180,7 @@ class wazuh::client(
   if ($::osfamily == 'RedHat' and $selinux == true) {
     selinux::module { 'ossec-logrotate':
       ensure => 'present',
-      source => 'puppet:///modules/ossec/ossec-logrotate.te',
+      source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',
     }
   }
 }
