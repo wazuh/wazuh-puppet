@@ -23,12 +23,17 @@ class wazuh::server (
   $ossec_auto_ignore                   = 'yes',
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
+  $api_service_provider                = $::wazuh::params::api_service_provider,
   $ossec_server_port                   = '1514',
   $ossec_server_protocol               = 'udp',
   $server_package_version              = 'installed',
+  $api_package_version                 = 'installed',
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'export',
+  $install_wazuh_api                   = false,
+  $manage_nodejs                       = true,
+  $nodejs_repo_url_suffix              = '6.x',
   $agent_auth_password                 = undef,
   $ar_repeated_offenders               = '',
   $syslog_output                       = false,
@@ -42,8 +47,10 @@ class wazuh::server (
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
-    $manage_repos, $manage_epel_repo, $syslog_output
+    $manage_repos, $manage_epel_repo, $syslog_output,
+    $install_wazuh_api
   )
+
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
   validate_array($ossec_ignorepaths)
@@ -158,6 +165,29 @@ class wazuh::server (
       mode    => $wazuh::params::keys_mode,
       content => $agent_auth_password,
       require => Package[$wazuh::params::server_package],
+    }
+  }
+
+  ### Wazuh API
+  if $install_wazuh_api {
+    validate_bool($manage_nodejs)
+    if $manage_nodejs {
+      validate_string($nodejs_repo_url_suffix)
+      class { '::nodejs': repo_url_suffix => $nodejs_repo_url_suffix }
+      Class['nodejs'] -> Package[$wazuh::params::api_package]
+    }
+
+    package { $wazuh::params::api_package:
+      ensure  => $api_package_version
+    }
+
+    service { $wazuh::params::api_service:
+      ensure    => running,
+      enable    => true,
+      hasstatus => $wazuh::params::service_has_status,
+      pattern   => $wazuh::params::api_service,
+      provider  => $api_service_provider,
+      require   => Package[$wazuh::params::api_package],
     }
   }
 
