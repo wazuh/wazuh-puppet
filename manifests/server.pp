@@ -24,6 +24,7 @@ class wazuh::server (
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
   $ossec_server_port                   = '1514',
+  $ossec_server_protocol               = 'udp',
   $server_package_version              = 'installed',
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
