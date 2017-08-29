@@ -5,7 +5,9 @@ class wazuh::repo (
 
   case $::osfamily {
     'Debian' : {
-      ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
+      if ! defined(Package['apt-transport-https']) {
+        ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
+      }
       # apt-key added by issue #34
       apt::key { 'wazuh':
         id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
