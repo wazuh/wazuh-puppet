@@ -27,10 +27,14 @@ class wazuh::server (
   $ossec_server_port                   = '1514',
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
+  $api_config_params                   = $::wazuh::params::api_config_params,
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'export',
   $install_wazuh_api                   = false,
+  $wazuh_api_enable_https              = false,
+  $wazuh_api_server_crt                = undef,
+  $wazuh_api_server_key                = undef,
   $manage_nodejs                       = true,
   $nodejs_repo_url_suffix              = '6.x',
   $agent_auth_password                 = undef,
@@ -179,6 +183,46 @@ class wazuh::server (
 
     package { $wazuh::params::api_package:
       ensure  => $api_package_version
+    }
+
+    if $wazuh_api_enable_https {
+      validate_string($wazuh_api_server_crt, $wazuh_api_server_key)
+      file { '/var/ossec/api/configuration/ssl/server.key':
+        content => $wazuh_api_server_key,
+        owner   => 'root',
+        group   => 'ossec',
+        mode    => '0600',
+        require => Package[$wazuh::params::api_package],
+        notify  => Service[$wazuh::params::api_service],
+      }
+
+      file { '/var/ossec/api/configuration/ssl/server.crt':
+        content => $wazuh_api_server_crt,
+        owner   => 'root',
+        group   => 'ossec',
+        mode    => '0600',
+        require => Package[$wazuh::params::api_package],
+        notify  => Service[$wazuh::params::api_service],
+      }
+    }
+
+    # wazuh-api config.js
+    $api_config_params = [
+      {'name' => 'ossec_path', 'value' => '/var/ossec'},
+      {'name' => 'host', 'value' => '0.0.0.0'},
+      {'name' => 'port', 'value' => '55000'},
+      {'name' => 'https', 'value' => 'yes'},
+      {'name' => 'basic_auth', 'value' => 'no'},
+      {'name' => 'BehindProxyServer', 'value' => 'no'},
+    ]
+
+    file { '/var/ossec/api/configuration/config.js':
+      content => template($api_config_template),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0750',
+      require => Package[$wazuh::params::api_package],
+      notify  => Service[$wazuh::params::api_service],
     }
 
     service { $wazuh::params::api_service:
