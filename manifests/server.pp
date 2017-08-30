@@ -43,11 +43,12 @@ class wazuh::server (
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
+  $api_config_template                 = 'wazuh/api/config.js.erb',
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
-    $install_wazuh_api
+    $install_wazuh_api, $wazuh_manager_verify_manager_ssl
   )
 
   # This allows arrays of integers, sadly
