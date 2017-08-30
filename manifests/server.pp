@@ -207,14 +207,9 @@ class wazuh::server (
     }
 
     # wazuh-api config.js
-    $api_config_params = [
-      {'name' => 'ossec_path', 'value' => '/var/ossec'},
-      {'name' => 'host', 'value' => '0.0.0.0'},
-      {'name' => 'port', 'value' => '55000'},
-      {'name' => 'https', 'value' => 'yes'},
-      {'name' => 'basic_auth', 'value' => 'no'},
-      {'name' => 'BehindProxyServer', 'value' => 'no'},
-    ]
+    # this hash is currently only covering the basic config section of config.js
+    # TODO: allow customization of the entire config.js
+    # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
 
     file { '/var/ossec/api/configuration/config.js':
       content => template($api_config_template),
