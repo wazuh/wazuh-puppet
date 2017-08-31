@@ -10,6 +10,7 @@ class wazuh::repo (
       apt::key { 'wazuh':
         id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
         source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
+        server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
         /(precise|trusty|vivid|wily|xenial|yakketi)/: {
