@@ -25,6 +25,8 @@ class wazuh::server (
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
   $api_service_provider                = $::wazuh::params::api_service_provider,
   $ossec_server_port                   = '1514',
+  $ossec_server_protocol               = 'udp',
+  $ossec_authd_enabled                 = false,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
   $manage_repos                        = true,
@@ -165,6 +167,32 @@ class wazuh::server (
       content => $agent_auth_password,
       require => Package[$wazuh::params::server_package],
     }
+  }
+
+  # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
+  if $wazuh_manager_verify_manager_ssl {
+    validate_string(
+      $wazuh_manager_server_crt, $wazuh_manager_server_key
+    )
+
+    file { '/var/ossec/etc/sslmanager.key':
+      content => $wazuh_manager_server_key,
+      owner   => 'root',
+      group   => 'ossec',
+      mode    => '0640',
+      require => Package[$wazuh::params::server_package],
+      notify  => Service[$wazuh::params::server_service],
+    }
+
+    file { '/var/ossec/etc/sslmanager.cert':
+      content => $wazuh_manager_server_crt,
+      owner   => 'root',
+      group   => 'ossec',
+      mode    => '0640',
+      require => Package[$wazuh::params::server_package],
+      notify  => Service[$wazuh::params::server_service],
+    }
+
   }
 
   ### Wazuh API
