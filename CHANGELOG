@@ -283,3 +283,4 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Fixed issue #18 with the pull request #17. (thanks @lemrouch)
   * Adding support for changing ossec_server_protocol with the pull request #30 (thanks @rafaelfc-olx)
   * Managing wazuh-api alongside with wazuh-manager with the pull request #31 (thanks @rafaelfc-olx)
+  * Preventing Duplicated declaration issues regarding apt-transport-https package with the pull request #32 (thanks @rafaelfc-olx)
