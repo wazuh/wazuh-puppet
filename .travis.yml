@@ -1,0 +1,36 @@
+---
+sudo: false
+language: ruby
+cache: bundler
+bundler_args: --without system_tests
+before_install:
+  - bundle -v
+  - rm Gemfile.lock || true
+  - gem update --system
+  - gem update bundler
+  - gem --version
+  - bundle -v
+matrix:
+  include:
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION='~> 3.0'
+  - rvm: 2.1.5
+    env: PUPPET_GEM_VERSION='~> 3.0'
+  - rvm: 2.1.5
+    env: PUPPET_GEM_VERSION='~> 3.0' FUTURE_PARSER=yes
+  - rvm: 2.1.6
+    env: PUPPET_GEM_VERSION='~> 4.1.0' STRICT_VARIABLES=yes
+  - rvm: 2.1.6
+    env: PUPPET_GEM_VERSION='~> 4.2.0' STRICT_VARIABLES=yes
+  - rvm: 2.1.6
+    env: PUPPET_GEM_VERSION='~> 4.3.0' STRICT_VARIABLES=yes
+  - rvm: 2.1.6
+    env: PUPPET_GEM_VERSION='~> 4.0' STRICT_VARIABLES=yes
+  - rvm: 2.1.6
+    env: PUPPET_GEM_VERSION='~> 5.0' STRICT_VARIABLES=yes
+  - rvm: 2.1.6
+    env: PUPPET_GEM_VERSION='~> 5.1' STRICT_VARIABLES=yes  
+script: 'bundle exec rake validate && bundle exec rake lint && bundle exec rake spec 
+ SPEC_OPTS="--format documentation"'
+notifications:
+  email: false
