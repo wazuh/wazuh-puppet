@@ -8,6 +8,7 @@ class wazuh::client(
   $ossec_server_ip            = undef,
   $ossec_server_hostname      = undef,
   $ossec_server_port          = '1514',
+  $ossec_server_protocol      = 'udp',
   $ossec_scanpaths            = [],
   $ossec_emailnotification    = 'yes',
   $ossec_ignorepaths          = [],
