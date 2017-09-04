@@ -32,9 +32,6 @@ class wazuh::server (
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'export',
   $install_wazuh_api                   = false,
-  $wazuh_api_enable_https              = false,
-  $wazuh_api_server_crt                = undef,
-  $wazuh_api_server_key                = undef,
   $manage_nodejs                       = true,
   $nodejs_repo_url_suffix              = '6.x',
   $agent_auth_password                 = undef,
@@ -52,7 +49,7 @@ class wazuh::server (
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
-    $install_wazuh_api, $wazuh_manager_verify_manager_ssl
+    $install_wazuh_api
   )
 
   # This allows arrays of integers, sadly
@@ -185,32 +182,10 @@ class wazuh::server (
       ensure  => $api_package_version
     }
 
-    if $wazuh_api_enable_https {
-      validate_string($wazuh_api_server_crt, $wazuh_api_server_key)
-      file { '/var/ossec/api/configuration/ssl/server.key':
-        content => $wazuh_api_server_key,
-        owner   => 'root',
-        group   => 'ossec',
-        mode    => '0600',
-        require => Package[$wazuh::params::api_package],
-        notify  => Service[$wazuh::params::api_service],
-      }
-
-      file { '/var/ossec/api/configuration/ssl/server.crt':
-        content => $wazuh_api_server_crt,
-        owner   => 'root',
-        group   => 'ossec',
-        mode    => '0600',
-        require => Package[$wazuh::params::api_package],
-        notify  => Service[$wazuh::params::api_service],
-      }
-    }
-
     # wazuh-api config.js
     # this hash is currently only covering the basic config section of config.js
     # TODO: allow customization of the entire config.js
     # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
-
     file { '/var/ossec/api/configuration/config.js':
       content => template($api_config_template),
       owner   => 'root',
