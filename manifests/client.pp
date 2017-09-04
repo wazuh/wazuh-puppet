@@ -8,6 +8,7 @@ class wazuh::client(
   $ossec_server_ip            = undef,
   $ossec_server_hostname      = undef,
   $ossec_server_port          = '1514',
+  $ossec_server_protocol      = 'udp',
   $ossec_scanpaths            = [],
   $ossec_emailnotification    = 'yes',
   $ossec_ignorepaths          = [],
@@ -26,6 +27,7 @@ class wazuh::client(
   $agent_service_name         = $::wazuh::params::agent_service,
   $manage_client_keys         = 'export',
   $agent_auth_password        = undef,
+  $wazuh_manager_root_ca_pem  = undef,
   $agent_seed                 = undef,
   $max_clients                = 3000,
   $ar_repeated_offenders      = '',
@@ -145,9 +147,26 @@ class wazuh::client(
       mode  => $wazuh::params::keys_mode,
     }
 
+    # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
+    $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/"
+    if $wazuh_manager_root_ca_pem != undef {
+      validate_string($wazuh_manager_root_ca_pem)
+      file { '/var/ossec/etc/rootCA.pem':
+        owner   => $wazuh::params::keys_owner,
+        group   => $wazuh::params::keys_group,
+        mode    => $wazuh::params::keys_mode,
+        content => $wazuh_manager_root_ca_pem,
+        require => Package[$agent_package_name],
+      }
+
+      $agent_auth_command = "${agent_auth_base_command} -v /var/ossec/etc/rootCA.pem"
+    } else {
+      $agent_auth_command = $agent_auth_base_command
+    }
+
     if $agent_auth_password {
       exec { 'agent-auth-with-pwd':
-        command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -P '${agent_auth_password}' -D /var/ossec/",
+        command => "${agent_auth_command} -P '${agent_auth_password}'",
         unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
         require => Package[$agent_package_name],
         notify  => Service[$agent_service_name],
@@ -155,7 +174,7 @@ class wazuh::client(
       }
     } else {
       exec { 'agent-auth-without-pwd':
-        command => "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/",
+        command => "${agent_auth_command}",
         unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
         require => Package[$agent_package_name],
         notify  => Service[$agent_service_name],

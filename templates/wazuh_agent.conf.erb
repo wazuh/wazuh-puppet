@@ -5,6 +5,9 @@
   <%- if @ossec_server_hostname then -%>
     <server-hostname><%= @ossec_server_hostname %></server-hostname>
   <%- end -%>
+  <%- if @ossec_server_protocol then -%>
+    <protocol><%= @ossec_server_protocol %></protocol>
+  <%- end -%>
     <port><%= @ossec_server_port %></port>
   <%- if @ossec_config_profiles then -%>
     <config-profile><%= @ossec_config_profiles.join(',') %></config-profile>
