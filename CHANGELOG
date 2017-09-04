@@ -285,3 +285,4 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Managing wazuh-api alongside with wazuh-manager with the pull request #31 (thanks @rafaelfc-olx)
   * Preventing Duplicated declaration issues regarding apt-transport-https package with the pull request #32 (thanks @rafaelfc-olx)
   * Adding support for changing the client protocol and validating the manager by CA with the pull request #34 (thanks @rafaelfc-olx)
+  * Fixed issue #29 puppetlabs/apt version 4 onwards breaks the installation of wazuh server (thanks @rafaelfc-olx)
