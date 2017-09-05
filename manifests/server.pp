@@ -25,6 +25,8 @@ class wazuh::server (
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
   $api_service_provider                = $::wazuh::params::api_service_provider,
   $ossec_server_port                   = '1514',
+  $ossec_server_protocol               = 'udp',
+  $ossec_authd_enabled                 = false,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
   $api_config_params                   = $::wazuh::params::api_config_params,
@@ -45,11 +47,14 @@ class wazuh::server (
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
   $api_config_template                 = 'wazuh/api/config.js.erb',
+  $wazuh_manager_verify_manager_ssl    = false,
+  $wazuh_manager_server_crt            = undef,
+  $wazuh_manager_server_key            = undef,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
-    $install_wazuh_api
+    $install_wazuh_api, $wazuh_manager_verify_manager_ssl
   )
 
   # This allows arrays of integers, sadly
@@ -169,6 +174,32 @@ class wazuh::server (
     }
   }
 
+  # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
+  if $wazuh_manager_verify_manager_ssl {
+    validate_string(
+      $wazuh_manager_server_crt, $wazuh_manager_server_key
+    )
+
+    file { '/var/ossec/etc/sslmanager.key':
+      content => $wazuh_manager_server_key,
+      owner   => 'root',
+      group   => 'ossec',
+      mode    => '0640',
+      require => Package[$wazuh::params::server_package],
+      notify  => Service[$wazuh::params::server_service],
+    }
+
+    file { '/var/ossec/etc/sslmanager.cert':
+      content => $wazuh_manager_server_crt,
+      owner   => 'root',
+      group   => 'ossec',
+      mode    => '0640',
+      require => Package[$wazuh::params::server_package],
+      notify  => Service[$wazuh::params::server_service],
+    }
+
+  }
+
   ### Wazuh API
   if $install_wazuh_api {
     validate_bool($manage_nodejs)
@@ -189,7 +220,7 @@ class wazuh::server (
     file { '/var/ossec/api/configuration/config.js':
       content => template($api_config_template),
       owner   => 'root',
-      group   => 'root',
+      group   => 'ossec',
       mode    => '0750',
       require => Package[$wazuh::params::api_package],
       notify  => Service[$wazuh::params::api_service],

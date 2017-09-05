@@ -22,7 +22,7 @@
     <%- @ossec_white_list.each do |ipaddress| -%><white_list><%= ipaddress %></white_list>
     <%- end -%>
   </global>
-  
+
 <%- if @syslog_output -%>
   <syslog_output>
     <server><%= @syslog_output_server %></server>
@@ -53,7 +53,7 @@
   <remote>
     <connection>secure</connection>
     <port><%= @ossec_server_port %></port>
-    <protocol>udp</protocol>
+    <protocol><%= @ossec_server_protocol %></protocol>
   </remote>
 
 <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
