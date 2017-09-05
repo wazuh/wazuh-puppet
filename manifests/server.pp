@@ -29,6 +29,7 @@ class wazuh::server (
   $ossec_authd_enabled                 = false,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
+  $api_config_params                   = $::wazuh::params::api_config_params,
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'export',
@@ -45,6 +46,7 @@ class wazuh::server (
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
+  $api_config_template                 = 'wazuh/api/config.js.erb',
   $wazuh_manager_verify_manager_ssl    = false,
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
@@ -209,6 +211,19 @@ class wazuh::server (
 
     package { $wazuh::params::api_package:
       ensure  => $api_package_version
+    }
+
+    # wazuh-api config.js
+    # this hash is currently only covering the basic config section of config.js
+    # TODO: allow customization of the entire config.js
+    # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
+    file { '/var/ossec/api/configuration/config.js':
+      content => template($api_config_template),
+      owner   => 'root',
+      group   => 'ossec',
+      mode    => '0750',
+      require => Package[$wazuh::params::api_package],
+      notify  => Service[$wazuh::params::api_service],
     }
 
     service { $wazuh::params::api_service:
