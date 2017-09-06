@@ -12,6 +12,12 @@
   <%- if @ossec_config_profiles then -%>
     <config-profile><%= @ossec_config_profiles.join(',') %></config-profile>
   <%- end -%>
+  <%- if @ossec_server_notify_time then -%>
+    <notify_time><%= @ossec_server_notify_time %></notify_time>
+  <%- end -%>
+  <%- if @ossec_server_time_reconnect then -%>
+    <time-reconnect><%= @ossec_server_time_reconnect %></time-reconnect>
+  <%- end -%>
   </client>
 
   <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
