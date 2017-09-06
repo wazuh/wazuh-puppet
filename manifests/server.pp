@@ -216,19 +216,6 @@ class wazuh::server (
       ensure  => $api_package_version
     }
 
-    # wazuh-api config.js
-    # this hash is currently only covering the basic config section of config.js
-    # TODO: allow customization of the entire config.js
-    # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
-    file { '/var/ossec/api/configuration/config.js':
-      content => template($api_config_template),
-      owner   => 'root',
-      group   => 'ossec',
-      mode    => '0750',
-      require => Package[$wazuh::params::api_package],
-      notify  => Service[$wazuh::params::api_service],
-    }
-
     if $wazuh_api_enable_https {
       validate_string($wazuh_api_server_crt, $wazuh_api_server_key)
       file { '/var/ossec/api/configuration/ssl/server.key':
@@ -248,6 +235,19 @@ class wazuh::server (
         require => Package[$wazuh::params::api_package],
         notify  => Service[$wazuh::params::api_service],
       }
+    }
+
+    # wazuh-api config.js
+    # this hash is currently only covering the basic config section of config.js
+    # TODO: allow customization of the entire config.js
+    # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
+    file { '/var/ossec/api/configuration/config.js':
+      content => template($api_config_template),
+      owner   => 'root',
+      group   => 'ossec',
+      mode    => '0750',
+      require => Package[$wazuh::params::api_package],
+      notify  => Service[$wazuh::params::api_service],
     }
 
     service { $wazuh::params::api_service:
