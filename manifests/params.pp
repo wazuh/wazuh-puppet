@@ -129,7 +129,7 @@ class wazuh::params {
                 $wodle_openscap_content = {
                   'ssg-centos-7-ds.xml' => {
                     'type' => 'xccdf',
-                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
+                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common',]
                 }
               }
               }
