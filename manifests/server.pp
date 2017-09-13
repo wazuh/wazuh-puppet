@@ -28,17 +28,9 @@ class wazuh::server (
   $ossec_server_protocol               = 'udp',
   $ossec_authd_enabled                 = false,
   $server_package_version              = 'installed',
-  $api_package_version                 = 'installed',
-  $api_config_params                   = $::wazuh::params::api_config_params,
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'export',
-  $install_wazuh_api                   = false,
-  $wazuh_api_enable_https              = false,
-  $wazuh_api_server_crt                = undef,
-  $wazuh_api_server_key                = undef,
-  $manage_nodejs                       = true,
-  $nodejs_repo_url_suffix              = '6.x',
   $agent_auth_password                 = undef,
   $ar_repeated_offenders               = '',
   $syslog_output                       = false,
@@ -49,7 +41,6 @@ class wazuh::server (
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
-  $api_config_template                 = 'wazuh/api/config.js.erb',
   $wazuh_manager_verify_manager_ssl    = false,
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
@@ -57,7 +48,7 @@ class wazuh::server (
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
-    $install_wazuh_api, $wazuh_manager_verify_manager_ssl
+    $wazuh_manager_verify_manager_ssl
   )
 
   # This allows arrays of integers, sadly
@@ -162,8 +153,6 @@ class wazuh::server (
     include wazuh::collect_agent_keys
   }
 
-
-
   if ( $manage_client_keys == 'authd') {
     # TODO: ensure the authd service is started if manage_client_keys == authd
     # (see https://github.com/wazuh/wazuh/issues/80)
@@ -201,63 +190,6 @@ class wazuh::server (
       notify  => Service[$wazuh::params::server_service],
     }
 
-  }
-
-  ### Wazuh API
-  if $install_wazuh_api {
-    validate_bool($manage_nodejs)
-    if $manage_nodejs {
-      validate_string($nodejs_repo_url_suffix)
-      class { '::nodejs': repo_url_suffix => $nodejs_repo_url_suffix }
-      Class['nodejs'] -> Package[$wazuh::params::api_package]
-    }
-
-    package { $wazuh::params::api_package:
-      ensure  => $api_package_version
-    }
-
-    if $wazuh_api_enable_https {
-      validate_string($wazuh_api_server_crt, $wazuh_api_server_key)
-      file { '/var/ossec/api/configuration/ssl/server.key':
-        content => $wazuh_api_server_key,
-        owner   => 'root',
-        group   => 'ossec',
-        mode    => '0600',
-        require => Package[$wazuh::params::api_package],
-        notify  => Service[$wazuh::params::api_service],
-      }
-
-      file { '/var/ossec/api/configuration/ssl/server.crt':
-        content => $wazuh_api_server_crt,
-        owner   => 'root',
-        group   => 'ossec',
-        mode    => '0600',
-        require => Package[$wazuh::params::api_package],
-        notify  => Service[$wazuh::params::api_service],
-      }
-    }
-
-    # wazuh-api config.js
-    # this hash is currently only covering the basic config section of config.js
-    # TODO: allow customization of the entire config.js
-    # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
-    file { '/var/ossec/api/configuration/config.js':
-      content => template($api_config_template),
-      owner   => 'root',
-      group   => 'ossec',
-      mode    => '0750',
-      require => Package[$wazuh::params::api_package],
-      notify  => Service[$wazuh::params::api_service],
-    }
-
-    service { $wazuh::params::api_service:
-      ensure    => running,
-      enable    => true,
-      hasstatus => $wazuh::params::service_has_status,
-      pattern   => $wazuh::params::api_service,
-      provider  => $api_service_provider,
-      require   => Package[$wazuh::params::api_package],
-    }
   }
 
 }

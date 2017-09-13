@@ -24,18 +24,6 @@ class wazuh::params {
       $processlist_owner = 'root'
       $processlist_group = 'ossec'
 
-      # this hash is currently only covering the basic config section of config.js
-      # TODO: allow customization of the entire config.js
-      # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
-      $api_config_params = [
-        {'name' => 'ossec_path', 'value' => '/var/ossec'},
-        {'name' => 'host', 'value' => '0.0.0.0'},
-        {'name' => 'port', 'value' => '55000'},
-        {'name' => 'https', 'value' => 'no'},
-        {'name' => 'basic_auth', 'value' => 'yes'},
-        {'name' => 'BehindProxyServer', 'value' => 'no'},
-      ]
-
       case $::osfamily {
         'Debian': {
 
