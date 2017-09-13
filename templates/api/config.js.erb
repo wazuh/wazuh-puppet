@@ -2,9 +2,20 @@
 var config = {};
 
 // Basic configuration
-<% @api_config_params.each do |config| -%>
-config.<%= config['name'] %> = "<%= config['value'] %>";
-<% end -%>
+
+
+
+config.ossec_path = "/var/ossec";
+config.host = "0.0.0.0";
+config.port = "55000";
+<%- if @wazuh_api_enable_https == true then -%>
+config.https = "yes";
+<% end %>
+<%- if @wazuh_api_enable_https == false then -%>
+config.https = "no";
+<% end %>
+config.BehindProxyServer = "yes";
+config.basic_auth = "yes";
 
 // Advanced configuration
 
