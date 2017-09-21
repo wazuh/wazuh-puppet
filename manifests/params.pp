@@ -87,7 +87,7 @@ class wazuh::params {
               $server_package = 'wazuh-manager'
               $api_service = 'wazuh-api'
               $api_package = 'wazuh-api'
-              $wodle_openscap_content = undef
+              $wodle_openscap_content = {}
             }
         default: {
           fail("Module ${module_name} is not supported on ${::operatingsystem}")
