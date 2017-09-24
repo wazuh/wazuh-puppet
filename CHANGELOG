@@ -288,3 +288,4 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Adding support for changing the client protocol and validating the manager by CA with the pull request #34 (thanks @rafaelfc-olx)
   * Configuring wazuh-api from puppet with the pull request #35 (thanks @rafaelfc-olx)
   * Adding notify_time and time-reconnect options to client config with the pull request #36 (thanks @rafaelfc-olx)
+  * New wazuh-winagent-v2.1.1-1.exe added.
