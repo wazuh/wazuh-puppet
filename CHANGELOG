@@ -289,3 +289,4 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Configuring wazuh-api from puppet with the pull request #35 (thanks @rafaelfc-olx)
   * Adding notify_time and time-reconnect options to client config with the pull request #36 (thanks @rafaelfc-olx)
   * New wazuh-winagent-v2.1.1-1.exe added.
+  * Profile name for Centos 7 is not _server, it's _common like RHEL7 with the pull request #38 (thanks @juliovalcarcel)
