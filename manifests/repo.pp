@@ -65,6 +65,18 @@ class wazuh::repo (
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }
+          'OracleLinux': {
+            if ( $::operatingsystemrelease =~ /^6.*/ ) {
+              $repotype = 'RHEL 6'
+              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
+              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
+            }
+            if ( $::operatingsystemrelease =~ /^7.*/ ){
+              $repotype = 'RHEL 7'
+              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
+              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
+            }
+          }
           'Redhat': {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
               $repotype = 'CentOS 5'

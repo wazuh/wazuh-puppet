@@ -158,6 +158,30 @@ class wazuh::params {
               }
               }
             }
+            'OracleLinux': {
+              if ( $::operatingsystemrelease =~ /^6.*/ ) {
+                $wodle_openscap_content = {
+                  'ssg-rhel-6-ds.xml' => {
+                    'type' => 'xccdf',
+                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
+                },
+                'cve-redhat-6-ds.xml' => {
+                'type' => 'xccdf',
+                  }
+              }
+              }
+              if ( $::operatingsystemrelease =~ /^7.*/ ) {
+                $wodle_openscap_content = {
+                  'ssg-rhel-7-ds.xml' => {
+                    'type' => 'xccdf',
+                    profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common',]
+                },
+                'cve-redhat-7-ds.xml' => {
+                'type' => 'xccdf',
+                  }
+              }
+              }
+            }
             'Fedora': {
               if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
                 $wodle_openscap_content = {
