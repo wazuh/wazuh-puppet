@@ -6,12 +6,12 @@ class wazuh::params {
       $config_file = '/var/ossec/etc/ossec.conf'
       $shared_agent_config_file = '/var/ossec/etc/shared/agent.conf'
 
-      $config_mode = '0440'
+      $config_mode = '0640'
       $config_owner = 'root'
       $config_group = 'ossec'
 
       $keys_file = '/var/ossec/etc/client.keys'
-      $keys_mode = '0440'
+      $keys_mode = '0640'
       $keys_owner = 'root'
       $keys_group = 'ossec'
 
@@ -20,7 +20,7 @@ class wazuh::params {
       $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
 
       $processlist_file = '/var/ossec/bin/.process_list'
-      $processlist_mode = '0440'
+      $processlist_mode = '0640'
       $processlist_owner = 'root'
       $processlist_group = 'ossec'
 
