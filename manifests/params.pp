@@ -134,7 +134,7 @@ class wazuh::params {
               }
               }
             }
-            'Redhat': {
+            /^(RedHat|OracleLinux)$/: {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-rhel-6-ds.xml' => {
