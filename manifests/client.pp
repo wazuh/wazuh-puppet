@@ -14,6 +14,7 @@ class wazuh::client(
   $ossec_scanpaths             = [],
   $ossec_emailnotification     = 'yes',
   $ossec_ignorepaths           = [],
+  $ossec_ignorepaths_regex     = [],
   $ossec_local_files           = $::wazuh::params::default_local_files,
   $ossec_syscheck_frequency    = 43200,
   $ossec_prefilter             = false,
