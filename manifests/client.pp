@@ -177,7 +177,7 @@ class wazuh::client(
       }
     } else {
       exec { 'agent-auth-without-pwd':
-        command => "${agent_auth_command}",
+        command => $agent_auth_command,
         unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
         require => Package[$agent_package_name],
         notify  => Service[$agent_service_name],
@@ -190,7 +190,7 @@ class wazuh::client(
   # Requires selinux module specified in metadata.json
   if ($::osfamily == 'RedHat' and $selinux == true) {
     selinux::module { 'ossec-logrotate':
-      ensure => 'present',
+      ensure    => 'present',
       source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',
     }
   }

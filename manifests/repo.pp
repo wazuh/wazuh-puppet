@@ -81,6 +81,7 @@ class wazuh::repo (
               $baseurl  = 'https://packages.wazuh.com/yum/fc/$releasever/$basearch'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
           }
+          default: { fail('This ossec module has not been tested on your distribution.') }
         }
       }
       # Set up OSSEC repo
