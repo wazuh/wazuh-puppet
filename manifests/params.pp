@@ -116,22 +116,29 @@ class wazuh::params {
             '/var/log/httpd/error_log'  => 'apache'
           }
           case $::operatingsystem {
+            'Amazon': {
+              # Amazon is based on Centos-6 with some improvements
+              # taken from RHEL-7 but uses SysV-Init, not Systemd.
+              # Probably best to leave this undef until we can
+              # write/find a release-specific file.
+              $wodle_openscap_content = undef
+           }
             'CentOS': {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-centos-6-ds.xml' => {
                     'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
+                  }
                 }
-              }
               }
               if ( $::operatingsystemrelease =~ /^7.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-centos-7-ds.xml' => {
                     'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common',]
+                  }
                 }
-              }
               }
             }
             /^(RedHat|OracleLinux)$/: {
@@ -140,22 +147,22 @@ class wazuh::params {
                   'ssg-rhel-6-ds.xml' => {
                     'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_server',]
-                },
-                'cve-redhat-6-ds.xml' => {
-                'type' => 'xccdf',
+                  },
+                  'cve-redhat-6-ds.xml' => {
+                    'type' => 'xccdf',
                   }
-              }
+                }
               }
               if ( $::operatingsystemrelease =~ /^7.*/ ) {
                 $wodle_openscap_content = {
                   'ssg-rhel-7-ds.xml' => {
                     'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common',]
-                },
-                'cve-redhat-7-ds.xml' => {
-                'type' => 'xccdf',
+                  },
+                  'cve-redhat-7-ds.xml' => {
+                    'type' => 'xccdf',
                   }
-              }
+                }
               }
             }
             'Fedora': {
@@ -164,16 +171,16 @@ class wazuh::params {
                   'ssg-fedora-ds.xml' => {
                     type => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_standard', 'xccdf_org.ssgproject.content_profile_common',]
-                },
-              }
+                  },
+                }
               }
             }
             default: { fail('This ossec module has not been tested on your distribution') }
-            }
           }
+        }
         default: { fail('This ossec module has not been tested on your distribution') }
+      }
     }
-  }
     'windows': {
       $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
       $shared_agent_config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/shared/agent.conf'), '\\\\', '/')
