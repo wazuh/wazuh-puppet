@@ -65,13 +65,13 @@ class wazuh::repo (
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }
-          'Redhat': {
+          /^(RedHat|OracleLinux)$/: {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $repotype = 'CentOS 5'
+              $repotype = 'RedHat 5'
               $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
               $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
             } else {
-              $repotype = 'CentOS > 5'
+              $repotype = 'RedHat > 5'
               $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
@@ -81,6 +81,7 @@ class wazuh::repo (
               $baseurl  = 'https://packages.wazuh.com/yum/fc/$releasever/$basearch'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
           }
+          default: { fail('This ossec module has not been tested on your distribution.') }
         }
       }
       # Set up OSSEC repo

@@ -290,3 +290,7 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Adding notify_time and time-reconnect options to client config with the pull request #36 (thanks @rafaelfc-olx)
   * New wazuh-winagent-v2.1.1-1.exe added.
   * Profile name for Centos 7 is not _server, it's _common like RHEL7 with the pull request #38 (thanks @juliovalcarcel)
+  * Verifying if @wodle_openscap_content is defined, fixed #45 and #46
+  * Set the same file permissions than the installed package, fixed #41
+  * Adding the ability to set "type" attribute for "ignore" tag, fixed #19
+  * Adding support to OracleLinux, Fixed #43

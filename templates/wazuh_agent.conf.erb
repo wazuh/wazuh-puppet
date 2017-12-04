@@ -22,6 +22,6 @@
 
   <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
 
-  <%- if @enable_wodle_openscap -%>
+  <%- if @enable_wodle_openscap and @wodle_openscap_content -%>
   <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
   <%- end -%>
