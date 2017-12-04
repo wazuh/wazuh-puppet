@@ -23,6 +23,7 @@ class wazuh::client(
   $selinux                     = false,
   $agent_name                  = $::hostname,
   $agent_ip_address            = $::ipaddress,
+  $manage_package              = true,
   $manage_repo                 = true,
   $manage_epel_repo            = true,
   $agent_package_name          = $::wazuh::params::agent_package,
@@ -41,7 +42,8 @@ class wazuh::client(
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
-    $selinux, $manage_repo, $manage_epel_repo
+    $selinux, $manage_repo, $manage_epel_repo,
+    $manage_package
   )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
@@ -52,7 +54,6 @@ class wazuh::client(
   if ( ( $ossec_server_ip == undef ) and ( $ossec_server_hostname == undef ) ) {
     fail('must pass either $ossec_server_ip or $ossec_server_hostname to Class[\'wazuh::client\'].')
   }
-
   case $::kernel {
     'Linux' : {
       if $manage_repo {
@@ -63,8 +64,10 @@ class wazuh::client(
           Class['wazuh::repo'] -> Package[$agent_package_name]
         }
       }
-      package { $agent_package_name:
-        ensure => $agent_package_version
+      if $manage_package {
+        package { $agent_package_name:
+          ensure  => $agent_package_version,
+        }
       }
     }
     'windows' : {
@@ -78,12 +81,14 @@ class wazuh::client(
           source_permissions => ignore
       }
 
-      package { $agent_package_name:
-        ensure          => $agent_package_version,
-        provider        => 'windows',
-        source          => 'C:/wazuh-winagent-v2.1.1-1.exe',
-        install_options => [ '/S' ],  # Nullsoft installer silent installation
-        require         => File['C:/wazuh-winagent-v2.1.1-1.exe'],
+      if $manage_package {
+        package { $agent_package_name:
+          ensure          => $agent_package_version,
+          provider        => 'windows',
+          source          => 'C:/wazuh-winagent-v2.1.1-1.exe',
+          install_options => [ '/S' ],  # Nullsoft installer silent installation
+          require         => File['C:/wazuh-winagent-v2.1.1-1.exe'],
+        }
       }
     }
     default: { fail('OS not supported') }
@@ -128,7 +133,7 @@ class wazuh::client(
       group   => $wazuh::params::keys_group,
       mode    => $wazuh::params::keys_mode,
       notify  => Service[$agent_service_name],
-      require => Package[$agent_package_name]
+      require => Package[$agent_package_name],
     }
     # A separate module to avoid storeconfigs warnings when not managing keys
     class { 'wazuh::export_agent_key':

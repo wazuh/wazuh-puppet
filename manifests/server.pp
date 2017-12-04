@@ -28,9 +28,11 @@ class wazuh::server (
   $ossec_server_port                   = '1514',
   $ossec_server_protocol               = 'udp',
   $ossec_authd_enabled                 = false,
+  $server_package_name                 = $::wazuh::params::server_package,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
   $api_config_params                   = $::wazuh::params::api_config_params,
+  $manage_package                      = true,
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'export',
@@ -58,7 +60,8 @@ class wazuh::server (
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
-    $install_wazuh_api, $wazuh_manager_verify_manager_ssl
+    $install_wazuh_api, $wazuh_manager_verify_manager_ssl,
+    $manage_package,
   )
 
   # This allows arrays of integers, sadly
@@ -72,7 +75,6 @@ class wazuh::server (
     validate_string($ossec_emailfrom)
     validate_array($ossec_emailto)
   }
-
   if $::osfamily == 'windows' {
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
   }
@@ -81,16 +83,18 @@ class wazuh::server (
     # TODO: Allow filtering of EPEL requirement
     class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
     if $::osfamily == 'Debian' {
-      Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params::server_package]
+      Class['wazuh::repo'] -> Class['apt::update'] -> Package[$server_package_name]
     } else {
-      Class['wazuh::repo'] -> Package[$wazuh::params::server_package]
+      Class['wazuh::repo'] -> Package[$server_package_name]
     }
 
   }
 
   # install package
-  package { $wazuh::params::server_package:
-    ensure  => $server_package_version
+  if $manage_package {
+    package { $server_package_name:
+      ensure  => $server_package_version,
+    }
   }
 
   file {
@@ -99,7 +103,7 @@ class wazuh::server (
       group   => $wazuh::params::config_group,
       mode    => $wazuh::params::config_mode,
       notify  => Service[$wazuh::params::server_service],
-      require => Package[$wazuh::params::server_package];
+      require => Package[$server_package_name];
     $wazuh::params::shared_agent_config_file:
       validate_cmd => $wazuh::params::validate_cmd_conf,
       content      => template($shared_agent_template);
@@ -117,7 +121,7 @@ class wazuh::server (
     hasstatus => $wazuh::params::service_has_status,
     pattern   => $wazuh::params::server_service,
     provider  => $ossec_service_provider,
-    require   => Package[$wazuh::params::server_package],
+    require   => Package[$server_package_name],
   }
 
   concat { 'ossec.conf':
@@ -125,7 +129,7 @@ class wazuh::server (
     owner   => $wazuh::params::config_owner,
     group   => $wazuh::params::config_group,
     mode    => $wazuh::params::config_mode,
-    require => Package[$wazuh::params::server_package],
+    require => Package[$server_package_name],
     notify  => Service[$wazuh::params::server_service],
     #validate_cmd => $wazuh::params::validate_cmd_conf, # not yet implemented, see https://github.com/wazuh/wazuh/issues/86
   }
@@ -151,7 +155,7 @@ class wazuh::server (
       group   => $wazuh::params::keys_group,
       mode    => $wazuh::params::keys_mode,
       notify  => Service[$wazuh::params::server_service],
-      require => Package[$wazuh::params::server_package],
+      require => Package[$server_package_name],
     }
     concat::fragment { 'var_ossec_etc_client.keys_end' :
       target  => $wazuh::params::keys_file,
@@ -174,7 +178,7 @@ class wazuh::server (
       group   => $wazuh::params::keys_group,
       mode    => $wazuh::params::keys_mode,
       content => $agent_auth_password,
-      require => Package[$wazuh::params::server_package],
+      require => Package[$server_package_name],
     }
   }
 
@@ -189,7 +193,7 @@ class wazuh::server (
       owner   => 'root',
       group   => 'ossec',
       mode    => '0640',
-      require => Package[$wazuh::params::server_package],
+      require => Package[$server_package_name],
       notify  => Service[$wazuh::params::server_service],
     }
 
@@ -198,7 +202,7 @@ class wazuh::server (
       owner   => 'root',
       group   => 'ossec',
       mode    => '0640',
-      require => Package[$wazuh::params::server_package],
+      require => Package[$server_package_name],
       notify  => Service[$wazuh::params::server_service],
     }
 
