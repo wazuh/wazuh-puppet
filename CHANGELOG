@@ -294,3 +294,4 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Set the same file permissions than the installed package, fixed #41
   * Adding the ability to set "type" attribute for "ignore" tag, fixed #19
   * Adding support to OracleLinux, Fixed #43
+  * Add an option for the agent/manager class to manage the firewall automatically with puppetlabs/firewall

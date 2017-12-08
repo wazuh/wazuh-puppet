@@ -15,6 +15,8 @@ class wazuh::params {
       $keys_owner = 'root'
       $keys_group = 'ossec'
 
+      $manage_firewall = false
+
       $authd_pass_file = '/var/ossec/etc/authd.pass'
 
       $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
@@ -179,6 +181,8 @@ class wazuh::params {
       $shared_agent_config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/shared/agent.conf'), '\\\\', '/')
       $config_owner = 'Administrator'
       $config_group = 'Administrators'
+
+      $manage_firewall = false
 
       $keys_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/client.keys'), '\\\\', '/')
       $keys_mode = '0440'

@@ -38,6 +38,7 @@ class wazuh::client(
   $wodle_openscap_content      = $::wazuh::params::wodle_openscap_content,
   $service_has_status          = $::wazuh::params::service_has_status,
   $ossec_conf_template         = 'wazuh/wazuh_agent.conf.erb',
+  Boolean $manage_firewall     = $::ossec::params::manage_firewall,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
@@ -193,5 +194,18 @@ class wazuh::client(
       ensure    => 'present',
       source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',
     }
+  }
+  # Manage firewall
+ if $manage_firewall {
+   include firewall
+   firewall { '1514 ossec-manager':
+     dport  => $ossec_server_port,
+     proto  => 'udp',
+     action => 'accept',
+     state  => [
+       'NEW',
+       'RELATED',
+       'ESTABLISHED'],
+   }
   }
 }
