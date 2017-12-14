@@ -38,7 +38,7 @@ class wazuh::client(
   $wodle_openscap_content      = $::wazuh::params::wodle_openscap_content,
   $service_has_status          = $::wazuh::params::service_has_status,
   $ossec_conf_template         = 'wazuh/wazuh_agent.conf.erb',
-  Boolean $manage_firewall     = $::ossec::params::manage_firewall,
+  Boolean $manage_firewall     = $::wazuh::params::manage_firewall,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
