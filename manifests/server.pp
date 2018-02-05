@@ -54,6 +54,7 @@ class wazuh::server (
   $wazuh_manager_verify_manager_ssl    = false,
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
+  Boolean $manage_firewall             = $::wazuh::params::manage_firewall,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
@@ -259,5 +260,17 @@ class wazuh::server (
       require   => Package[$wazuh::params::api_package],
     }
   }
-
+  # Manage firewall
+   if $manage_firewall {
+     include firewall
+     firewall { '1514 wazuh-manager':
+       dport  => $ossec_server_port,
+       proto  => $ossec_server_protocol,
+       action => 'accept',
+       state  => [
+         'NEW',
+         'RELATED',
+         'ESTABLISHED'],
+    }
+  }
 }
