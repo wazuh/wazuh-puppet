@@ -34,6 +34,8 @@ class wazuh::server (
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'export',
+  $manage_custom_client_keys           = false,
+  $custom_client_keys_file             = undef,
   $install_wazuh_api                   = false,
   $wazuh_api_enable_https              = false,
   $wazuh_api_server_crt                = undef,
@@ -59,7 +61,8 @@ class wazuh::server (
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
-    $install_wazuh_api, $wazuh_manager_verify_manager_ssl
+    $install_wazuh_api, $wazuh_manager_verify_manager_ssl,
+    $manage_custom_client_keys
   )
 
   # This allows arrays of integers, sadly
@@ -152,6 +155,15 @@ class wazuh::server (
       mode    => $wazuh::params::keys_mode,
       notify  => Service[$wazuh::params::server_service],
       require => Package[$wazuh::params::server_package],
+    }
+    if $manage_custom_client_keys {
+      concat::fragment {
+        'var_ossec_etc_client.keys_top' :
+          target => $wazuh::params::keys_file,
+          order  => 00,
+          source => $custom_client_keys_file,
+          notify => Service[$wazuh::params::server_service];
+      }
     }
     concat::fragment { 'var_ossec_etc_client.keys_end' :
       target  => $wazuh::params::keys_file,
