@@ -107,3 +107,4 @@ class wazuh::repo (
     default: { fail('This ossec module has not been tested on your distribution') }
   }
 }
+
