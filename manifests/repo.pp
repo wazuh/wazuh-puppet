@@ -47,43 +47,18 @@ class wazuh::repo (
       }
     }
     'Linux', 'Redhat' : {
-      if ( $::operatingsystem == 'Amazon' ) {
-        $repotype = 'Amazon Linux'
-        $baseurl  = 'https://packages.wazuh.com/yum/rhel/6Server/$basearch'
-        $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-      }
-      else {
         case $::os[name] {
-          'CentOS': {
+          /^(CentOS|RedHat|OracleLinux|Fedora)$/: {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $repotype = 'CentOS 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/el/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
+              $baseurl  = 'https://packages.wazuh.com/3.x/yum/5/'
+              $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
             } else {
-              $repotype = 'CentOS > 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/el/$releasever/$basearch'
+              $baseurl  = 'https://packages.wazuh.com/3.x/yum/'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
-          }
-          /^(RedHat|OracleLinux)$/: {
-            if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $repotype = 'RedHat 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
-            } else {
-              $repotype = 'RedHat > 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-            }
-          }
-          'Fedora': {
-              $repotype = 'Fedora'
-              $baseurl  = 'https://packages.wazuh.com/yum/fc/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
           }
           default: { fail('This ossec module has not been tested on your distribution.') }
         }
-      }
       # Set up OSSEC repo
       yumrepo { 'wazuh':
         descr    => "WAZUH OSSEC Repository - www.wazuh.com # ${repotype}",
