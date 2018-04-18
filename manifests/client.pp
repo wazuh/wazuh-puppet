@@ -7,6 +7,7 @@ class wazuh::client(
   $ossec_rootcheck_checkfiles  = true,
   $ossec_server_ip             = undef,
   $ossec_server_hostname       = undef,
+  $wazuh_manager_address       = undef,
   $ossec_server_port           = '1514',
   $ossec_server_protocol       = 'udp',
   $ossec_server_notify_time    = undef,
@@ -28,6 +29,7 @@ class wazuh::client(
   $agent_package_name          = $::wazuh::params::agent_package,
   $agent_package_version       = 'installed',
   $agent_service_name          = $::wazuh::params::agent_service,
+  $agent_auto_restart          = 'yes',
   $manage_client_keys          = 'export',
   $agent_auth_password         = undef,
   $wazuh_manager_root_ca_pem   = undef,
@@ -50,8 +52,8 @@ class wazuh::client(
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if ( ( $ossec_server_ip == undef ) and ( $ossec_server_hostname == undef ) ) {
-    fail('must pass either $ossec_server_ip or $ossec_server_hostname to Class[\'wazuh::client\'].')
+  if ( ( $ossec_server_ip == undef ) and ( $ossec_server_hostname == undef ) and ( $wazuh_manager_address == undef ) ) {
+    fail('must pass either $ossec_server_ip or $ossec_server_hostname or $wazuh_manager_address to Class[\'wazuh::client\'].')
   }
 
   case $::kernel {
