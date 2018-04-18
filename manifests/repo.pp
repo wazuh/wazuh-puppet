@@ -15,27 +15,13 @@ class wazuh::repo (
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(precise|trusty|vivid|wily|xenial|yakketi)/: {
+        /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/apt',
-            release  => $::lsbdistcodename,
-            repos    => 'main',
-            include  => {
-              'src' => false,
-              'deb' => true,
-            },
-          }
-
-        }
-        /^(jessie|wheezy|stretch|sid)$/: {
-          apt::source { 'wazuh':
-            ensure   => present,
-            comment  => 'This is the WAZUH Debian repository',
-            location => 'https://packages.wazuh.com/apt',
-            release  => $::lsbdistcodename,
+            location => 'https://packages.wazuh.com/3.x/apt',
+            release  => 'stable',
             repos    => 'main',
             include  => {
               'src' => false,
