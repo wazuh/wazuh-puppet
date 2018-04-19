@@ -34,7 +34,7 @@ class wazuh::client(
   $agent_seed                  = undef,
   $max_clients                 = 3000,
   $ar_repeated_offenders       = '',
-  $enable_wodle_openscap       = true,
+  $enable_wodle_openscap       = false,
   $wodle_openscap_content      = $::wazuh::params::wodle_openscap_content,
   $service_has_status          = $::wazuh::params::service_has_status,
   $ossec_conf_template         = 'wazuh/wazuh_agent.conf.erb',
