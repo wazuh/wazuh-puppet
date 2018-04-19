@@ -171,7 +171,7 @@ class wazuh::params {
               if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
                 $wodle_openscap_content = {
                   'ssg-fedora-ds.xml' => {
-                    type => 'xccdf',
+                    'type' => 'xccdf',
                     profiles => ['xccdf_org.ssgproject.content_profile_standard', 'xccdf_org.ssgproject.content_profile_common',]
                   },
                 }
