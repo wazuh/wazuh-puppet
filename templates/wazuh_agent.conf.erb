@@ -26,6 +26,13 @@
     <auto_restart><%= @agent_auto_restart %></auto_restart>
   </client>
 
+  <client_buffer>
+    <!-- Agent buffer options -->
+    <disabled>no</disabled>
+    <queue_size><%= @client_buffer_queue_size %></queue_size>
+    <events_per_second><%= @client_buffer_events_per_second %></events_per_second>
+  </client_buffer>
+
   <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
 
   <%- if @enable_wodle_openscap and @wodle_openscap_content -%>
