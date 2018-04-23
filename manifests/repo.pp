@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Repo installation
 class wazuh::repo (
   $redhat_manage_epel = true,
@@ -68,4 +69,3 @@ class wazuh::repo (
     default: { fail('This ossec module has not been tested on your distribution') }
   }
 }
-

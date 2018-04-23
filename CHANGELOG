@@ -295,3 +295,6 @@ Jose Luis Ruiz <jose@wazuh.com>:
   * Adding the ability to set "type" attribute for "ignore" tag, fixed #19
   * Adding support to OracleLinux, Fixed #43
   * Add an option for the agent/manager class to manage the firewall automatically with puppetlabs/firewall
+  * Update URL repository to support Wazuh 3.x
+  * Update templates with new Wazuh 3.x terminology.
+  

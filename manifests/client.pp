@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
 class wazuh::client(
   $ossec_active_response           = true,
@@ -213,4 +214,3 @@ class wazuh::client(
    }
   }
 }
-

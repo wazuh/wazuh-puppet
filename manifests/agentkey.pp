@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # utility function to fill up /var/ossec/etc/client.keys
 define wazuh::agentkey(
   $agent_id,
