@@ -1,0 +1,13 @@
+  <integration>
+    <name><%= @name %></name>
+    <hook_url><%= @hook_url %></hook_url>
+    <% if @api_key != '' -%>
+      <api_key><%= @api_key %></api_key>
+    <% end %>
+    <% if @in_rule_id != '' -%>
+      <rule_id><%= @in_rule_id %></rule_id>
+    <% end %>
+    <level><%= @in_level %></level>
+    <group><%= @in_group %></group>
+    <event_location><%= @in_location %></event_location>
+  </integration>
