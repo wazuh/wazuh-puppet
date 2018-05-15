@@ -6,3 +6,6 @@ CSYSLOG_DAEMON=ossec-csyslogd
 <% if @ossec_authd_enabled -%>
 AUTH_DAEMON=ossec-authd
 <% end -%>
+<% if @ossec_integratord_enabled -%>
+INTEGRATOR_DAEMON=ossec-integratord
+<% end -%>
