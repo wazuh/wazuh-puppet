@@ -1,7 +1,7 @@
 # Main ossec server config
 class wazuh::server (
   $smtp_server                         = undef,
-  $ossec_emailto                       = undef,
+  $ossec_emailto                       = [],
   $ossec_emailfrom                     = "wazuh@${::domain}",
   $ossec_active_response               = true,
   $ossec_rootcheck                     = true,
