@@ -35,7 +35,7 @@ class wazuh::repo (
     }
     'Linux', 'Redhat' : {
         case $::os[name] {
-          /^(CentOS|RedHat|OracleLinux|Fedora)$/: {
+          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
               $baseurl  = 'https://packages.wazuh.com/3.x/yum/5/'
               $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
