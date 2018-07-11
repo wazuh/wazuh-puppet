@@ -219,7 +219,10 @@ class wazuh::server (
     validate_bool($manage_nodejs)
     if $manage_nodejs {
       validate_string($nodejs_repo_url_suffix)
-      class { '::nodejs': repo_url_suffix => $nodejs_repo_url_suffix }
+      class { '::nodejs':
+        repo_url_suffix        => $nodejs_repo_url_suffix,
+        legacy_debian_symlinks => false,
+      }
       Class['nodejs'] -> Package[$wazuh::params::api_package]
     }
 
