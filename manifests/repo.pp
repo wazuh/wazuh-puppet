@@ -1,6 +1,7 @@
 # Repo installation
 class wazuh::repo (
   $redhat_manage_epel = true,
+  $package_subtree    = '',
 ) {
 
   case $::osfamily {
@@ -15,20 +16,19 @@ class wazuh::repo (
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(precise|trusty|vivid|wily|xenial|yakketi)/: {
+        /(precise|trusty|vivid|wily|xenial|yakkety|bionic)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/apt',
-            release  => $::lsbdistcodename,
+            location => "https://packages.wazuh.com/${package_subtree}/apt",
+            release  => 'stable',
             repos    => 'main',
             include  => {
               'src' => false,
               'deb' => true,
             },
           }
-
         }
         /^(jessie|wheezy|stretch|sid)$/: {
           apt::source { 'wazuh':
@@ -81,6 +81,7 @@ class wazuh::repo (
               $baseurl  = 'https://packages.wazuh.com/yum/fc/$releasever/$basearch'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
           }
+          default: { fail('This ossec module has not been tested on your distribution') }
         }
       }
       # Set up OSSEC repo

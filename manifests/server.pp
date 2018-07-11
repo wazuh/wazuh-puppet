@@ -32,6 +32,7 @@ class wazuh::server (
   $api_config_params                   = $::wazuh::params::api_config_params,
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
+  $package_subtree                     = $::wazuh::params::package_subtree,
   $manage_client_keys                  = 'export',
   $install_wazuh_api                   = false,
   $wazuh_api_enable_https              = false,
@@ -78,7 +79,10 @@ class wazuh::server (
 
   if $manage_repos {
     # TODO: Allow filtering of EPEL requirement
-    class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
+    class { 'wazuh::repo':
+      redhat_manage_epel => $manage_epel_repo,
+      package_subtree    => $package_subtree,
+    }
     if $::osfamily == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params::server_package]
     } else {
