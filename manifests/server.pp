@@ -96,22 +96,27 @@ class wazuh::server (
     ensure  => $server_package_version
   }
 
+  File {
+    owner   => $wazuh::params::config_owner,
+    group   => $wazuh::params::config_group,
+    mode    => $wazuh::params::config_mode,
+    notify  => Service[$wazuh::params::server_service],
+  }
+
   file {
-    default:
-      owner   => $wazuh::params::config_owner,
-      group   => $wazuh::params::config_group,
-      mode    => $wazuh::params::config_mode,
-      notify  => Service[$wazuh::params::server_service],
-      require => Package[$wazuh::params::server_package];
     $wazuh::params::shared_agent_config_file:
       validate_cmd => $wazuh::params::validate_cmd_conf,
-      content      => template($shared_agent_template);
+      content      => template($shared_agent_template),
+      require      => Package[$wazuh::params::server_package];
     '/var/ossec/etc/rules/local_rules.xml':
-      content      => template($local_rules_template);
+      content      => template($local_rules_template),
+      require => Package[$wazuh::params::server_package];
     '/var/ossec/etc/decoders/local_decoder.xml':
-      content      => template($local_decoder_template);
+      content      => template($local_decoder_template),
+      require => Package[$wazuh::params::server_package];
     $wazuh::params::processlist_file:
-      content      => template('wazuh/process_list.erb');
+      content      => template('wazuh/process_list.erb'),
+      require => Package[$wazuh::params::server_package];
   }
 
   service { $wazuh::params::server_service:
@@ -133,10 +138,12 @@ class wazuh::server (
     #validate_cmd => $wazuh::params::validate_cmd_conf, # not yet implemented, see https://github.com/wazuh/wazuh/issues/86
   }
 
+  Concat::Fragment {
+    target => 'ossec.conf',
+    notify => Service[$wazuh::params::server_service],
+  }
+
   concat::fragment {
-    default:
-      target => 'ossec.conf',
-      notify => Service[$wazuh::params::server_service];
     'ossec.conf_header':
       order   => 00,
       content => "<ossec_config>\n";
