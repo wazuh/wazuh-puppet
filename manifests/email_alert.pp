@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Define an email alert
 define wazuh::email_alert(
   $alert_email,

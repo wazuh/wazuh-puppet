@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Repo installation
 class wazuh::repo (
   $redhat_manage_epel = true,
@@ -29,67 +30,41 @@ class wazuh::repo (
         # This is never used
         server => "${apt_key_server}",
       }
-      # This list seems contradictory to params.pp, what the heck is going on??
-      # Also, obscene duplication of data. The only difference is the flavor!
-      # UPDATE: This definitely conflicts with params.pp, minimum versions in 
-      #  params.pp are 6 for RedHat flavors. 5 is long dead and should be 
-      #  dropped.
-      apt::source { 'wazuh':
-        ensure   => present,
-        comment  => "This is the ${facts['os']['family']} Ubuntu repository",
-        location => "${repo_base_url}/apt",
-        # This is the default so really no need to specify it
-        #release  => $::lsbdistcodename,
-        repos    => 'main',
-        include  => {
-          'src' => false,
-          'deb' => true,
-        },
+      case $::lsbdistcodename {
+        /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi)/: {
+
+          apt::source { 'wazuh':
+            ensure   => present,
+            comment  => 'This is the WAZUH Ubuntu repository',
+            location => 'https://packages.wazuh.com/3.x/apt',
+            release  => 'stable',
+            repos    => 'main',
+            include  => {
+              'src' => false,
+              'deb' => true,
+            },
+          }
+        }
+        default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
       }
     }
-    'Linux', 'RedHat': {
-      if ( $::operatingsystem == 'Amazon' ) {
-        #$repotype = 'Amazon Linux'
-        $baseurl  = 'https://packages.wazuh.com/yum/rhel/6Server/$basearch'
-        $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-      }
-      else {
+    'Linux', 'Redhat' : {
         case $::os[name] {
-          'CentOS': {
+          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              # Is 5 supported anywhere else??
-              #$repotype = 'CentOS 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/el/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
+              $baseurl  = 'https://packages.wazuh.com/3.x/yum/5/'
+              $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
             } else {
-              #$repotype = 'CentOS > 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/el/$releasever/$basearch'
+              $baseurl  = 'https://packages.wazuh.com/3.x/yum/'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
-          }
-          /^(RedHat|OracleLinux)$/: {
-            if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              #$repotype = 'RedHat 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
-            } else {
-              #$repotype = 'RedHat > 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-            }
-          }
-          'Fedora': {
-              #$repotype = 'Fedora'
-              $baseurl  = 'https://packages.wazuh.com/yum/fc/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
           }
           default: { fail('This ossec module has not been tested on your distribution.') }
         }
-      }
       # Set up OSSEC repo
       yumrepo { 'wazuh':
-        descr    => 'WAZUH OSSEC Repository',
-        enabled  => $yum_repo_enable,
+        descr    => "WAZUH OSSEC Repository - www.wazuh.com",
+        enabled  => true,
         gpgcheck => 1,
         gpgkey   => "{repo_base_url}/key/${yum_gpgkey_name}",
         baseurl  => "${repo_base_url}/${yum_directory_url}"
