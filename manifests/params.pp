@@ -1,4 +1,4 @@
-# Paramas file
+# Params file
 class wazuh::params {
   case $::kernel {
     'Linux': {
@@ -41,8 +41,8 @@ class wazuh::params {
       case $::osfamily {
         'Debian': {
 
-          $agent_service  = 'wazuh-agent'
-          $agent_package  = 'wazuh-agent'
+          #$agent_service  = 'wazuh-agent'
+          #$agent_package  = 'wazuh-agent'
           $service_has_status  = false
           $ossec_service_provider = undef
           $api_service_provider = undef
@@ -58,10 +58,10 @@ class wazuh::params {
 
           case $::lsbdistcodename {
             'xenial': {
-              $server_service = 'wazuh-manager'
-              $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
+              #$server_service = 'wazuh-manager'
+              #$server_package = 'wazuh-manager'
+              #$api_service = 'wazuh-api'
+              #$api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-ubuntu-1604-ds.xml' => {
                   'type' => 'xccdf',
@@ -70,10 +70,10 @@ class wazuh::params {
               }
             }
             'jessie': {
-              $server_service = 'wazuh-manager'
-              $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
+              #$server_service = 'wazuh-manager'
+              #$server_package = 'wazuh-manager'
+              #$api_service = 'wazuh-api'
+              #$api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-debian-8-ds.xml' => {
                   'type' => 'xccdf',
@@ -85,10 +85,10 @@ class wazuh::params {
               }
             }
             /^(wheezy|stretch|sid|precise|trusty|vivid|wily|xenial)$/: {
-              $server_service = 'wazuh-manager'
-              $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
+              #$server_service = 'wazuh-manager'
+              #$server_package = 'wazuh-manager'
+              #$api_service = 'wazuh-api'
+              #$api_package = 'wazuh-api'
               $wodle_openscap_content = undef
             }
         default: {
@@ -99,12 +99,12 @@ class wazuh::params {
         }
         'Linux', 'RedHat': {
 
-          $agent_service  = 'wazuh-agent'
-          $agent_package  = 'wazuh-agent'
-          $server_service = 'wazuh-manager'
-          $server_package = 'wazuh-manager'
-          $api_service = 'wazuh-api'
-          $api_package = 'wazuh-api'
+          #$agent_service  = 'wazuh-agent'
+          #$agent_package  = 'wazuh-agent'
+          #$server_service = 'wazuh-manager'
+          #$server_package = 'wazuh-manager'
+          #$api_service = 'wazuh-api'
+          #$api_package = 'wazuh-api'
           $service_has_status  = true
           $ossec_service_provider = 'redhat'
           $api_service_provider = 'redhat'
@@ -184,30 +184,6 @@ class wazuh::params {
       }
     }
     'windows': {
-      $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
-      $shared_agent_config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/shared/agent.conf'), '\\\\', '/')
-      $config_owner = 'Administrator'
-      $config_group = 'Administrators'
-
-      $manage_firewall = false
-
-      $keys_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/client.keys'), '\\\\', '/')
-      $keys_mode = '0440'
-      $keys_owner = 'Administrator'
-      $keys_group = 'Administrators'
-
-      $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 2.0'
-      $server_service = ''
-      $server_package = ''
-      $api_service = ''
-      $api_package = ''
-      $service_has_status  = true
-
-      # TODO
-      $validate_cmd_conf = undef
-      # Pushed by shared agent config now
-      $default_local_files = {}
     }
   default: { fail('This ossec module has not been tested on your distribution') }
   }

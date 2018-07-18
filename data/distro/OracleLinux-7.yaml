@@ -1,0 +1,17 @@
+---
+# Facts specific to RedHat 7's
+
+# In case they're ever needed...
+# $server_service = 'wazuh-manager'
+# $server_package = 'wazuh-manager'
+# $api_service = 'wazuh-api'
+# $api_package = 'wazuh-api'
+
+wazuh::wodle_openscap_content:
+  'ssg-rhel-7-ds.xml':
+    type: 'xccdf'
+    profiles:
+      - 'xccdf_org.ssgproject.content_profile_pci-dss'
+      - 'xccdf_org.ssgproject.content_profile_common'
+  'cve-redhat-7-ds.xml':
+    type: 'xccdf'

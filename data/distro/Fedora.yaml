@@ -1,0 +1,20 @@
+---
+# Facts specific to Fedora versions
+# NOTE: Are these needed anymore?? 23-25 are fairly old and newer
+#   Fedora's appropriately report RedHat for $::operatingsystem
+
+# In case they're ever needed...
+# $server_service = 'wazuh-manager'
+# $server_package = 'wazuh-manager'
+# $api_service = 'wazuh-api'
+# $api_package = 'wazuh-api'
+
+# Repo data
+wazuh::yum_directory_url: 'yum/fc/$releasever/$basearch'
+
+wazuh::wodle_openscap_content:
+  'ssg-fedora-ds.xml':
+    type: 'xccdf'
+    profiles:
+      - 'xccdf_org.ssgproject.content_profile_standard'
+      - 'xccdf_org.ssgproject.content_profile_common'

@@ -1,0 +1,8 @@
+---
+# Parameters common to all 
+
+# Common repository values
+wazuh::repo_base_url: 'https://packages.wazuh.com'
+
+# Default value if all others fail
+wazuh::wodle_openscap_content: ~

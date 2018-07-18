@@ -1,0 +1,16 @@
+---
+# Facts specific to Debian Jessie
+
+# In case they're ever needed...
+# $server_service = 'wazuh-manager'
+# $server_package = 'wazuh-manager'
+# $api_service = 'wazuh-api'
+# $api_package = 'wazuh-api'
+
+wazuh::wodle_openscap_content:
+  'ssg-debian-8-ds.xml':
+    type: 'xccdf'
+    profiles:
+      - 'xccdf_org.ssgproject.content_profile_common'
+  'cve-debian-oval.xml':
+    type: 'oval'
