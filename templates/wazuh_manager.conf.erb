@@ -67,3 +67,20 @@
     <log_alert_level>3</log_alert_level>
     <email_alert_level><%= @ossec_email_alert_level %></email_alert_level>
   </alerts>
+
+<% if @wazuh_cluster_enable %>
+  <cluster>
+    <name><%= @wazuh_cluster_name %></name>
+    <node_name><%= @hostname %></node_name>
+    <key><%= @wazuh_cluster_key %></key>
+    <node_type><%- if @hostname == @wazuh_cluster_master_hostname -%>master<%- else -%>client<%- end -%></node_type>
+    <port>1516</port>
+    <bind_addr>0.0.0.0</bind_addr>
+    <nodes>
+      <node><%= @wazuh_cluster_master_hostname %></node>
+    </nodes>
+    <hidden>no</hidden>
+    <disabled>no</disabled>
+  </cluster>
+<% end %>
+

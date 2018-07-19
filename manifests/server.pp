@@ -54,6 +54,10 @@ class wazuh::server (
   $wazuh_manager_verify_manager_ssl    = false,
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
+  $wazuh_cluster_enable                = false,
+  $wazuh_cluster_name                  = 'wazuh',
+  $wazuh_cluster_master_hostname       = undef,
+  $wazuh_cluster_key                   = undef,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
@@ -274,4 +278,10 @@ class wazuh::server (
     }
   }
 
+  ### Wazuh cluster
+  if $wazuh_cluster_enable {
+    validate_string($wazuh_cluster_name)
+    validate_string($wazuh_cluster_key)
+    validate_string($wazuh_cluster_master_hostname)
+  }
 }
