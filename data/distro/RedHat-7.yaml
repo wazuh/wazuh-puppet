@@ -8,7 +8,8 @@
 # $api_package = 'wazuh-api'
 
 # Repo data
-wazuh::yum_directory_url: 'yum/rhel/$releasever/$basearch'
+# - no longer used, wazuh wisely consolidated to a base yum url
+#wazuh::yum_directory_url: 'yum/rhel/$releasever/$basearch'
 
 wazuh::wodle_openscap_content:
   'ssg-rhel-7-ds.xml':

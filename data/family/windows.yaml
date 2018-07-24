@@ -9,8 +9,10 @@ wazuh::keys_file: 'c:/Program Files (x86)/ossec-agent/client.keys'
 wazuh::keys_mode: '0440'
 wazuh::keys_owner: 'Administrator'
 wazuh::keys_group: 'Administrators'
-wazuh::agent_service : 'OssecSvc'
-wazuh::agent_package : 'Wazuh Agent 2.0'
+#wazuh::agent_service : 'OssecSvc'
+wazuh::client::agent_service_name : 'OssecSvc'
+#wazuh::agent_package : 'Wazuh Agent 2.0'
+wazuh::client::agent_package_name : 'Wazuh Agent 2.0'
 wazuh::server_service: ''
 wazuh::server_package: ''
 wazuh::api_service: ''
@@ -19,5 +21,6 @@ wazuh::service_has_status: true
 # TODO
 wazuh::validate_cmd_conf: ~
 # Pushed by shared agent config now
-wazuh::default_local_files: {}
+#wazuh::default_local_files: {}
+wazuh::ossec_local_files: {}
 

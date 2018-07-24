@@ -10,7 +10,8 @@
 # $api_package = 'wazuh-api'
 
 # Repo data
-wazuh::yum_directory_url: 'yum/fc/$releasever/$basearch'
+# - no longer used, wazuh wisely consolidated to a base yum url
+#wazuh::yum_directory_url: 'yum/fc/$releasever/$basearch'
 
 wazuh::wodle_openscap_content:
   'ssg-fedora-ds.xml':

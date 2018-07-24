@@ -2,15 +2,16 @@
 # Facts specific to CentOS6
 
 # In case they're ever needed...
-# $agent_service  = 'wazuh-agent'
-# $agent_package  = 'wazuh-agent'
-# $server_service = 'wazuh-manager'
-# $server_package = 'wazuh-manager'
-# $api_service = 'wazuh-api'
-# $api_package = 'wazuh-api'
+# wazuh::agent_service  = 'wazuh-agent'
+# wazuh::agent_package  = 'wazuh-agent'
+# wazuh::server_service = 'wazuh-manager'
+# wazuh::server_package = 'wazuh-manager'
+# wazuh::api_service = 'wazuh-api'
+# wazuh::api_package = 'wazuh-api'
 
 # Repo data
-wazuh::yum_directory_url: 'yum/el/$releasever/$basearch'
+# - no longer used, wazuh wisely consolidated to a base yum url
+#wazuh::yum_directory_url: 'yum/el/$releasever/$basearch'
 
 wazuh::wodle_openscap_content:
   'ssg-centos-6-ds.xml':

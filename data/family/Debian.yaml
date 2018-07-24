@@ -21,7 +21,8 @@ wazuh::service_has_status: false
 wazuh::ossec_service_provider: ~
 wazuh::api_service_provider: ~
 
-wazuh::default_local_files:
+#wazuh::default_local_files:
+wazuh::ossec_local_files:
   '/var/log/syslog': 'syslog'
   '/var/log/kern.log': 'syslog'
   '/var/log/auth.log': 'syslog'

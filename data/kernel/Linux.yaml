@@ -3,8 +3,10 @@
 # NOTE: If any of these need overridden for a specific flavor, just
 #   add them to the appropriate distro specific file under 
 #   'data/distro'. Hooray hiera!
-wazuh::agent_service: 'wazuh-agent'
-wazuh::agent_package: 'wazuh-agent'
+#wazuh::agent_service: 'wazuh-agent'
+wazuh::client::agent_service_name: 'wazuh-agent'
+#wazuh::agent_package: 'wazuh-agent'
+wazuh::client::agent_package_name: 'wazuh-agent'
 
 wazuh::server_service: 'wazuh-manager'
 wazuh::server_package: 'wazuh-manager'

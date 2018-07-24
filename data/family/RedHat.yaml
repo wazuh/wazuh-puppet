@@ -9,15 +9,16 @@
 # wazuh::api_service: 'wazuh-api'
 # wazuh::api_package: 'wazuh-api'
 
-# Not used/necessary at this time
-# wazuh::yum_gpgkey_name: 'GPG-KEY-WAZUH'
-# wazuh::yum_repo_url:  
+# Repo data
+wazuh::yum_gpgkey_name: 'GPG-KEY-WAZUH'
+wazuh::yum_repo_url: '3.x/yum/'
 
 wazuh::service_has_status: true
 wazuh::ossec_service_provider: 'redhat'
 wazuh::api_service_provider: 'redhat'
 
-wazuh::default_local_files:
+#wazuh::default_local_files:
+wazuh::ossec_local_files:
   '/var/log/messages': 'syslog'
   '/var/log/secure': 'syslog'
   '/var/log/maillog': 'syslog'
