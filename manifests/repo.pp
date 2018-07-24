@@ -1,19 +1,17 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Repo installation
 class wazuh::repo (
-  $redhat_manage_epel = true,
-  $repo_base_url,
-  $apt_key_id = '',
-  $apt_key_source = '',
-  $apt_key_server = '',
-  $apt_gpgkey_name = 'GPG-KEY-WAZUH',
-  $yum_gpgkey_name = 'GPG-KEY-WAZUH',
-  #$yum_gpgkey_url = 'key',
-  $yum_repo_enable = true,
-  $yum_directory_url = '3.x/yum/',
+  Boolean $redhat_manage_epel = true,
+  String $repo_base_url       = 'https://packages.wazuh.com',
+  String $apt_key_id          = '',
+  String $apt_key_source      = '',
+  String $apt_key_server      = '',
+  String $apt_gpgkey_name     = 'GPG-KEY-WAZUH',
+  String $yum_gpgkey_name     = 'GPG-KEY-WAZUH',
+  #String $yum_gpgkey_url      = 'key',
+  Boolean $yum_repo_enable    = true,
+  String $yum_directory_url   = '3.x/yum/',
 ) {
-
-# No no no NO! Data belongs in hiera!!
   case $facts['os']['family'] {
     'Debian' : {
       if ! defined(Package['apt-transport-https']) {
@@ -30,11 +28,6 @@ class wazuh::repo (
         # This is never used
         server => "${apt_key_server}",
       }
-      # This list seems contradictory to params.pp, what the heck is going on??
-      # Also, obscene duplication of data. The only difference is the flavor!
-      # UPDATE: This definitely conflicts with params.pp, minimum versions in 
-      #  params.pp are 6 for RedHat flavors. 5 is long dead and should be 
-      #  dropped.
       apt::source { 'wazuh':
         ensure   => present,
         comment  => "This is the WAZUH ${facts['os']['name']} repository",
