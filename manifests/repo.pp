@@ -49,7 +49,7 @@ class wazuh::repo (
         descr    => 'WAZUH OSSEC Repository',
         enabled  => $yum_repo_enable,
         gpgcheck => 1,
-        gpgkey   => "{repo_base_url}/key/${yum_gpgkey_name}",
+        gpgkey   => "${repo_base_url}/key/${yum_gpgkey_name}",
         baseurl  => "${repo_base_url}/${yum_directory_url}"
       }
 
