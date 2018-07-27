@@ -19,7 +19,7 @@ class wazuh::agentkey(
   $agentkey2 = md5("${agent_name} ${agent_ip_address} ${agent_seed}")
 
   # Check if storeconfigs is enabled before attempting to export
-  if $whatever == true {
+  if $settings::storeconfigs == true {
     $export = '@@'
   }
   
