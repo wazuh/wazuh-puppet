@@ -122,6 +122,7 @@ class wazuh::client(
     require   => Package[$agent_package_name],
   }
 
+  # TODO: concat doesn't like undef values for params
   concat { 'ossec.conf':
     path    => $config_file,
     owner   => $config_owner,
@@ -156,7 +157,7 @@ class wazuh::client(
         require => Package[$agent_package_name]
       }
       
-      class { 'wazuh::agent_key':
+      class { 'wazuh::agentkey':
         max_clients      => $max_clients,
         agent_name       => $agent_name,
         agent_ip_address => $agent_ip_address,
@@ -170,6 +171,7 @@ class wazuh::client(
       # NOTE: Per the documentation, any and all of these may be used
 
       # Verify manager
+      # TODO: file doesn't like undef values for params
       if defined('$wazuh_manager_root_ca_pem') {
         file { '/var/ossec/etc/rootCA.pem':
           owner   => $keys_owner,
