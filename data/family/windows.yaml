@@ -1,6 +1,6 @@
 ---
 # Facts specific to Windows
-wazuh::config_file: 'c:/Program Files (x86)/ossec-agent/ossec.conf'
+wazuh::client::config_file: 'c:/Program Files (x86)/ossec-agent/ossec.conf'
 wazuh::shared_agent_config_file: 'c:/Program Files (x86)/ossec-agent/shared/agent.conf'
 wazuh::config_owner: 'Administrator'
 wazuh::config_group: 'Administrators'

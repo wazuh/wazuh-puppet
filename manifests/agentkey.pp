@@ -1,10 +1,10 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # utility function to fill up /var/ossec/etc/client.keys
 class wazuh::agentkey(
-  Integer $max_clients = 3000,
-  #$agent_id,
   String $agent_name,
   String $agent_ip_address,
+  Integer $max_clients = 3000,
+  #$agent_id,
   #Stdlib::Ip_address $agent_ip_address,
   String $agent_seed = 'xaeS7ahf',
 ) {

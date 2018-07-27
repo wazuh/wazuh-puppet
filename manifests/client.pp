@@ -1,5 +1,6 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
+# Stdlib::Absolutepath is handy but doesn't like undef
 class wazuh::client(
   Boolean $ossec_active_response    = true,
   Boolean $ossec_rootcheck          = true,
@@ -16,14 +17,16 @@ class wazuh::client(
   $ossec_scanpaths                  = [],
   Array[Stdlib::Absolutepath] $ossec_ignorepaths = [],
   $ossec_ignorepaths_regex          = [],
-  Stdlib::Absolutepath $config_file = undef,
-  String $config_owner              = undef,
-  String $config_group              = undef,
-  String $config_mode               = undef,
-  String $keys_file                 = undef,
-  String $keys_owner                = undef,
-  String $keys_group                = undef,
-  String $keys_mode                 = undef,
+  # Actually, SHOULD this be optional?
+  Optional[Stdlib::Absolutepath] $config_file = undef,
+  # Don't like these, have to think about it
+  String $config_owner              = lookup('wazuh::config_owner'),
+  String $config_group              = lookup('wazuh::config_group'),
+  String $config_mode               = lookup('wazuh::config_mode'),
+  String $keys_file                 = lookup('wazuh::keys_file'),
+  String $keys_owner                = lookup('wazuh::keys_owner'),
+  String $keys_group                = lookup('wazuh::keys_group'),
+  String $keys_mode                 = lookup('wazuh::keys_mode'),
   $ossec_local_files                = {},
   $ossec_syscheck_frequency         = 43200,
   $ossec_prefilter                  = false,
@@ -43,9 +46,9 @@ class wazuh::client(
   $client_buffer_events_per_second  = 500,
   $manage_client_keys               = 'export',
   $agent_auth_password              = undef,
-  Stdlib::Absolutepath $wazuh_manager_root_ca_pem = undef,
-  Stdlib::Absolutepath $wazuh_client_pem = undef,
-  Stdlib::Absolutepath $wazuh_client_key = undef,
+  Optional[Stdlib::Absolutepath] $wazuh_manager_root_ca_pem = undef,
+  Optional[Stdlib::Absolutepath] $wazuh_client_pem = undef,
+  Optional[Stdlib::Absolutepath] $wazuh_client_key = undef,
   $agent_seed                       = undef,
   $max_clients                      = 3000,
   $ar_repeated_offenders            = '',
@@ -189,12 +192,12 @@ class wazuh::client(
       }
 
       # Final command, rather long which is how these things usually go
-      $agent_auth_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} "\
-                            "-A ${agent_name} "\
-                            '-D /var/ossec/ '\
-                            "${agent_auth_command_ca_opt} "\
-                            "${agent_auth_command_client_cert_opt} "\
-                            "${agent_auth_command_passwd_opt}"
+      $agent_auth_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} \
+                            -A ${agent_name} \
+                            -D /var/ossec/ \
+                            ${agent_auth_command_ca_opt} \
+                            ${agent_auth_command_client_cert_opt} \
+                            ${agent_auth_command_passwd_opt}"
       exec { 'agent-auth-cmd':
         command => "${agent_auth_command}",
         creates => $keys_file,

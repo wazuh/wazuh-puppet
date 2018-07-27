@@ -11,11 +11,13 @@ wazuh::client::agent_package_name: 'wazuh-agent'
 wazuh::server_service: 'wazuh-manager'
 wazuh::server_package: 'wazuh-manager'
 
-wazuh::config_file: '/var/ossec/etc/ossec.conf'
+wazuh::client::config_file: '/var/ossec/etc/ossec.conf'
 wazuh::config_mode: '0640'
 wazuh::config_owner: 'root'
 wazuh::config_group: 'ossec'
 wazuh::shared_agent_config_file: '/var/ossec/etc/shared/agent.conf'
+
+wazuh::server::config_file: '/var/ossec/etc/ossec.conf'
 
 wazuh::keys_file: '/var/ossec/etc/client.keys'
 wazuh::keys_mode: '0640'
