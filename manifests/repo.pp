@@ -40,6 +40,8 @@ class wazuh::repo (
           'deb' => true,
         },
       }
+      # Refresh apt with new packages
+      Class['apt::source'] -> Class['apt::update']
     }
     'Linux', 'RedHat': {
       # Set up OSSEC repo
