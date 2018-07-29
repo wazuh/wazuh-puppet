@@ -3,7 +3,9 @@
 class wazuh::agentkey(
   String $agent_name,
   String $agent_ip_address,
+  Stdlib::Absolutepath $keys_file,
   Integer $max_clients = 3000,
+  Boolean $export_keys = true,
   #$agent_id,
   #Stdlib::Ip_address $agent_ip_address,
   String $agent_seed = 'xaeS7ahf',
@@ -18,17 +20,22 @@ class wazuh::agentkey(
   $agentkey1 = md5("${agent_id} ${agent_seed}")
   $agentkey2 = md5("${agent_name} ${agent_ip_address} ${agent_seed}")
 
-  # Check if storeconfigs is enabled before attempting to export
-  if $settings::storeconfigs == true {
-    $export = '@@'
-  }
-  
-  # Put it all together
-  Resource["${export}concat::fragment"] { 
-  #concat::fragment { "var_ossec_etc_client.keys_${agent_name}_part":
+  # Put it all together and make sure the local keys are created since 
+  #  Puppet doesn't actually DO anything with exported resources until 
+  #  collected
+  concat::fragment { "var_ossec_etc_client.keys_${agent_name}_part":
     "var_ossec_etc_client.keys_${agent_name}_part":
-      target  => $wazuh::params::keys_file,
+      target  => $keys_file,
       order   => $agent_id,
       content => "${agent_id} ${agent_name} ${agent_ip_address} ${agentkey1}${agentkey2}\n",
+  }
+
+  # Export keys if storeconfigs is enabled
+  if ($settings::storeconfigs == true) and ($export_keys == true) {
+    @@concat::fragment { "var_ossec_etc_client.keys_${agent_name}_export":
+      target  => $keys_file,
+      order   => $agent_id,
+      content => "${agent_id} ${agent_name} ${agent_ip_address} ${agentkey1}${agentkey2}\n",
+    }
   }
 }
