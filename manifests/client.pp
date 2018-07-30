@@ -30,7 +30,7 @@ class wazuh::client(
   $ossec_local_files                = {},
   $ossec_syscheck_frequency         = 43200,
   $ossec_prefilter                  = false,
-  $ossec_service_provider           = '',
+  $ossec_service_provider           = lookup('wazuh::ossec_service_provider'),
   $ossec_config_profiles            = [],
   Boolean $enable_selinux_rules     = false,
   $agent_name                       = $facts['networking']['hostname'],
@@ -44,7 +44,9 @@ class wazuh::client(
   # client_buffer configuration
   $client_buffer_queue_size         = 5000,
   $client_buffer_events_per_second  = 500,
-  $manage_client_keys               = 'export',
+  #$manage_client_keys               = 'export',
+  $client_keys_management           = 'export',
+  #$export_client_keys               = true,
   $agent_auth_password              = undef,
   Optional[Stdlib::Absolutepath] $wazuh_manager_root_ca_pem = undef,
   Optional[Stdlib::Absolutepath] $wazuh_client_pem = undef,
@@ -118,7 +120,7 @@ class wazuh::client(
     enable    => true,
     hasstatus => $service_has_status,
     pattern   => $agent_service_name,
-    provider  => $ossec_service_provider,
+    #provider  => $ossec_service_provider,
     require   => Package[$agent_package_name],
   }
 
@@ -146,27 +148,37 @@ class wazuh::client(
       order   => 99,
       content => '</ossec_config>';
   }
+      
+  # Pick whichever server address is specified first
+  $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
 
-  case $manage_client_keys {
+  #case $manage_client_keys {
+  case $client_keys_management {
     'export': {
-      concat { "${keys_file}":
-        owner   => $keys_owner,
-        group   => $keys_group,
-        mode    => $keys_mode,
-        notify  => Service[$agent_service_name],
-        require => Package[$agent_package_name]
-      }
+      #concat { "${keys_file}":
+      #  owner   => $keys_owner,
+      #  group   => $keys_group,
+      #  mode    => $keys_mode,
+      #  notify  => Service[$agent_service_name],
+      #  require => Package[$agent_package_name]
+      #}
       
       class { 'wazuh::agentkey':
-        max_clients      => $max_clients,
-        agent_name       => $agent_name,
-        agent_ip_address => $agent_ip_address,
-        agent_seed       => $agent_seed,
+        keys_owner           => $keys_owner,
+        keys_group           => $keys_group,
+        keys_mode            => $keys_mode,
+        max_clients          => $max_clients,
+        agent_name           => $agent_name,
+        agent_ip_address     => $agent_ip_address,
+        ossec_server_address => $ossec_server_address,
+        agent_package_name   => $agent_package_name,
+        agent_service_name   => $agent_service_name,
+        keys_file            => $keys_file,
+        agent_seed           => $agent_seed,
+        #export_keys          => $export_client_keys,
       }
     }
     'authd': {
-      $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
-      
       # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
       # NOTE: Per the documentation, any and all of these may be used
 
@@ -208,8 +220,12 @@ class wazuh::client(
         before  => File[$keys_file]
       }
     }
+    'none': {
+      # Don't manage key files at all, but let user know
+      notify { 'Not registering client to Wazuh server': }
+    }
     default: {
-      fail("You have selected an invalid client key management type: ${manage_client_keys}")
+      fail("You have selected an invalid client key management type: ${client_keys_management}")
     }
   }
   #if ( $manage_client_keys == 'export' ) {

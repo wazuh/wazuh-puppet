@@ -12,7 +12,6 @@ class wazuh::agentkey(
   Stdlib::Absolutepath $keys_file,
   Integer $max_clients = 3000,
   #Stdlib::Ip_address $agent_ip_address,
-  #Boolean $export_keys = true,
   String $agent_seed = 'xaeS7ahf',
 ) {
   # Generate random agent_id
@@ -33,15 +32,8 @@ class wazuh::agentkey(
     notify  => Service[$agent_service_name],
     require => Package[$agent_package_name],
   }
-  #concat::fragment { "var_ossec_etc_client.keys_${agent_name}_part":
-  #  "var_ossec_etc_client.keys_${agent_name}_part":
-  #    target  => $keys_file,
-  #    order   => $agent_id,
-  #    content => "${agent_id} ${agent_name} ${agent_ip_address} ${agentkey1}${agentkey2}\n",
-  #}
 
   # Export keys if storeconfigs is enabled
-  #if ($settings::storeconfigs == true) and ($export_keys == true) {
   if ($settings::storeconfigs == true) {
     @@concat::fragment { "var_ossec_etc_client.keys_${agent_name}_${$ossec_server_address}_part":
       target  => $keys_file,
