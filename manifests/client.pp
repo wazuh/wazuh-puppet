@@ -60,39 +60,28 @@ class wazuh::client(
   $ossec_conf_template              = 'wazuh/wazuh_agent.conf.erb',
   Boolean $manage_firewall          = lookup('wazuh::manage_firewall'),
 ) {
-
-  #Deprecated, use Puppet data types
-  #validate_bool(
-  #  $ossec_active_response, $ossec_rootcheck,
-  #  $selinux, $manage_repo, $manage_epel_repo
-  #)
-  # This allows arrays of integers, sadly
-  # (commented due to stdlib version requirement)
-  #validate_array($ossec_ignorepaths)
-  #validate_string($agent_package_name)
-  #validate_string($agent_service_name)
-
+  # Required params
   if !defined('$ossec_server_ip', '$ossec_server_hostname', '$wazuh_manager_address') {
     fail('must pass either $ossec_server_ip or $ossec_server_hostname or $wazuh_manager_address to Class[\'wazuh::client\'].')
   }
-  #if ( ( $ossec_server_ip == undef ) and ( $ossec_server_hostname == undef ) and ( $wazuh_manager_address == undef ) ) {
-  #  fail('must pass either $ossec_server_ip or $ossec_server_hostname or $wazuh_manager_address to Class[\'wazuh::client\'].')
-  #}
 
+  # Repo/package install
   case $facts['kernel'] {
     'Linux': {
       if $manage_repo {
-        class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
-        #if $::osfamily == 'Debian' {
-        #  Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
-        #} else {
-        #  Class['wazuh::repo'] -> Package[$agent_package_name]
-        #}
-        package { $agent_package_name:
-          ensure => $agent_package_ensure
+        class { 'wazuh::repo': 
+          redhat_manage_epel => $manage_epel_repo,
+          before             => Package[$agent_package_name],
         }
-        Class['wazuh::repo'] -> Package[$agent_package_name]
+        # Could also use fancy chaining arrows
+        # Class['wazuh::repo'] -> Package[$agent_package_name]
       }
+
+      # Install package
+      package { $agent_package_name:
+        ensure => $agent_package_ensure
+      }
+      
     }
     'windows': {
       file {
@@ -115,6 +104,7 @@ class wazuh::client(
     default: { fail('OS not supported') }
   }
 
+  # Manage the service
   service { $agent_service_name:
     ensure    => running,
     enable    => true,
@@ -124,6 +114,7 @@ class wazuh::client(
     require   => Package[$agent_package_name],
   }
 
+  # Set up configuration file and fragments
   # TODO: concat doesn't like undef values for params
   concat { 'ossec.conf':
     path    => $config_file,
@@ -148,21 +139,13 @@ class wazuh::client(
       order   => 99,
       content => '</ossec_config>';
   }
-      
+  
   # Pick whichever server address is specified first
   $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
 
-  #case $manage_client_keys {
+  # Manage client keys/registration
   case $client_keys_management {
     'export': {
-      #concat { "${keys_file}":
-      #  owner   => $keys_owner,
-      #  group   => $keys_group,
-      #  mode    => $keys_mode,
-      #  notify  => Service[$agent_service_name],
-      #  require => Package[$agent_package_name]
-      #}
-      
       class { 'wazuh::agentkey':
         keys_owner           => $keys_owner,
         keys_group           => $keys_group,
@@ -182,7 +165,7 @@ class wazuh::client(
       # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
       # NOTE: Per the documentation, any and all of these may be used
 
-      # Verify manager
+      # Verify manager cert
       # TODO: file doesn't like undef values for params
       if defined('$wazuh_manager_root_ca_pem') {
         file { '/var/ossec/etc/rootCA.pem':
@@ -195,7 +178,7 @@ class wazuh::client(
         $agent_auth_command_ca_opt = '-v /var/ossec/etc/rootCA.pem'
       }
 
-      # Verify client
+      # Verify client cert
       if defined('$wazuh_client_pem', '$wazuh_client_key') {
         $agent_auth_command_client_cert_opt = "-x ${wazuh_client_pem} -k ${wazuh_client_key}"
       }
@@ -331,14 +314,15 @@ class wazuh::client(
     #}
   #}
 
-  # SELinux
-  # Requires selinux module specified in metadata.json
+  # SELinux rules
+  # - Requires selinux module specified in metadata.json
   if ($facts['os']['family'] == 'RedHat' and $enable_selinux_rules == true) {
     selinux::module { 'ossec-logrotate':
       ensure    => 'present',
       source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',
     }
   }
+
   # Manage firewall
   if $manage_firewall {
     include firewall

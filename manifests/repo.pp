@@ -1,11 +1,11 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Repo installation
 class wazuh::repo (
+  String $apt_key_id,
+  String $apt_key_source,
+  String $apt_key_server,
   Boolean $redhat_manage_epel = true,
   String $repo_base_url       = 'https://packages.wazuh.com',
-  String $apt_key_id          = '',
-  String $apt_key_source      = '',
-  String $apt_key_server      = '',
   String $apt_gpgkey_name     = 'GPG-KEY-WAZUH',
   String $yum_gpgkey_name     = 'GPG-KEY-WAZUH',
   #String $yum_gpgkey_url      = 'key',
@@ -17,10 +17,12 @@ class wazuh::repo (
       if ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
-      if ! $facts['lsbdistcodename'] {
-        fail('The lsb package does not appear to be installed or the codename fact is missing.') 
-      }
-        
+      # No longer necessary?
+      #if ! $facts['lsbdistcodename'] {
+      #  fail('The lsb package does not appear to be installed or the codename fact is missing.')
+      #}
+
+# TODO: fix blank default values and lookups
       # apt-key added by issue #34
       apt::key { 'wazuh':
         id     => "${apt_key_id}",
@@ -29,19 +31,24 @@ class wazuh::repo (
         server => "${apt_key_server}",
       }
       apt::source { 'wazuh':
-        ensure   => present,
-        comment  => "This is the WAZUH ${facts['os']['name']} repository",
-        location => "${repo_base_url}/apt",
+        ensure        => present,
+        comment       => "This is the WAZUH ${facts['os']['name']} repository",
+        location      => "${repo_base_url}/3.x/apt",
         # This is the default so really no need to specify it
         #release  => $::lsbdistcodename,
-        repos    => 'main',
-        include  => {
+        repos         => 'main',
+        include       => {
           'src' => false,
           'deb' => true,
         },
+        notify_update => true,
       }
+      # Do these need to be contained??
+      #contain 'apt::key'
+      #contain 'apt::source'
+
       # Refresh apt with new packages
-      Class['apt::source'] -> Class['apt::update']
+      #Apt::Source['wazuh'] -> Class['apt::update']
     }
     'Linux', 'RedHat': {
       # Set up OSSEC repo
