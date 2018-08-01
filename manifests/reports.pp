@@ -1,23 +1,25 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 #Define for a Reports section
 define wazuh::reports(
-  Optional[String] $r_group               = undef,
-  Optional[String] $r_category            = undef,
-  Optional[Integer] $r_rule               = undef,
-  Optional[Integer[1,16]] $r_level        = undef,
-  Optional[String] $r_location            = undef,
-  Optional[String] $r_srcip               = undef,
-  Optional[String] $r_user                = undef,
-  String $r_title                         = '',
-  String $r_email_to                      = '',
-  Optional[Enum['yes', 'no']] $r_showlogs = undef,
+  String $report_title,
+  String $report_email_to,
+  String $report_group        = undef,
+  String $report_category     = undef,
+  Integer $report_rule        = undef,
+  Integer[1,16] $report_level = undef,
+  String $report_location     = undef,
+  Variant[Stdlib::Host, Stdlib::IP::Address, Undef] $report_srcip = undef,
+  String $report_user         = undef,
+  Integer $report_order       = 70,
+  Optional[Enum['yes', 'no']] $report_showlogs = undef,
 ) {
+  # Validate required email parameter
+  validate_email_address($report_email_to)
 
-  require wazuh::params
-
-  concat::fragment { $name:
+  # Build report fragment
+  concat::fragment { "ossec.conf_reports-${title}":
     target  => 'ossec.conf',
-    order   => 70,
+    order   => $report_order,
     content => template('wazuh/fragments/_reports.erb')
   }
 }
