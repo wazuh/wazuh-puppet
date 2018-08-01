@@ -2,15 +2,16 @@
 # Repo installation
 class wazuh::repo (
   String $apt_key_id,
-  #String $apt_key_source,
   String $apt_key_server,
-  Boolean $redhat_manage_epel = true,
   String $repo_base_url       = 'https://packages.wazuh.com',
+  #String $apt_gpgkey_url      = 'key',
+  #String $yum_gpgkey_url      = 'key',
   String $apt_gpgkey_name     = 'GPG-KEY-WAZUH',
   String $yum_gpgkey_name     = 'GPG-KEY-WAZUH',
-  #String $yum_gpgkey_url      = 'key',
-  Boolean $yum_repo_enable    = true,
+  String $apt_directory_url   = '3.x/apt/',
   String $yum_directory_url   = '3.x/yum/',
+  Boolean $yum_repo_enable    = true,
+  Boolean $redhat_manage_epel = true,
 ) {
   case $facts['os']['family'] {
     'Debian' : {
@@ -28,7 +29,7 @@ class wazuh::repo (
       apt::source { 'wazuh':
         ensure        => present,
         comment       => "This is the WAZUH ${facts['os']['name']} repository",
-        location      => "${repo_base_url}/3.x/apt",
+        location      => "${repo_base_url}/${apt_directory_url}",
         release       => 'stable',
         repos         => 'main',
         include       => {
@@ -37,12 +38,6 @@ class wazuh::repo (
         },
         notify_update => true,
       }
-      # Do these need to be contained??
-      #contain 'apt::key'
-      #contain 'apt::source'
-
-      # Refresh apt with new packages
-      #Apt::Source['wazuh'] -> Class['apt::update']
     }
     'Linux', 'RedHat': {
       # Set up OSSEC repo

@@ -19,10 +19,10 @@ wazuh::shared_agent_config_file: '/var/ossec/etc/shared/agent.conf'
 
 wazuh::server::config_file: '/var/ossec/etc/ossec.conf'
 
-wazuh::client::keys_file: '/var/ossec/etc/client.keys'
-wazuh::client::keys_mode: '0640'
-wazuh::client::keys_owner: 'root'
-wazuh::client::keys_group: 'ossec'
+wazuh::keys_file: '/var/ossec/etc/client.keys'
+wazuh::keys_mode: '0640'
+wazuh::keys_owner: 'root'
+wazuh::keys_group: 'ossec'
 
 wazuh::manage_firewall: false
 

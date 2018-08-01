@@ -2,6 +2,7 @@
 # Setup for ossec client
 # Stdlib::Absolutepath is handy but doesn't like undef
 class wazuh::client(
+  Stdlib::Absolutepath $config_file,
   Boolean $ossec_active_response    = true,
   Boolean $ossec_rootcheck          = true,
   $ossec_rootcheck_frequency        = 36000,
@@ -17,9 +18,6 @@ class wazuh::client(
   $ossec_scanpaths                  = [],
   Array[Stdlib::Absolutepath] $ossec_ignorepaths = [],
   $ossec_ignorepaths_regex          = [],
-  # Actually, SHOULD this be optional?
-  Optional[Stdlib::Absolutepath] $config_file = undef,
-  # Don't like these, have to think about it
   String $config_owner              = lookup('wazuh::config_owner'),
   String $config_group              = lookup('wazuh::config_group'),
   String $config_mode               = lookup('wazuh::config_mode'),
@@ -44,13 +42,14 @@ class wazuh::client(
   # client_buffer configuration
   $client_buffer_queue_size         = 5000,
   $client_buffer_events_per_second  = 500,
-  #$manage_client_keys               = 'export',
   $client_keys_management           = 'export',
-  #$export_client_keys               = true,
   $agent_auth_password              = undef,
   Optional[Stdlib::Absolutepath] $wazuh_manager_root_ca_pem = undef,
   Optional[Stdlib::Absolutepath] $wazuh_client_pem = undef,
   Optional[Stdlib::Absolutepath] $wazuh_client_key = undef,
+  String $rootCA_owner              = lookup('wazuh::keys_owner'),
+  String $rootCA_group              = lookup('wazuh::keys_group'),
+  String $rootCA_mode               = lookup('wazuh::keys_mode'),
   $agent_seed                       = undef,
   $max_clients                      = 3000,
   $ar_repeated_offenders            = '',
@@ -61,7 +60,7 @@ class wazuh::client(
   Boolean $manage_firewall          = lookup('wazuh::manage_firewall'),
 ) {
   # Required params
-  if !defined('$ossec_server_ip', '$ossec_server_hostname', '$wazuh_manager_address') {
+  unless defined('$ossec_server_ip', '$ossec_server_hostname', '$wazuh_manager_address') {
     fail('must pass either $ossec_server_ip or $ossec_server_hostname or $wazuh_manager_address to Class[\'wazuh::client\'].')
   }
 
@@ -115,7 +114,6 @@ class wazuh::client(
   }
 
   # Set up configuration file and fragments
-  # TODO: concat doesn't like undef values for params
   concat { 'ossec.conf':
     path    => $config_file,
     owner   => $config_owner,
@@ -166,12 +164,11 @@ class wazuh::client(
       # NOTE: Per the documentation, any and all of these may be used
 
       # Verify manager cert
-      # TODO: file doesn't like undef values for params
       if defined('$wazuh_manager_root_ca_pem') {
         file { '/var/ossec/etc/rootCA.pem':
-          owner   => $keys_owner,
-          group   => $keys_group,
-          mode    => $keys_mode,
+          owner   => $rootCA_owner,
+          group   => $rootCA_group,
+          mode    => $rootCA_mode,
           content => $wazuh_manager_root_ca_pem,
           require => Package[$agent_package_name],
         }
@@ -211,108 +208,6 @@ class wazuh::client(
       fail("You have selected an invalid client key management type: ${client_keys_management}")
     }
   }
-  #if ( $manage_client_keys == 'export' ) {
-  #  concat { "${keys_file}":
-  #    owner   => $keys_owner,
-  #    group   => $keys_group,
-  #    mode    => $keys_mode,
-  #    notify  => Service[$agent_service_name],
-  #    require => Package[$agent_package_name]
-  #  }
-    ## A separate module to avoid storeconfigs warnings when not managing keys
-    ## Is this still necessary or did Puppet finally fix it?
-    ## Either way, it has some significant security implications. Most sizeable 
-    ## users of Puppet are going to have shared environments meaning ANYONE can 
-    ## collect the agent key. We also need a way to check whether this will work
-    ## (aka storeconfig) or else we're wasting our time and will generate legit
-    ## errors.
-    #class { 'wazuh::export_agent_key':
-    #  max_clients      => $max_clients,
-    #  agent_name       => $agent_name,
-    #  agent_ip_address => $agent_ip_address,
-    #  agent_seed       => $agent_seed,
-    #}
-  #} elsif ($manage_client_keys == 'authd') {
-  #  if ($::kernel != 'Linux') {
-  #    fail('key generation using agent-auth via puppet is not supported on this platform yet')
-  #  }
-  #  # Is this really Linux only?
-  #  $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
-#
-    # Move this down so we can get rid of the ridiculous call out to egrep
-  #  file { "${keys_file}":
-  #    owner => $keys_owner,
-  #    group => $keys_group,
-  #    mode  => $keys_mode,
-  #  }
-
-    # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
-    # NOTE: Per the documentation, any and all of these may be used
-    #$agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/"
-   # if defined('$wazuh_manager_root_ca_pem') {
-   #   file { '/var/ossec/etc/rootCA.pem':
-   #     owner   => $keys_owner,
-   #     group   => $keys_group,
-   #     mode    => $keys_mode,
-   #     content => $wazuh_manager_root_ca_pem,
-   #     require => Package[$agent_package_name],
-   #   }
-   #   $agent_auth_command_ca_opt = "-v /var/ossec/etc/rootCA.pem"
-   # }
-   # if defined('$wazuh_client_pem', '$wazuh_client_key') {
-   #   $agent_auth_command_client_cert_opt = "-x ${wazuh_client_pem} -k ${wazuh_client_key}"
-   # }
-   # if defined('$agent_auth_password') {
-   #   $agent_auth_command_passwd_opt = "-P '${agent_auth_password}'"
-   # }
-   # $agent_auth_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/ ${agent_auth_command_ca_opt} ${agent_auth_command_client_cert_opt} ${agent_auth_command_passwd_opt}"
-
-    #if $wazuh_manager_root_ca_pem != undef {
-    #  #validate_string($wazuh_manager_root_ca_pem)
-    #  file { '/var/ossec/etc/rootCA.pem':
-    #    owner   => $keys_owner,
-    #    group   => $keys_group,
-    #    mode    => $keys_mode,
-    #    content => $wazuh_manager_root_ca_pem,
-    #    require => Package[$agent_package_name],
-    #  }
-
-    #  $agent_auth_command = "${agent_auth_base_command} -v /var/ossec/etc/rootCA.pem"
-    #} else {
-    #  $agent_auth_command = $agent_auth_base_command
-    #}
-
-    ## Execs are always bad in my opinion
-    ##
-    ## - Ohhhhhhhh, they have to do the unless because it will run every time Puppet runs. Further
-    ##   proof that execs are always bad and shouldn't be used. 
-    #exec { 'agent-auth-cmd':
-    #  command => "${agent_auth_command}",
-    #  #unless  => "/bin/egrep -q '.' ${keys_file}",
-    #  creates => $keys_file,
-    #  require => Package[$agent_package_name],
-    #  notify  => Service[$agent_service_name],
-    #  before  => File[$keys_file]
-    #}
-    #if $agent_auth_password {
-    #  exec { 'agent-auth-with-pwd':
-    #    command => "${agent_auth_command}",
-    #    #unless  => "/bin/egrep -q '.' ${keys_file}",
-    #    creates => $keys_file,
-    #    require => Package[$agent_package_name],
-    #    notify  => Service[$agent_service_name],
-    #    before  => File[$keys_file]
-    #  }
-    #} else {
-    #  exec { 'agent-auth-without-pwd':
-    #    command => $agent_auth_command,
-    #    unless  => "/bin/egrep -q '.' ${keys_file}",
-    #    require => Package[$agent_package_name],
-    #    notify  => Service[$agent_service_name],
-    #    before  => File[$keys_file],
-    #  }
-    #}
-  #}
 
   # SELinux rules
   # - Requires selinux module specified in metadata.json
