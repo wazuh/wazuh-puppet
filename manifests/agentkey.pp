@@ -39,6 +39,7 @@ class wazuh::agentkey(
       target  => $keys_file,
       order   => $agent_id,
       content => "${agent_id} ${agent_name} ${agent_ip_address} ${agentkey1}${agentkey2}\n",
+      tag     => ['Wazuh', $ossec_server_address],
     }
   }
 }
