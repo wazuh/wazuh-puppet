@@ -2,6 +2,8 @@
 # Setup for ossec client
 # Stdlib::Absolutepath is handy but doesn't like undef
 class wazuh::client(
+  String $agent_package_name,
+  String $agent_service_name,
   Stdlib::Absolutepath $config_file,
   Boolean $ossec_active_response    = true,
   Boolean $ossec_rootcheck          = true,
@@ -35,9 +37,7 @@ class wazuh::client(
   $agent_ip_address                 = $facts['networking']['ip'],
   Boolean $manage_repo              = true,
   Boolean $manage_epel_repo         = false,
-  String $agent_package_name        = '',
   String $agent_package_ensure      = 'installed',
-  String $agent_service_name        = '',
   $agent_auto_restart               = 'yes',
   # client_buffer configuration
   $client_buffer_queue_size         = 5000,
@@ -68,7 +68,7 @@ class wazuh::client(
   case $facts['kernel'] {
     'Linux': {
       if $manage_repo {
-        class { 'wazuh::repo': 
+        class { 'wazuh::repo':
           redhat_manage_epel => $manage_epel_repo,
           before             => Package[$agent_package_name],
         }
@@ -176,7 +176,7 @@ class wazuh::client(
       }
 
       # Verify client cert
-      if defined('$wazuh_client_pem', '$wazuh_client_key') {
+      if ($wazuh_client_pem and $wazuh_client_key) {
         $agent_auth_command_client_cert_opt = "-x ${wazuh_client_pem} -k ${wazuh_client_key}"
       }
 
