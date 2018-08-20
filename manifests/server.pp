@@ -98,7 +98,7 @@ class wazuh::server (
 
   # Repo configuration
   if $manage_repos {
-    class { 'wazuh::repo': 
+    class { 'wazuh::repo':
       redhat_manage_epel => $manage_epel_repo,
       before             => Package[$server_package],
     }
@@ -287,10 +287,10 @@ class wazuh::server (
   # Wazuh API
   if $install_wazuh_api {
     unless $api_package_name {
-      fail("You have chosen to install the Wazuh API, but no package name has been specified")
+      fail('You have chosen to install the Wazuh API, but no package name has been specified')
     }
     unless $api_service_name {
-      fail("You have chosen to install the Wazuh API, but no service name has been specified")
+      fail('You have chosen to install the Wazuh API, but no service name has been specified')
     }
 
     # Manage nodejs
@@ -351,15 +351,15 @@ class wazuh::server (
 
   # Manage firewall
   if $manage_firewall {
-     include firewall
-     firewall { '1514 wazuh-manager':
-       dport  => $ossec_server_port,
-       proto  => $ossec_server_protocol,
-       action => 'accept',
-       state  => [
-         'NEW',
-         'RELATED',
-         'ESTABLISHED'],
-     }
+    include firewall
+    firewall { '1514 wazuh-manager':
+      dport  => $ossec_server_port,
+      proto  => $ossec_server_protocol,
+      action => 'accept',
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
+    }
   }
 }
