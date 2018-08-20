@@ -2,12 +2,12 @@
 # Facts specific to the Debian family
 
 # In case they're ever needed...
-# wazuh::agent_service: 'wazuh-agent'
-# wazuh::agent_package: 'wazuh-agent'
-# wazuh::server_service: 'wazuh-manager'
-# wazuh::server_package: 'wazuh-manager'
-# wazuh::api_service: 'wazuh-api'
-# wazuh::api_package: 'wazuh-api'
+# wazuh::client::agent_service: 'wazuh-agent'
+# wazuh::client::agent_package: 'wazuh-agent'
+# wazuh::server::server_service: 'wazuh-manager'
+# wazuh::server::server_package: 'wazuh-manager'
+# wazuh::server::api_service_name: 'wazuh-api'
+# wazuh::server::api_package_name: 'wazuh-api'
 
 # Apt-key values
 wazuh::apt_key_id: '0DCFCA5547B19D2A6099506096B3EE5F29111145'
@@ -19,7 +19,7 @@ wazuh::apt_key_server: 'pgp.mit.edu'
 
 wazuh::service_has_status: false
 wazuh::ossec_service_provider: ~
-wazuh::api_service_provider: ~
+#wazuh::server::api_service_provider: ~
 
 #wazuh::default_local_files:
 wazuh::ossec_local_files:

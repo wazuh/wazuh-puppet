@@ -164,7 +164,7 @@ class wazuh::client(
       # NOTE: Per the documentation, any and all of these may be used
 
       # Verify manager cert
-      if defined('$wazuh_manager_root_ca_pem') {
+      if $wazuh_manager_root_ca_pem {
         file { '/var/ossec/etc/rootCA.pem':
           owner   => $rootCA_owner,
           group   => $rootCA_group,
@@ -181,7 +181,7 @@ class wazuh::client(
       }
 
       # Use password
-      if defined('$agent_auth_password') {
+      if $agent_auth_password {
         $agent_auth_command_passwd_opt = "-P '${agent_auth_password}'"
       }
 
