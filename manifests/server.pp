@@ -35,6 +35,7 @@ class wazuh::server (
   $ossec_scanpaths                               = [ {'path' => '/etc,/usr/bin,/usr/sbin', 'report_changes' => 'no', 'realtime' => 'no'}, {'path' => '/bin,/sbin', 'report_changes' => 'yes', 'realtime' => 'yes'} ],
   $ossec_white_list                              = [],
   $ossec_extra_rules_config                      = [],
+  Hash $ossec_local_files                        = {},
   #$ossec_local_files                             = $::wazuh::params::default_local_files,
   Boolean $ossec_email_notification              = true,
   $ossec_email_maxperhour                        = '12',
@@ -89,7 +90,7 @@ class wazuh::server (
     if $smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
-    validate_email_address($ossec_emailfrom, $ossec_emailto)
+    validate_email_address($ossec_emailfrom, join($ossec_emailto,','))
   }
 
   if $facts['os']['family'] == 'windows' {
@@ -182,7 +183,7 @@ class wazuh::server (
       if ($settings::storeconfigs == true) {
         Wazuh::Agentkey <<| tag == $ossec_server_address |>>
       } else {
-        notify { "To collect agent keys, storeconfigs must be enabled. Current setting: ${settings::storeconfigs}" }
+        notify { "To collect agent keys, storeconfigs must be enabled. Current setting: ${settings::storeconfigs}": }
       }
     }
     'authd': {
