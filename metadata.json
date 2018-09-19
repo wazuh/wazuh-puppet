@@ -92,7 +92,7 @@
       "version_range": ">= 3.0.0 < 4.0.0"
     },
     {
-      "name": "puppet/firewall",
+      "name": "puppetlabs/firewall",
       "version_range": ">= 1.7.0"
     }
   ]
