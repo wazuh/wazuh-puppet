@@ -1,0 +1,27 @@
+---
+# Facts specific to the RedHat family
+
+# In case they're ever needed...
+# wazuh::client::agent_service: 'wazuh-agent'
+# wazuh::client::agent_package: 'wazuh-agent'
+# wazuh::server::server_service: 'wazuh-manager'
+# wazuh::server::server_package: 'wazuh-manager'
+# wazuh::server::api_service_name: 'wazuh-api'
+# wazuh::server::api_package_name: 'wazuh-api'
+
+# Repo data
+wazuh::yum_gpgkey_name: 'GPG-KEY-WAZUH'
+wazuh::yum_repo_url: '3.x/yum/'
+
+wazuh::service_has_status: true
+wazuh::ossec_service_provider: 'redhat'
+#wazuh::server::api_service_provider: 'redhat'
+
+#wazuh::default_local_files:
+wazuh::ossec_local_files:
+  '/var/log/messages': 'syslog'
+  '/var/log/secure': 'syslog'
+  '/var/log/maillog': 'syslog'
+  '/var/log/yum.log': 'syslog'
+  '/var/log/httpd/access_log': 'apache'
+  '/var/log/httpd/error_log': 'apache'

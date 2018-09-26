@@ -1,0 +1,71 @@
+---
+# Facts common to all Linux flavors
+# NOTE: If any of these need overridden for a specific flavor, just
+#   add them to the appropriate distro specific file under 
+#   'data/distro'. Hooray hiera!
+wazuh::client::agent_service_name: 'wazuh-agent'
+wazuh::client::agent_package_name: 'wazuh-agent'
+
+wazuh::server::server_service: 'wazuh-manager'
+wazuh::server::server_package: 'wazuh-manager'
+
+wazuh::client::config_file: '/var/ossec/etc/ossec.conf'
+wazuh::config_mode: '0640'
+wazuh::config_owner: 'root'
+wazuh::config_group: 'ossec'
+wazuh::server::shared_agent_config_file: '/var/ossec/etc/shared/agent.conf'
+
+wazuh::server::config_file: '/var/ossec/etc/ossec.conf'
+
+wazuh::keys_file: '/var/ossec/etc/client.keys'
+wazuh::keys_mode: '0640'
+wazuh::keys_owner: 'root'
+wazuh::keys_group: 'ossec'
+
+wazuh::manage_firewall: false
+
+wazuh::authd_pass_file: '/var/ossec/etc/authd.pass'
+
+wazuh::server::validate_cmd_conf: '/var/ossec/bin/verify-agent-conf -f %'
+
+wazuh::processlist_file: '/var/ossec/bin/.process_list'
+wazuh::processlist_mode: '0640'
+wazuh::processlist_owner: 'root'
+wazuh::processlist_group: 'ossec'
+
+# this hash is currently only covering the basic config section of config.js
+# TODO: allow customization of the entire config.js
+# for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
+wazuh::server::api_config_params:
+  ossec_path: '/var/ossec'
+  host: '0.0.0.0'
+  port: '55000'
+  https: 'no'
+  basic_auth: 'yes'
+  BehindProxyServer: 'no'
+wazuh::server::api_config_certs:
+  https_key: 'configuration/ssl/server.key'
+  https_cert: 'configuration/ssl/server.crt'
+  https_use_ca: 'no'
+  https_ca: 'configuration/ssl/ca.crt'
+wazuh::server::api_config_advanced_params:
+  log_level: 'info'
+  log_path: '/logs/api.log'
+  cors: 'yes'
+  cache_enabled: 'yes'
+  cache_debug: 'no'
+  cache_time: '750'
+  python:
+    - bin: 'python'
+      lib: ''
+    - bin: 'python3'
+      lib: ''
+    - bin: '/opt/rh/python27/root/usr/bin/python'
+      lib: '/opt/rh/python27/root/usr/lib64'
+  ld_library_path: '/framework/lib'
+  use_only_authd: false
+  secureProtocol: 'TLSv1_2_method'
+  honorCipherOrder: true
+  ciphers: ''
+wazuh::server::api_service_name: 'wazuh-api'
+wazuh::server::api_package_name: 'wazuh-api'

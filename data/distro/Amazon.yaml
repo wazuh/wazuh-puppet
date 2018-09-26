@@ -1,0 +1,16 @@
+---
+# Facts specfic to Amazon
+
+# In case they're ever needed...
+# wazuh::client::agent_service  = 'wazuh-agent'
+# wazuh::client::agent_package  = 'wazuh-agent'
+# wazuh::server::server_service = 'wazuh-manager'
+# wazuh::server::server_package = 'wazuh-manager'
+# wazuh::server::api_service_name = 'wazuh-api'
+# wazuh::server::api_package_name = 'wazuh-api'
+
+# Repo data
+# - no longer used, wazuh wisely consolidated to a base yum url
+#wazuh::yum_directory_url: 'yum/rhel/6Server/$basearch'
+
+wazuh::wodle_openscap_content: ~

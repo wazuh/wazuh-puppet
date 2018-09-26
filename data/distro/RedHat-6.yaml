@@ -1,0 +1,21 @@
+---
+# Facts specific to RedHat 6's
+
+# In case they're ever needed...
+# wazuh::server::server_service = 'wazuh-manager'
+# wazuh::server::server_package = 'wazuh-manager'
+# wazuh::server::api_service_name = 'wazuh-api'
+# wazuh::server::api_package_name = 'wazuh-api'
+
+# Repo data
+# - no longer used, wazuh wisely consolidated to a base yum url
+#wazuh::yum_directory_url: 'yum/rhel/$releasever/$basearch'
+
+wazuh::wodle_openscap_content:
+  'ssg-rhel-6-ds.xml':
+    type: 'xccdf'
+    profiles:
+      - 'xccdf_org.ssgproject.content_profile_pci-dss'
+      - 'xccdf_org.ssgproject.content_profile_server'
+  'cve-redhat-6-ds.xml':
+    type: 'xccdf'
