@@ -1,0 +1,31 @@
+---
+# Facts specific to the Debian family
+
+# In case they're ever needed...
+# wazuh::client::agent_service: 'wazuh-agent'
+# wazuh::client::agent_package: 'wazuh-agent'
+# wazuh::server::server_service: 'wazuh-manager'
+# wazuh::server::server_package: 'wazuh-manager'
+# wazuh::server::api_service_name: 'wazuh-api'
+# wazuh::server::api_package_name: 'wazuh-api'
+
+# Apt-key values
+wazuh::apt_key_id: '0DCFCA5547B19D2A6099506096B3EE5F29111145'
+wazuh::apt_key_source: 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
+# Not sure the purpose of this because puppet forge's apt will only
+#  try source when source is specified. Essentially this will never
+#  be used...
+wazuh::apt_key_server: 'pgp.mit.edu'
+
+wazuh::service_has_status: false
+wazuh::ossec_service_provider: ~
+#wazuh::server::api_service_provider: ~
+
+#wazuh::default_local_files:
+wazuh::ossec_local_files:
+  '/var/log/syslog': 'syslog'
+  '/var/log/kern.log': 'syslog'
+  '/var/log/auth.log': 'syslog'
+  '/var/log/mail.log': 'syslog'
+  '/var/log/dpkg.log': 'syslog'
+  '/var/ossec/logs/active-responses.log': 'syslog'

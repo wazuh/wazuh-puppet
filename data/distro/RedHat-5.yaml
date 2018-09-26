@@ -1,0 +1,12 @@
+---
+# Facts specific to RedHat 5's
+
+# In case they're ever needed...
+# wazuh::server::server_service = 'wazuh-manager'
+# wazuh::server::server_package = 'wazuh-manager'
+# wazuh::server::api_service_name = 'wazuh-api'
+# wazuh::server::api_package_name = 'wazuh-api'
+
+# Repo data
+wazuh::yum_directory_url: '3.x/yum/5/'
+wazuh::yum_gpgkey_name: 'GPG-KEY-WAZUH-5'

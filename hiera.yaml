@@ -1,0 +1,21 @@
+---
+version: 5
+defaults:
+  datadir: data
+  data_hash: yaml_data
+
+# Not sure this is the best hierarchy, but acceptable stab at it.
+#   Specifically, 'distro' may not be the best name for what we're
+#   trying to capture. Ideally it should probaly be under the 'os'
+#   directory, but then you get that ugly 'RedHat.yaml' next to the 
+#   'RedHat' subdirectory. This layout seems slightly easier for the 
+#   layperson to grasp for the time being.
+hierarchy:
+  - name: "OS Release"
+    path: "distro/%{facts.os.name}-%{facts.os.release.major}.yaml"
+  - name: "OS Family"
+    path: "family/%{facts.os.family}.yaml"
+  - name: "OS Kernel"
+    path: "kernel/%{facts.kernel}.yaml"
+  - name: "common"
+    path: "common.yaml"

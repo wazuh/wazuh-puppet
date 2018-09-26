@@ -1,58 +1,52 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Repo installation
 class wazuh::repo (
-  $redhat_manage_epel = true,
+  String $apt_key_id,
+  String $apt_key_server,
+  String $repo_base_url       = 'https://packages.wazuh.com',
+  #String $apt_gpgkey_url      = 'key',
+  #String $yum_gpgkey_url      = 'key',
+  String $apt_gpgkey_name     = 'GPG-KEY-WAZUH',
+  String $yum_gpgkey_name     = 'GPG-KEY-WAZUH',
+  String $apt_directory_url   = '3.x/apt/',
+  String $yum_directory_url   = '3.x/yum/',
+  Boolean $yum_repo_enable    = true,
+  Boolean $redhat_manage_epel = true,
 ) {
-
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : {
       if ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
+
       # apt-key added by issue #34
       apt::key { 'wazuh':
-        id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
-        source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH',
-        server => 'pgp.mit.edu'
+        id     => "${apt_key_id}",
+        source => "${repo_base_url}/key/${apt_gpgkey_name}",
+        # This is never used
+        server => "${apt_key_server}",
       }
-      case $::lsbdistcodename {
-        /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi)/: {
-
-          apt::source { 'wazuh':
-            ensure   => present,
-            comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/3.x/apt',
-            release  => 'stable',
-            repos    => 'main',
-            include  => {
-              'src' => false,
-              'deb' => true,
-            },
-          }
-        }
-        default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
+      apt::source { 'wazuh':
+        ensure        => present,
+        comment       => "This is the WAZUH ${facts['os']['name']} repository",
+        location      => "${repo_base_url}/${apt_directory_url}",
+        release       => 'stable',
+        repos         => 'main',
+        include       => {
+          'src' => false,
+          'deb' => true,
+        },
+        notify_update => true,
       }
     }
-    'Linux', 'Redhat' : {
-        case $::os[name] {
-          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
-            if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $baseurl  = 'https://packages.wazuh.com/3.x/yum/5/'
-              $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
-            } else {
-              $baseurl  = 'https://packages.wazuh.com/3.x/yum/'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-            }
-          }
-          default: { fail('This ossec module has not been tested on your distribution.') }
-        }
+    'Linux', 'RedHat': {
       # Set up OSSEC repo
       yumrepo { 'wazuh':
-        descr    => "WAZUH OSSEC Repository - www.wazuh.com",
-        enabled  => true,
+        descr    => 'WAZUH OSSEC Repository',
+        enabled  => $yum_repo_enable,
         gpgcheck => 1,
-        gpgkey   => $gpgkey,
-        baseurl  => $baseurl
+        gpgkey   => "${repo_base_url}/key/${yum_gpgkey_name}",
+        baseurl  => "${repo_base_url}/${yum_directory_url}"
       }
 
       if $redhat_manage_epel {

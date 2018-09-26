@@ -1,0 +1,25 @@
+---
+# Facts specific to Windows
+wazuh::client::config_file: 'C:\\Program Files (x86)\\ossec-agent\\ossec.conf'
+wazuh::server::shared_agent_config_file: 'C:\\Program Files (x86)\\ossec-agent\\shared\\agent.conf'
+wazuh::config_owner: 'Administrator'
+wazuh::config_group: 'Administrators'
+wazuh::manage_firewall: false
+wazuh::keys_file: 'c:/Program Files (x86)/ossec-agent/client.keys'
+wazuh::keys_owner: 'Administrator'
+wazuh::keys_group: 'Administrators'
+wazuh::keys_mode: '0440'
+#wazuh::agent_service : 'OssecSvc'
+wazuh::client::agent_service_name : 'OssecSvc'
+wazuh::client::agent_package_name : 'Wazuh Agent 2.0'
+wazuh::server::server_service: ''
+wazuh::server::server_package: ''
+wazuh::server::api_service_name: ''
+wazuh::server::api_package_name: ''
+wazuh::service_has_status: true
+# TODO
+wazuh::server::validate_cmd_conf: ~
+# Pushed by shared agent config now
+#wazuh::default_local_files: {}
+wazuh::ossec_local_files: {}
+

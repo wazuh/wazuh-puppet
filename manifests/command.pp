@@ -1,17 +1,16 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Define an ossec command
 define wazuh::command(
-  $command_name,
-  $command_executable,
-  $command_expect = 'srcip',
-  $timeout_allowed = true,
+  String $command_name,
+  String $command_executable,
+  String $command_expect = 'srcip',
+  Integer $command_order = 45,
+  Enum['yes', 'no'] $command_timeout_allowed = 'yes',
 ) {
-  require wazuh::params
-
-  if ($timeout_allowed) { $command_timeout_allowed='yes' } else { $command_timeout_allowed='no' }
-  concat::fragment { $name:
+  # Build command fragment
+  concat::fragment { "ossec.conf_command-${title}":
     target  => 'ossec.conf',
-    order   => 45,
-    content => template('wazuh/command.erb'),
+    order   => $command_order,
+    content => template('wazuh/fragments/_command.erb'),
   }
 }

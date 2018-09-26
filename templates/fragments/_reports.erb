@@ -1,28 +1,28 @@
   <reports>
-    <%- if defined?(@r_group) -%>
-    <group><%= @r_group %></group>
+    <title><%= @report_title %></title>
+    <email_to><%= @report_email_to %></email_to>
+    <%- if defined?(@report_group) -%>
+    <group><%= @report_group %></group>
     <%- end -%>
-    <%- if defined?(@r_category) -%>
-    <category><%= @r_category %></category>
+    <%- if defined?(@report_category) -%>
+    <category><%= @report_category %></category>
     <%- end -%>
-    <%- if defined?(@r_rule) -%>
-    <rule><%= @r_rule %></rule>
+    <%- if defined?(@report_rule) -%>
+    <rule><%= @report_rule %></rule>
     <%- end -%>
-    <%- if defined?(@r_level) -%>
-    <level><%= @r_level %></level>
+    <%- if defined?(@report_level) -%>
+    <level><%= @report_level %></level>
     <%- end -%>
-    <%- if defined?(@r_location) -%>
-    <location><%= @r_location %></location>
+    <%- if defined?(@report_location) -%>
+    <location><%= @report_location %></location>
     <%- end -%>
-    <%- if defined?(@r_srcip) -%>
-    <srcip><%= @r_srcip %><srcip/>
+    <%- if defined?(@report_srcip) -%>
+    <srcip><%= @report_srcip %><srcip/>
     <%- end -%>
-    <%- if defined?(@r_user) -%>
-    <user><%= @r_user %></user>
+    <%- if defined?(@report_user) -%>
+    <user><%= @report_user %></user>
     <%- end -%>
-    <title><%= @r_title %></title>
-    <email_to><%= @r_email_to %></email_to>
-    <%- if defined?(@r_showlogs) -%>
-    <showlogs><%= @r_showlogs %></showlogs>
+    <%- if defined?(@report_showlogs) -%>
+    <showlogs><%= @report_showlogs %></showlogs>
     <%- end -%>
   </reports>

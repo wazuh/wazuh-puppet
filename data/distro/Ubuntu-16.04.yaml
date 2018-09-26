@@ -1,0 +1,14 @@
+---
+# Facts specific to Ubuntu Xenial
+
+# In case they're ever needed...
+# wazuh::server::server_service = 'wazuh-manager'
+# wazuh::server::server_package = 'wazuh-manager'
+# wazuh::server::api_service_name = 'wazuh-api'
+# wazuh::server::api_package_name = 'wazuh-api'
+
+wazuh::wodle_openscap_content:
+  'ssg-ubuntu-1604-ds.xml':
+    type: 'xccdf'
+    profiles:
+      - 'xccdf_org.ssgproject.content_profile_common'
