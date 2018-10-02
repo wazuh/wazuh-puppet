@@ -89,7 +89,7 @@ class wazuh::server (
 
     # install package
     package { $wazuh::params::server_package:
-      ensure  => $server_package_version
+      ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
     }
   }
 
@@ -214,7 +214,7 @@ class wazuh::server (
     }
 
     package { $wazuh::params::api_package:
-      ensure  => $api_package_version
+      ensure => $api_package_version, # lint:ignore:security_package_pinned_version
     }
 
     if $wazuh_api_enable_https {
@@ -261,16 +261,16 @@ class wazuh::server (
     }
   }
   # Manage firewall
-   if $manage_firewall {
-     include firewall
-     firewall { '1514 wazuh-manager':
-       dport  => $ossec_server_port,
-       proto  => $ossec_server_protocol,
-       action => 'accept',
-       state  => [
-         'NEW',
-         'RELATED',
-         'ESTABLISHED'],
+  if $manage_firewall {
+    include firewall
+    firewall { '1514 wazuh-manager':
+      dport  => $ossec_server_port,
+      proto  => $ossec_server_protocol,
+      action => 'accept',
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
 }
