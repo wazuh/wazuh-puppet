@@ -43,6 +43,8 @@ class wazuh::server (
   $agent_auth_password                 = undef,
   $ar_repeated_offenders               = '',
   $syslog_output                       = false,
+  $syslog_output_level                 = 2,
+  $syslog_output_port                  = 514,
   $syslog_output_server                = undef,
   $syslog_output_format                = undef,
   $enable_wodle_openscap               = false,
