@@ -49,7 +49,9 @@ class wazuh::server (
   $enable_wodle_openscap               = false,
   $wodle_openscap_content              = $::wazuh::params::wodle_openscap_content,
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
+  $decoder_exclude                     = [],
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
+  $rule_exclude                        = [],
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
   $api_config_template                 = 'wazuh/api/config.js.erb',
   $wazuh_manager_verify_manager_ssl    = false,
@@ -61,6 +63,9 @@ class wazuh::server (
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
     $install_wazuh_api, $wazuh_manager_verify_manager_ssl
+  )
+  validate_array(
+    $decoder_exclude, $rule_exclude
   )
 
   # This allows arrays of integers, sadly
