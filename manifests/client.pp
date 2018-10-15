@@ -24,6 +24,7 @@ class wazuh::client(
   $selinux                         = false,
   $agent_name                      = $::hostname,
   $agent_ip_address                = $::ipaddress,
+  $agent_group                     = 'default',
   $manage_repo                     = true,
   $manage_epel_repo                = true,
   $agent_package_name              = $::wazuh::params::agent_package,
@@ -157,7 +158,8 @@ class wazuh::client(
     }
 
     # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
-    $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -D /var/ossec/"
+
+    $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -G ${agent_group} -D /var/ossec/"
     if $wazuh_manager_root_ca_pem != undef {
       validate_string($wazuh_manager_root_ca_pem)
       file { '/var/ossec/etc/rootCA.pem':
