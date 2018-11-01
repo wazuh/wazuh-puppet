@@ -7,7 +7,7 @@
     <auto_ignore><%= @ossec_auto_ignore %></auto_ignore>
 
     <!-- Directories to check  (perform all possible verifications) -->
-    <%- @ossec_scanpaths.each do |scanpath| -%>    <directories check_all="yes" report_changes="<%= scanpath["report_changes"] %>" realtime="<%= scanpath['realtime'] %>"><%= scanpath['path']  %></directories>
+    <%- @ossec_scanpaths.each do |scanpath| -%>    <directories check_all="yes" report_changes="<%= scanpath["report_changes"] %>" realtime="<%= scanpath['realtime'] %>" whodata="<%= scanpath['whodata'] || 'no' %>"><%= scanpath['path']  %></directories>
 <%- end -%>
 
     <!-- Files/directories to ignore (parameterized) -->
