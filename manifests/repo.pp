@@ -16,7 +16,7 @@ class wazuh::repo (
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi)/: {
+        /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
