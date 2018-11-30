@@ -1,0 +1,17 @@
+  <cluster>
+    <name><%= @cl_name %></name>
+    <node_name><%= @cl_node_name %></node_name>
+    <node_type><%= @cl_node_type %></node_type>
+	<% if @cl_key != '' -%>
+		<key><%= @cl_key %></key>
+	<% end -%>
+    <port><%= @cl_port %></port>
+    <bind_addr><%= @cl_bin_addr %></bind_addr>
+    <nodes>
+	<% @cl_node.each do |node| %>
+        <node><%= node %></node>
+	<% end %>
+    </nodes>
+    <hidden><%= @cl_hidden %></hidden>
+    <disabled><%= @cl_disabled %></disabled>
+  </cluster>

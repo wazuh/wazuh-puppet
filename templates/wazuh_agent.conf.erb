@@ -1,14 +1,19 @@
   <client>
+  <server>
   <%- if @ossec_server_ip then -%>
-    <server-ip><%= @ossec_server_ip %></server-ip>
+    <address><%= @ossec_server_ip %></address>
   <%- end -%>
   <%- if @ossec_server_hostname then -%>
-    <server-hostname><%= @ossec_server_hostname %></server-hostname>
+    <address><%= @ossec_server_hostname %></address>
+  <%- end -%>
+  <%- if @wazuh_manager_address then -%>
+    <address><%= @wazuh_manager_address %></address>
   <%- end -%>
   <%- if @ossec_server_protocol then -%>
     <protocol><%= @ossec_server_protocol %></protocol>
   <%- end -%>
     <port><%= @ossec_server_port %></port>
+  </server>
   <%- if @ossec_config_profiles then -%>
     <config-profile><%= @ossec_config_profiles.join(',') %></config-profile>
   <%- end -%>
@@ -18,7 +23,15 @@
   <%- if @ossec_server_time_reconnect then -%>
     <time-reconnect><%= @ossec_server_time_reconnect %></time-reconnect>
   <%- end -%>
+    <auto_restart><%= @agent_auto_restart %></auto_restart>
   </client>
+
+  <client_buffer>
+    <!-- Agent buffer options -->
+    <disabled>no</disabled>
+    <queue_size><%= @client_buffer_queue_size %></queue_size>
+    <events_per_second><%= @client_buffer_events_per_second %></events_per_second>
+  </client_buffer>
 
   <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
 

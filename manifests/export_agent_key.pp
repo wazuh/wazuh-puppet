@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 #Export agent key
 class wazuh::export_agent_key(
   $max_clients,

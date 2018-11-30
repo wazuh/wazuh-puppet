@@ -17,6 +17,10 @@ This module installs and configure Wazuh agent and manager.
 
 This Puppet module has been authored by Nicolas Zin, and updated by Jonathan Gazeley and Michael Porter. Wazuh has forked it with the purpose of maintaining it. Thank you to the authors for the contribution.
 
+## License and copyright
+
+Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
+
 ## References
 
 * [Wazuh website](http://wazuh.com)
