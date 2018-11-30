@@ -33,7 +33,7 @@ class wazuh::client(
   # client_buffer configuration
   $client_buffer_queue_size        = 5000,
   $client_buffer_events_per_second = 500,
-  $manage_client_keys              = 'export',
+  $manage_client_keys              = 'authd',
   $agent_auth_password             = undef,
   $wazuh_manager_root_ca_pem       = undef,
   $agent_seed                      = undef,
