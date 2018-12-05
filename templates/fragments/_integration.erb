@@ -1,0 +1,23 @@
+  <integration>
+    <name><%= @name %></name>
+    <% if @hook_url != '' -%>
+      <hook_url><%= @hook_url %></hook_url>
+    <% end %>
+    <% if @api_key != '' -%>
+      <api_key><%= @api_key %></api_key>
+    <% end %>
+    <% if @in_rule_id != '' -%>
+      <rule_id><%= @in_rule_id %></rule_id>
+    <% end %>
+    <% if @in_level != '' -%>
+      <level><%= @in_level %></level>
+    <% end %>
+    <group><%= @in_group %></group>
+    <% if @in_location != '' -%>
+      <event_location><%= @in_location %></event_location>
+    <% end %>
+    <alert_format><%= @in_format %></alert_format>
+    <% if @in_max_log != '' -%>
+      <max_log><%= @in_max_log %></max_log>
+    <% end %>
+  </integration>
