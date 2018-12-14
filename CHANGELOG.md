@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 - Updated metadata.json
 - addlog command support ([#90](https://github.com/wazuh/wazuh-puppet/pull/90))
 
+### Added
+
+- add integration support ([#89](https://github.com/wazuh/wazuh-puppet/pull/89))
+
 ## v3.7.0-3701
 
 ### Added
