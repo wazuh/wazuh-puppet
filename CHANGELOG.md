@@ -3,14 +3,20 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.7.1]
 
+### Added
+
+- add integration support ([#89](https://github.com/wazuh/wazuh-puppet/pull/89))
+- Add support for who data ([#84](https://github.com/wazuh/wazuh-puppet/pull/84))
+- Grouping agents ([#82](https://github.com/wazuh/wazuh-puppet/pull/82))
+
+### Fixed
+
+- Fix firewall module and support excluding decoders and rules ([#81](https://github.com/wazuh/wazuh-puppet/pull/81))
+
 ### Changed
 
 - Updated metadata.json
 - addlog command support ([#90](https://github.com/wazuh/wazuh-puppet/pull/90))
-
-### Added
-
-- add integration support ([#89](https://github.com/wazuh/wazuh-puppet/pull/89))
 
 ## v3.7.0-3701
 
