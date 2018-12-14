@@ -1,6 +1,14 @@
   <localfile>
     <log_format><%= @logtype %></log_format>
+    <%- if @logfile -%>
     <location><%= @logfile %></location>
+    <%- end -%>
+    <%- if @logcommand -%>
+    <command><%= @logcommand %> </command>
+    <%- end -%>
+    <%- if @commandalias -%>
+    <alias><%= @commandalias %> </alias>
+    <%- end -%>
     <%- if @frequency -%>
     <frequency><%= @frequency %></frequency>
     <%- end -%>
