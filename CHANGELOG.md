@@ -5,29 +5,29 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- add integration support ([#89](https://github.com/wazuh/wazuh-puppet/pull/89))
-- Add support for who data ([#84](https://github.com/wazuh/wazuh-puppet/pull/84))
-- Grouping agents ([#82](https://github.com/wazuh/wazuh-puppet/pull/82))
+- Add integration support. ([#89](https://github.com/wazuh/wazuh-puppet/pull/89))
+- Add support for who data. ([#84](https://github.com/wazuh/wazuh-puppet/pull/84))
+- Grouping agents. ([#82](https://github.com/wazuh/wazuh-puppet/pull/82))
 
 ### Fixed
 
-- Fix firewall module and support excluding decoders and rules ([#81](https://github.com/wazuh/wazuh-puppet/pull/81))
+- Fix firewall module and support excluding decoders and rules. ([#81](https://github.com/wazuh/wazuh-puppet/pull/81))
 
 ### Changed
 
-- Updated metadata.json
-- addlog command support ([#90](https://github.com/wazuh/wazuh-puppet/pull/90))
+- Updated metadata.json. 
+- Changed addlog for command support. ([#90](https://github.com/wazuh/wazuh-puppet/pull/90))
 
 ## v3.7.0-3701
 
 ### Added
 
 - New repository management and content.
-- Add support for Wazuh 3.x ([#85](https://github.com/wazuh/wazuh-puppet/pull/85))
+- Add support for Wazuh 3.x. ([#85](https://github.com/wazuh/wazuh-puppet/pull/85))
 
 ### Fixed
 
-- Fix username (puppet to puppetlabs) ([#74](https://github.com/wazuh/wazuh-puppet/pull/74))
+- Fix username (puppet to puppetlabs). ([#74](https://github.com/wazuh/wazuh-puppet/pull/74))
 
 ## Change Log old version. 
   
