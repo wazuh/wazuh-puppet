@@ -69,9 +69,9 @@ class wazuh::client(
         } else {
           Class['wazuh::repo'] -> Package[$agent_package_name]
         }
-        package { $agent_package_name:
-          ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
-        }
+      }
+      package { $agent_package_name:
+        ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
       }
     }
     'windows' : {
