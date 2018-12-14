@@ -263,16 +263,16 @@ class wazuh::server (
     }
   }
   # Manage firewall
-   if $manage_firewall {
-     include firewall
-     firewall { '1514 wazuh-manager':
-       dport  => $ossec_server_port,
-       proto  => $ossec_server_protocol,
-       action => 'accept',
-       state  => [
-         'NEW',
-         'RELATED',
-         'ESTABLISHED'],
+  if $manage_firewall {
+    include firewall
+    firewall { '1514 wazuh-manager':
+      dport  => $ossec_server_port,
+      proto  => $ossec_server_protocol,
+      action => 'accept',
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
 }

@@ -125,7 +125,7 @@ class wazuh::params {
               # Probably best to leave this undef until we can
               # write/find a release-specific file.
               $wodle_openscap_content = undef
-           }
+            }
             'CentOS': {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {

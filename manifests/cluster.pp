@@ -9,7 +9,7 @@ define wazuh::cluster(
   $cl_node      = ['NODE_IP','NODE_IP2'],
   $cl_hidden    = 'no',
   $cl_disabled  = 'yes',
-) { 
+) {
 
   require wazuh::params
 
@@ -18,4 +18,4 @@ define wazuh::cluster(
     order   => 95,
     content => template('wazuh/fragments/_cluster.erb')
   }
-} 
+}
