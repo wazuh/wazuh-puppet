@@ -1,9 +1,11 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 #Define a log-file to add to ossec
 define wazuh::addlog(
-  $logfile,
-  $logtype   = 'syslog',
-  $frequency = undef,
+  $logfile      = undef,
+  $logtype      = 'syslog',
+  $logcommand      = undef,
+  $commandalias = undef,
+  $frequency    = undef,
 ) {
   require wazuh::params
 
