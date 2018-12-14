@@ -70,7 +70,7 @@ class wazuh::client(
           Class['wazuh::repo'] -> Package[$agent_package_name]
         }
         package { $agent_package_name:
-          ensure => $agent_package_version
+          ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
         }
       }
     }
@@ -86,7 +86,7 @@ class wazuh::client(
       }
 
       package { $agent_package_name:
-        ensure          => $agent_package_version,
+        ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
         provider        => 'windows',
         source          => 'C:/wazuh-winagent-v2.1.1-1.exe',
         install_options => [ '/S' ],  # Nullsoft installer silent installation

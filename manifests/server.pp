@@ -45,6 +45,8 @@ class wazuh::server (
   $agent_auth_password                 = undef,
   $ar_repeated_offenders               = '',
   $syslog_output                       = false,
+  $syslog_output_level                 = 2,
+  $syslog_output_port                  = 514,
   $syslog_output_server                = undef,
   $syslog_output_format                = undef,
   $enable_wodle_openscap               = false,
@@ -96,7 +98,7 @@ class wazuh::server (
 
     # install package
     package { $wazuh::params::server_package:
-      ensure  => $server_package_version
+      ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
     }
   }
 
@@ -221,7 +223,7 @@ class wazuh::server (
     }
 
     package { $wazuh::params::api_package:
-      ensure  => $api_package_version
+      ensure => $api_package_version, # lint:ignore:security_package_pinned_version
     }
 
     if $wazuh_api_enable_https {
