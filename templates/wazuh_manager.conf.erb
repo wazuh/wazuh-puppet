@@ -43,11 +43,17 @@
     <decoder_dir>ruleset/decoders</decoder_dir>
     <rule_dir>ruleset/rules</rule_dir>
     <rule_exclude>0215-policy_rules.xml</rule_exclude>
+    <%- @rule_exclude.each do |r| -%>
+    <rule_exclude><%= r %></rule_exclude>
+    <%- end -%>
     <list>etc/lists/audit-keys</list>
 
     <!-- User-defined ruleset -->
     <decoder_dir>etc/decoders</decoder_dir>
     <rule_dir>etc/rules</rule_dir>
+    <%- @decoder_exclude.each do |r| -%>
+    <decoder_exclude><%= r %></decoder_exclude>
+    <%- end -%>
   </ruleset>
 
   <remote>
