@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Repo installation
 class wazuh::repo (
   $redhat_manage_epel = true,
@@ -15,27 +16,13 @@ class wazuh::repo (
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(precise|trusty|vivid|wily|xenial|yakketi)/: {
+        /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/apt',
-            release  => $::lsbdistcodename,
-            repos    => 'main',
-            include  => {
-              'src' => false,
-              'deb' => true,
-            },
-          }
-
-        }
-        /^(jessie|wheezy|stretch|sid)$/: {
-          apt::source { 'wazuh':
-            ensure   => present,
-            comment  => 'This is the WAZUH Debian repository',
-            location => 'https://packages.wazuh.com/apt',
-            release  => $::lsbdistcodename,
+            location => 'https://packages.wazuh.com/3.x/apt',
+            release  => 'stable',
             repos    => 'main',
             include  => {
               'src' => false,
@@ -47,46 +34,21 @@ class wazuh::repo (
       }
     }
     'Linux', 'Redhat' : {
-      if ( $::operatingsystem == 'Amazon' ) {
-        $repotype = 'Amazon Linux'
-        $baseurl  = 'https://packages.wazuh.com/yum/rhel/6Server/$basearch'
-        $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-      }
-      else {
         case $::os[name] {
-          'CentOS': {
+          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $repotype = 'CentOS 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/el/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
+              $baseurl  = 'https://packages.wazuh.com/3.x/yum/5/'
+              $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
             } else {
-              $repotype = 'CentOS > 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/el/$releasever/$basearch'
+              $baseurl  = 'https://packages.wazuh.com/3.x/yum/'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
-          }
-          /^(RedHat|OracleLinux)$/: {
-            if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $repotype = 'RedHat 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5'
-            } else {
-              $repotype = 'RedHat > 5'
-              $baseurl  = 'https://packages.wazuh.com/yum/rhel/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
-            }
-          }
-          'Fedora': {
-              $repotype = 'Fedora'
-              $baseurl  = 'https://packages.wazuh.com/yum/fc/$releasever/$basearch'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
           }
           default: { fail('This ossec module has not been tested on your distribution.') }
         }
-      }
       # Set up OSSEC repo
       yumrepo { 'wazuh':
-        descr    => "WAZUH OSSEC Repository - www.wazuh.com # ${repotype}",
+        descr    => "WAZUH OSSEC Repository - www.wazuh.com",
         enabled  => true,
         gpgcheck => 1,
         gpgkey   => $gpgkey,

@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Main ossec server config
 class wazuh::server (
   $smtp_server                         = undef,
@@ -27,13 +28,14 @@ class wazuh::server (
   $api_service_provider                = $::wazuh::params::api_service_provider,
   $ossec_server_port                   = '1514',
   $ossec_server_protocol               = 'udp',
-  $ossec_authd_enabled                 = false,
+  $ossec_authd_enabled                 = true,
+  $ossec_integratord_enabled           = false,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
   $api_config_params                   = $::wazuh::params::api_config_params,
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
-  $manage_client_keys                  = 'export',
+  $manage_client_keys                  = 'authd',
   $install_wazuh_api                   = false,
   $wazuh_api_enable_https              = false,
   $wazuh_api_server_crt                = undef,
@@ -43,12 +45,16 @@ class wazuh::server (
   $agent_auth_password                 = undef,
   $ar_repeated_offenders               = '',
   $syslog_output                       = false,
+  $syslog_output_level                 = 2,
+  $syslog_output_port                  = 514,
   $syslog_output_server                = undef,
   $syslog_output_format                = undef,
   $enable_wodle_openscap               = false,
   $wodle_openscap_content              = $::wazuh::params::wodle_openscap_content,
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
+  $decoder_exclude                     = [],
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
+  $rule_exclude                        = [],
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
   $api_config_template                 = 'wazuh/api/config.js.erb',
   $wazuh_manager_verify_manager_ssl    = false,
@@ -60,6 +66,9 @@ class wazuh::server (
     $ossec_active_response, $ossec_rootcheck,
     $manage_repos, $manage_epel_repo, $syslog_output,
     $install_wazuh_api, $wazuh_manager_verify_manager_ssl
+  )
+  validate_array(
+    $decoder_exclude, $rule_exclude
   )
 
   # This allows arrays of integers, sadly
@@ -89,7 +98,7 @@ class wazuh::server (
 
     # install package
     package { $wazuh::params::server_package:
-      ensure  => $server_package_version
+      ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
     }
   }
 
@@ -214,7 +223,7 @@ class wazuh::server (
     }
 
     package { $wazuh::params::api_package:
-      ensure  => $api_package_version
+      ensure => $api_package_version, # lint:ignore:security_package_pinned_version
     }
 
     if $wazuh_api_enable_https {
@@ -261,16 +270,16 @@ class wazuh::server (
     }
   }
   # Manage firewall
-   if $manage_firewall {
-     include firewall
-     firewall { '1514 wazuh-manager':
-       dport  => $ossec_server_port,
-       proto  => $ossec_server_protocol,
-       action => 'accept',
-       state  => [
-         'NEW',
-         'RELATED',
-         'ESTABLISHED'],
+  if $manage_firewall {
+    include firewall
+    firewall { '1514 wazuh-manager':
+      dport  => $ossec_server_port,
+      proto  => $ossec_server_protocol,
+      action => 'accept',
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
 }

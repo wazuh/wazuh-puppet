@@ -1,3 +1,4 @@
+# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Paramas file
 class wazuh::params {
   case $::kernel {
@@ -84,7 +85,7 @@ class wazuh::params {
                 }
               }
             }
-            /^(wheezy|stretch|sid|precise|trusty|vivid|wily|xenial)$/: {
+            /^(wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $api_service = 'wazuh-api'
@@ -124,7 +125,7 @@ class wazuh::params {
               # Probably best to leave this undef until we can
               # write/find a release-specific file.
               $wodle_openscap_content = undef
-           }
+            }
             'CentOS': {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $wodle_openscap_content = {
