@@ -29,7 +29,6 @@ class wazuh::server (
   $ossec_server_port                   = '1514',
   $ossec_server_protocol               = 'udp',
   $ossec_authd_enabled                 = true,
-  $ossec_restart_command               = '/var/ossec/bin/ossec-control restart',
   $ossec_integratord_enabled           = false,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
@@ -283,10 +282,4 @@ class wazuh::server (
         'ESTABLISHED'],
     }
   }
-
-  exec{ 'ossec-restart':
-    command => $ossec_restart_command,
-    require   => Package[$wazuh::params::server_package],
-  }
-
 }
