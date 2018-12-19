@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Fixing process_list.erb performance ([#94](https://github.com/wazuh/wazuh-puppet/pull/94))
+- Update windows agent version ([#96](https://github.com/wazuh/wazuh-puppet/pull/96))
 
 ## [v3.7.1]
 
