@@ -107,8 +107,6 @@ class wazuh::params {
           $api_service = 'wazuh-api'
           $api_package = 'wazuh-api'
           $service_has_status  = true
-          $ossec_service_provider = 'redhat'
-          $api_service_provider = 'redhat'
 
           $default_local_files = {
             '/var/log/messages'         => 'syslog',
@@ -128,6 +126,8 @@ class wazuh::params {
             }
             'CentOS': {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
                 $wodle_openscap_content = {
                   'ssg-centos-6-ds.xml' => {
                     'type' => 'xccdf',
@@ -136,6 +136,8 @@ class wazuh::params {
                 }
               }
               if ( $::operatingsystemrelease =~ /^7.*/ ) {
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
                 $wodle_openscap_content = {
                   'ssg-centos-7-ds.xml' => {
                     'type' => 'xccdf',
@@ -146,6 +148,8 @@ class wazuh::params {
             }
             /^(RedHat|OracleLinux)$/: {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
                 $wodle_openscap_content = {
                   'ssg-rhel-6-ds.xml' => {
                     'type' => 'xccdf',
@@ -157,6 +161,8 @@ class wazuh::params {
                 }
               }
               if ( $::operatingsystemrelease =~ /^7.*/ ) {
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
                 $wodle_openscap_content = {
                   'ssg-rhel-7-ds.xml' => {
                     'type' => 'xccdf',
@@ -170,6 +176,8 @@ class wazuh::params {
             }
             'Fedora': {
               if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
                 $wodle_openscap_content = {
                   'ssg-fedora-ds.xml' => {
                     'type' => 'xccdf',
