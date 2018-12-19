@@ -77,20 +77,20 @@ class wazuh::client(
     'windows' : {
 
       file {
-        'C:/wazuh-agent-3.7.2.msi':
+        'C:/wazuh-agent-3.7.2-1.msi':
           owner              => 'Administrators',
           group              => 'Administrators',
           mode               => '0774',
-          source             => 'puppet:///modules/wazuh/wazuh-agent-3.7.2.msi',
+          source             => 'puppet:///modules/wazuh/wazuh-agent-3.7.2-1.msi',
           source_permissions => ignore
       }
-
+       
       package { $agent_package_name:
         ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
         provider        => 'windows',
-        source          => 'C:/wazuh-agent-3.7.2.msi',
-        install_options => [ '/q' ],  # Nullsoft installer silent installation
-        require         => File['C:/wazuh-agent-3.7.2.msi'],
+        source          => 'C:/wazuh-agent-3.7.2-1.msi',
+        install_options => [ '/q', "ADDRESS=${ossec_server_ip}", "AUTHD_SERVER=${ossec_server_ip}" ],  # silent installation
+        require         => File['C:/wazuh-agent-3.7.2-1.msi'],
       }
     }
     default: { fail('OS not supported') }
@@ -145,51 +145,51 @@ class wazuh::client(
       agent_seed       => $agent_seed,
     }
   } elsif ($manage_client_keys == 'authd') {
-    if ($::kernel != 'Linux') {
-      fail('key generation using agent-auth via puppet is not supported on this platform yet')
-    }
-    # Is this really Linux only?
-    $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
+    if ($::kernel == 'Linux') {
+    
+      # Is this really Linux only?
+      $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
 
-    file { $::wazuh::params::keys_file:
-      owner => $wazuh::params::keys_owner,
-      group => $wazuh::params::keys_group,
-      mode  => $wazuh::params::keys_mode,
-    }
-
-    # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
-
-    $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -G ${agent_group} -D /var/ossec/"
-    if $wazuh_manager_root_ca_pem != undef {
-      validate_string($wazuh_manager_root_ca_pem)
-      file { '/var/ossec/etc/rootCA.pem':
-        owner   => $wazuh::params::keys_owner,
-        group   => $wazuh::params::keys_group,
-        mode    => $wazuh::params::keys_mode,
-        content => $wazuh_manager_root_ca_pem,
-        require => Package[$agent_package_name],
+      file { $::wazuh::params::keys_file:
+        owner => $wazuh::params::keys_owner,
+        group => $wazuh::params::keys_group,
+        mode  => $wazuh::params::keys_mode,
       }
 
-      $agent_auth_command = "${agent_auth_base_command} -v /var/ossec/etc/rootCA.pem"
-    } else {
-      $agent_auth_command = $agent_auth_base_command
-    }
+      # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
 
-    if $agent_auth_password {
-      exec { 'agent-auth-with-pwd':
-        command => "${agent_auth_command} -P '${agent_auth_password}'",
-        unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
-        require => Package[$agent_package_name],
-        notify  => Service[$agent_service_name],
-        before  => File[$wazuh::params::keys_file]
+      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -G ${agent_group} -D /var/ossec/"
+      if $wazuh_manager_root_ca_pem != undef {
+        validate_string($wazuh_manager_root_ca_pem)
+        file { '/var/ossec/etc/rootCA.pem':
+          owner   => $wazuh::params::keys_owner,
+          group   => $wazuh::params::keys_group,
+          mode    => $wazuh::params::keys_mode,
+          content => $wazuh_manager_root_ca_pem,
+          require => Package[$agent_package_name],
+        }
+
+        $agent_auth_command = "${agent_auth_base_command} -v /var/ossec/etc/rootCA.pem"
+      } else {
+        $agent_auth_command = $agent_auth_base_command
       }
-    } else {
-      exec { 'agent-auth-without-pwd':
-        command => $agent_auth_command,
-        unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
-        require => Package[$agent_package_name],
-        notify  => Service[$agent_service_name],
-        before  => File[$wazuh::params::keys_file],
+
+      if $agent_auth_password {
+        exec { 'agent-auth-with-pwd':
+          command => "${agent_auth_command} -P '${agent_auth_password}'",
+          unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
+          require => Package[$agent_package_name],
+          notify  => Service[$agent_service_name],
+          before  => File[$wazuh::params::keys_file]
+       }
+      } else {
+        exec { 'agent-auth-without-pwd':
+          command => $agent_auth_command,
+          unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
+          require => Package[$agent_package_name],
+          notify  => Service[$agent_service_name],
+          before  => File[$wazuh::params::keys_file],
+        }
       }
     }
   }
