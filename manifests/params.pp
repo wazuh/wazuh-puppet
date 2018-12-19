@@ -206,7 +206,7 @@ class wazuh::params {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 2.0'
+      $agent_package  = 'Wazuh Agent 3.7.2'
       $server_service = ''
       $server_package = ''
       $api_service = ''
