@@ -183,29 +183,29 @@ class wazuh::client(
        $agent_auth_option_manager = "-v /var/ossec/etc/rootCA.pem"
       }
 
-			# https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-agents-via-ssl
-			if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
-				validate_string($wazuh_agent_cert)
-				validate_string($wazuh_agent_key)
-				file { '/var/ossec/etc/sslagent.cert':
-					owner   => $wazuh::params::keys_owner,
-					group   => $wazuh::params::keys_group,
-					mode    => $wazuh::params::keys_mode,
-					content => $wazuh_agent_cert,
-					require => Package[$agent_package_name],
-				}
-				file { '/var/ossec/etc/sslagent.key':
-					owner   => $wazuh::params::keys_owner,
-					group   => $wazuh::params::keys_group,
-					mode    => $wazuh::params::keys_mode,
-					content => $wazuh_agent_key,
-					require => Package[$agent_package_name],
-				}
+    # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-agents-via-ssl
+    if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
+      validate_string($wazuh_agent_cert)
+      validate_string($wazuh_agent_key)
+      file { '/var/ossec/etc/sslagent.cert':
+        owner   => $wazuh::params::keys_owner,
+        group   => $wazuh::params::keys_group,
+        mode    => $wazuh::params::keys_mode,
+        content => $wazuh_agent_cert,
+        require => Package[$agent_package_name],
+      }
+      file { '/var/ossec/etc/sslagent.key':
+        owner   => $wazuh::params::keys_owner,
+        group   => $wazuh::params::keys_group,
+        mode    => $wazuh::params::keys_mode,
+        content => $wazuh_agent_key,
+        require => Package[$agent_package_name],
+      }
 
-				$agent_auth_option_agent = "-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key"
-			}
+      $agent_auth_option_agent = "-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key"
+    }
 
-			$agent_auth_command = "$agent_auth_base_command $agent_auth_option_manager $agent_auth_option_agent"
+    $agent_auth_command = "$agent_auth_base_command $agent_auth_option_manager $agent_auth_option_agent"
 
 
       if $agent_auth_password {
