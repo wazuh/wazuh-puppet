@@ -48,10 +48,36 @@
 
 
   <!-- Files to monitor (localfiles) -->
-<%- @ossec_local_files.sort.each do |path, format| -%>
+<%- @ossec_local_files.each do |localfile| -%>
   <localfile>
-    <log_format><%= format %></log_format>
-    <location><%= path %></location>
+    <log_format><%= localfile['log_format'] %></log_format>
+    <%- if localfile.key?('location') -%>
+    <location><%= localfile['location'] %></location>
+    <%- end -%>
+    <%- if localfile.key?('frequency') -%>
+    <frequency><%= localfile['frequency'] %></frequency>
+    <%- end -%>
+    <%- if localfile.key?('query') -%>
+    <query><%= localfile['query'] %></query>
+    <%- end -%>
+    <%- if localfile.key?('command') -%>
+    <command><%= localfile['command'] %></command>
+    <%- end -%>
+    <%- if localfile.key?('alias') -%>
+    <alias><%= localfile['alias'] %></alias>
+    <%- end -%>
+    <%- if localfile.key?('label') -%>
+    <label <%- if localfile['label'].key?('attributes') and localfile['label']['attributes'].key?('key')  -%>key="<%= localfile['label']['attributes']['key'] %>"<%- end -%> ><%= localfile['label']['value']%></label>
+    <%- end -%>
+    <%- if localfile.key?('only-future-events') -%>
+    <only-future-events><%= localfile['only-future-events'] %></only-future-events>
+    <%- end -%>
+    <%- if localfile.key?('target') -%>
+    <target><%= localfile['target'] %></target>
+    <%- end -%>
+    <%- if localfile.key?('out_format') -%>
+    <out_format <%- if localfile['out_format'].key?('attributes') and  localfile['out_format']['attributes'].key?('target') -%>target="<%= localfile['out_format']['attributes']['target'] %>"<%- end -%> ><%= localfile['out_format']['value'] %></out_format>
+    <%- end -%>
   </localfile>
 <%- end %>
 
