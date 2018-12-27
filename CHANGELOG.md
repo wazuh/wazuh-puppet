@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [v3.7.x]
+
+### Added 
+- Updating params.pp and _common.erb so all the options of localfile can be used ([#97](https://github.com/wazuh/wazuh-puppet/pull/97))
+
 ## [v3.7.2]
 
 ### Fixed
