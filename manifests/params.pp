@@ -47,16 +47,14 @@ class wazuh::params {
           $service_has_status  = false
           $ossec_service_provider = undef
           $api_service_provider = undef
-
-          $default_local_files = {
-            '/var/log/syslog'                      => 'syslog',
-            '/var/log/kern.log'                    => 'syslog',
-            '/var/log/auth.log'                    => 'syslog',
-            '/var/log/mail.log'                    => 'syslog',
-            '/var/log/dpkg.log'                    => 'syslog',
-            '/var/ossec/logs/active-responses.log' => 'syslog',
-          }
-
+          $default_local_files = [
+            {  'location' => '/var/log/syslog' , 'log_format' => 'syslog'},
+            {  'location' => '/var/log/kern.log' , 'log_format' => 'syslog'},
+            {  'location' => '/var/log/auth.log' , 'log_format' => 'syslog'},
+            {  'location' => '/var/log/mail.log' , 'log_format' => 'syslog'},
+            {  'location' => '/var/log/dpkg.log', 'log_format' => 'syslog'},
+            {  'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog'},
+          ]
           case $::lsbdistcodename {
             'xenial': {
               $server_service = 'wazuh-manager'
@@ -108,14 +106,14 @@ class wazuh::params {
           $api_package = 'wazuh-api'
           $service_has_status  = true
 
-          $default_local_files = {
-            '/var/log/messages'         => 'syslog',
-            '/var/log/secure'           => 'syslog',
-            '/var/log/maillog'          => 'syslog',
-            '/var/log/yum.log'          => 'syslog',
-            '/var/log/httpd/access_log' => 'apache',
-            '/var/log/httpd/error_log'  => 'apache'
-          }
+          $default_local_files =[
+              {  'location' => '/var/log/messages' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/secure' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/maillog', 'log_format' => 'syslog'},
+              {  'location' => '/var/log/yum.log' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/httpd/access_log' , 'log_format' => 'apache'},
+              {  'location' => '/var/log/httpd/error_log' , 'log_format' => 'apache'},
+          ]
           case $::operatingsystem {
             'Amazon': {
               # Amazon is based on Centos-6 with some improvements
@@ -216,7 +214,12 @@ class wazuh::params {
       # TODO
       $validate_cmd_conf = undef
       # Pushed by shared agent config now
-      $default_local_files = {}
+      $default_local_files =  [
+        {'location' => 'Security' , 'log_format' => 'eventchannel', 'query' => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID != 4703 and EventID != 4907]'},
+        {'location' => 'System' , 'log_format' =>  'eventlog'  },
+        {'location' => 'active-response\active-responses.log' , 'log_format' =>  'syslog'  },
+      ]
+
     }
   default: { fail('This ossec module has not been tested on your distribution') }
   }
