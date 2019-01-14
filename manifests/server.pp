@@ -28,7 +28,6 @@ class wazuh::server (
   $api_service_provider                = $::wazuh::params::api_service_provider,
   $ossec_server_port                   = '1514',
   $ossec_server_protocol               = 'udp',
-  $ossec_authd_enabled                 = true,
   $ossec_integratord_enabled           = false,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',

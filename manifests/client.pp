@@ -79,29 +79,29 @@ class wazuh::client(
     'windows' : {
 
       file {
-        'C:/wazuh-agent-3.7.2-1.msi':
+        'C:/wazuh-agent-3.8-1.msi':
           owner              => 'Administrators',
           group              => 'Administrators',
           mode               => '0774',
-          source             => 'puppet:///modules/wazuh/wazuh-agent-3.7.2-1.msi',
+          source             => 'puppet:///modules/wazuh/wazuh-agent-3.8-1.msi',
           source_permissions => ignore
       }
       if ( $manage_client_keys == 'authd' ) {
         package { $agent_package_name:
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
-          source          => 'C:/wazuh-agent-3.7.2-1.msi',
+          source          => 'C:/wazuh-agent-3.8-1.msi',
           install_options => [ '/q', "ADDRESS=${ossec_server_ip}", "AUTHD_SERVER=${ossec_server_ip}" ],  # silent installation
-          require         => File['C:/wazuh-agent-3.7.2-1.msi'],
+          require         => File['C:/wazuh-agent-3.8-1.msi'],
         }
       }
       else {
         package { $agent_package_name:
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
-          source          => 'C:/wazuh-agent-3.7.2-1.msi',
+          source          => 'C:/wazuh-agent-3.8-1.msi',
           install_options => [ '/q' ],  # silent installation
-          require         => File['C:/wazuh-agent-3.7.2-1.msi'],
+          require         => File['C:/wazuh-agent-3.8-1.msi'],
         }
       }
     }
