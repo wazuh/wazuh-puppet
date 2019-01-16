@@ -1,0 +1,21 @@
+  <!-- Client Authentication Settings -->
+  <auth>
+  <%- if @manage_client_keys == 'authd' -%>
+    <disabled>no</disabled>
+    <port><%= @ossec_auth_port %></port>
+    <%- if @ossec_auth_use_srcip -%>
+    <use_source_ip>yes</use_source_ip>
+    <%- end -%>
+    <%- if @ossec_auth_use_password -%>
+    <use_password>yes</use_password>
+    <%- end -%>
+    <%- if @ossec_auth_force_insert -%>
+    <force_insert>yes</force_insert>
+    <%- end -%>
+    <%- if @ossec_auth_purge -%>
+    <purge>yes</purge>
+    <%- end -%>
+  <%- else -%>
+    <disabled>yes</disabled>
+  <%- end -%>
+  </auth>

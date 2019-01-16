@@ -61,6 +61,11 @@ class wazuh::server (
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
   Boolean $manage_firewall             = $::wazuh::params::manage_firewall,
+  Integer $ossec_auth_port             = 1515,
+  Boolean $ossec_auth_use_srcip        = false,
+  Boolean $ossec_auth_use_password     = false,
+  Boolean $ossec_auth_force_insert     = false,
+  Boolean $ossec_auth_purge            = false,
 ) inherits wazuh::params {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
