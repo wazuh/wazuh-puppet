@@ -48,7 +48,7 @@ class wazuh::repo (
         }
       # Set up OSSEC repo
       yumrepo { 'wazuh':
-        descr    => "WAZUH OSSEC Repository - www.wazuh.com",
+        descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
         enabled  => true,
         gpgcheck => 1,
         gpgkey   => $gpgkey,

@@ -95,7 +95,6 @@ class wazuh::server (
       Class['wazuh::repo'] -> Package[$wazuh::params::server_package]
     }
   }
- 
   # install package
   package { $wazuh::params::server_package:
     ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
