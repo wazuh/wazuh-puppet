@@ -1,13 +1,13 @@
 {
   "name": "wazuh-wazuh",
-  "version": "3.7.2",
+  "version": "3.8.0",
   "author": "WAZUH",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
   "source": "https://github.com/wazuh/wazuh-puppet",
   "project_page": "https://github.com/wazuh/wazuh-puppet",
   "issues_url": "https://github.com/wazuh/wazuh-puppet/issues",
-  "tags": ["ossec", "hids", "3.7", "wazuh"],
+  "tags": ["ossec", "hids", "3.8", "wazuh"],
   "operatingsystem_support": [
     {
       "operatingsystem": "Windows",
@@ -15,6 +15,7 @@
         "Server 2003 R2",
         "Server 2008 R2",
         "Server 2012",
+        "Server 2016",
         "Server 2012 R2",
         "Windows 2008",
         "Windows 10"
