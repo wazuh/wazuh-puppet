@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.8.0]
 
+### Added 
+- Feature/agent auth cert key ([#98](https://github.com/wazuh/wazuh-puppet/pull/98))
+- Install package even if repos are not managed by wazuh ([#99](https://github.com/wazuh/wazuh-puppet/pull/99))
+
 ## [v3.7.x]
 
 ### Added 

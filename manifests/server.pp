@@ -28,7 +28,6 @@ class wazuh::server (
   $api_service_provider                = $::wazuh::params::api_service_provider,
   $ossec_server_port                   = '1514',
   $ossec_server_protocol               = 'udp',
-  $ossec_authd_enabled                 = true,
   $ossec_integratord_enabled           = false,
   $server_package_version              = 'installed',
   $api_package_version                 = 'installed',
@@ -96,7 +95,6 @@ class wazuh::server (
       Class['wazuh::repo'] -> Package[$wazuh::params::server_package]
     }
   }
- 
   # install package
   package { $wazuh::params::server_package:
     ensure  => $server_package_version, # lint:ignore:security_package_pinned_version

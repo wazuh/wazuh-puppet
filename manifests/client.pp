@@ -79,29 +79,29 @@ class wazuh::client(
     'windows' : {
 
       file {
-        'C:/wazuh-agent-3.7.2-1.msi':
+        'C:/wazuh-agent-3.8.0-1.msi':
           owner              => 'Administrators',
           group              => 'Administrators',
           mode               => '0774',
-          source             => 'puppet:///modules/wazuh/wazuh-agent-3.7.2-1.msi',
+          source             => 'puppet:///modules/wazuh/wazuh-agent-3.8.0-1.msi',
           source_permissions => ignore
       }
       if ( $manage_client_keys == 'authd' ) {
         package { $agent_package_name:
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
-          source          => 'C:/wazuh-agent-3.7.2-1.msi',
+          source          => 'C:/wazuh-agent-3.8.0-1.msi',
           install_options => [ '/q', "ADDRESS=${ossec_server_ip}", "AUTHD_SERVER=${ossec_server_ip}" ],  # silent installation
-          require         => File['C:/wazuh-agent-3.7.2-1.msi'],
+          require         => File['C:/wazuh-agent-3.8.0-1.msi'],
         }
       }
       else {
         package { $agent_package_name:
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
-          source          => 'C:/wazuh-agent-3.7.2-1.msi',
+          source          => 'C:/wazuh-agent-3.8.0-1.msi',
           install_options => [ '/q' ],  # silent installation
-          require         => File['C:/wazuh-agent-3.7.2-1.msi'],
+          require         => File['C:/wazuh-agent-3.8.0-1.msi'],
         }
       }
     }
@@ -158,7 +158,6 @@ class wazuh::client(
     }
   } elsif ($manage_client_keys == 'authd') {
     if ($::kernel == 'Linux') {
-    
       # Is this really Linux only?
       $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
 
@@ -180,7 +179,7 @@ class wazuh::client(
           content => $wazuh_manager_root_ca_pem,
           require => Package[$agent_package_name],
         }
-       $agent_auth_option_manager = "-v /var/ossec/etc/rootCA.pem"
+          $agent_auth_option_manager = '-v /var/ossec/etc/rootCA.pem'
       }
 
     # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-agents-via-ssl
@@ -202,10 +201,10 @@ class wazuh::client(
         require => Package[$agent_package_name],
       }
 
-      $agent_auth_option_agent = "-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key"
+      $agent_auth_option_agent = '-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key'
     }
 
-    $agent_auth_command = "$agent_auth_base_command $agent_auth_option_manager $agent_auth_option_agent"
+    $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_manager} ${agent_auth_option_agent}"
 
 
       if $agent_auth_password {
@@ -215,7 +214,7 @@ class wazuh::client(
           require => Package[$agent_package_name],
           notify  => Service[$agent_service_name],
           before  => File[$wazuh::params::keys_file]
-       }
+          }
       } else {
         exec { 'agent-auth-without-pwd':
           command => $agent_auth_command,
