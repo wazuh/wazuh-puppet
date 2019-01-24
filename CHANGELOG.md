@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.8.1]
 
+### Changed
+- Update to Wazuh version 3.8.1 ([#104](https://github.com/wazuh/wazuh-puppet/pull/104))
+
 ## [v3.8.0]
 
 ### Added 
