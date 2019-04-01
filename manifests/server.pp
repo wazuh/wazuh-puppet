@@ -59,6 +59,8 @@ class wazuh::server (
   $wazuh_manager_verify_manager_ssl    = false,
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
+  $wazuh_manager_root_ca_pem           = undef,
+  $wazuh_manager_root_ca_pem_path      = undef,
   Boolean $manage_firewall             = $::wazuh::params::manage_firewall,
   Integer $ossec_auth_port             = 1515,
   Boolean $ossec_auth_use_srcip        = false,
@@ -192,6 +194,7 @@ class wazuh::server (
 
   # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
   if $wazuh_manager_verify_manager_ssl {
+
     validate_string(
       $wazuh_manager_server_crt, $wazuh_manager_server_key
     )
