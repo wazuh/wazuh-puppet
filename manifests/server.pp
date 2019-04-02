@@ -59,6 +59,9 @@ class wazuh::server (
   $wazuh_manager_verify_manager_ssl    = false,
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
+  $ossec_auth_ssl_cert                 = undef,
+  $ossec_auth_ssl_key                  = undef,
+  $ossec_auth_ssl_ca                   = undef,
   Boolean $manage_firewall             = $::wazuh::params::manage_firewall,
   Integer $ossec_auth_port             = 1515,
   Boolean $ossec_auth_use_srcip        = false,
@@ -192,28 +195,30 @@ class wazuh::server (
 
   # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
   if $wazuh_manager_verify_manager_ssl {
-    validate_string(
-      $wazuh_manager_server_crt, $wazuh_manager_server_key
-    )
 
-    file { '/var/ossec/etc/sslmanager.key':
-      content => $wazuh_manager_server_key,
-      owner   => 'root',
-      group   => 'ossec',
-      mode    => '0640',
-      require => Package[$wazuh::params::server_package],
-      notify  => Service[$wazuh::params::server_service],
+    if ($wazuh_manager_server_crt != undef) and ($wazuh_manager_server_key != undef) {
+      validate_string(
+        $wazuh_manager_server_crt, $wazuh_manager_server_key
+      )
+
+      file { '/var/ossec/etc/sslmanager.key':
+        content => $wazuh_manager_server_key,
+        owner   => 'root',
+        group   => 'ossec',
+        mode    => '0640',
+        require => Package[$wazuh::params::server_package],
+        notify  => Service[$wazuh::params::server_service],
+      }
+
+      file { '/var/ossec/etc/sslmanager.cert':
+        content => $wazuh_manager_server_crt,
+        owner   => 'root',
+        group   => 'ossec',
+        mode    => '0640',
+        require => Package[$wazuh::params::server_package],
+        notify  => Service[$wazuh::params::server_service],
+      }
     }
-
-    file { '/var/ossec/etc/sslmanager.cert':
-      content => $wazuh_manager_server_crt,
-      owner   => 'root',
-      group   => 'ossec',
-      mode    => '0640',
-      require => Package[$wazuh::params::server_package],
-      notify  => Service[$wazuh::params::server_service],
-    }
-
   }
 
   ### Wazuh API

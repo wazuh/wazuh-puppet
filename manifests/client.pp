@@ -37,8 +37,11 @@ class wazuh::client(
   $manage_client_keys              = 'authd',
   $agent_auth_password             = undef,
   $wazuh_manager_root_ca_pem       = undef,
+  $wazuh_manager_root_ca_pem_path  = undef,
   $wazuh_agent_cert                = undef,
   $wazuh_agent_key                 = undef,
+  $wazuh_agent_cert_path           = undef,
+  $wazuh_agent_key_path            = undef,
   $agent_seed                      = undef,
   $max_clients                     = 3000,
   $ar_repeated_offenders           = '',
@@ -181,6 +184,10 @@ class wazuh::client(
         }
           $agent_auth_option_manager = '-v /var/ossec/etc/rootCA.pem'
       }
+      if $wazuh_manager_root_ca_pem_path != undef {
+        validate_string($wazuh_manager_root_ca_pem)
+        $agent_auth_option_manager = "-v ${wazuh_manager_root_ca_pem_path}"
+      }
 
     # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-agents-via-ssl
     if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
@@ -202,6 +209,12 @@ class wazuh::client(
       }
 
       $agent_auth_option_agent = '-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key'
+    }
+
+    if ($wazuh_agent_cert_path != undef) and ($wazuh_agent_key_path != undef) {
+      validate_string($wazuh_agent_cert_path)
+      validate_string($wazuh_agent_key_path)
+      $agent_auth_option_agent = "-x ${wazuh_agent_cert_path} -k ${wazuh_agent_key_path}"
     }
 
     $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_manager} ${agent_auth_option_agent}"
