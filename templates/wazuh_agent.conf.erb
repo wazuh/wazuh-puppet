@@ -38,3 +38,7 @@
   <%- if @enable_wodle_openscap and @wodle_openscap_content -%>
   <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
   <%- end -%>
+
+  <%- if @enable_wodle_syscollector -%>
+  <%= scope.function_template(["wazuh/fragments/_wodle_syscollector.erb"]) -%>
+  <%- end -%>

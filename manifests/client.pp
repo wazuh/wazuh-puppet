@@ -44,6 +44,7 @@ class wazuh::client(
   $ar_repeated_offenders           = '',
   $enable_wodle_openscap           = false,
   $wodle_openscap_content          = $::wazuh::params::wodle_openscap_content,
+  $enable_wodle_syscollector       = false,
   $service_has_status              = $::wazuh::params::service_has_status,
   $ossec_conf_template             = 'wazuh/wazuh_agent.conf.erb',
   Boolean $manage_firewall         = $::wazuh::params::manage_firewall,
