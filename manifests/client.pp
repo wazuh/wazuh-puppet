@@ -82,6 +82,7 @@ class wazuh::client(
     'windows' : {
 
       file {
+
         'C:/wazuh-agent-3.9.0-1.msi':
           owner              => 'Administrators',
           group              => 'Administrators',
