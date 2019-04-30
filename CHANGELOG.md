@@ -4,7 +4,22 @@ All notable changes to this project will be documented in this file.
 ## [v3.9.0]
 
 ### Added 
-- Allow certificates to be defined by file path  ([#112](https://github.com/wazuh/wazuh-puppet/pull/112))
+- Allow certificates to be defined by file path ([#112](https://github.com/wazuh/wazuh-puppet/pull/112))
+
+### Changed
+
+- Update to Wazuh version 3.9.0 ([#118](https://github.com/wazuh/wazuh-puppet/pull/118))
+
+## [v3.8.2]
+
+### Changed
+
+- Update to Wazuh version 3.8.2. ([#107](https://github.com/wazuh/wazuh-puppet/pull/107))
+
+## [v3.8.1]
+
+### Changed
+- Update to Wazuh version 3.8.1 ([#104](https://github.com/wazuh/wazuh-puppet/pull/104))
 
 ## [v3.8.0]
 
