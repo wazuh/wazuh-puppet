@@ -7,7 +7,7 @@
   "source": "https://github.com/wazuh/wazuh-puppet",
   "project_page": "https://github.com/wazuh/wazuh-puppet",
   "issues_url": "https://github.com/wazuh/wazuh-puppet/issues",
-  "tags": ["ossec", "hids", "3.8", "wazuh"],
+  "tags": ["ossec", "hids", "3.9", "wazuh"],
   "operatingsystem_support": [
     {
       "operatingsystem": "Windows",
