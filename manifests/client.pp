@@ -8,6 +8,7 @@ class wazuh::client(
   $ossec_rootcheck_checkfiles      = true,
   $ossec_server_ip                 = undef,
   $ossec_server_hostname           = undef,
+  $ossec_authd_hostname            = undef,
   $wazuh_manager_address           = undef,
   $ossec_server_port               = '1514',
   $ossec_server_protocol           = 'udp',
@@ -163,7 +164,7 @@ class wazuh::client(
   } elsif ($manage_client_keys == 'authd') {
     if ($::kernel == 'Linux') {
       # Is this really Linux only?
-      $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
+      $ossec_server_address = pick($ossec_authd_hostname, $ossec_server_ip, $ossec_server_hostname)
 
       file { $::wazuh::params::keys_file:
         owner => $wazuh::params::keys_owner,
