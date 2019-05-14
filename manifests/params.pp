@@ -27,8 +27,6 @@ class wazuh::params {
       $processlist_owner = 'root'
       $processlist_group = 'ossec'
 
-      $wodle_ciscat_content = undef
-
       # this hash is currently only covering the basic config section of config.js
       # TODO: allow customization of the entire config.js
       # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html

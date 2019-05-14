@@ -38,7 +38,3 @@
   <%- if @enable_wodle_openscap and @wodle_openscap_content -%>
   <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
   <%- end -%>
-
-  <%- if @enable_wodle_ciscat and @wodle_ciscat_content -%>
-  <%= scope.function_template(["wazuh/fragments/_wodle_ciscat.erb"]) -%>
-  <%- end -%>
