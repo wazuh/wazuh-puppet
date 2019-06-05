@@ -21,20 +21,22 @@
     <prefilter_cmd>/usr/sbin/prelink -y</prefilter_cmd>
   <%- end -%>
   </syscheck>
-  <%- if @ossec_rootcheck == false then -%>
+
   <rootcheck>
-    <disabled>yes</disabled>
-  <rootcheck>
-  <%- if @ossec_rootcheck_frequency then -%>
+    <disabled><%- @ossec_rootcheck_disabled %></disabled>
+    <check_files><%- @ossec_rootcheck_check_files %></check_files>
+    <check_trojans><%- @ossec_rootcheck_check_trojans %></check_trojans>
+    <check_dev><%- @ossec_rootcheck_check_dev %></check_dev>
+    <check_sys><%- @ossec_rootcheck_check_sys %></check_sys>
+    <check_pids><%- @ossec_rootcheck_check_pids %></check_pids>
+    <check_ports><%- @ossec_rootcheck_check_ports %></check_ports>
+    <check_if><%- @ossec_rootcheck_check_if %></check_if>
+
     <frequency><%= @ossec_rootcheck_frequency %></frequency>
-  <%- end -%>
-  <%- if @ossec_rootcheck_checkports == false then -%>
-    <check_ports>no</check_ports>
-  <%- end -%>
-  <%- if @ossec_rootcheck_checkfiles == false then -%>
-    <check_files>no</check_files>
-  <%- end -%>
-  </rootcheck>
+
+    <rootkit_files><%= @ossec_rootcheck_rootkit_files %></rootkit_files>
+    <rootkit_trojans><%= @ossec_rootcheck_rootkit_trojans %></rootkit_trojans>
+  <rootcheck>
   <%- end -%>
 <%- if @ar_repeated_offenders != '' and @ossec_active_response -%>
   <active-response>
