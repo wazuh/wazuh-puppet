@@ -5,7 +5,10 @@ class wazuh::server (
   $ossec_emailto                       = [],
   $ossec_emailfrom                     = "wazuh@${::domain}",
   $ossec_active_response               = true,
-  $ossec_rootcheck_disabled            = "no",
+
+  ## Rootcheck
+
+  $ossec_rootcheck_disabled            = true,
   $ossec_rootcheck_check_files         = "yes",
   $ossec_rootcheck_check_trojans       = "yes",
   $ossec_rootcheck_check_dev           = "yes",
@@ -21,42 +24,42 @@ class wazuh::server (
   ## Wodles
 
   #openscap
-  $wodle_openscap_disabled             = "no",
+  $wodle_openscap_disabled             = true,
   $wodle_openscap_timeout              = "1800",
   $wodle_openscap_interval             = "1d",
   $wodle_openscap_scan_on_start        = "yes",
   $wodle_openscap_content              = $::wazuh::params::wodle_openscap_content,
   
   #cis-cat
-  $wodle_ciscat_disabled             = "yes",
-  $wodle_ciscat_timeout              = "1800",
-  $wodle_ciscat_interval             = "1d",
-  $wodle_ciscat_scan_on_start        = "yes",
-  $wodle_ciscat_java_path            = "wodles/java",
-  $wodle_ciscat_ciscat_path        = "wodles/ciscat",
+  $wodle_ciscat_disabled               = true,
+  $wodle_ciscat_timeout                = "1800",
+  $wodle_ciscat_interval               = "1d",
+  $wodle_ciscat_scan_on_start          = "yes",
+  $wodle_ciscat_java_path              = "wodles/java",
+  $wodle_ciscat_ciscat_path            = "wodles/ciscat",
 
   #osquery
 
-  $wodle_osquery_disabled             = "yes",
+  $wodle_osquery_disabled             = true,
   $wodle_osquery_run_daemon           = "yes",
   $wodle_osquery_log_path             = "/var/log/osquery/osqueryd.results.log",
   $wodle_osquery_config_path          = "/etc/osquery/osquery.conf",
   $wodle_osquery_add_labels           = "yes",
 
   #syscollector
-  $wodle_syscollector_disabled             = "yes",
-  $wodle_syscollector_interval             = "1d",
-  $wodle_syscollector_scan_on_start        = "yes",
-  $wodle_syscollector_hardware             = "yes",
-  $wodle_syscollector_os                   = "yes",
-  $wodle_syscollector_network              = "yes",
-  $wodle_syscollector_packages             = "yes",
-  $wodle_syscollector_ports                = "yes",
-  $wodle_syscollector_processes            = "yes",
+  $wodle_syscollector_disabled        = true,
+  $wodle_syscollector_interval        = "1h",
+  $wodle_syscollector_scan_on_start   = "yes",
+  $wodle_syscollector_hardware        = "yes",
+  $wodle_syscollector_os              = "yes",
+  $wodle_syscollector_network         = "yes",
+  $wodle_syscollector_packages        = "yes",
+  $wodle_syscollector_ports           = "yes",
+  $wodle_syscollector_processes       = "yes",
 
   #vulnerability-detector
 
-  $wodle_vulnerability_detector_disabled             = "yes",
+  $wodle_vulnerability_detector_disabled             = true,
   $wodle_vulnerability_detector_interval             = "5m",
   $wodle_vulnerability_detector_ignore_time          = "6h",
   $wodle_vulnerability_detector_run_on_start         = "yes",
@@ -67,6 +70,7 @@ class wazuh::server (
   $wodle_vulnerability_detector_redhat_update        = "1h",
   $wodle_vulnerability_detector_debian_9_disable     = "yes",
   $wodle_vulnerability_detector_debian_9_update      = "1h",
+
 
 
   $ossec_email_alert_level             = 12,
@@ -98,7 +102,7 @@ class wazuh::server (
   $wazuh_api_server_crt                = undef,
   $wazuh_api_server_key                = undef,
   $manage_nodejs                       = true,
-  $nodejs_repo_url_suffix              = '6.x',
+  $nodejs_repo_url_suffix              = '8.x',
   $agent_auth_password                 = undef,
   $ar_repeated_offenders               = '',
   $syslog_output                       = false,
@@ -127,8 +131,7 @@ class wazuh::server (
   Boolean $ossec_auth_purge            = false,
 ) inherits wazuh::params {
   validate_bool(
-    $ossec_active_response, $ossec_rootcheck,
-    $manage_repos, $manage_epel_repo, $syslog_output,
+    $ossec_active_response,$manage_repos, $manage_epel_repo, $syslog_output,
     $install_wazuh_api, $wazuh_manager_verify_manager_ssl
   )
   validate_array(
