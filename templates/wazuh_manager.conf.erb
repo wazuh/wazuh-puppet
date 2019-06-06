@@ -37,121 +37,26 @@
     <queue_size>131072</queue_size>
   </remote>
 
-  <wodle name="open-scap">
-    <disabled><%= @wodle_openscap_disabled %></disabled>
-    <timeout><%= @wodle_openscap_timeout %></timeout>
-    <interval><%= @wodle_openscap_interval %></interval>
-    <scan-on-start><%= @wodle_openscap_scan_on_start %></scan-on-start>
+  <%= scope.function_template(["wazuh/fragments/_rootcheck_linux.erb"]) -%>
 
-    <%- @wodle_openscap_content.each do |path, value| -%>
-    <content type="<%= value['type'] %>" path="<%= path %>">
-      <%- if value['profiles'] then -%>
-      <%- value['profiles'].each do |profile| -%>
-      <profile><%= profile %></profile>
-      <%- end -%>
-      <%- end -%>
-    </content>
-    <%- end -%>
-  </wodle>
+  <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
+  
+  <%= scope.function_template(["wazuh/fragments/_wodle_cis_cat.erb"]) -%>
 
-  <wodle name="cis-cat">
-    <disabled><%= @wodle_ciscat_disable %></disabled>
-    <timeout><%= @wodle_ciscat_timeout %></timeout>
-    <interval><%= @wodle_ciscat_interval %></interval>
-    <scan-on-start><%= @wodle_ciscat_scan_on_start %></scan-on-start>
+  <%= scope.function_template(["wazuh/fragments/_wodle_osquery.erb"]) -%>
 
-    <java_path><%= @wodle_ciscat_java_path %></java_path>
-    <ciscat_path><%= @wodle_ciscat_ciscat_path %></ciscat_path>
-  </wodle>
+  <%= scope.function_template(["wazuh/fragments/_wodle_syscollector.erb"]) -%>
 
-  <wodle name="osquery">
-    <disabled><%= @wodle_osquery_disabled %></disabled>
-    <run_daemon><%= @wodle_osquery_run_daemon %></run_daemon>
-    <log_path><%= @wodle_osquery_log_path %></log_path>
-    <config_path><%= @wodle_osquery_config_path %></config_path>
-    <add_labels><%= @wodle_osquery_add_labels %></add_labels>
-  </wodle>
+  <%= scope.function_template(["wazuh/fragments/_sca_debian.erb"]) -%>
 
-  <wodle name="syscollector">
-    <disabled><%- @wodle_syscollector_disabled -%></disabled>
-    <interval><%- @wodle_syscollector_interval -%></interval>
-    <scan_on_start><%- @wodle_syscollector_scan_on_start -%></scan_on_start>
-    <hardware><%- @wodle_syscollector_hardware -%></hardware>
-    <os><%- @wodle_syscollector_os -%></os>
-    <network><%- @wodle_syscollector_network -%></network>
-    <packages><%- @wodle_syscollector_packages -%></packages>
-    <ports all="no"><%- @wodle_syscollector_ports -%></ports>
-    <processes><%- @wodle_syscollector_processes -%></processes>
-  </wodle>
+  <%= scope.function_template(["wazuh/fragments/_wodle_vulnerability_detector.erb"]) -%>
 
-  <wodle name="vulnerability-detector">
-    <disabled><%- @wodle_vulnerability_detector_disabled -%></disabled>
-    <interval><%- @wodle_vulnerability_detector_interval -%></interval>
-    <ignore_time><%- @wodle_vulnerability_detector_ignore_time -%></ignore_time>
-    <run_on_start><%- @wodle_vulnerability_detector_run_on_start -%></run_on_start>
-    <feed name="ubuntu-18">
-      <disabled><%- @wodle_vulnerability_detector_ubuntu_disabled -%></disabled>
-      <update_interval><%- @wodle_vulnerability_detector_ubuntu_update -%></update_interval>
-    </feed>
-    <feed name="redhat">
-      <disabled><%- @wodle_vulnerability_detector_redhat_disable -%></disabled>
-      <update_from_year><%- @wodle_vulnerability_detector_redhat_update_from -%></update_from_year>
-      <update_interval><%- @wodle_vulnerability_detector_redhat_update -%></update_interval>
-    </feed>
-    <feed name="debian-9">
-      <disabled><%- @wodle_vulnerability_detector_debian_9_disable -%></disabled>
-      <update_interval><%- @wodle_vulnerability_detector_debian_9_update -%></update_interval>
-    </feed>
-  </wodle>
+  <%= scope.function_template(["wazuh/fragments/_syscheck_linux.erb"]) -%>
 
-  <ruleset>
-    <!-- Default ruleset -->
-    <decoder_dir>ruleset/decoders</decoder_dir>
-    <rule_dir>ruleset/rules</rule_dir>
-    <rule_exclude>0215-policy_rules.xml</rule_exclude>
-    <%- @rule_exclude.each do |r| -%>
-    <rule_exclude><%= r %></rule_exclude>
-    <%- end -%>
-    <list>etc/lists/audit-keys</list>
+  <%= scope.function_template(["wazuh/command.erb"]) -%>
 
-    <!-- User-defined ruleset -->
-    <decoder_dir>etc/decoders</decoder_dir>
-    <rule_dir>etc/rules</rule_dir>
-    <%- @decoder_exclude.each do |r| -%>
-    <decoder_exclude><%= r %></decoder_exclude>
-    <%- end -%>
-  </ruleset>
+  <%= scope.function_template(["wazuh/fragments/_localfile_linux_debian.erb"]) -%>
 
-  <remote>
-    <connection>secure</connection>
-    <port><%= @ossec_server_port %></port>
-    <protocol><%= @ossec_server_protocol %></protocol>
-  </remote>
+  <%= scope.function_template(["wazuh/fragments/_auth.erb"]) -%>
 
-<%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
-
-<%= scope.function_template(["wazuh/fragments/_auth.erb"]) -%>
-
-<%- if @enable_wodle_openscap and @wodle_openscap_content -%>
-<%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
-<%- end -%>
-
-<%- if @syslog_output -%>
-  <syslog_output>
-    <server><%= @syslog_output_server %></server>
-    <port><%= @syslog_output_port %></port>
-    <format><%= @syslog_output_format %></format>
-    <level><%= @syslog_output_level %></level>
-  </syslog_output>
-<%- end -%>
-<%- if @use_mysql -%>
-  <database_output>
-    <hostname><%= @mysql_hostname %></hostname>
-    <username><%= @mysql_username %></username>
-    <password><%= @mysql_password %></password>
-    <database><%= @mysql_name %></database>
-    <type>mysql</type>
-  </database_output>
-<%- end -%>
-
-
+  <%= scope.function_template(["wazuh/fragments/_ruleset.erb"]) -%>
