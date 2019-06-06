@@ -2,10 +2,73 @@
 # Setup for ossec client
 class wazuh::client(
   $ossec_active_response           = true,
-  $ossec_rootcheck                 = true,
-  $ossec_rootcheck_frequency       = 36000,
-  $ossec_rootcheck_checkports      = true,
-  $ossec_rootcheck_checkfiles      = true,
+
+  ## Rootcheck
+  
+  $ossec_rootcheck_disabled            = "no",
+  $ossec_rootcheck_check_files         = "yes",
+  $ossec_rootcheck_check_trojans       = "yes",
+  $ossec_rootcheck_check_dev           = "yes",
+  $ossec_rootcheck_check_sys           = "yes",
+  $ossec_rootcheck_check_pids          = "yes",
+  $ossec_rootcheck_check_ports         = "yes",
+  $ossec_rootcheck_check_if            = "yes",
+  $ossec_rootcheck_frequency           = 43200,
+  $ossec_rootcheck_rootkit_files       = "/var/ossec/etc/rootcheck/rootkit_files.txt",
+  $ossec_rootcheck_rootkit_trojans     = "/var/ossec/etc/rootcheck/rootkit_trojans.txt",
+  $ossec_rootcheck_skip_nfs            = "yes",
+
+ ## Wodles
+
+  #openscap
+  $wodle_openscap_disabled             = "no",
+  $wodle_openscap_timeout              = "1800",
+  $wodle_openscap_interval             = "1d",
+  $wodle_openscap_scan_on_start        = "yes",
+  $wodle_openscap_content              = $::wazuh::params::wodle_openscap_content,
+  
+  #cis-cat
+  $wodle_ciscat_disabled             = "yes",
+  $wodle_ciscat_timeout              = "1800",
+  $wodle_ciscat_interval             = "1d",
+  $wodle_ciscat_scan_on_start        = "yes",
+  $wodle_ciscat_java_path            = "wodles/java",
+  $wodle_ciscat_ciscat_path        = "wodles/ciscat",
+
+  #osquery
+
+  $wodle_osquery_disabled             = "yes",
+  $wodle_osquery_run_daemon           = "yes",
+  $wodle_osquery_log_path             = "/var/log/osquery/osqueryd.results.log",
+  $wodle_osquery_config_path          = "/etc/osquery/osquery.conf",
+  $wodle_osquery_add_labels           = "yes",
+
+  #syscollector
+  $wodle_syscollector_disabled             = true,
+  $wodle_syscollector_interval             = "1d",
+  $wodle_syscollector_scan_on_start        = "yes",
+  $wodle_syscollector_hardware             = "yes",
+  $wodle_syscollector_os                   = "yes",
+  $wodle_syscollector_network              = "yes",
+  $wodle_syscollector_packages             = "yes",
+  $wodle_syscollector_ports                = "yes",
+  $wodle_syscollector_processes            = "yes",
+
+  #vulnerability-detector
+
+  $wodle_vulnerability_detector_disabled             = "yes",
+  $wodle_vulnerability_detector_interval             = "1h",
+  $wodle_vulnerability_detector_ignore_time          = "6h",
+  $wodle_vulnerability_detector_run_on_start         = "yes",
+  $wodle_vulnerability_detector_ubuntu_disabled      = "yes",
+  $wodle_vulnerability_detector_ubuntu_update        = "1h",
+  $wodle_vulnerability_detector_redhat_disable       = "yes",
+  $wodle_vulnerability_detector_redhat_update_from   = "2010",
+  $wodle_vulnerability_detector_redhat_update        = "1h",
+  $wodle_vulnerability_detector_debian_9_disable     = "yes",
+  $wodle_vulnerability_detector_debian_9_update      = "1h",
+
+
   $ossec_server_ip                 = undef,
   $ossec_server_hostname           = undef,
   $wazuh_manager_address           = undef,
@@ -45,7 +108,7 @@ class wazuh::client(
   $agent_seed                      = undef,
   $max_clients                     = 3000,
   $ar_repeated_offenders           = '',
-  $enable_wodle_openscap           = false,
+
   $wodle_openscap_content          = $::wazuh::params::wodle_openscap_content,
   $service_has_status              = $::wazuh::params::service_has_status,
   $ossec_conf_template             = 'wazuh/wazuh_agent.conf.erb',
