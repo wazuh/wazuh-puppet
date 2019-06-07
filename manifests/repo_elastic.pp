@@ -8,7 +8,7 @@ class wazuh::repo_elastic (
         }
         # apt-key added by issue #34
         apt::key { 'elastic':
-          id     => 'D88E42B4',
+          id     => '46095ACC8548582C1A2699A9D27D666CD88E42B4',
           source => 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
         }
         case $::lsbdistcodename {
