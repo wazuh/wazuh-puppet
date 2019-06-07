@@ -1,25 +1,73 @@
 class wazuh::elasticsearch (
+  # Elasticsearch.yml configuration
+
+  $elasticsearch_cluster_name = 'es-wazuh',
+  $elasticsearch_node_name = 'es-node-01',
+  $elasticsearch_node_master = 'true',
+  $elasticsearch_node_data = 'true',
+  $elasticsearch_node_ingest = 'true',
+  $elasticsearch_node_max_local_storage_nodes = '1',
+  $elasticsearch_service = 'elasticsearch',
+  $elasticsearch_package = 'elasticsearch',
+  $elasticsearch_version = '7.1.1',
+  
+  $elasticsearch_path_data = "/var/lib/elasticsearch",
+  $elasticsearch_path_logs = "/var/log/elasticsearch",
+
+
+  $elasticsearch_ip = '172.17.0.101',
+  $elasticsearch_port = '9200',
+  $elasticsearch_discovery_option = 'discovery.type: single-node',
+  $elasticsearch_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']",
+
+# JVM options
+  $jvm_options_memmory = "1g",
   
 ){
 
-  include "wazuh::repo_elastic"
+  class {"wazuh::repo_elastic":}
+  class {"wazuh::params_elastic":}
 
-  require "wazuh::params_elastic"
+  # install package
+  package { 'Installing elasticsearch...':
+    name    => $elasticsearch_package,
+    ensure  => $elasticsearch_version,
+  }
 
   file { 'Configure elasticsearch.yml':
-    owner   => 'root',
-    group   => $wazuh::params_elastic::config_group,
-    mode    => $wazuh::params_elastic::config_mode,
-    notify  => Service[$wazuh::params_elastic::server_service],
-    require => Package[$wazuh::params_elastic::server_package];
-  '/etc/elasticsearch/elasticsearch.yml':
-    content => template("elasticsearch_yml.erb");
+    owner   => 'elasticsearch',
+    path    => '/etc/elasticsearch/elasticsearch.yml', 
+    group   => 'elasticsearch',
+    mode    => '0644',
+    notify  => Service[$elasticsearch_service], ## Restarts the service
+    content => template("wazuh/elasticsearch_yml.erb")
   }
 
-  exec { 'Insert line limits.. ':
-    command => '<<-EOH
-                echo "elasticsearch - nofile  65535" >> /etc/security/limits.conf
-                echo "elasticsearch - memlock unlimited" >> /etc/security/limits.conf
-                EOH'
+  file { 'Configure jvm.options':
+    owner   => 'elasticsearch',
+    path    => '/etc/elasticsearch/jvm.options', 
+    group   => 'elasticsearch',
+    mode    => '0660',
+    notify  => Service[$elasticsearch_service], ## Restarts the service
+    content => template("wazuh/jvm_options.erb")
   }
+
+  service { "elasticsearch":
+    ensure  => running,
+    enable  => true,
+  }
+
+  exec { 'Insert line limits':
+    command => "echo 'elasticsearch - nofile  65535\nelasticsearch - memlock unlimited' >> /etc/security/limits.conf",
+    provider => 'shell',
+  }
+
+  exec { 'Verify Elasticsearch folders owner':
+    command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch \
+             && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch \
+             && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
+    provider => 'shell',             
+  }
+
+
 }
