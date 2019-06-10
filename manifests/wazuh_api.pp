@@ -13,7 +13,18 @@ class wazuh::wazuh_api (
     command => "cd /tmp && curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -",
     provider => 'shell',
   }
-  
+  if $::osfamily == 'Debian' {
+    exec { 'Updating repositories...':
+      command => "apt update",
+      provider => 'shell',
+    }
+  }else{
+    exec { 'Updating repositories...':
+      command => "yum update",
+      provider => 'shell',
+    }
+  }
+
   package { $nodejs_package:
   }
 
