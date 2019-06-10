@@ -47,7 +47,11 @@
 
   <%= scope.function_template(["wazuh/fragments/_wodle_syscollector.erb"]) -%>
 
-  <%= scope.function_template(["wazuh/fragments/_sca_debian.erb"]) -%>
+  <%- if @apply_template_os == "debian" -%>
+    <%= scope.function_template(["wazuh/fragments/_sca_debian.erb"]) -%>
+  <%- else -%>
+    <%= scope.function_template(["wazuh/fragments/_sca_centos.erb"]) -%>
+  <%- end -%>
 
   <%= scope.function_template(["wazuh/fragments/_wodle_vulnerability_detector.erb"]) -%>
 
@@ -55,7 +59,11 @@
 
   <%= scope.function_template(["wazuh/command.erb"]) -%>
 
-  <%= scope.function_template(["wazuh/fragments/_localfile_linux_debian.erb"]) -%>
+  <%- if @apply_template_os == "debian" -%>
+    <%= scope.function_template(["wazuh/fragments/_localfile_linux_debian.erb"]) -%>
+  <%- else -%>
+    <%= scope.function_template(["wazuh/fragments/_localfile_linux_centos.erb"]) -%>
+  <%- end -%>
 
   <%= scope.function_template(["wazuh/fragments/_auth.erb"]) -%>
 
