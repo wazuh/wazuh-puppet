@@ -1,10 +1,21 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Main ossec server config
 class wazuh::server (
+
+  $ossec_active_response               = true,
+
+
+  ### Ossec.conf blocks
+
+  ## Email notifications
+
   $smtp_server                         = undef,
   $ossec_emailto                       = [],
   $ossec_emailfrom                     = "wazuh@${::domain}",
-  $ossec_active_response               = true,
+  $ossec_emailnotification             = false,
+  $ossec_email_maxperhour              = '12',
+  $ossec_email_idsname                 = undef,
+  $ossec_email_alert_level             = 12,
 
   ## Rootcheck
 
@@ -71,52 +82,56 @@ class wazuh::server (
   $wodle_vulnerability_detector_debian_9_disable     = "yes",
   $wodle_vulnerability_detector_debian_9_update      = "1h",
 
+  # syslog
+
+  $syslog_output                       = false,
+  $syslog_output_level                 = 2,
+  $syslog_output_port                  = 514,
+  $syslog_output_server                = undef,
+  $syslog_output_format                = undef,
+
+  ### Wazuh-API
+
+  $api_service_provider                = $::wazuh::params::api_service_provider,
+  $api_package_version                 = 'installed',
+  $api_config_params                   = $::wazuh::params::api_config_params,
+  $api_config_template                 = 'wazuh/api/config.js.erb',
+  $install_wazuh_api                   = false,
+  $wazuh_api_enable_https              = false,
+  $wazuh_api_server_crt                = undef,
+  $wazuh_api_server_key                = undef,
 
 
-  $ossec_email_alert_level             = 12,
   $ossec_ignorepaths                   = [],
   $ossec_ignorepaths_regex             = [],
   $ossec_scanpaths                     = [ {'path' => '/etc,/usr/bin,/usr/sbin', 'report_changes' => 'no', 'realtime' => 'no'}, {'path' => '/bin,/sbin', 'report_changes' => 'yes', 'realtime' => 'yes'} ],
   $ossec_white_list                    = [],
   $ossec_extra_rules_config            = [],
   $ossec_local_files                   = $::wazuh::params::default_local_files,
-  $ossec_emailnotification             = false,
-  $ossec_email_maxperhour              = '12',
-  $ossec_email_idsname                 = undef,
+
   $ossec_syscheck_frequency            = 79200,
   $ossec_auto_ignore                   = 'yes',
   $ossec_prefilter                     = false,
   $ossec_service_provider              = $::wazuh::params::ossec_service_provider,
-  $api_service_provider                = $::wazuh::params::api_service_provider,
+  
   $ossec_server_port                   = '1514',
   $ossec_server_protocol               = 'udp',
   $ossec_integratord_enabled           = false,
-  $server_package_version              = 'installed',
-  $api_package_version                 = 'installed',
-  $api_config_params                   = $::wazuh::params::api_config_params,
+  $server_package_version              = '3.9.1-1',
+  
+  
   $manage_repos                        = true,
   $manage_epel_repo                    = true,
   $manage_client_keys                  = 'authd',
-  $install_wazuh_api                   = false,
-  $wazuh_api_enable_https              = false,
-  $wazuh_api_server_crt                = undef,
-  $wazuh_api_server_key                = undef,
-  $manage_nodejs                       = true,
-  $nodejs_repo_url_suffix              = '8.x',
   $agent_auth_password                 = undef,
   $ar_repeated_offenders               = '',
-  $syslog_output                       = false,
-  $syslog_output_level                 = 2,
-  $syslog_output_port                  = 514,
-  $syslog_output_server                = undef,
-  $syslog_output_format                = undef,
-  $enable_wodle_openscap               = false,
+
   $local_decoder_template              = 'wazuh/local_decoder.xml.erb',
   $decoder_exclude                     = [],
   $local_rules_template                = 'wazuh/local_rules.xml.erb',
   $rule_exclude                        = [],
   $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb',
-  $api_config_template                 = 'wazuh/api/config.js.erb',
+  
   $wazuh_manager_verify_manager_ssl    = false,
   $wazuh_manager_server_crt            = undef,
   $wazuh_manager_server_key            = undef,
@@ -154,6 +169,8 @@ class wazuh::server (
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
   }
 
+  # Install wazuh-repository
+
   if $manage_repos {
     # TODO: Allow filtering of EPEL requirement
     class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
@@ -163,7 +180,9 @@ class wazuh::server (
       Class['wazuh::repo'] -> Package[$wazuh::params::server_package]
     }
   }
-  # install package
+
+  # Install and configure Wazuh-manager package
+
   package { $wazuh::params::server_package:
     ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
   }
@@ -194,6 +213,15 @@ class wazuh::server (
     provider  => $ossec_service_provider,
     require   => Package[$wazuh::params::server_package],
   }
+
+  ## Declaring variables for localfile and wodles generation
+  
+  if $::osfamily == 'Debian' {
+    $apply_template_os = "debian"
+  }else{
+    $apply_template_os = "centos"
+  }
+
 
   concat { 'ossec.conf':
     path    => $wazuh::params::config_file,
@@ -281,62 +309,6 @@ class wazuh::server (
     }
   }
 
-  ### Wazuh API
-  if $install_wazuh_api {
-    validate_bool($manage_nodejs)
-    if $manage_nodejs {
-      validate_string($nodejs_repo_url_suffix)
-      class { '::nodejs': repo_url_suffix => $nodejs_repo_url_suffix }
-      Class['nodejs'] -> Package[$wazuh::params::api_package]
-    }
-
-    package { $wazuh::params::api_package:
-      ensure => $api_package_version, # lint:ignore:security_package_pinned_version
-    }
-
-    if $wazuh_api_enable_https {
-      validate_string($wazuh_api_server_crt, $wazuh_api_server_key)
-      file { '/var/ossec/api/configuration/ssl/server.key':
-        content => $wazuh_api_server_key,
-        owner   => 'root',
-        group   => 'ossec',
-        mode    => '0600',
-        require => Package[$wazuh::params::api_package],
-        notify  => Service[$wazuh::params::api_service],
-      }
-
-      file { '/var/ossec/api/configuration/ssl/server.crt':
-        content => $wazuh_api_server_crt,
-        owner   => 'root',
-        group   => 'ossec',
-        mode    => '0600',
-        require => Package[$wazuh::params::api_package],
-        notify  => Service[$wazuh::params::api_service],
-      }
-    }
-
-    # wazuh-api config.js
-    # this hash is currently only covering the basic config section of config.js
-    # TODO: allow customization of the entire config.js
-    # for reference: https://documentation.wazuh.com/current/user-manual/api/configuration.html
-    file { '/var/ossec/api/configuration/config.js':
-      content => template($api_config_template),
-      owner   => 'root',
-      group   => 'ossec',
-      mode    => '0750',
-      require => Package[$wazuh::params::api_package],
-      notify  => Service[$wazuh::params::api_service],
-    }
-
-    service { $wazuh::params::api_service:
-      ensure    => running,
-      enable    => true,
-      hasstatus => $wazuh::params::service_has_status,
-      pattern   => $wazuh::params::api_service,
-      provider  => $api_service_provider,
-      require   => Package[$wazuh::params::api_package],
-    }
-  }
   # Manage firewall
   if $manage_firewall {
     include firewall
