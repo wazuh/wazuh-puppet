@@ -33,33 +33,33 @@ class wazuh::repo_elastic (
           case $::os[name] {
             /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
               if ( $::operatingsystemrelease =~ /^5.*/ ) {
-                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/apt'
+                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/yum'
                 $gpgkey   = 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
               } else {
-                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/apt'
+                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/yum'
                 $gpgkey   = 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
               }
             }
             default: { fail('This ossec module has not been tested on your distribution.') }
           }
-        # Set up OSSEC repo
-        yumrepo { 'elastic':
-          descr    => 'Elastic',
-          enabled  => true,
-          gpgcheck => 1,
-          gpgkey   => $gpgkey,
-          baseurl  => $baseurl
+        ## Set up Elasticsearch repo
+        
+        # Import GPG key
+
+        exec { 'Install Elasticsearch GPG key':
+          command => "rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch",
+          provider => 'shell',             
         }
 
-        if $redhat_manage_epel {
-          # Set up EPEL repo
-          # NOTE: This relies on the 'epel' module referenced in metadata.json
-          package { 'inotify-tools':
-            ensure  => present
-          }
-          include epel
+        # Adding repo by Puppet yumrepo resource
 
-          Class['epel'] -> Package['inotify-tools']
+        yumrepo { 'elasticsearch':
+          name     => "elasticsearch",
+          enabled  => 1,
+          gpgcheck => 1,
+          gpgkey   => $gpgkey,
+          baseurl  => $baseurl,
+          ensure   => 'present',
         }
       }
       default: { fail('This ossec module has not been tested on your distribution') }
