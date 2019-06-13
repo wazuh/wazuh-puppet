@@ -14,10 +14,11 @@
     <%- unless @ossec_email_idsname.nil? -%>
     <email_idsname><%= @ossec_email_idsname %></email_idsname>
     <%- end -%>
-  <%- else -%>
-  <email_notification>no</email_notification>
-  <%- end -%>
-    <%- @ossec_white_list.each do |ipaddress| -%><white_list><%= ipaddress %></white_list>
+    <%- else -%>
+    <email_notification>no</email_notification>
+    <%- end -%>
+    <%- @ossec_white_list.each do |ipaddress| -%>
+    <white_list><%= ipaddress %></white_list>
     <%- end -%>
   </global>
 
@@ -37,34 +38,3 @@
     <queue_size>131072</queue_size>
   </remote>
 
-  <%= scope.function_template(["wazuh/fragments/_rootcheck_linux.erb"]) -%>
-
-  <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
-  
-  <%= scope.function_template(["wazuh/fragments/_wodle_cis_cat.erb"]) -%>
-
-  <%= scope.function_template(["wazuh/fragments/_wodle_osquery.erb"]) -%>
-
-  <%= scope.function_template(["wazuh/fragments/_wodle_syscollector.erb"]) -%>
-
-  <%- if @apply_template_os == "debian" -%>
-    <%= scope.function_template(["wazuh/fragments/_sca_debian.erb"]) -%>
-  <%- else -%>
-    <%= scope.function_template(["wazuh/fragments/_sca_centos.erb"]) -%>
-  <%- end -%>
-
-  <%= scope.function_template(["wazuh/fragments/_wodle_vulnerability_detector.erb"]) -%>
-
-  <%= scope.function_template(["wazuh/fragments/_syscheck_linux.erb"]) -%>
-
-  <%= scope.function_template(["wazuh/command.erb"]) -%>
-
-  <%- if @apply_template_os == "debian" -%>
-    <%= scope.function_template(["wazuh/fragments/_localfile_linux_debian.erb"]) -%>
-  <%- else -%>
-    <%= scope.function_template(["wazuh/fragments/_localfile_linux_centos.erb"]) -%>
-  <%- end -%>
-
-  <%= scope.function_template(["wazuh/fragments/_auth.erb"]) -%>
-
-  <%= scope.function_template(["wazuh/fragments/_ruleset.erb"]) -%>
