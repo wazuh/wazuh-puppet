@@ -1,6 +1,6 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
-class wazuh::client(
+class wazuh::agent(
   $ossec_active_response           = true,
 
   ## Rootcheck
@@ -54,22 +54,9 @@ class wazuh::client(
   $wodle_syscollector_ports                = "yes",
   $wodle_syscollector_processes            = "yes",
 
-  #vulnerability-detector
-
-  $wodle_vulnerability_detector_disabled             = "yes",
-  $wodle_vulnerability_detector_interval             = "1h",
-  $wodle_vulnerability_detector_ignore_time          = "6h",
-  $wodle_vulnerability_detector_run_on_start         = "yes",
-  $wodle_vulnerability_detector_ubuntu_disabled      = "yes",
-  $wodle_vulnerability_detector_ubuntu_update        = "1h",
-  $wodle_vulnerability_detector_redhat_disable       = "yes",
-  $wodle_vulnerability_detector_redhat_update_from   = "2010",
-  $wodle_vulnerability_detector_redhat_update        = "1h",
-  $wodle_vulnerability_detector_debian_9_disable     = "yes",
-  $wodle_vulnerability_detector_debian_9_update      = "1h",
 
 
-  $ossec_server_ip                 = undef,
+  $ossec_server_ip                 = "172.16.1.2",
   $ossec_server_hostname           = undef,
   $wazuh_manager_address           = undef,
   $ossec_server_port               = '1514',
@@ -125,7 +112,7 @@ class wazuh::client(
   validate_string($agent_service_name)
 
   if ( ( $ossec_server_ip == undef ) and ( $ossec_server_hostname == undef ) and ( $wazuh_manager_address == undef ) ) {
-    fail('must pass either $ossec_server_ip or $ossec_server_hostname or $wazuh_manager_address to Class[\'wazuh::client\'].')
+    fail('must pass either $ossec_server_ip or $ossec_server_hostname or $wazuh_manager_address to Class[\'wazuh::agent\'].')
   }
 
   case $::kernel {
@@ -208,22 +195,8 @@ class wazuh::client(
       content => '</ossec_config>';
   }
 
-  if ( $manage_client_keys == 'export' ) {
-    concat { $wazuh::params::keys_file:
-      owner   => $wazuh::params::keys_owner,
-      group   => $wazuh::params::keys_group,
-      mode    => $wazuh::params::keys_mode,
-      notify  => Service[$agent_service_name],
-      require => Package[$agent_package_name]
-    }
-    # A separate module to avoid storeconfigs warnings when not managing keys
-    class { 'wazuh::export_agent_key':
-      max_clients      => $max_clients,
-      agent_name       => $agent_name,
-      agent_ip_address => $agent_ip_address,
-      agent_seed       => $agent_seed,
-    }
-  } elsif ($manage_client_keys == 'authd') {
+
+  if ($manage_client_keys == 'authd') {
     if ($::kernel == 'Linux') {
       # Is this really Linux only?
       $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
@@ -282,7 +255,6 @@ class wazuh::client(
     }
 
     $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_manager} ${agent_auth_option_agent}"
-
 
       if $agent_auth_password {
         exec { 'agent-auth-with-pwd':
