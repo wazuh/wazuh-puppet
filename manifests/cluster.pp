@@ -11,7 +11,7 @@ define wazuh::cluster(
   $cl_disabled  = 'yes',
 ) {
 
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { $name:
     target  => 'ossec.conf',

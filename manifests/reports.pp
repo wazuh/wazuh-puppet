@@ -13,7 +13,7 @@ define wazuh::reports(
   Optional[Enum['yes', 'no']] $r_showlogs = undef,
 ) {
 
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { $name:
     target  => 'ossec.conf',

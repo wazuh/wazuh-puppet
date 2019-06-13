@@ -6,7 +6,7 @@ define wazuh::command(
   $command_expect = 'srcip',
   $timeout_allowed = true,
 ) {
-  require wazuh::params
+  require wazuh::params_manager
 
   if ($timeout_allowed) { $command_timeout_allowed='yes' } else { $command_timeout_allowed='no' }
   concat::fragment { $name:

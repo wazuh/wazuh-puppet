@@ -4,11 +4,11 @@ define wazuh::email_alert(
   $alert_email,
   $alert_group = false
 ) {
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { $name:
     target  => 'ossec.conf',
-    order   => 65,
+    order   => 66,
     content => template('wazuh/email_alert.erb'),
   }
 }

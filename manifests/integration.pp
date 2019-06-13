@@ -11,7 +11,7 @@ define wazuh::integration(
   $in_max_log = '',
 ) {
 
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { $name:
     target  => 'ossec.conf',

@@ -7,7 +7,7 @@ define wazuh::addlog(
   $commandalias = undef,
   $frequency    = undef,
 ) {
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { "ossec.conf_localfile-${logfile}":
     target  => 'ossec.conf',
