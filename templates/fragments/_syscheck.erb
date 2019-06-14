@@ -1,5 +1,5 @@
-  <syscheck>
-    <!-- Default files to be monitored - system32 only. -->
+  <%- if @kernel == 'windows' -%>
+  <syscheck> <!-- Default files to be monitored - system32 only. -->
     <directories check_all="yes">%WINDIR%/win.ini</directories>
     <directories check_all="yes">%WINDIR%/system.ini</directories>
     <directories check_all="yes">C:\autoexec.bat</directories>
@@ -83,4 +83,42 @@
     <registry_ignore>HKEY_LOCAL_MACHINE\Security\SAM\Domains\Account\Users</registry_ignore>
     <registry_ignore type="sregex">\Enum$</registry_ignore>
   </syscheck>
-  
+
+  <%- else -%>
+  <syscheck>
+    <%- if @ossec_syscheck_disabled %>
+    <disabled><%= @ossec_syscheck_disabled %></disabled><%- end -%>
+    <%- if @ossec_syscheck_frequency -%>
+    <frequency><%=@ossec_syscheck_frequency%></frequency>
+    <%- end -%>
+    <%- if @ossec_syscheck_scan_on_start -%>
+    <scan_on_start><%=@ossec_syscheck_scan_on_start%></scan_on_start>
+    <%- end -%>
+    <%- if @ossec_syscheck_alert_new_files -%>
+    <alert_new_files><%=@ossec_syscheck_alert_new_files%></alert_new_files>
+    <%- end -%>
+    <%- if @ossec_syscheck_auto_ignore -%>
+    <auto_ignore frequency="10" timeframe="3600"><%=@ossec_syscheck_auto_ignore%></auto_ignore>
+    <%- end -%>
+    <%- if @ossec_syscheck_directories_1 -%>
+    <directories check_all="yes"><%=@ossec_syscheck_directories_1%></directories>
+    <%- end -%>
+    <%- if @ossec_syscheck_directories_2 -%>
+    <directories check_all="yes"><%=@ossec_syscheck_directories_2%></directories>
+    <%- end -%>
+    <%- if @ossec_syscheck_ignore_list -%>
+      <%- @ossec_syscheck_ignore_list.each do |ignore_element| -%>
+    <ignore><%= ignore_element %></ignore>
+      <%- end -%>  
+    <%- end -%>
+    <%- if @ossec_syscheck_ignore_type_1 -%>
+    <ignore type="sregex"><%=@ossec_syscheck_ignore_type_1%></ignore>
+    <%- end -%>
+    <%- if @ossec_syscheck_nodiff -%>
+    <nodiff><%=@ossec_syscheck_nodiff%></nodiff>
+    <%- end -%>
+    <%- if @ossec_syscheck_skip_nfs -%>
+    <skip_nfs><%=@ossec_syscheck_skip_nfs%></skip_nfs>
+    <%- end -%>
+    </syscheck>
+  <%- end -%>
