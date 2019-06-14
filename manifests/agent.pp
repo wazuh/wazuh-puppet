@@ -1,113 +1,15 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
 class wazuh::agent(
-  $ossec_active_response           = true,
-
-  ## Rootcheck
   
-  $ossec_rootcheck_disabled            = "no",
-  $ossec_rootcheck_check_files         = "yes",
-  $ossec_rootcheck_check_trojans       = "yes",
-  $ossec_rootcheck_check_dev           = "yes",
-  $ossec_rootcheck_check_sys           = "yes",
-  $ossec_rootcheck_check_pids          = "yes",
-  $ossec_rootcheck_check_ports         = "yes",
-  $ossec_rootcheck_check_if            = "yes",
-  $ossec_rootcheck_frequency           = 43200,
-  $ossec_rootcheck_rootkit_files       = "/var/ossec/etc/rootcheck/rootkit_files.txt",
-  $ossec_rootcheck_rootkit_trojans     = "/var/ossec/etc/rootcheck/rootkit_trojans.txt",
-  $ossec_rootcheck_skip_nfs            = "yes",
 
- ## Wodles
-
-  #openscap
-  $wodle_openscap_disabled             = "no",
-  $wodle_openscap_timeout              = "1800",
-  $wodle_openscap_interval             = "1d",
-  $wodle_openscap_scan_on_start        = "yes",
-  $wodle_openscap_content              = $::wazuh::params::wodle_openscap_content,
-  
-  #cis-cat
-  $wodle_ciscat_disabled             = "yes",
-  $wodle_ciscat_timeout              = "1800",
-  $wodle_ciscat_interval             = "1d",
-  $wodle_ciscat_scan_on_start        = "yes",
-  $wodle_ciscat_java_path            = "wodles/java",
-  $wodle_ciscat_ciscat_path        = "wodles/ciscat",
-
-  #osquery
-
-  $wodle_osquery_disabled             = "yes",
-  $wodle_osquery_run_daemon           = "yes",
-  $wodle_osquery_log_path             = "/var/log/osquery/osqueryd.results.log",
-  $wodle_osquery_config_path          = "/etc/osquery/osquery.conf",
-  $wodle_osquery_add_labels           = "yes",
-
-  #syscollector
-  $wodle_syscollector_disabled             = true,
-  $wodle_syscollector_interval             = "1d",
-  $wodle_syscollector_scan_on_start        = "yes",
-  $wodle_syscollector_hardware             = "yes",
-  $wodle_syscollector_os                   = "yes",
-  $wodle_syscollector_network              = "yes",
-  $wodle_syscollector_packages             = "yes",
-  $wodle_syscollector_ports                = "yes",
-  $wodle_syscollector_processes            = "yes",
-
-
-
-  $ossec_server_ip                 = "172.16.1.2",
-  $ossec_server_hostname           = undef,
-  $wazuh_manager_address           = undef,
-  $ossec_server_port               = '1514',
-  $ossec_server_protocol           = 'udp',
-  $ossec_server_notify_time        = undef,
-  $ossec_server_time_reconnect     = undef,
-  $ossec_scanpaths                 = [],
-  $ossec_ignorepaths               = [],
-  $ossec_ignorepaths_regex         = [],
-  $ossec_local_files               = $::wazuh::params::default_local_files,
-  $ossec_syscheck_frequency        = 43200,
-  $ossec_prefilter                 = false,
-  $ossec_service_provider          = $::wazuh::params::ossec_service_provider,
-  $ossec_config_profiles           = [],
-  $selinux                         = false,
-  $agent_name                      = $::hostname,
-  $agent_ip_address                = $::ipaddress,
-  $agent_group                     = 'default',
-  $manage_repo                     = true,
-  $manage_epel_repo                = true,
-  $agent_package_name              = $::wazuh::params::agent_package,
-  $agent_package_version           = 'installed',
-  $agent_service_name              = $::wazuh::params::agent_service,
-  $agent_auto_restart              = 'yes',
-  # client_buffer configuration
-  $client_buffer_queue_size        = 5000,
-  $client_buffer_events_per_second = 500,
-  $manage_client_keys              = 'authd',
-  $agent_auth_password             = undef,
-  $wazuh_manager_root_ca_pem       = undef,
-  $wazuh_manager_root_ca_pem_path  = undef,
-  $wazuh_agent_cert                = undef,
-  $wazuh_agent_key                 = undef,
-  $wazuh_agent_cert_path           = undef,
-  $wazuh_agent_key_path            = undef,
-  $agent_seed                      = undef,
-  $max_clients                     = 3000,
-  $ar_repeated_offenders           = '',
-
-  $wodle_openscap_content          = $::wazuh::params::wodle_openscap_content,
-  $service_has_status              = $::wazuh::params::service_has_status,
-  $ossec_conf_template             = 'wazuh/wazuh_agent.conf.erb',
-  Boolean $manage_firewall         = $::wazuh::params::manage_firewall,
-) inherits wazuh::params {
+) inherits wazuh::params_agent {
   validate_bool(
     $ossec_active_response, $ossec_rootcheck,
     $selinux, $manage_repo, $manage_epel_repo
   )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  validate_array($ossec_ignorepaths)
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
@@ -171,6 +73,8 @@ class wazuh::agent(
     require   => Package[$agent_package_name],
   }
 
+  ## ossec.conf generation concats
+
   concat { 'ossec.conf':
     path    => $wazuh::params::config_file,
     owner   => $wazuh::params::config_owner,
@@ -190,11 +94,86 @@ class wazuh::agent(
     'ossec.conf_agent':
       order   => 10,
       content => template($ossec_conf_template);
-    'ossec.conf_footer':
+  }
+  if ($configure_rootcheck == true){
+    concat::fragment {
+        'ossec.conf_rootcheck':
+        target  => 'ossec.conf',
+        order   => 15,
+        content => template($ossec_rootcheck_template);
+    }
+  }
+  if ($configure_wodle_openscap == true){
+    concat::fragment {
+        'ossec.conf_openscap':
+        target  => 'ossec.conf',
+        order   => 16,
+        content => template($ossec_wodle_openscap_template);
+    }
+  }
+  if ($configure_wodle_cis_cat == true){
+    concat::fragment {
+        'ossec.conf_cis_cat':
+        target  => 'ossec.conf',
+        order   => 17,
+        content => template($ossec_wodle_cis_cat_template);
+    }
+  }
+  if ($configure_wodle_osquery == true){
+    concat::fragment {
+        'ossec.conf_osquery':
+        target  => 'ossec.conf',
+        order   => 18,
+        content => template($ossec_wodle_osquery_template);
+    }
+  }
+  if ($configure_wodle_syscollector == true){
+    concat::fragment {
+        'ossec.conf_syscollector':
+        target  => 'ossec.conf',
+        order   => 19,
+        content => template($ossec_wodle_syscollector_template);
+    }
+  }
+  if ($configure_sca == true){
+    concat::fragment {
+        'ossec.conf_sca':
+        target  => 'ossec.conf',
+        order   => 25,
+        content => template($ossec_sca_template);
+    }
+  }
+  if ($configure_syscheck == true){
+    concat::fragment {
+        'ossec.conf_syscheck':
+        target  => 'ossec.conf',
+        order   => 30,
+        content => template($ossec_syscheck_template);
+    }
+  }
+  if ($configure_localfile == true){
+    concat::fragment {
+        'ossec.conf_localfile':
+        target  => 'ossec.conf',
+        order   => 35,
+        content => template($ossec_localfile_template);
+    }
+  }
+  if ($configure_active_response == true){
+    concat::fragment {
+        'ossec.conf_active_response':
+        target  => 'ossec.conf',
+        order   => 40,
+        content => template($ossec_active_response_template);
+    }
+  }
+  
+  concat::fragment {
+      'ossec.conf_footer':
+      target  => 'ossec.conf',
       order   => 99,
       content => '</ossec_config>';
   }
-
 
   if ($manage_client_keys == 'authd') {
     if ($::kernel == 'Linux') {
