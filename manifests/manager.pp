@@ -1,8 +1,8 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Main ossec server config
 class wazuh::manager (
-    $ossec_local_files = $::wazuh::params::default_local_files
-) inherits wazuh::params {
+    $ossec_local_files = $::wazuh::params_manager::default_local_files
+) inherits wazuh::params_manager {
   validate_bool(
     $manage_repos, $manage_epel_repo, $syslog_output,$wazuh_manager_verify_manager_ssl
   )
@@ -10,9 +10,22 @@ class wazuh::manager (
     $decoder_exclude, $rule_exclude
   )
 
+  ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
+
+  if ($::kernel == 'windows') {
+    $kernel = 'Linux'
+    
+  }else{
+    $kernel = 'Linux'
+    if ($::osfamily == 'Debian'){
+      $os_family = 'debian'
+    }else{
+      $os_family = 'centos'
+    }
+  }
+
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  validate_array($ossec_ignorepaths)
   if ( $ossec_emailnotification ) {
     if $smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
@@ -32,43 +45,43 @@ class wazuh::manager (
     # TODO: Allow filtering of EPEL requirement
     class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
     if $::osfamily == 'Debian' {
-      Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params::server_package]
+      Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params_manager::server_package]
     } else {
-      Class['wazuh::repo'] -> Package[$wazuh::params::server_package]
+      Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
     }
   }
 
   # Install and configure Wazuh-manager package
 
-  package { $wazuh::params::server_package:
+  package { $wazuh::params_manager::server_package:
     ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
   }
 
   file {
     default:
-      owner   => $wazuh::params::config_owner,
-      group   => $wazuh::params::config_group,
-      mode    => $wazuh::params::config_mode,
-      notify  => Service[$wazuh::params::server_service],
-      require => Package[$wazuh::params::server_package];
-    $wazuh::params::shared_agent_config_file:
-      validate_cmd => $wazuh::params::validate_cmd_conf,
+      owner   => $wazuh::params_manager::config_owner,
+      group   => $wazuh::params_manager::config_group,
+      mode    => $wazuh::params_manager::config_mode,
+      notify  => Service[$wazuh::params_manager::server_service],
+      require => Package[$wazuh::params_manager::server_package];
+    $wazuh::params_manager::shared_agent_config_file:
+      validate_cmd => $wazuh::params_manager::validate_cmd_conf,
       content      => template($shared_agent_template);
     '/var/ossec/etc/rules/local_rules.xml':
       content      => template($local_rules_template);
     '/var/ossec/etc/decoders/local_decoder.xml':
       content      => template($local_decoder_template);
-    $wazuh::params::processlist_file:
+    $wazuh::params_manager::processlist_file:
       content      => template('wazuh/process_list.erb');
   }
 
-  service { $wazuh::params::server_service:
+  service { $wazuh::params_manager::server_service:
     ensure    => running,
     enable    => true,
-    hasstatus => $wazuh::params::service_has_status,
-    pattern   => $wazuh::params::server_service,
+    hasstatus => $wazuh::params_manager::service_has_status,
+    pattern   => $wazuh::params_manager::server_service,
     provider  => $ossec_service_provider,
-    require   => Package[$wazuh::params::server_package],
+    require   => Package[$wazuh::params_manager::server_package],
   }
 
   ## Declaring variables for localfile and wodles generation
@@ -80,12 +93,12 @@ class wazuh::manager (
   }
 
   concat { 'ossec.conf':
-    path    => $wazuh::params::config_file,
-    owner   => $wazuh::params::config_owner,
-    group   => $wazuh::params::config_group,
-    mode    => $wazuh::params::config_mode,
-    require => Package[$wazuh::params::server_package],
-    notify  => Service[$wazuh::params::server_service],
+    path    => $wazuh::params_manager::config_file,
+    owner   => $wazuh::params_manager::config_owner,
+    group   => $wazuh::params_manager::config_group,
+    mode    => $wazuh::params_manager::config_mode,
+    require => Package[$wazuh::params_manager::server_package],
+    notify  => Service[$wazuh::params_manager::server_service],
   }
   concat::fragment {
     'ossec.conf_header':
@@ -139,45 +152,27 @@ class wazuh::manager (
     }
   }
   if ($sca_configure == true){
-    if ($::osfamily == 'RedHat'){
-      concat::fragment {
-        'ossec.conf_sca':
-          order => 35,
-          target => 'ossec.conf',
-          content => template('wazuh/fragments/_sca_centos.erb');
+    concat::fragment {
+      'ossec.conf_sca':
+        order => 40,
+        target => 'ossec.conf',
+        content => template('wazuh/fragments/_sca.erb');
       }
-    }else{
-      concat::fragment {
-        'ossec.conf_sca':
-          order => 40,
-          target => 'ossec.conf',
-          content => template('wazuh/fragments/_sca_debian.erb');
-      }
-    }
   }
   if($wodle_vulnerability_detector_configure == true){
     concat::fragment {
-        'ossec.conf_wodle_vulnerability_detector':
-          order => 45,
-          target => 'ossec.conf',
-          content => template('wazuh/fragments/_wodle_vulnerability_detector.erb');
-      }
+      'ossec.conf_wodle_vulnerability_detector':
+        order => 45,
+        target => 'ossec.conf',
+        content => template('wazuh/fragments/_wodle_vulnerability_detector.erb');
+    }
   }
   if($syscheck_configure == true){
-    if ($::kernel == 'Linux') {
-      concat::fragment {
-          'ossec.conf_syscheck':
-            order => 50,
-            target => 'ossec.conf',
-            content => template('wazuh/fragments/_syscheck_linux.erb');
-      }
-    }else{
-      concat::fragment {
-          'ossec.conf_syscheck':
-            order => 55,
-            target => 'ossec.conf',
-            content => template('wazuh/fragments/_syscheck_windows.erb');
-      }
+    concat::fragment {
+      'ossec.conf_syscheck':
+        order => 55,
+        target => 'ossec.conf',
+        content => template('wazuh/fragments/_syscheck.erb');
     }
   }
   if ($command_configure == true){
@@ -230,18 +225,18 @@ class wazuh::manager (
   
 
   if ( $manage_client_keys == 'export' ) {
-    concat { $wazuh::params::keys_file:
-      owner   => $wazuh::params::keys_owner,
-      group   => $wazuh::params::keys_group,
-      mode    => $wazuh::params::keys_mode,
-      notify  => Service[$wazuh::params::server_service],
-      require => Package[$wazuh::params::server_package],
+    concat { $wazuh::params_manager::keys_file:
+      owner   => $wazuh::params_manager::keys_owner,
+      group   => $wazuh::params_manager::keys_group,
+      mode    => $wazuh::params_manager::keys_mode,
+      notify  => Service[$wazuh::params_manager::server_service],
+      require => Package[$wazuh::params_manager::server_package],
     }
     concat::fragment { 'var_ossec_etc_client.keys_end' :
-      target  => $wazuh::params::keys_file,
+      target  => $wazuh::params_manager::keys_file,
       order   => 99,
       content => "\n",
-      notify  => Service[$wazuh::params::server_service]
+      notify  => Service[$wazuh::params_manager::server_service]
     }
     # A separate module to avoid storeconfigs warnings when not managing keys
     include wazuh::collect_agent_keys
@@ -253,12 +248,12 @@ class wazuh::manager (
     # TODO: ensure the authd service is started if manage_client_keys == authd
     # (see https://github.com/wazuh/wazuh/issues/80)
 
-    file { $wazuh::params::authd_pass_file:
-      owner   => $wazuh::params::keys_owner,
-      group   => $wazuh::params::keys_group,
-      mode    => $wazuh::params::keys_mode,
+    file { $wazuh::params_manager::authd_pass_file:
+      owner   => $wazuh::params_manager::keys_owner,
+      group   => $wazuh::params_manager::keys_group,
+      mode    => $wazuh::params_manager::keys_mode,
       content => $agent_auth_password,
-      require => Package[$wazuh::params::server_package],
+      require => Package[$wazuh::params_manager::server_package],
     }
   }
 
@@ -275,8 +270,8 @@ class wazuh::manager (
         owner   => 'root',
         group   => 'ossec',
         mode    => '0640',
-        require => Package[$wazuh::params::server_package],
-        notify  => Service[$wazuh::params::server_service],
+        require => Package[$wazuh::params_manager::server_package],
+        notify  => Service[$wazuh::params_manager::server_service],
       }
 
       file { '/var/ossec/etc/sslmanager.cert':
@@ -284,8 +279,8 @@ class wazuh::manager (
         owner   => 'root',
         group   => 'ossec',
         mode    => '0640',
-        require => Package[$wazuh::params::server_package],
-        notify  => Service[$wazuh::params::server_service],
+        require => Package[$wazuh::params_manager::server_package],
+        notify  => Service[$wazuh::params_manager::server_service],
       }
     }
   }
