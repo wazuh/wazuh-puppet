@@ -26,7 +26,6 @@ class wazuh::elasticsearch (
 ){
 
   class {"wazuh::repo_elastic":}
-  class {"wazuh::params_elastic":}
 
   # install package
   package { 'Installing elasticsearch...':
@@ -58,15 +57,17 @@ class wazuh::elasticsearch (
   }
 
   exec { 'Insert line limits':
+    path => '/usr/bin',
     command => "echo 'elasticsearch - nofile  65535\nelasticsearch - memlock unlimited' >> /etc/security/limits.conf",
-    provider => 'shell',
+    
   }
 
   exec { 'Verify Elasticsearch folders owner':
-    command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch \
-             && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch \
+    path => '/usr/bin',
+    command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch\
+             && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch\
              && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
-    provider => 'shell',             
+                 
   }
 
 

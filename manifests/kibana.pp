@@ -19,43 +19,46 @@ class wazuh::kibana (
     ensure  => $kibana_version,
   }
 
-  service { "kibana":
-    ensure  => running,
-    enable  => true,
-  }
-
   file { 'Configure kibana.yml':
     owner   => 'kibana',
     path    => '/etc/kibana/kibana.yml', 
     group   => 'kibana',
     mode    => '0644',
+    notify  => Service[$kibana_service],
     content => template("wazuh/kibana_yml.erb"),
   }
 
-    exec {"Waiting for elasticsearch...":
-    command => "until (curl -XGET http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}); do\
-                printf 'Waiting for elasticsearch....' && \
-                sleep 5\
-                done",
-    provider => 'shell',
+  service { "kibana":
+    ensure  => running,
+    enable  => true,
+  }
+
+  exec {"Waiting for elasticsearch...":
+    path    => "/usr/bin",
+    command => "curl -XGET http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+    timeout => 5,
+    tries   => 5,
     returns => [0, 2, 14],
   }
 
   exec {"Installing Wazuh App...":
+    path    => "/usr/bin",
     command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_app_version}.zip",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$kibana_service],
-    provider => 'shell',
+    
   }
     exec {"Enabling and restarting kibana...":
+      path    => "/usr/bin",
       command => "systemctl daemon-reload && systemctl enable kibana && systemctl restart kibana",
-      provider => 'shell',
+      
   }
 
   exec { 'Verify Kibana folders owner':
+    path    => "/usr/bin",
     command => "chown -R kibana:kibana /usr/share/kibana/optimize\
              && chown -R kibana:kibana /usr/share/kibana/plugins",
-    provider => 'shell',             
+                 
   }
 
 }

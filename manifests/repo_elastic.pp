@@ -47,8 +47,8 @@ class wazuh::repo_elastic (
         # Import GPG key
 
         exec { 'Install Elasticsearch GPG key':
-          command => "rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch",
-          provider => 'shell',             
+          path    => "/usr/bin",
+          command => "rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch",             
         }
 
         # Adding repo by Puppet yumrepo resource

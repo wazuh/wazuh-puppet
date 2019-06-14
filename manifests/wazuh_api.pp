@@ -12,7 +12,7 @@ class wazuh::wazuh_api (
   if $::osfamily == 'Debian' {
     exec { 'Updating repositories...':
       command => "cd /tmp && curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -",
-      provider => 'shell',
+      
     }
     package { $nodejs_package:
       provider => 'apt',
@@ -24,8 +24,9 @@ class wazuh::wazuh_api (
 
   }else{
     exec { 'Updating repositories...':
+      path    => "/usr/bin",
       command => "curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -",
-      provider => 'shell',
+      
     }
     package { $nodejs_package:
       provider => 'yum',

@@ -25,8 +25,8 @@ class wazuh::filebeat (
   }
 
   exec { 'Installing wazuh-template.json...':
+    path => "/usr/bin",
     command => "curl -so /etc/filebeat/wazuh-template.json 'https://raw.githubusercontent.com/wazuh/wazuh/$wazuh_extensions_version/extensions/elasticsearch/7.x/wazuh-template.json'",
-    provider => 'shell',
     notify => Service['filebeat']
   }
 
