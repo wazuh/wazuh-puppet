@@ -26,7 +26,7 @@ class wazuh::manager (
 
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  if ( $ossec_emailnotification ) {
+  if ($ossec_emailnotification == true) {
     if $smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
@@ -110,7 +110,7 @@ class wazuh::manager (
       order => 01,
       content => template('wazuh/wazuh_manager.conf.erb');
   }
-  if($rootcheck_configure == true){
+  if($configure_rootcheck == true){
     concat::fragment {
         'ossec.conf_rootcheck':
           order => 10,
@@ -119,7 +119,7 @@ class wazuh::manager (
       }6
   }
 
-  if ($wodle_openscap_configure == true){
+  if ($configure_wodle_openscap == true){
     concat::fragment {
       'ossec.conf_wodle_openscap':
         order => 15,
@@ -127,7 +127,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_wodle_openscap.erb');
     }
   }
-  if ($wodle_ciscat_configure == true){
+  if ($configure_wodle_cis_cat == true){
     concat::fragment {
       'ossec.conf_wodle_ciscat':
         order => 20,
@@ -135,7 +135,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_wodle_cis_cat.erb');
     }
   }
-  if ($wodle_osquery_configure == true){
+  if ($configure_wodle_osquery== true){
     concat::fragment {
       'ossec.conf_wodle_osquery':
         order => 25,
@@ -143,7 +143,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_wodle_osquery.erb');
     }
   }
-  if ($wodle_syscollector_configure == true){
+  if ($configure_wodle_syscollector == true){
     concat::fragment {
       'ossec.conf_wodle_syscollector':
         order => 30,
@@ -151,7 +151,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_wodle_syscollector.erb');
     }
   }
-  if ($sca_configure == true){
+  if ($configure_sca == true){
     concat::fragment {
       'ossec.conf_sca':
         order => 40,
@@ -159,7 +159,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_sca.erb');
       }
   }
-  if($wodle_vulnerability_detector_configure == true){
+  if($configure_vulnerability_detector == true){
     concat::fragment {
       'ossec.conf_wodle_vulnerability_detector':
         order => 45,
@@ -167,7 +167,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_wodle_vulnerability_detector.erb');
     }
   }
-  if($syscheck_configure == true){
+  if($configure_syscheck == true){
     concat::fragment {
       'ossec.conf_syscheck':
         order => 55,
@@ -175,7 +175,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_syscheck.erb');
     }
   }
-  if ($command_configure == true){
+  if ($configure_command == true){
     concat::fragment {
           'ossec.conf_command':
             order => 60,
@@ -183,7 +183,7 @@ class wazuh::manager (
             content => template('wazuh/command.erb');
       }
   }
-  if ($localfile_configure == true){
+  if ($configure_localfile == true){
     concat::fragment {
       'ossec.conf_localfile':
         order => 65,
@@ -191,7 +191,7 @@ class wazuh::manager (
         content => template('wazuh/fragments/_localfile.erb');
     }
   }
-  if($ruleset_configure == true){
+  if($configure_ruleset == true){
     concat::fragment {
         'ossec.conf_ruleset':
           order => 75,
@@ -199,7 +199,7 @@ class wazuh::manager (
           content => template('wazuh/fragments/_ruleset.erb');
       }
   }
-  if ($auth_configure == true){
+  if ($configure_auth == true){
     concat::fragment {
         'ossec.conf_auth':
           order => 80,
@@ -207,12 +207,20 @@ class wazuh::manager (
           content => template('wazuh/fragments/_auth.erb');
       }
   }
-  if ($cluster_configure == true){
+  if ($configure_cluster == true){
     concat::fragment {
         'ossec.conf_cluster':
           order => 85,
           target => 'ossec.conf',
           content => template('wazuh/fragments/_cluster.erb');
+      }
+  }
+  if ($configure_active_response == true){
+    concat::fragment {
+        'ossec.conf_active_response':
+          order => 90,
+          target => 'ossec.conf',
+          content => template('wazuh/fragments/_activeresponse.erb');
       }
   }
   concat::fragment {
@@ -222,29 +230,7 @@ class wazuh::manager (
       content => "</ossec_config>\n";
   }
 
-  
-
-  if ( $manage_client_keys == 'export' ) {
-    concat { $wazuh::params_manager::keys_file:
-      owner   => $wazuh::params_manager::keys_owner,
-      group   => $wazuh::params_manager::keys_group,
-      mode    => $wazuh::params_manager::keys_mode,
-      notify  => Service[$wazuh::params_manager::server_service],
-      require => Package[$wazuh::params_manager::server_package],
-    }
-    concat::fragment { 'var_ossec_etc_client.keys_end' :
-      target  => $wazuh::params_manager::keys_file,
-      order   => 99,
-      content => "\n",
-      notify  => Service[$wazuh::params_manager::server_service]
-    }
-    # A separate module to avoid storeconfigs warnings when not managing keys
-    include wazuh::collect_agent_keys
-  }
-
-
-
-  if ( $manage_client_keys == 'authd') {
+  if ( $manage_client_keys == 'yes') {
     # TODO: ensure the authd service is started if manage_client_keys == authd
     # (see https://github.com/wazuh/wazuh/issues/80)
 
@@ -289,8 +275,8 @@ class wazuh::manager (
   if $manage_firewall {
     include firewall
     firewall { '1514 wazuh-manager':
-      dport  => $ossec_server_port,
-      proto  => $ossec_server_protocol,
+      dport  => $manager_port,
+      proto  => $manager_protocol,
       action => 'accept',
       state  => [
         'NEW',
