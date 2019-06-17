@@ -8,7 +8,7 @@
     <%- @ossec_emailto.each do |emailto| -%>
     <email_to><%= emailto %></email_to>
     <%- end -%>
-    <smtp_server><%= @smtp_server %></smtp_server>
+    <smtp_server><%= @ossec_smtp_server %></smtp_server>
     <email_from><%= @ossec_emailfrom %></email_from>
     <email_maxperhour><%= @ossec_email_maxperhour %></email_maxperhour>
     <%- unless @ossec_email_idsname.nil? -%>
@@ -23,7 +23,7 @@
   </global>
 
   <alerts>
-    <log_alert_level>3</log_alert_level>
+    <log_alert_level><%= @ossec_alert_level %></log_alert_level>
     <email_alert_level><%= @ossec_email_alert_level %></email_alert_level>
   </alerts>
 
@@ -32,9 +32,9 @@
   </logging>
 
   <remote>
-    <connection>secure</connection>
-    <port><%= @ossec_server_port %></port>
-    <protocol><%= @ossec_server_protocol %></protocol>
-    <queue_size>131072</queue_size>
+    <connection><%= @ossec_remote_connection %></connection>
+    <port><%= @ossec_remote_port %></port>
+    <protocol><%= @ossec_remote_protocol %></protocol>
+    <queue_size><%= @ossec_remote_queue_size %></queue_size>
   </remote>
 
