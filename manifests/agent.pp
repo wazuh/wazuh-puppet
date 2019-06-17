@@ -1,20 +1,19 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
 class wazuh::agent(
-  
-
+  $ossec_local_files = $::wazuh::params_agent::default_local_files
 ) inherits wazuh::params_agent {
-  validate_bool(
-    $ossec_active_response, $ossec_rootcheck,
-    $selinux, $manage_repo, $manage_epel_repo
-  )
+  # validate_bool(
+  #   $ossec_active_response, $ossec_rootcheck,
+  #   $selinux, $manage_repo, $manage_epel_repo
+  # )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if ( ( $ossec_server_ip == undef ) and ( $ossec_server_hostname == undef ) and ( $wazuh_manager_address == undef ) ) {
-    fail('must pass either $ossec_server_ip or $ossec_server_hostname or $wazuh_manager_address to Class[\'wazuh::agent\'].')
+  if ( ( $manager_ip == undef ) and ( $manager_hostname == undef ) and ( $manager_address == undef ) ) {
+    fail('must pass either $manager_ip or $manager_hostname or $manager_address to Class[\'wazuh::agent\'].')
   }
 
   case $::kernel {
@@ -42,12 +41,12 @@ class wazuh::agent(
           source             => 'puppet:///modules/wazuh/wazuh-agent-3.9.1-1.msi',
           source_permissions => ignore
       }
-      if ( $manage_client_keys == 'authd' ) {
+      if ( $manage_client_keys == 'yes' ) {
         package { $agent_package_name:
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
           source          => 'C:/wazuh-agent-3.9.1-1.msi',
-          install_options => [ '/q', "ADDRESS=${ossec_server_ip}", "AUTHD_SERVER=${ossec_server_ip}" ],  # silent installation
+          install_options => [ '/q', "ADDRESS=${manager_ip}", "AUTHD_SERVER=${manager_ip}" ],  # silent installation
           require         => File['C:/wazuh-agent-3.9.1-1.msi'],
         }
       }
@@ -76,10 +75,10 @@ class wazuh::agent(
   ## ossec.conf generation concats
 
   concat { 'ossec.conf':
-    path    => $wazuh::params::config_file,
-    owner   => $wazuh::params::config_owner,
-    group   => $wazuh::params::config_group,
-    mode    => $wazuh::params::config_mode,
+    path    => $wazuh::params_agent::config_file,
+    owner   => $wazuh::params_agent::config_owner,
+    group   => $wazuh::params_agent::config_group,
+    mode    => $wazuh::params_agent::config_mode,
     require => Package[$agent_package_name],
     notify  => Service[$agent_service_name],
   }
@@ -175,34 +174,33 @@ class wazuh::agent(
       content => '</ossec_config>';
   }
 
-  if ($manage_client_keys == 'authd') {
+  if ($manage_client_keys == 'yes') {
     if ($::kernel == 'Linux') {
       # Is this really Linux only?
-      $ossec_server_address = pick($ossec_server_ip, $ossec_server_hostname)
+      $manager_address = pick($manager_ip, $manager_hostname)
 
-      file { $::wazuh::params::keys_file:
-        owner => $wazuh::params::keys_owner,
-        group => $wazuh::params::keys_group,
-        mode  => $wazuh::params::keys_mode,
+      file { $::wazuh::params_agent::keys_file:
+        owner => $wazuh::params_agent::keys_owner,
+        group => $wazuh::params_agent::keys_group,
+        mode  => $wazuh::params_agent::keys_mode,
       }
 
       # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
 
-      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_server_address} -A ${agent_name} -G ${agent_group} -D /var/ossec/"
-      if $wazuh_manager_root_ca_pem != undef {
-        validate_string($wazuh_manager_root_ca_pem)
-        file { '/var/ossec/etc/rootCA.pem':
-          owner   => $wazuh::params::keys_owner,
-          group   => $wazuh::params::keys_group,
-          mode    => $wazuh::params::keys_mode,
-          content => $wazuh_manager_root_ca_pem,
-          require => Package[$agent_package_name],
-        }
-          $agent_auth_option_manager = '-v /var/ossec/etc/rootCA.pem'
+      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${manager_address}"      
+
+      if $agent_name != undef {
+        validate_string($agent_name)
+        $agent_auth_option_name = "-A \"${agent_name}\""
+      }else{
+        $agent_auth_option_name = ""  # Avoid errors when compounding final command
       }
-      if $wazuh_manager_root_ca_pem_path != undef {
-        validate_string($wazuh_manager_root_ca_pem)
-        $agent_auth_option_manager = "-v ${wazuh_manager_root_ca_pem_path}"
+
+      if $agent_group != undef {
+        validate_string($agent_group)
+        $agent_auth_option_group = "-G \"${agent_group}\""
+      }else{
+        $agent_auth_option_group = ""
       }
 
     # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-agents-via-ssl
@@ -210,16 +208,16 @@ class wazuh::agent(
       validate_string($wazuh_agent_cert)
       validate_string($wazuh_agent_key)
       file { '/var/ossec/etc/sslagent.cert':
-        owner   => $wazuh::params::keys_owner,
-        group   => $wazuh::params::keys_group,
-        mode    => $wazuh::params::keys_mode,
+        owner   => $wazuh::params_agent::keys_owner,
+        group   => $wazuh::params_agent::keys_group,
+        mode    => $wazuh::params_agent::keys_mode,
         content => $wazuh_agent_cert,
         require => Package[$agent_package_name],
       }
       file { '/var/ossec/etc/sslagent.key':
-        owner   => $wazuh::params::keys_owner,
-        group   => $wazuh::params::keys_group,
-        mode    => $wazuh::params::keys_mode,
+        owner   => $wazuh::params_agent::keys_owner,
+        group   => $wazuh::params_agent::keys_group,
+        mode    => $wazuh::params_agent::keys_mode,
         content => $wazuh_agent_key,
         require => Package[$agent_package_name],
       }
@@ -233,23 +231,23 @@ class wazuh::agent(
       $agent_auth_option_agent = "-x ${wazuh_agent_cert_path} -k ${wazuh_agent_key_path}"
     }
 
-    $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_manager} ${agent_auth_option_agent}"
+    $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_name} ${agent_auth_option_group} ${agent_auth_option_agent}"
 
       if $agent_auth_password {
         exec { 'agent-auth-with-pwd':
           command => "${agent_auth_command} -P '${agent_auth_password}'",
-          unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
+          unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
           require => Package[$agent_package_name],
           notify  => Service[$agent_service_name],
-          before  => File[$wazuh::params::keys_file]
+          before  => File[$wazuh::params_agent::keys_file]
           }
       } else {
         exec { 'agent-auth-without-pwd':
           command => $agent_auth_command,
-          unless  => "/bin/egrep -q '.' ${::wazuh::params::keys_file}",
+          unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
           require => Package[$agent_package_name],
           notify  => Service[$agent_service_name],
-          before  => File[$wazuh::params::keys_file],
+          before  => File[$wazuh::params_agent::keys_file],
         }
       }
     }
@@ -267,8 +265,8 @@ class wazuh::agent(
   if $manage_firewall {
     include firewall
     firewall { '1514 wazuh-agent':
-      dport  => $ossec_server_port,
-      proto  => $ossec_server_protocol,
+      dport  => $manager_port,
+      proto  => $manager_protocol,
       action => 'accept',
       state  => [
         'NEW',
