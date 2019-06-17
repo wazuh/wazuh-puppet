@@ -8,39 +8,59 @@ class wazuh::params_manager {
 
       $server_package_version             =  '3.9.1-1'
 
-    # Ossec.conf generation parameters
-      
-      $rootcheck_configure                = true
-      $wodle_openscap_configure           = true
-      $wodle_ciscat_configure             = true
-      $wodle_osquery_configure            = true
-      $wodle_syscollector_configure       = true
-      $wodle_vulnerability_detector_configure = true
-      $sca_configure                      = true
-      $syscheck_configure                 = true
-      $command_configure                  = true
-      $localfile_configure                = true
-      $ruleset_configure                  = true
-      $auth_configure                     = true
-      $cluster_configure                  = true
-      
+    # ossec.conf generation parameters
+
+      $configure_rootcheck              = true
+      $configure_wodle_openscap         = true
+      $configure_wodle_cis_cat          = true
+      $configure_wodle_osquery          = true
+      $configure_wodle_syscollector     = true
+      $configure_vulnerability_detector = true
+      $configure_sca                    = true
+      $configure_syscheck               = true
+      $configure_command                = true
+      $configure_localfile              = true
+      $configure_ruleset                = true
+      $configure_auth                   = true
+      $configure_cluster                = true
+      $configure_active_response        = false
+
+
+    # ossec.conf templates paths
+      $ossec_manager_template            = 'wazuh/wazuh_manager.conf.erb'
+      $ossec_rootcheck_template          = 'wazuh/fragments/_rootcheck_linux.erb'
+      $ossec_wodle_openscap_template     = 'wazuh/fragments/_wodle_openscap.erb'
+      $ossec_wodle_cis_cat_template      = 'wazuh/fragments/_wodle_cis_cat.erb'
+      $ossec_wodle_osquery_template      = 'wazuh/fragments/_wodle_osquery.erb'
+      $ossec_wodle_syscollector_template = 'wazuh/fragments/_wodle_syscollector.erb'
+      $ossec_sca_template                = 'wazuh/fragments/_sca_centos.erb'
+      $ossec_syscheck_template           = 'wazuh/fragments/_syscheck_linux.erb'
+      $ossec_localfile_template          = 'wazuh/fragments/_localfile.erb'
+      $ossec_ruleset                     = 'wazuh/fragments/_ruleset.erb'
+      $ossec_auth                        = 'wazuh/fragments/_auth.erb'
+      $ossec_cluster                     = 'wazuh/fragments/_cluster.erb'
+      $ossec_active_response_template    = "wazuh/fragments/_activeresponse.erb"
+
       ### Ossec.conf blocks
-
-      $ossec_white_list                    = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
-
-      ## Email notifications
-
-      $smtp_server                         = undef
-      $ossec_emailto                       = []
-      $ossec_emailfrom                     = "wazuh@${::domain}"
-      $ossec_emailnotification             = false
-      $ossec_email_maxperhour              = '12'
-      $ossec_email_idsname                 = undef
-      $ossec_email_alert_level             = 12
+      
+      ## Global
+      $ossec_emailnotification = false
+      $ossec_emailto = []
+      $ossec_smtp_server = "smtp.example.wazuh.com"
+      $ossec_emailfrom = "ossecm$example.wazuh.com"
+      $ossec_email_maxperhour = undef
+      $ossec_email_idsname = undef
+      $ossec_white_list = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
+      $ossec_alert_level = 3
+      $ossec_email_alert_level = 12
+      $ossec_remote_connection = "secure"
+      $ossec_remote_port = 1514
+      $ossec_remote_protocol = udp
+      $ossec_remote_queue_size = 131072
 
       ## Rootcheck
 
-      $ossec_rootcheck_disabled            = true
+      $ossec_rootcheck_disabled            = "no"
       $ossec_rootcheck_check_files         = "yes"
       $ossec_rootcheck_check_trojans       = "yes"
       $ossec_rootcheck_check_dev           = "yes"
@@ -126,38 +146,65 @@ class wazuh::params_manager {
       $ossec_auth_ssl_manager_key          = "/var/ossec/etc/sslmanager.key"
       $ossec_auth_ssl_auto_negotiate       = "no"
 
+
+      # syscheck
+
+      $ossec_syscheck_disabled            = "no"
+      $ossec_syscheck_frequency           = "43200"
+      $ossec_syscheck_scan_on_start       = "yes"
+      $ossec_syscheck_alert_new_files     = "yes"
+      $ossec_syscheck_auto_ignore         = "no"
+      $ossec_syscheck_directories_1       = "/etc,/usr/bin,/usr/sbin"
+      $ossec_syscheck_directories_2       = "/bin,/sbin,/boot"
+      $ossec_syscheck_ignore_list         = ["/etc/mtab",
+                                              "/etc/hosts.deny",
+                                              "/etc/mail/statistics",
+                                              "/etc/random-seed",
+                                              "/etc/random.seed",
+                                              "/etc/adjtime",
+                                              "/etc/httpd/logs",
+                                              "/etc/utmpx",
+                                              "/etc/wtmpx",
+                                              "/etc/cups/certs",
+                                              "/etc/dumpdates",
+                                              "/etc/svc/volatile",
+                                              "/sys/kernel/security",
+                                              "/sys/kernel/debug",
+                                              "/dev/core",
+                                            ]
+      $ossec_syscheck_ignore_type_1       = "^/proc"
+      $ossec_syscheck_ignore_type_2       = ".log$|.swp$"
+      
+
+      $ossec_syscheck_nodiff               ="/etc/ssl/private.key"
+      $ossec_syscheck_skip_nfs            = "yes"
+
+      # Cluster
+
+      $ossec_cluster_name = "wazuh"
+      $ossec_cluster_node_name = "node01"
+      $ossec_cluster_node_type = "master"
+      $ossec_cluster_key = "KEY"
+      $ossec_cluster_port = "1516"
+      $ossec_cluster_bind_addr = "0.0.0.0"
+      $ossec_cluster_nodes = ["NODE_IP"]
+      $ossec_cluster_hidden = "no"
+      $ossec_cluster_disabled = "yes"
+
+
       #----- End of ossec.conf parameters -------
 
-      ### Wazuh-API
-
-      $api_package_version                 = 'installed'
-      $api_config_params                   = $::wazuh::params_manager::api_config_params
-      $api_config_template                 = 'wazuh/api/config.js.erb'
-      $install_wazuh_api                   = false
-      $wazuh_api_enable_https              = false
-      $wazuh_api_server_crt                = undef
-      $wazuh_api_server_key                = undef
-
-
-      $ossec_ignorepaths                   = []
-      $ossec_ignorepaths_regex             = []
-      $ossec_scanpaths                     = [ {'path' => '/etc,/usr/bin,/usr/sbin', 'report_changes' => 'no', 'realtime' => 'no'}, {'path' => '/bin,/sbin', 'report_changes' => 'yes', 'realtime' => 'yes'} ]
-    
-      
-
-      $ossec_syscheck_frequency            = 79200
-      $ossec_auto_ignore                   = 'yes'
       $ossec_prefilter                     = false
       
-      $ossec_server_port                   = '1514'
-      $ossec_server_protocol               = 'udp'
-      $ossec_integratord_enabled           = false
+      $manager_port                   = '1514'
+      $manager_protocol               = 'udp'
+      $ossec_integratord_enabled      = false
 
       
       
       $manage_repos                        = true
       $manage_epel_repo                    = true
-      $manage_client_keys                  = 'authd'
+      $manage_client_keys                  = 'yes'
       $agent_auth_password                 = undef
       $ar_repeated_offenders               = ''
 
