@@ -115,7 +115,7 @@ class wazuh::manager (
         'ossec.conf_rootcheck':
           order => 10,
           target => 'ossec.conf',
-          content => template('wazuh/fragments/_rootcheck_linux.erb');
+          content => template('wazuh/fragments/_rootcheck.erb');
       }6
   }
 
@@ -180,7 +180,7 @@ class wazuh::manager (
           'ossec.conf_command':
             order => 60,
             target => 'ossec.conf',
-            content => template('wazuh/command.erb');
+            content => template('wazuh/default_commands.erb');
       }
   }
   if ($configure_localfile == true){
@@ -272,11 +272,23 @@ class wazuh::manager (
   }
 
   # Manage firewall
-  if $manage_firewall {
+  if $manage_firewall == true {
     include firewall
     firewall { '1514 wazuh-manager':
-      dport  => $manager_port,
-      proto  => $manager_protocol,
+      dport  => $ossec_remote_port,
+      proto  => $ossec_remote_protocol,
+      action => 'accept',
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
+    }
+  }
+  if $ossec_cluster_enable_firewall == "yes"{
+    include firewall
+    firewall { '1516 wazuh-manager':
+      dport  => $ossec_cluster_port,
+      proto  => $ossec_remote_protocol,
       action => 'accept',
       state  => [
         'NEW',
