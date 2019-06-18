@@ -9,13 +9,13 @@ class wazuh::elasticsearch (
   $elasticsearch_node_max_local_storage_nodes = '1',
   $elasticsearch_service = 'elasticsearch',
   $elasticsearch_package = 'elasticsearch',
-  $elasticsearch_version = '7.1.1',
+  $elasticsearch_version = '7.1.0',
   
   $elasticsearch_path_data = "/var/lib/elasticsearch",
   $elasticsearch_path_logs = "/var/log/elasticsearch",
 
 
-  $elasticsearch_ip = '172.17.0.101',
+  $elasticsearch_ip = 'localhost',
   $elasticsearch_port = '9200',
   $elasticsearch_discovery_option = 'discovery.type: single-node',
   $elasticsearch_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']",

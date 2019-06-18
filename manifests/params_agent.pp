@@ -10,14 +10,16 @@ class wazuh::params_agent {
 
     # Authd Registration options
 
-      $manage_client_keys      = 'yes'
-      $agent_name              = undef
-      $agent_group             = undef
-      $wazuh_agent_cert        = undef
-      $wazuh_agent_key         = undef
-      $wazuh_agent_cert_path   = undef
-      $wazuh_agent_key_path    = undef
-      $agent_auth_password     = undef
+      $manage_client_keys               = 'yes'
+      $agent_name                       = undef
+      $agent_group                      = undef
+      $wazuh_agent_cert                 = undef
+      $wazuh_agent_key                  = undef
+      $wazuh_agent_cert_path            = undef
+      $wazuh_agent_key_path             = undef
+      $agent_auth_password              = undef
+      $wazuh_manager_root_ca_pem        = undef
+      $wazuh_manager_root_ca_pem_path   = undef
 
     ## Wazuh config folders and modes
 
@@ -55,7 +57,6 @@ class wazuh::params_agent {
       $configure_sca = true
       $configure_syscheck = true
       $configure_localfile = true
-      $configure_active_response = true
       
 
     # ossec.conf templates paths
@@ -77,14 +78,15 @@ class wazuh::params_agent {
 
       ## Server block configuration
 
-      $manager_ip                 = "172.17.0.101"
-      $manager_hostname           = undef
-      $manager_address            = undef
-      $manager_port               = '1514'
-      $manager_protocol           = 'udp'
-      $manager_notify_time        = undef
-      $manager_time_reconnect     = undef  
-      $agent_auto_restart         = "yes"
+      $ossec_ip                 = "localhost"
+      $ossec_hostname           = undef
+      $ossec_address            = undef
+      $ossec_port               = '1514'
+      $ossec_protocol           = 'udp'
+      $ossec_notify_time        = 10
+      $ossec_time_reconnect     = 60 
+      $ossec_auto_restart       = "yes"
+      $ossec_crypto_method      = "aes"
       
       $client_buffer_queue_size = 5000
       $client_buffer_events_per_second = 500
@@ -181,8 +183,6 @@ class wazuh::params_agent {
       $manage_repo                     = true
       $manage_epel_repo                = true
 
-
-
       case $::osfamily {
         'Debian': {
 
@@ -265,6 +265,7 @@ class wazuh::params_agent {
               $wodle_openscap_content = undef
             }
             'CentOS': {
+              $ossec_config_profiles = ["centos","centos7", "centos7.6"]
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $ossec_service_provider = 'redhat'
                 $api_service_provider = 'redhat'

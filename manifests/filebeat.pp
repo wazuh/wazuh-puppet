@@ -1,11 +1,11 @@
 class wazuh::filebeat (
-  $filebeat_elasticsearch_ip = "172.17.0.101",
+  $filebeat_elasticsearch_ip = "localhost",
   $filebeat_elasticsearch_port = "9200",
   $elasticsearch_server_ip = "\"${filebeat_elasticsearch_ip}:${filebeat_elasticsearch_port}\"",
 
   $filebeat_package = "filebeat",
   $filebeat_service = "filebeat",
-  $filebeat_version = "7.1.1",
+  $filebeat_version = "7.1.0",
   $wazuh_app_version = "3.9.1_7.1.0",
   $wazuh_extensions_version = "v3.9.1",
 ){

@@ -4,9 +4,31 @@ class wazuh::params_manager {
   case $::kernel {
     'Linux': {
 
-    # Versions  
+    # Installation
+      $server_package_version              = '3.9.1-1'
+      $manage_repos                        = true
+      $manage_epel_repo                    = true
+      $manage_firewall                     = false
 
-      $server_package_version             =  '3.9.1-1'
+      
+
+
+    ### Ossec.conf blocks
+      
+      ## Global
+      $ossec_emailnotification = false
+      $ossec_emailto = []
+      $ossec_smtp_server = "smtp.example.wazuh.com"
+      $ossec_emailfrom = "ossecm$example.wazuh.com"
+      $ossec_email_maxperhour = undef
+      $ossec_email_idsname = undef
+      $ossec_white_list = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
+      $ossec_alert_level = 3
+      $ossec_email_alert_level = 12
+      $ossec_remote_connection = "secure"
+      $ossec_remote_port = 1514
+      $ossec_remote_protocol = "udp"
+      $ossec_remote_queue_size = 131072
 
     # ossec.conf generation parameters
 
@@ -28,7 +50,7 @@ class wazuh::params_manager {
 
     # ossec.conf templates paths
       $ossec_manager_template            = 'wazuh/wazuh_manager.conf.erb'
-      $ossec_rootcheck_template          = 'wazuh/fragments/_rootcheck_linux.erb'
+      $ossec_rootcheck_template          = 'wazuh/fragments/_rootcheck.erb'
       $ossec_wodle_openscap_template     = 'wazuh/fragments/_wodle_openscap.erb'
       $ossec_wodle_cis_cat_template      = 'wazuh/fragments/_wodle_cis_cat.erb'
       $ossec_wodle_osquery_template      = 'wazuh/fragments/_wodle_osquery.erb'
@@ -40,23 +62,6 @@ class wazuh::params_manager {
       $ossec_auth                        = 'wazuh/fragments/_auth.erb'
       $ossec_cluster                     = 'wazuh/fragments/_cluster.erb'
       $ossec_active_response_template    = "wazuh/fragments/_activeresponse.erb"
-
-      ### Ossec.conf blocks
-      
-      ## Global
-      $ossec_emailnotification = false
-      $ossec_emailto = []
-      $ossec_smtp_server = "smtp.example.wazuh.com"
-      $ossec_emailfrom = "ossecm$example.wazuh.com"
-      $ossec_email_maxperhour = undef
-      $ossec_email_idsname = undef
-      $ossec_white_list = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
-      $ossec_alert_level = 3
-      $ossec_email_alert_level = 12
-      $ossec_remote_connection = "secure"
-      $ossec_remote_port = 1514
-      $ossec_remote_protocol = udp
-      $ossec_remote_queue_size = 131072
 
       ## Rootcheck
 
@@ -191,19 +196,15 @@ class wazuh::params_manager {
       $ossec_cluster_hidden = "no"
       $ossec_cluster_disabled = "yes"
 
+      $ossec_cluster_enable_firewall = "no"
+
 
       #----- End of ossec.conf parameters -------
 
       $ossec_prefilter                     = false
-      
-      $manager_port                   = '1514'
-      $manager_protocol               = 'udp'
       $ossec_integratord_enabled      = false
 
       
-      
-      $manage_repos                        = true
-      $manage_epel_repo                    = true
       $manage_client_keys                  = 'yes'
       $agent_auth_password                 = undef
       $ar_repeated_offenders               = ''
@@ -233,7 +234,7 @@ class wazuh::params_manager {
       $keys_owner = 'root'
       $keys_group = 'ossec'
 
-      $manage_firewall = false
+
       $authd_pass_file = '/var/ossec/etc/authd.pass'
 
       $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
