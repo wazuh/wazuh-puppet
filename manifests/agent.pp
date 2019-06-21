@@ -65,6 +65,12 @@ class wazuh::agent(
 
   ## ossec.conf generation concats
 
+  if $::osfamily == 'Debian' {
+    $apply_template_os = "debian"
+  }else{
+    $apply_template_os = "centos"
+  }
+
   concat { 'ossec.conf':
     path    => $wazuh::params_agent::config_file,
     owner   => $wazuh::params_agent::config_owner,
@@ -72,20 +78,17 @@ class wazuh::agent(
     mode    => $wazuh::params_agent::config_mode,
     require => Package[$agent_package_name],
   }
-  if $::osfamily == 'Debian' {
-    $apply_template_os = "debian"
-  }else{
-    $apply_template_os = "centos"
-  }
 
   concat::fragment {
     default:
       target => 'ossec.conf';
     'ossec.conf_header':
       order   => 00,
+      before  => Service[$agent_service_name],
       content => "<ossec_config>\n";
     'ossec.conf_agent':
       order   => 10,
+      before  => Service[$agent_service_name],
       content => template($ossec_conf_template);
   }
   if ($configure_rootcheck == true){
@@ -93,6 +96,7 @@ class wazuh::agent(
         'ossec.conf_rootcheck':
         target  => 'ossec.conf',
         order   => 15,
+        before  => Service[$agent_service_name],
         content => template($ossec_rootcheck_template);
     }
   }
@@ -101,6 +105,7 @@ class wazuh::agent(
         'ossec.conf_openscap':
         target  => 'ossec.conf',
         order   => 16,
+        before  => Service[$agent_service_name],
         content => template($ossec_wodle_openscap_template);
     }
   }
@@ -109,6 +114,7 @@ class wazuh::agent(
         'ossec.conf_cis_cat':
         target  => 'ossec.conf',
         order   => 17,
+        before  => Service[$agent_service_name],
         content => template($ossec_wodle_cis_cat_template);
     }
   }
@@ -117,6 +123,7 @@ class wazuh::agent(
         'ossec.conf_osquery':
         target  => 'ossec.conf',
         order   => 18,
+        before  => Service[$agent_service_name],
         content => template($ossec_wodle_osquery_template);
     }
   }
@@ -125,6 +132,7 @@ class wazuh::agent(
         'ossec.conf_syscollector':
         target  => 'ossec.conf',
         order   => 19,
+        before  => Service[$agent_service_name],
         content => template($ossec_wodle_syscollector_template);
     }
   }
@@ -133,6 +141,7 @@ class wazuh::agent(
         'ossec.conf_sca':
         target  => 'ossec.conf',
         order   => 25,
+        before  => Service[$agent_service_name],
         content => template($ossec_sca_template);
     }
   }
@@ -141,6 +150,7 @@ class wazuh::agent(
         'ossec.conf_syscheck':
         target  => 'ossec.conf',
         order   => 30,
+        before  => Service[$agent_service_name],
         content => template($ossec_syscheck_template);
     }
   }
@@ -149,6 +159,7 @@ class wazuh::agent(
         'ossec.conf_localfile':
         target  => 'ossec.conf',
         order   => 35,
+        before  => Service[$agent_service_name],
         content => template($ossec_localfile_template);
     }
   }
@@ -157,6 +168,7 @@ class wazuh::agent(
         'ossec.conf_active_response':
         target  => 'ossec.conf',
         order   => 40,
+        before  => Service[$agent_service_name],
         content => template($ossec_active_response_template);
     }
   }
@@ -164,6 +176,7 @@ class wazuh::agent(
       'ossec.conf_footer':
       target  => 'ossec.conf',
       order   => 99,
+      before  => Service[$agent_service_name],
       content => '</ossec_config>';
   }
 
@@ -248,17 +261,15 @@ class wazuh::agent(
         exec { 'agent-auth-with-pwd':
           command => "${agent_auth_command} -P '${agent_auth_password}'",
           unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
-          require => Package[$agent_package_name],
-          notify  => Service[$agent_service_name],
-          before  => File[$wazuh::params_agent::keys_file]
+          require => Concat['ossec.conf'],
+          before  => Service[$agent_service_name],
           }
       } else {
         exec { 'agent-auth-without-pwd':
           command => $agent_auth_command,
           unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
-          require => Package[$agent_package_name],
-          notify  => Service[$agent_service_name],
-          before  => File[$wazuh::params_agent::keys_file],
+          require => Concat['ossec.conf'],
+          before  => Service[$agent_service_name],
         }
       }
 
