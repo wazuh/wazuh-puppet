@@ -63,15 +63,6 @@ class wazuh::agent(
     default: { fail('OS not supported') }
   }
 
-  service { $agent_service_name:
-    ensure    => running,
-    enable    => true,
-    hasstatus => $service_has_status,
-    pattern   => $agent_service_name,
-    provider  => $ossec_service_provider,
-    require   => Package[$agent_package_name],
-  }
-
   ## ossec.conf generation concats
 
   concat { 'ossec.conf':
@@ -80,13 +71,16 @@ class wazuh::agent(
     group   => $wazuh::params_agent::config_group,
     mode    => $wazuh::params_agent::config_mode,
     require => Package[$agent_package_name],
-    notify  => Service[$agent_service_name],
+  }
+  if $::osfamily == 'Debian' {
+    $apply_template_os = "debian"
+  }else{
+    $apply_template_os = "centos"
   }
 
   concat::fragment {
     default:
-      target => 'ossec.conf',
-      notify => Service[$agent_service_name];
+      target => 'ossec.conf';
     'ossec.conf_header':
       order   => 00,
       content => "<ossec_config>\n";
@@ -173,7 +167,8 @@ class wazuh::agent(
       content => '</ossec_config>';
   }
 
-  if ($manage_client_keys == 'yes') {
+  if ($manage_client_keys == 'yes'){
+
     if ($::kernel == 'Linux') {
       # Is this really Linux only?
       $ossec_address = pick($ossec_ip, $ossec_hostname)
@@ -202,14 +197,14 @@ class wazuh::agent(
         validate_string($wazuh_manager_root_ca_pem)
         $agent_auth_option_manager = "-v ${wazuh_manager_root_ca_pem_path}"
       } else {
-        $agent_auth_option_manager = ''
+        $agent_auth_option_manager = ''  # Avoid errors when compounding final command
       }
 
       if $agent_name != undef {
         validate_string($agent_name)
         $agent_auth_option_name = "-A \"${agent_name}\""
       }else{
-        $agent_auth_option_name = ""  # Avoid errors when compounding final command
+        $agent_auth_option_name = ""  
       }
 
       if $agent_group != undef {
@@ -266,6 +261,26 @@ class wazuh::agent(
           before  => File[$wazuh::params_agent::keys_file],
         }
       }
+
+      service { $agent_service_name:
+        ensure    => running,
+        enable    => true,
+        hasstatus => $service_has_status,
+        pattern   => $agent_service_name,
+        provider  => $ossec_service_provider,
+        require   => Package[$agent_package_name],
+      }
+    }
+  }
+  
+  if $manage_client_keys != "yes"{
+    service { $agent_service_name:
+          ensure    => stopped,
+          enable    => false,
+          hasstatus => $service_has_status,
+          pattern   => $agent_service_name,
+          provider  => $ossec_service_provider,
+          require   => Package[$agent_package_name],
     }
   }
 
