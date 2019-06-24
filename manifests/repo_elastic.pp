@@ -1,5 +1,5 @@
 class wazuh::repo_elastic (
-  $redhat_manage_epel = true,
+
 ) {
     case $::osfamily {
       'Debian' : {
