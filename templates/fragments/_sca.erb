@@ -1,5 +1,5 @@
 <%- if @kernel == 'Linux' -%>
-  <%- if @os_family == 'centos' -%>
+  <%- if @apply_template_os == 'centos' -%>
     <sca>
       <enabled>yes</enabled>
       <scan_on_start>yes</scan_on_start>
@@ -13,8 +13,21 @@
         <policy>system_audit_pw.yml</policy>
       </policies>
     </sca>
-  <%- else -%> 
+  <%- elsif @apply_template_os =='amazon' -%> 
     <sca>
+      <enabled>yes</enabled>
+      <scan_on_start>yes</scan_on_start>
+      <interval>12h</interval>
+      <skip_nfs>yes</skip_nfs>
+
+      <policies>
+      <policy>system_audit_rcl.yml</policy>
+      <policy>system_audit_ssh.yml</policy>
+      <policy>system_audit_pw.yml</policy>
+      </policies>
+    </sca>
+  <%- else -%>
+      <sca>
       <enabled>yes</enabled>
       <scan_on_start>yes</scan_on_start>
       <interval>12h</interval>
