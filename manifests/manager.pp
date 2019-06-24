@@ -4,7 +4,7 @@ class wazuh::manager (
     $ossec_local_files = $::wazuh::params_manager::default_local_files
 ) inherits wazuh::params_manager {
   validate_bool(
-    $manage_repos, $manage_epel_repo, $syslog_output,$wazuh_manager_verify_manager_ssl
+    $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
   )
   validate_array(
     $decoder_exclude, $rule_exclude
@@ -43,7 +43,7 @@ class wazuh::manager (
 
   if $manage_repos {
     # TODO: Allow filtering of EPEL requirement
-    class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
+    class { 'wazuh::repo':}
     if $::osfamily == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params_manager::server_package]
     } else {
@@ -86,11 +86,19 @@ class wazuh::manager (
 
   ## Declaring variables for localfile and wodles generation
   
-  if $::osfamily == 'Debian' {
-    $apply_template_os = "debian"
-  }else{
-    $apply_template_os = "centos"
+  case $::operatingsystem{
+    'Redhat', 'redhat':{
+      $apply_template_os = "rhel"
+    }'Debian', 'debian':{
+      $apply_template_os = "debian"
+    }'Amazon':{
+      $apply_template_os = "amazon"
+    }'CentOS','Centos','centos':{
+      $apply_template_os = "centos"
+    }
   }
+
+
 
   concat { 'ossec.conf':
     path    => $wazuh::params_manager::config_file,
@@ -108,15 +116,15 @@ class wazuh::manager (
     'ossec.conf_main':
       target => 'ossec.conf',
       order => 01,
-      content => template('wazuh/wazuh_manager.conf.erb');
+      content => template($ossec_manager_template);
   }
   if($configure_rootcheck == true){
     concat::fragment {
         'ossec.conf_rootcheck':
           order => 10,
           target => 'ossec.conf',
-          content => template('wazuh/fragments/_rootcheck.erb');
-      }6
+          content => template($ossec_rootcheck_template);
+      }
   }
 
   if ($configure_wodle_openscap == true){
@@ -124,7 +132,7 @@ class wazuh::manager (
       'ossec.conf_wodle_openscap':
         order => 15,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_wodle_openscap.erb');
+        content => template($ossec_wodle_openscap_template);
     }
   }
   if ($configure_wodle_cis_cat == true){
@@ -132,7 +140,7 @@ class wazuh::manager (
       'ossec.conf_wodle_ciscat':
         order => 20,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_wodle_cis_cat.erb');
+        content => template($ossec_wodle_cis_cat_template);
     }
   }
   if ($configure_wodle_osquery== true){
@@ -140,7 +148,7 @@ class wazuh::manager (
       'ossec.conf_wodle_osquery':
         order => 25,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_wodle_osquery.erb');
+        content => template($ossec_wodle_osquery_template);
     }
   }
   if ($configure_wodle_syscollector == true){
@@ -148,7 +156,7 @@ class wazuh::manager (
       'ossec.conf_wodle_syscollector':
         order => 30,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_wodle_syscollector.erb');
+        content => template($ossec_wodle_syscollector_template);
     }
   }
   if ($configure_sca == true){
@@ -156,7 +164,7 @@ class wazuh::manager (
       'ossec.conf_sca':
         order => 40,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_sca.erb');
+        content => template($ossec_sca_template);
       }
   }
   if($configure_vulnerability_detector == true){
@@ -164,7 +172,7 @@ class wazuh::manager (
       'ossec.conf_wodle_vulnerability_detector':
         order => 45,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_wodle_vulnerability_detector.erb');
+        content => template($ossec_wodle_vulnerability_detector_template);
     }
   }
   if($configure_syscheck == true){
@@ -172,7 +180,7 @@ class wazuh::manager (
       'ossec.conf_syscheck':
         order => 55,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_syscheck.erb');
+        content => template($ossec_syscheck_template);
     }
   }
   if ($configure_command == true){
@@ -180,7 +188,7 @@ class wazuh::manager (
           'ossec.conf_command':
             order => 60,
             target => 'ossec.conf',
-            content => template('wazuh/default_commands.erb');
+            content => template($ossec_default_commands_template);
       }
   }
   if ($configure_localfile == true){
@@ -188,7 +196,7 @@ class wazuh::manager (
       'ossec.conf_localfile':
         order => 65,
         target => 'ossec.conf',
-        content => template('wazuh/fragments/_localfile.erb');
+        content => template($ossec_localfile_template);
     }
   }
   if($configure_ruleset == true){
@@ -196,7 +204,7 @@ class wazuh::manager (
         'ossec.conf_ruleset':
           order => 75,
           target => 'ossec.conf',
-          content => template('wazuh/fragments/_ruleset.erb');
+          content => template($ossec_ruleset_template);
       }
   }
   if ($configure_auth == true){
@@ -204,7 +212,7 @@ class wazuh::manager (
         'ossec.conf_auth':
           order => 80,
           target => 'ossec.conf',
-          content => template('wazuh/fragments/_auth.erb');
+          content => template($ossec_auth_template);
       }
   }
   if ($configure_cluster == true){
@@ -212,7 +220,7 @@ class wazuh::manager (
         'ossec.conf_cluster':
           order => 85,
           target => 'ossec.conf',
-          content => template('wazuh/fragments/_cluster.erb');
+          content => template($ossec_cluster_template);
       }
   }
   if ($configure_active_response == true){
@@ -220,7 +228,7 @@ class wazuh::manager (
         'ossec.conf_active_response':
           order => 90,
           target => 'ossec.conf',
-          content => template('wazuh/fragments/_activeresponse.erb');
+          content => template($ossec_active_response_template);
       }
   }
   concat::fragment {
