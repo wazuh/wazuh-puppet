@@ -5,7 +5,7 @@ class wazuh::agent(
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
-  #   $selinux, $manage_repo, $manage_epel_repo
+  #   $selinux, $manage_repo, 
   # )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
@@ -19,7 +19,7 @@ class wazuh::agent(
   case $::kernel {
     'Linux' : {
       if $manage_repo {
-        class { 'wazuh::repo': redhat_manage_epel => $manage_epel_repo }
+        class { 'wazuh::repo':}
         if $::osfamily == 'Debian' {
           Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
         } else {
@@ -65,10 +65,16 @@ class wazuh::agent(
 
   ## ossec.conf generation concats
 
-  if $::osfamily == 'Debian' {
-    $apply_template_os = "debian"
-  }else{
-    $apply_template_os = "centos"
+  case $::operatingsystem{
+    'Redhat', 'redhat':{
+      $apply_template_os = "rhel"
+    }'Debian', 'debian':{
+      $apply_template_os = "debian"
+    }'Amazon', 'amazon':{
+      $apply_template_os = "amazon"
+    }'CentOS','Centos','centos':{
+      $apply_template_os = "centos"
+    }
   }
 
   concat { 'ossec.conf':

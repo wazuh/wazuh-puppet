@@ -57,13 +57,13 @@ class wazuh::elasticsearch (
   }
 
   exec { 'Insert line limits':
-    path => '/usr/bin',
+    path => '/usr/bin:/bin/',
     command => "echo 'elasticsearch - nofile  65535\nelasticsearch - memlock unlimited' >> /etc/security/limits.conf",
     
   }
 
   exec { 'Verify Elasticsearch folders owner':
-    path => '/usr/bin',
+    path => '/usr/bin:/bin',
     command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch\
              && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch\
              && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
