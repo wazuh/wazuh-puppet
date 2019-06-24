@@ -35,10 +35,9 @@ class wazuh::kibana (
 
   exec {"Waiting for elasticsearch...":
     path    => "/usr/bin",
-    command => "curl -XGET http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
-    timeout => 5,
-    tries   => 5,
-    returns => [0, 2, 14],
+    command => "curl -s -XGET http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+    tries   => 100,
+    try_sleep => 3,
   }
 
   exec {"Installing Wazuh App...":
@@ -49,13 +48,13 @@ class wazuh::kibana (
     
   }
     exec {"Enabling and restarting kibana...":
-      path    => "/usr/bin",
+      path    => "/usr/bin:/bin",
       command => "systemctl daemon-reload && systemctl enable kibana && systemctl restart kibana",
       
   }
 
   exec { 'Verify Kibana folders owner':
-    path    => "/usr/bin",
+    path    => "/usr/bin:/bin",
     command => "chown -R kibana:kibana /usr/share/kibana/optimize\
              && chown -R kibana:kibana /usr/share/kibana/plugins",
                  
