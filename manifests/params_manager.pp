@@ -7,7 +7,6 @@ class wazuh::params_manager {
     # Installation
       $server_package_version              = '3.9.1-1'
       $manage_repos                        = true
-      $manage_epel_repo                    = true
       $manage_firewall                     = false
 
       
@@ -19,7 +18,7 @@ class wazuh::params_manager {
       $ossec_emailnotification = false
       $ossec_emailto = []
       $ossec_smtp_server = "smtp.example.wazuh.com"
-      $ossec_emailfrom = "ossecm$example.wazuh.com"
+      $ossec_emailfrom = "ossecm@example.wazuh.com"
       $ossec_email_maxperhour = undef
       $ossec_email_idsname = undef
       $ossec_white_list = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
@@ -49,19 +48,21 @@ class wazuh::params_manager {
 
 
     # ossec.conf templates paths
-      $ossec_manager_template            = 'wazuh/wazuh_manager.conf.erb'
-      $ossec_rootcheck_template          = 'wazuh/fragments/_rootcheck.erb'
-      $ossec_wodle_openscap_template     = 'wazuh/fragments/_wodle_openscap.erb'
-      $ossec_wodle_cis_cat_template      = 'wazuh/fragments/_wodle_cis_cat.erb'
-      $ossec_wodle_osquery_template      = 'wazuh/fragments/_wodle_osquery.erb'
-      $ossec_wodle_syscollector_template = 'wazuh/fragments/_wodle_syscollector.erb'
-      $ossec_sca_template                = 'wazuh/fragments/_sca_centos.erb'
-      $ossec_syscheck_template           = 'wazuh/fragments/_syscheck_linux.erb'
-      $ossec_localfile_template          = 'wazuh/fragments/_localfile.erb'
-      $ossec_ruleset                     = 'wazuh/fragments/_ruleset.erb'
-      $ossec_auth                        = 'wazuh/fragments/_auth.erb'
-      $ossec_cluster                     = 'wazuh/fragments/_cluster.erb'
-      $ossec_active_response_template    = "wazuh/fragments/_activeresponse.erb"
+      $ossec_manager_template                      = 'wazuh/wazuh_manager.conf.erb'
+      $ossec_rootcheck_template                    = 'wazuh/fragments/_rootcheck.erb'
+      $ossec_wodle_openscap_template               = 'wazuh/fragments/_wodle_openscap.erb'
+      $ossec_wodle_cis_cat_template                = 'wazuh/fragments/_wodle_cis_cat.erb'
+      $ossec_wodle_osquery_template                = 'wazuh/fragments/_wodle_osquery.erb'
+      $ossec_wodle_syscollector_template           = 'wazuh/fragments/_wodle_syscollector.erb'
+      $ossec_wodle_vulnerability_detector_template = 'wazuh/fragments/_wodle_vulnerability_detector.erb'
+      $ossec_sca_template                          = 'wazuh/fragments/_sca.erb'
+      $ossec_syscheck_template                     = 'wazuh/fragments/_syscheck.erb'
+      $ossec_default_commands_template             = 'wazuh/default_commands.erb'
+      $ossec_localfile_template                    = 'wazuh/fragments/_localfile.erb'
+      $ossec_ruleset_template                      = 'wazuh/fragments/_ruleset.erb'
+      $ossec_auth_template                         = 'wazuh/fragments/_auth.erb'
+      $ossec_cluster_template                      = 'wazuh/fragments/_cluster.erb'
+      $ossec_active_response_template              = "wazuh/fragments/_default_activeresponse.erb"
 
       ## Rootcheck
 
@@ -181,28 +182,28 @@ class wazuh::params_manager {
       $ossec_syscheck_ignore_type_2       = ".log$|.swp$"
       
 
-      $ossec_syscheck_nodiff               ="/etc/ssl/private.key"
+      $ossec_syscheck_nodiff              ="/etc/ssl/private.key"
       $ossec_syscheck_skip_nfs            = "yes"
 
       # Cluster
 
-      $ossec_cluster_name = "wazuh"
-      $ossec_cluster_node_name = "node01"
-      $ossec_cluster_node_type = "master"
-      $ossec_cluster_key = "KEY"
-      $ossec_cluster_port = "1516"
-      $ossec_cluster_bind_addr = "0.0.0.0"
-      $ossec_cluster_nodes = ["NODE_IP"]
-      $ossec_cluster_hidden = "no"
-      $ossec_cluster_disabled = "yes"
+      $ossec_cluster_name                 = "wazuh"
+      $ossec_cluster_node_name            = "node01"
+      $ossec_cluster_node_type            = "master"
+      $ossec_cluster_key                  = "c98b62a9b6169ac5f67dae55ae4a9088"
+      $ossec_cluster_port                 = "1516"
+      $ossec_cluster_bind_addr            = "0.0.0.0"
+      $ossec_cluster_nodes                = ["172.17.0.101"]
+      $ossec_cluster_hidden               = "no"
+      $ossec_cluster_disabled             = "no"
 
-      $ossec_cluster_enable_firewall = "no"
+      $ossec_cluster_enable_firewall      = "no"
 
 
       #----- End of ossec.conf parameters -------
 
       $ossec_prefilter                     = false
-      $ossec_integratord_enabled      = false
+      $ossec_integratord_enabled           = false
 
       
       $manage_client_keys                  = 'yes'
@@ -270,7 +271,9 @@ class wazuh::params_manager {
                 'ssg-ubuntu-1604-ds.xml' => {
                   'type' => 'xccdf',
                   profiles => ['xccdf_org.ssgproject.content_profile_common'],
-                },
+                },'cve-ubuntu-xenial-oval.xml' => {
+                  'type' => 'oval'
+                }
               }
             }
             'jessie': {
@@ -320,6 +323,8 @@ class wazuh::params_manager {
           ]
           case $::operatingsystem {
             'Amazon': {
+              $ossec_service_provider = 'systemd'
+              $api_service_provider = 'systemd'
               # Amazon is based on Centos-6 with some improvements
               # taken from RHEL-7 but uses SysV-Init, not Systemd.
               # Probably best to leave this undef until we can

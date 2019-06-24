@@ -10,8 +10,8 @@ class wazuh::params_agent {
 
     # Authd Registration options
 
-      $manage_client_keys               = 'yes'
-      $agent_name                       = undef
+      $manage_client_keys               = 'yes'  # Enable/Disable agent registration
+      $agent_name                       = 'bond'
       $agent_group                      = undef
       $wazuh_agent_cert                 = undef
       $wazuh_agent_key                  = undef
@@ -19,6 +19,7 @@ class wazuh::params_agent {
       $wazuh_agent_key_path             = undef
       $agent_auth_password              = undef
       $wazuh_manager_root_ca_pem        = undef
+
       $wazuh_manager_root_ca_pem_path   = undef
 
     ## Wazuh config folders and modes
@@ -49,19 +50,20 @@ class wazuh::params_agent {
 
       ## Ossec.conf generation variables
 
-      $configure_rootcheck = true
-      $configure_wodle_openscap = true
-      $configure_wodle_cis_cat = true
-      $configure_wodle_osquery = true
-      $configure_wodle_syscollector = true
-      $configure_sca = true
-      $configure_syscheck = true
-      $configure_localfile = true
+      $configure_rootcheck               = true
+      $configure_wodle_openscap          = true
+      $configure_wodle_cis_cat           = true
+      $configure_wodle_osquery           = true
+      $configure_wodle_syscollector      = true
+      $configure_sca                     = true
+      $configure_syscheck                = true
+      $configure_localfile               = true
+      $configure_active_response         = true
       
 
     # ossec.conf templates paths
       $ossec_conf_template               = 'wazuh/wazuh_agent.conf.erb'
-      $ossec_rootcheck_template          = 'wazuh/fragments/_rootcheck_linux.erb'
+      $ossec_rootcheck_template          = 'wazuh/fragments/_rootcheck.erb'
       $ossec_wodle_openscap_template     = 'wazuh/fragments/_wodle_openscap.erb'
       $ossec_wodle_cis_cat_template      = 'wazuh/fragments/_wodle_cis_cat.erb'
       $ossec_wodle_osquery_template      = 'wazuh/fragments/_wodle_osquery.erb'
@@ -72,13 +74,13 @@ class wazuh::params_agent {
       $ossec_ruleset                     = 'wazuh/fragments/_ruleset.erb'
       $ossec_auth                        = 'wazuh/fragments/_auth.erb'
       $ossec_cluster                     = 'wazuh/fragments/_cluster.erb'
-      $ossec_active_response_template    = "wazuh/fragments/_activeresponse.erb"
+      $ossec_active_response_template    = "wazuh/fragments/_default_activeresponse.erb"
 
       ### Ossec.conf blocks
 
       ## Server block configuration
 
-      $ossec_ip                 = "localhost"
+      $ossec_ip                 = "172.17.0.101"
       $ossec_hostname           = undef
       $ossec_address            = undef
       $ossec_port               = '1514'
@@ -102,8 +104,8 @@ class wazuh::params_agent {
       $ossec_rootcheck_check_ports         = "yes"
       $ossec_rootcheck_check_if            = "yes"
       $ossec_rootcheck_frequency           = 43200
-      $ossec_rootcheck_rootkit_files       = "/var/ossec/etc/rootcheck/rootkit_files.txt"
-      $ossec_rootcheck_rootkit_trojans     = "/var/ossec/etc/rootcheck/rootkit_trojans.txt"
+      $ossec_rootcheck_rootkit_files       = "/var/ossec/etc/shared/rootkit_files.txt"
+      $ossec_rootcheck_rootkit_trojans     = "/var/ossec/etc/shared/rootkit_trojans.txt"
       $ossec_rootcheck_skip_nfs            = "yes"
 
     ## Wodles
@@ -148,8 +150,8 @@ class wazuh::params_agent {
       $ossec_syscheck_disabled            = "no"
       $ossec_syscheck_frequency           = "43200"
       $ossec_syscheck_scan_on_start       = "yes"
-      $ossec_syscheck_alert_new_files     = "yes"
-      $ossec_syscheck_auto_ignore         = "no"
+      $ossec_syscheck_alert_new_files     = undef
+      $ossec_syscheck_auto_ignore         = undef
       $ossec_syscheck_directories_1       = "/etc,/usr/bin,/usr/sbin"
       $ossec_syscheck_directories_2       = "/bin,/sbin,/boot"
       $ossec_syscheck_ignore_list         = ["/etc/mtab",
@@ -181,7 +183,6 @@ class wazuh::params_agent {
       $selinux                         = false
 
       $manage_repo                     = true
-      $manage_epel_repo                = true
 
       case $::osfamily {
         'Debian': {
@@ -208,7 +209,9 @@ class wazuh::params_agent {
                 'ssg-ubuntu-1604-ds.xml' => {
                   'type' => 'xccdf',
                   profiles => ['xccdf_org.ssgproject.content_profile_common'],
-                },
+                },'cve-ubuntu-xenial-oval.xml' => {
+                  'type' => 'oval'
+                }
               }
             }
             'jessie': {
@@ -254,7 +257,7 @@ class wazuh::params_agent {
               {  'location' => '/var/ossec/logs/active-responses.log' , 'log_format' => 'syslog'},
               {  'location' => '/var/log/messages', 'log_format' => 'syslog'},
               {  'location' => '/var/log/secure' , 'log_format' => 'syslog'},
-              {  'location' => '/var/log/maillog' , 'log_format' => 'apache'},
+              {  'location' => '/var/log/maillog' , 'log_format' => 'syslog'},
           ]
           case $::operatingsystem {
             'Amazon': {
@@ -265,7 +268,7 @@ class wazuh::params_agent {
               $wodle_openscap_content = undef
             }
             'CentOS': {
-              $ossec_config_profiles = ["centos","centos7", "centos7.6"]
+              
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
                 $ossec_service_provider = 'redhat'
                 $api_service_provider = 'redhat'
