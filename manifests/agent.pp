@@ -68,9 +68,20 @@ class wazuh::agent(
   case $::operatingsystem{
     'Redhat', 'redhat':{
       $apply_template_os = "rhel"
+      if ( $::operatingsystemrelease     =~ /^7.*/ ){
+        $rhel_version = "7"
+      }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
+        $rhel_version = "6"
+      }elsif ( $::operatingsystemrelease =~ /^5.*/ ){
+        $rhel_version = "5"
+      }else{
+        fail('This ossec module has not been tested on your distribution')
+      }
     }'Debian', 'debian':{
       $apply_template_os = "debian"
-    }'Amazon', 'amazon':{
+      if ( $::lsbdistcodename == "wheezy") or ($::lsbdistcodename == "jessie"){
+        $debian_additional_templates = "yes"
+    }'Amazon':{
       $apply_template_os = "amazon"
     }'CentOS','Centos','centos':{
       $apply_template_os = "centos"
