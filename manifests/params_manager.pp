@@ -260,6 +260,7 @@ class wazuh::params_manager {
             {  'location' => '/var/log/auth.log' , 'log_format' => 'syslog'},
             {  'location' => '/var/log/dpkg.log', 'log_format' => 'syslog'},
             {  'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog'},
+            {  'location' => '/var/log/messages' , 'log_format' => 'syslog'},
           ]
           case $::lsbdistcodename {
             'xenial': {
@@ -286,7 +287,7 @@ class wazuh::params_manager {
                   'type' => 'xccdf',
                   profiles => ['xccdf_org.ssgproject.content_profile_common'],
                 },
-                'cve-debian-oval.xml' => {
+                'cve-debian-8-oval.xml' => {
                   'type' => 'oval',
                 }
               }
