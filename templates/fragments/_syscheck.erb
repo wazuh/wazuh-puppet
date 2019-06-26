@@ -86,8 +86,9 @@
 
   <%- else -%>
   <syscheck>
-    <%- if @ossec_syscheck_disabled %>
-    <disabled><%= @ossec_syscheck_disabled %></disabled><%- end -%>
+    <%- if @ossec_syscheck_disabled -%>
+    <disabled><%= @ossec_syscheck_disabled %></disabled>
+    <%- end -%>
     <%- if @ossec_syscheck_frequency -%>
     <frequency><%=@ossec_syscheck_frequency%></frequency>
     <%- end -%>
@@ -113,6 +114,9 @@
     <%- end -%>
     <%- if @ossec_syscheck_ignore_type_1 -%>
     <ignore type="sregex"><%=@ossec_syscheck_ignore_type_1%></ignore>
+    <%- end -%>
+    <%- if @ossec_syscheck_ignore_type_2 -%>
+    <ignore type="sregex"><%=@ossec_syscheck_ignore_type_2%></ignore>
     <%- end -%>
     <%- if @ossec_syscheck_nodiff -%>
     <nodiff><%=@ossec_syscheck_nodiff%></nodiff>
