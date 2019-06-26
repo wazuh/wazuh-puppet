@@ -3,7 +3,7 @@
 define wazuh::addlog(
   $logfile      = undef,
   $logtype      = 'syslog',
-  $logcommand      = undef,
+  $logcommand   = undef,
   $commandalias = undef,
   $frequency    = undef,
 ) {
@@ -12,7 +12,7 @@ define wazuh::addlog(
   concat::fragment { "ossec.conf_localfile-${logfile}":
     target  => 'ossec.conf',
     content => template('wazuh/fragments/_localfile.erb'),
-    order   => 20,
+    order   => 21,
   }
 
 }
