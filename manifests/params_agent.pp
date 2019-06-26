@@ -341,7 +341,7 @@ class wazuh::params_agent {
       $shared_agent_config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/shared/agent.conf'), '\\\\', '/')
       $config_owner = 'Administrator'
       $config_group = 'Administrators'
-
+      $download_path = "C:/"
       $manage_firewall = false
 
       $keys_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/client.keys'), '\\\\', '/')
