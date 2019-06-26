@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
 class wazuh::agent(
-  $ossec_local_files = $::wazuh::params_agent::default_local_files
+  
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
@@ -31,33 +31,33 @@ class wazuh::agent(
       }
     }
     'windows' : {
-
-      file {
-
-        'C:/wazuh-agent-3.9.1-1.msi':
-          owner              => 'Administrators',
+      
+      file { 'wazuh-agent':
+          path               => "${download_path}wazuh-agent-${agent_package_version}.msi",
+          owner              => 'Administrator',
           group              => 'Administrators',
           mode               => '0774',
-          source             => 'puppet:///modules/wazuh/wazuh-agent-3.9.1-1.msi',
+          source             => "http://packages.wazuh.com/3.x/windows/wazuh-agent-${agent_package_version}.msi",
           source_permissions => ignore
       }
+      
       if ( $manage_client_keys == 'yes' ) {
         package { $agent_package_name:
-          ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
+          ensure          => "${agent_package_version}", # lint:ignore:security_package_pinned_version
           provider        => 'windows',
-          source          => 'C:/wazuh-agent-3.9.1-1.msi',
+          source          => "${download_path}/wazuh-agent-${agent_package_version}.msi",
           install_options => [ '/q', "ADDRESS=${ossec_ip}", "AUTHD_SERVER=${ossec_ip}" ],  # silent installation
-          require         => File['C:/wazuh-agent-3.9.1-1.msi'],
+          require         => File["${download_path}wazuh-agent-${agent_package_version}.msi"],
         }
       }
       else {
         package { $agent_package_name:
-          ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
+          ensure          => "${agent_package_version}", # lint:ignore:security_package_pinned_version
           provider        => 'windows',
-          source          => 'C:/wazuh-agent-3.9.1-1.msi',
+          source          => "${download_path}wazuh-agent-${agent_package_version}.msi",
           install_options => [ '/q' ],  # silent installation
-          require         => File['C:/wazuh-agent-3.9.1-1.msi'],
-        }
+          require         => File["${download_path}wazuh-agent-${agent_package_version}.msi"],
+       }
       }
     }
     default: { fail('OS not supported') }
@@ -81,6 +81,7 @@ class wazuh::agent(
       $apply_template_os = "debian"
       if ( $::lsbdistcodename == "wheezy") or ($::lsbdistcodename == "jessie"){
         $debian_additional_templates = "yes"
+      }
     }'Amazon':{
       $apply_template_os = "amazon"
     }'CentOS','Centos','centos':{
@@ -334,3 +335,4 @@ class wazuh::agent(
     }
   }
 }
+
