@@ -13,9 +13,9 @@
 </agent_config>
 
 <agent_config os="Linux">
-  <%= scope.function_template(["wazuh/fragments/_rootcheck_linux.erb"]) %>
+  <%= scope.function_template(["wazuh/fragments/_rootcheck.erb"]) %>
 
-  <%= scope.function_template(["wazuh/fragments/_syscheck_linux.erb"]) %>
+  <%= scope.function_template(["wazuh/fragments/_syscheck.erb"]) %>
 
   <!-- Log analysis -->
   <localfile>
@@ -25,9 +25,9 @@
 </agent_config>
 
 <agent_config os="Windows">
-  <%= scope.function_template(["wazuh/fragments/_rootcheck_windows.erb"]) %>
+  <%= scope.function_template(["wazuh/fragments/_rootcheck.erb"]) %>
 
-  <%= scope.function_template(["wazuh/fragments/_syscheck_windows.erb"]) %>
+  <%= scope.function_template(["wazuh/fragments/_syscheck.erb"]) %>
 
   <localfile>
     <log_format>eventlog</log_format>

@@ -1,14 +1,14 @@
-# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Define an email alert
 define wazuh::email_alert(
   $alert_email,
   $alert_group = false
 ) {
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { $name:
     target  => 'ossec.conf',
-    order   => 65,
+    order   => 66,
     content => template('wazuh/email_alert.erb'),
   }
 }

@@ -1,6 +1,33 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.9.1_7.1.0
+
+### Added
+
+- Created required files for Filebeat installation. ([@jm404](https://github.com/jm404)) [#f36be695](https://github.com/wazuh/wazuh-puppet/commit/f36be69558f012a75717150bd6a48f9b9a45b3c8)
+
+- Created required files for Elasticsearch installation. ([@jm404](https://github.com/jm404)) [#890fb88](https://github.com/wazuh/wazuh-puppet/commit/890fb88cdb4f18ea67caaf09943792145ac245bd)
+
+- Created required files for Kibana installation. ([@jm404](https://github.com/jm404)) [#ac31a02](https://github.com/wazuh/wazuh-puppet/commit/ac31a02c5a6771e5e480db378934b23e2dc59b03)
+
+- Added configuration variables to make `ossec.conf` more flexible. ([@jm404](https://github.com/jm404)) [#5631753](https://github.com/wazuh/wazuh-puppet/commit/5631753cf4c3967d7fc08fc53d2535d78d4e19b7)
+
+- Now it's possible to install an agent without registering it. ([@jm404](https://github.com/jm404)) [#63e1a13](https://github.com/wazuh/wazuh-puppet/commit/63e1a1390edbaef4387c4397c16636514525eeaa)
+- Added support for Amazon-Linux-2. ([@jm404](https://github.com/jm404)) [#823eeec](https://github.com/wazuh/wazuh-puppet/commit/823eeec502c4a100dc6946f25388b9d04833c105)
+
+### Changed
+
+- The `server.pp` manifest has been renamed to `manager.pp`. ([@jm404](https://github.com/jm404)) [#f859f87](https://github.com/wazuh/wazuh-puppet/commit/f859f879e5bd6e83b4adf54ebbe44adfc60c0f03)
+- The `client.pp` manifest moved to `agent.pp`. ([@jm404](https://github.com/jm404)) [#69fe628](https://github.com/wazuh/wazuh-puppet/commit/69fe628bfbfec171fce3754b22f1d04b67d58d81)
+
+## Removed
+
+- Registration method `export` deleted due to security issues. ([@jm404](https://github.com/jm404)) [#f77fe49](https://github.com/wazuh/wazuh-puppet/commit/f77fe496b4e290b0b3a70272c66d26f8ee7d0012)
+- Eliminated `inotify-tools `. ([@jm404](https://github.com/jm404)) [#628db1e](https://github.com/wazuh/wazuh-puppet/commit/628db1e4d5236b195ee1c50945fb6ff7553a5b23)
+- Deleted `_common.erb` fragment in order to give flexibility to Agent and Manager. ([@jm404](https://github.com/jm404)) [#92114ea](https://github.com/wazuh/wazuh-puppet/commit/92114ea205be4fa6783115b01b1148a2a6dc7c2d)
+
+
 ## [v3.9.1]
 
 ### Added
@@ -76,8 +103,8 @@ All notable changes to this project will be documented in this file.
 - Fix username (puppet to puppetlabs). ([#74](https://github.com/wazuh/wazuh-puppet/pull/74))
 
 ## Change Log old version. 
-  
-  
+
+
  ## 2017-xx-xx support@wazuh.com  - 2.0.23
 
   * Fixed issue #18 with the pull request #17. (thanks @lemrouch)

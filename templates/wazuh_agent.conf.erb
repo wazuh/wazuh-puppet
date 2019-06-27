@@ -1,30 +1,39 @@
   <client>
   <server>
-  <%- if @ossec_server_ip then -%>
-    <address><%= @ossec_server_ip %></address>
+  <%- if @ossec_ip then -%>
+    <address><%= @ossec_ip %></address>
   <%- end -%>
-  <%- if @ossec_server_hostname then -%>
-    <address><%= @ossec_server_hostname %></address>
+  <%- if @ossec_hostname then -%>
+    <address><%= @ossec_hostname %></address>
   <%- end -%>
-  <%- if @wazuh_manager_address then -%>
-    <address><%= @wazuh_manager_address %></address>
+  <%- if @ossec_address then -%>
+    <address><%= @ossec_address %></address>
   <%- end -%>
-  <%- if @ossec_server_protocol then -%>
-    <protocol><%= @ossec_server_protocol %></protocol>
+  <%- if @ossec_protocol then -%>
+    <protocol><%= @ossec_protocol %></protocol>
   <%- end -%>
-    <port><%= @ossec_server_port %></port>
+    <port><%= @ossec_port %></port>
   </server>
   <%- if @ossec_config_profiles then -%>
     <config-profile><%= @ossec_config_profiles.join(',') %></config-profile>
   <%- end -%>
-  <%- if @ossec_server_notify_time then -%>
-    <notify_time><%= @ossec_server_notify_time %></notify_time>
+  <%- if @ossec_notify_time then -%>
+    <notify_time><%= @ossec_notify_time %></notify_time>
   <%- end -%>
-  <%- if @ossec_server_time_reconnect then -%>
-    <time-reconnect><%= @ossec_server_time_reconnect %></time-reconnect>
+  <%- if @ossec_time_reconnect then -%>
+    <time-reconnect><%= @ossec_time_reconnect %></time-reconnect>
   <%- end -%>
-    <auto_restart><%= @agent_auto_restart %></auto_restart>
+  <%- if @ossec_crypto_method then -%>
+    <crypto_method><%= @ossec_crypto_method %></crypto_method>
+  <%- end -%>
+  <%- if @ossec_auto_restart then -%>
+    <auto_restart><%= @ossec_auto_restart %></auto_restart>
+  <%- end -%>
   </client>
+  
+  <logging>
+    <log_format>plain</log_format>
+  </logging>
 
   <client_buffer>
     <!-- Agent buffer options -->
@@ -33,8 +42,3 @@
     <events_per_second><%= @client_buffer_events_per_second %></events_per_second>
   </client_buffer>
 
-  <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
-
-  <%- if @enable_wodle_openscap and @wodle_openscap_content -%>
-  <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
-  <%- end -%>

@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 #Define for a Reports section
 define wazuh::reports(
   Optional[String] $r_group               = undef,
@@ -13,7 +13,7 @@ define wazuh::reports(
   Optional[Enum['yes', 'no']] $r_showlogs = undef,
 ) {
 
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { $name:
     target  => 'ossec.conf',

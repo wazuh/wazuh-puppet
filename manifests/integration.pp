@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 #Define for a specific ossec integration
 define wazuh::integration(
   $hook_url = '',
@@ -11,7 +11,7 @@ define wazuh::integration(
   $in_max_log = '',
 ) {
 
-  require wazuh::params
+  require wazuh::params_manager
 
   concat::fragment { $name:
     target  => 'ossec.conf',

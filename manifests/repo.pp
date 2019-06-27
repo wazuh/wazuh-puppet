@@ -1,7 +1,6 @@
-# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
-# Repo installation
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh repository installation
 class wazuh::repo (
-  $redhat_manage_epel = true,
 ) {
 
   case $::osfamily {
@@ -55,16 +54,6 @@ class wazuh::repo (
         baseurl  => $baseurl
       }
 
-      if $redhat_manage_epel {
-        # Set up EPEL repo
-        # NOTE: This relies on the 'epel' module referenced in metadata.json
-        package { 'inotify-tools':
-          ensure  => present
-        }
-        include epel
-
-        Class['epel'] -> Package['inotify-tools']
-      }
     }
     default: { fail('This ossec module has not been tested on your distribution') }
   }

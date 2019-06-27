@@ -1,17 +1,35 @@
   <cluster>
-    <name><%= @cl_name %></name>
-    <node_name><%= @cl_node_name %></node_name>
-    <node_type><%= @cl_node_type %></node_type>
-	<% if @cl_key != '' -%>
-		<key><%= @cl_key %></key>
-	<% end -%>
-    <port><%= @cl_port %></port>
-    <bind_addr><%= @cl_bin_addr %></bind_addr>
-    <nodes>
-	<% @cl_node.each do |node| %>
-        <node><%= node %></node>
-	<% end %>
-    </nodes>
-    <hidden><%= @cl_hidden %></hidden>
-    <disabled><%= @cl_disabled %></disabled>
+  <% if @ossec_cluster_name -%>
+   <name><%=@ossec_cluster_name%></name>
+  <% end -%>
+  <% if @ossec_cluster_node_name -%>
+   <node_name><%=@ossec_cluster_node_name%></node_name>
+  <% end -%>
+  <% if @ossec_cluster_node_type -%>
+   <node_type><%=@ossec_cluster_node_type%></node_type>
+  <% end -%>
+  <% if @ossec_cluster_key -%>
+   <key><%=@ossec_cluster_key%></key>
+  <% end -%>
+  <% if @ossec_cluster_port -%>
+   <port><%=@ossec_cluster_port%></port>
+  <% end -%>
+  <% if @ossec_cluster_bind_addr -%>
+   <bind_addr><%=@ossec_cluster_bind_addr%></bind_addr>
+  <% end -%>
+  <% if @ossec_cluster_nodes -%>
+   <nodes>
+    <% @ossec_cluster_nodes.each do |node| -%>
+    <node><%= node %></node>
+    <% end -%>
+   </nodes>
+  <% end -%>
+  <% if @ossec_cluster_hidden -%>
+   <hidden><%=@ossec_cluster_hidden %></hidden>
+  <% end -%>
+  <% if @ossec_cluster_disabled -%>
+   <disabled><%=@ossec_cluster_disabled%></disabled>
+  <% end -%>
   </cluster>
+
+
