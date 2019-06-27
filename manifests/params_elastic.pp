@@ -19,7 +19,7 @@ class wazuh::params_elastic {
         $elasticsearch_path_logs = "/var/log/elasticsearch"
 
 
-        $elasticsearch_ip = 'YOUR_ELASTICSEARCH_IP'
+        $elasticsearch_ip = 'localhost'
         $elastcisearch_port = 9200
         $elasticsearch_discovery_option = 'discovery.type: single-node'
         $elasticsearch_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']"
