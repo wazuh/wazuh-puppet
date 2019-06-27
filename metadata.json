@@ -71,31 +71,27 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_range": ">= 1.0.0"
+      "version_requirement": ">= 1.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_range": ">= 1.0.0"
-    },
-    {
-      "name": "stahnma/epel",
-      "version_range": ">= 1.0.0"
+      "version_requirement": ">= 1.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_range": ">= 2.0.0"
+      "version_requirement": ">= 2.0.0"
     },
     {
       "name": "puppet/selinux",
-      "version_range": ">= 0.8.0"
+      "version_requirement": ">= 0.8.0"
     },
     {
       "name": "puppet/nodejs",
-      "version_range": ">= 3.0.0 < 4.0.0"
+      "version_requirement": ">= 3.0.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/firewall",
-      "version_range": ">= 1.7.0"
+      "version_requirement": ">= 1.7.0"
     }
   ]
 }
