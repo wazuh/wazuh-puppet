@@ -11,7 +11,7 @@ define wazuh::addlog(
 
   concat::fragment { "ossec.conf_localfile-${logfile}":
     target  => 'ossec.conf',
-    content => template('wazuh/fragments/_localfile.erb'),
+    content => template('wazuh/fragments/_localfile_generation.erb'),
     order   => 21,
   }
 
