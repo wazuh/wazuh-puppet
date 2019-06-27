@@ -7,7 +7,32 @@
   "source": "https://github.com/wazuh/wazuh-puppet",
   "project_page": "https://github.com/wazuh/wazuh-puppet",
   "issues_url": "https://github.com/wazuh/wazuh-puppet/issues",
-  "tags": ["ossec", "hids", "3.9", "wazuh"],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 1.0.0 < 6.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.0.0 < 6.0.0"
+    },
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 2.0.0 < 7.0.0"
+    },
+    {
+      "name": "puppet/selinux",
+      "version_requirement": ">= 0.8.0 < 3.0.0"
+    },
+    {
+      "name": "puppet/nodejs",
+      "version_requirement": ">= 3.0.0 < 4.0.0"
+    },
+    {
+      "name": "puppetlabs/firewall",
+      "version_requirement": ">= 1.7.0 < 2.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Windows",
@@ -21,7 +46,7 @@
         "Windows 10"
       ]
     },
-   {
+    {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "5",
@@ -43,7 +68,7 @@
         "22",
         "23",
         "24",
-	"25"
+        "25"
       ]
     },
     {
@@ -55,7 +80,7 @@
         "Wily",
         "Xenial",
         "Yakketi",
-	"Bionic"
+        "Bionic"
       ]
     },
     {
@@ -68,30 +93,19 @@
       ]
     }
   ],
-  "dependencies": [
+  "requirements": [
     {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 1.0.0"
-    },
-    {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.0.0"
-    },
-    {
-      "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.0.0"
-    },
-    {
-      "name": "puppet/selinux",
-      "version_requirement": ">= 0.8.0"
-    },
-    {
-      "name": "puppet/nodejs",
-      "version_requirement": ">= 3.0.0 < 4.0.0"
-    },
-    {
-      "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.7.0"
+      "name": "puppet",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     }
-  ]
+  ],
+  "tags": [
+    "ossec",
+    "hids",
+    "3.9",
+    "wazuh"
+  ],
+  "pdk-version": "1.10.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git#1.10.0",
+  "template-ref": "1.10.0-0-gbba9ac3"
 }
