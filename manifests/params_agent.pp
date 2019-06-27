@@ -11,7 +11,7 @@ class wazuh::params_agent {
     # Authd Registration options
 
       $manage_client_keys                = 'yes'  # Enable/Disable agent registration
-      $agent_name                        = 'bond'
+      $agent_name                        = undef
       $agent_group                       = undef
       $wazuh_agent_cert                  = undef
       $wazuh_agent_key                   = undef
