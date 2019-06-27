@@ -4,7 +4,7 @@ define wazuh::command(
   $command_name,
   $command_executable,
   $command_expect = 'srcip',
-  $command_timeout_allowed = true,
+  $timeout_allowed = true,
 ) {
   require wazuh::params_manager
 
