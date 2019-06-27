@@ -192,7 +192,7 @@ class wazuh::params_manager {
       $ossec_cluster_bind_addr                         = "0.0.0.0"
       $ossec_cluster_nodes                             = ["NODE_IP"]
       $ossec_cluster_hidden                            = "no"
-      $ossec_cluster_disabled                          = "no"
+      $ossec_cluster_disabled                          = "yes"
 
       $ossec_cluster_enable_firewall                   = "no"
 
