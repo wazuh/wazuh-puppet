@@ -2,49 +2,49 @@ class wazuh::params_agent {
   case $::kernel {
     'Linux': {
 
-    # Versions  
+# Versions  
 
-      $agent_package_version           = '3.9.1-1'
-      $agent_package_name              = 'wazuh-agent'
-      $agent_service_name              = 'wazuh-agent'
+      $agent_package_version             = '3.9.1-1'
+      $agent_package_name                = 'wazuh-agent'
+      $agent_service_name                = 'wazuh-agent'
 
     # Authd Registration options
 
-      $manage_client_keys               = 'yes'  # Enable/Disable agent registration
-      $agent_name                       = 'bond'
-      $agent_group                      = undef
-      $wazuh_agent_cert                 = undef
-      $wazuh_agent_key                  = undef
-      $wazuh_agent_cert_path            = undef
-      $wazuh_agent_key_path             = undef
-      $agent_auth_password              = undef
-      $wazuh_manager_root_ca_pem        = undef
+      $manage_client_keys                = 'yes'  # Enable/Disable agent registration
+      $agent_name                        = 'bond'
+      $agent_group                       = undef
+      $wazuh_agent_cert                  = undef
+      $wazuh_agent_key                   = undef
+      $wazuh_agent_cert_path             = undef
+      $wazuh_agent_key_path              = undef
+      $agent_auth_password               = undef
+      $wazuh_manager_root_ca_pem         = undef
 
-      $wazuh_manager_root_ca_pem_path   = undef
+      $wazuh_manager_root_ca_pem_path    = undef
 
     ## Wazuh config folders and modes
 
-      $config_file = '/var/ossec/etc/ossec.conf'
-      $shared_agent_config_file = '/var/ossec/etc/shared/agent.conf'
+      $config_file                       = '/var/ossec/etc/ossec.conf'
+      $shared_agent_config_file          = '/var/ossec/etc/shared/agent.conf'
 
-      $config_mode = '0640'
-      $config_owner = 'root'
-      $config_group = 'ossec'
+      $config_mode                       = '0640'
+      $config_owner                      = 'root'
+      $config_group                      = 'ossec'
 
-      $keys_file = '/var/ossec/etc/client.keys'
-      $keys_mode = '0640'
-      $keys_owner = 'root'
-      $keys_group = 'ossec'
+      $keys_file                         = '/var/ossec/etc/client.keys'
+      $keys_mode                         = '0640'
+      $keys_owner                        = 'root'
+      $keys_group                        = 'ossec'
 
-      $manage_firewall = false
-      $authd_pass_file = '/var/ossec/etc/authd.pass'
+      $manage_firewall                   = false
+      $authd_pass_file                   = '/var/ossec/etc/authd.pass'
 
-      $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
+      $validate_cmd_conf                 = '/var/ossec/bin/verify-agent-conf -f %'
 
-      $processlist_file = '/var/ossec/bin/.process_list'
-      $processlist_mode = '0640'
-      $processlist_owner = 'root'
-      $processlist_group = 'ossec'
+      $processlist_file                  = '/var/ossec/bin/.process_list'
+      $processlist_mode                  = '0640'
+      $processlist_owner                 = 'root'
+      $processlist_group                 = 'ossec'
 
     # ossec.conf generation parameters
 
@@ -80,41 +80,41 @@ class wazuh::params_agent {
 
       ## Server block configuration
 
-      $ossec_ip                 = "172.17.0.101"
-      $ossec_hostname           = undef
-      $ossec_address            = undef
-      $ossec_port               = '1514'
-      $ossec_protocol           = 'udp'
-      $ossec_notify_time        = 10
-      $ossec_time_reconnect     = 60 
-      $ossec_auto_restart       = "yes"
-      $ossec_crypto_method      = "aes"
+      $ossec_ip                          = "YOUR_MANAGER_IP"
+      $ossec_hostname                    = undef
+      $ossec_address                     = undef
+      $ossec_port                        = '1514'
+      $ossec_protocol                    = 'udp'
+      $ossec_notify_time                 = 10
+      $ossec_time_reconnect              = 60
+      $ossec_auto_restart                = "yes"
+      $ossec_crypto_method               = "aes"
       
-      $client_buffer_queue_size = 5000
-      $client_buffer_events_per_second = 500
+      $client_buffer_queue_size          = 5000
+      $client_buffer_events_per_second   = 500
 
       # Rootcheck
       
-      $ossec_rootcheck_disabled            = "no"
-      $ossec_rootcheck_check_files         = "yes"
-      $ossec_rootcheck_check_trojans       = "yes"
-      $ossec_rootcheck_check_dev           = "yes"
-      $ossec_rootcheck_check_sys           = "yes"
-      $ossec_rootcheck_check_pids          = "yes"
-      $ossec_rootcheck_check_ports         = "yes"
-      $ossec_rootcheck_check_if            = "yes"
-      $ossec_rootcheck_frequency           = 43200
-      $ossec_rootcheck_rootkit_files       = "/var/ossec/etc/shared/rootkit_files.txt"
-      $ossec_rootcheck_rootkit_trojans     = "/var/ossec/etc/shared/rootkit_trojans.txt"
-      $ossec_rootcheck_skip_nfs            = "yes"
+      $ossec_rootcheck_disabled          = "no"
+      $ossec_rootcheck_check_files       = "yes"
+      $ossec_rootcheck_check_trojans     = "yes"
+      $ossec_rootcheck_check_dev         = "yes"
+      $ossec_rootcheck_check_sys         = "yes"
+      $ossec_rootcheck_check_pids        = "yes"
+      $ossec_rootcheck_check_ports       = "yes"
+      $ossec_rootcheck_check_if          = "yes"
+      $ossec_rootcheck_frequency         = 43200
+      $ossec_rootcheck_rootkit_files     = "/var/ossec/etc/shared/rootkit_files.txt"
+      $ossec_rootcheck_rootkit_trojans   = "/var/ossec/etc/shared/rootkit_trojans.txt"
+      $ossec_rootcheck_skip_nfs          = "yes"
 
     ## Wodles
 
       #openscap
-      $wodle_openscap_disabled             = "no"
-      $wodle_openscap_timeout              = "1800"
-      $wodle_openscap_interval             = "1d"
-      $wodle_openscap_scan_on_start        = "yes"
+      $wodle_openscap_disabled           = "no"
+      $wodle_openscap_timeout            = "1800"
+      $wodle_openscap_interval           = "1d"
+      $wodle_openscap_scan_on_start      = "yes"
       
       #cis-cat
       $wodle_ciscat_disabled             = "yes"
@@ -122,39 +122,39 @@ class wazuh::params_agent {
       $wodle_ciscat_interval             = "1d"
       $wodle_ciscat_scan_on_start        = "yes"
       $wodle_ciscat_java_path            = "wodles/java"
-      $wodle_ciscat_ciscat_path        = "wodles/ciscat"
+      $wodle_ciscat_ciscat_path          = "wodles/ciscat"
 
       #osquery
 
-      $wodle_osquery_disabled             = "yes"
-      $wodle_osquery_run_daemon           = "yes"
-      $wodle_osquery_log_path             = "/var/log/osquery/osqueryd.results.log"
-      $wodle_osquery_config_path          = "/etc/osquery/osquery.conf"
-      $wodle_osquery_add_labels           = "yes"
+      $wodle_osquery_disabled            = "yes"
+      $wodle_osquery_run_daemon          = "yes"
+      $wodle_osquery_log_path            = "/var/log/osquery/osqueryd.results.log"
+      $wodle_osquery_config_path         = "/etc/osquery/osquery.conf"
+      $wodle_osquery_add_labels          = "yes"
 
       #syscollector
-      $wodle_syscollector_disabled             = true
-      $wodle_syscollector_interval             = "1d"
-      $wodle_syscollector_scan_on_start        = "yes"
-      $wodle_syscollector_hardware             = "yes"
-      $wodle_syscollector_os                   = "yes"
-      $wodle_syscollector_network              = "yes"
-      $wodle_syscollector_packages             = "yes"
-      $wodle_syscollector_ports                = "yes"
-      $wodle_syscollector_processes            = "yes"
+      $wodle_syscollector_disabled       = true
+      $wodle_syscollector_interval       = "1d"
+      $wodle_syscollector_scan_on_start  = "yes"
+      $wodle_syscollector_hardware       = "yes"
+      $wodle_syscollector_os             = "yes"
+      $wodle_syscollector_network        = "yes"
+      $wodle_syscollector_packages       = "yes"
+      $wodle_syscollector_ports          = "yes"
+      $wodle_syscollector_processes      = "yes"
 
       # localfile
-      $ossec_local_files               = $::wazuh::params_agent::default_local_files
+      $ossec_local_files                 = $::wazuh::params_agent::default_local_files
 
       #syscheck
-      $ossec_syscheck_disabled            = "no"
-      $ossec_syscheck_frequency           = "43200"
-      $ossec_syscheck_scan_on_start       = "yes"
-      $ossec_syscheck_alert_new_files     = undef
-      $ossec_syscheck_auto_ignore         = undef
-      $ossec_syscheck_directories_1       = "/etc,/usr/bin,/usr/sbin"
-      $ossec_syscheck_directories_2       = "/bin,/sbin,/boot"
-      $ossec_syscheck_ignore_list         = ["/etc/mtab",
+      $ossec_syscheck_disabled           = "no"
+      $ossec_syscheck_frequency          = "43200"
+      $ossec_syscheck_scan_on_start      = "yes"
+      $ossec_syscheck_alert_new_files    = undef
+      $ossec_syscheck_auto_ignore        = undef
+      $ossec_syscheck_directories_1      = "/etc,/usr/bin,/usr/sbin"
+      $ossec_syscheck_directories_2      = "/bin,/sbin,/boot"
+      $ossec_syscheck_ignore_list        = ["/etc/mtab",
                                               "/etc/hosts.deny",
                                               "/etc/mail/statistics",
                                               "/etc/random-seed",
@@ -170,12 +170,13 @@ class wazuh::params_agent {
                                               "/sys/kernel/debug",
                                               "/dev/core",
                                             ]
-      $ossec_syscheck_ignore_type_1       = "^/proc"
-      $ossec_syscheck_ignore_type_2       = ".log$|.swp$"
+      $ossec_syscheck_ignore_type_1      = "^/proc"
+      $ossec_syscheck_ignore_type_2      = ".log$|.swp$"
       
 
-      $ossec_syscheck_nodiff               ="/etc/ssl/private.key"
-      $ossec_syscheck_skip_nfs            = "yes"
+      $ossec_syscheck_nodiff             = "/etc/ssl/private.key"
+      $ossec_syscheck_skip_nfs           = "yes"
+
 
       # others
 

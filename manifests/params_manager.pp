@@ -5,164 +5,161 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version              = '3.9.1-1'
-      $manage_repos                        = true
-      $manage_firewall                     = false
-
-      
-
+      $server_package_version                          = '3.9.1-1'
+      $manage_repos                                    = true
+      $manage_firewall                                 = false
 
     ### Ossec.conf blocks
       
       ## Global
-      $ossec_emailnotification = false
-      $ossec_emailto = []
-      $ossec_smtp_server = "smtp.example.wazuh.com"
-      $ossec_emailfrom = "ossecm@example.wazuh.com"
-      $ossec_email_maxperhour = undef
-      $ossec_email_idsname = undef
-      $ossec_white_list = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
-      $ossec_alert_level = 3
-      $ossec_email_alert_level = 12
-      $ossec_remote_connection = "secure"
-      $ossec_remote_port = 1514
-      $ossec_remote_protocol = "udp"
-      $ossec_remote_queue_size = 131072
+      $ossec_emailnotification                         = false
+      $ossec_emailto                                   = []
+      $ossec_smtp_server                               = "smtp.example.wazuh.com"
+      $ossec_emailfrom                                 = "ossecm@example.wazuh.com"
+      $ossec_email_maxperhour                          = undef
+      $ossec_email_idsname                             = undef
+      $ossec_white_list                                = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
+      $ossec_alert_level                               = 3
+      $ossec_email_alert_level                         = 12
+      $ossec_remote_connection                         = "secure"
+      $ossec_remote_port                               = 1514
+      $ossec_remote_protocol                           = "udp"
+      $ossec_remote_queue_size                         = 131072
 
     # ossec.conf generation parameters
 
-      $configure_rootcheck              = true
-      $configure_wodle_openscap         = true
-      $configure_wodle_cis_cat          = true
-      $configure_wodle_osquery          = true
-      $configure_wodle_syscollector     = true
-      $configure_vulnerability_detector = true
-      $configure_sca                    = true
-      $configure_syscheck               = true
-      $configure_command                = true
-      $configure_localfile              = true
-      $configure_ruleset                = true
-      $configure_auth                   = true
-      $configure_cluster                = true
-      $configure_active_response        = false
+      $configure_rootcheck                             = true
+      $configure_wodle_openscap                        = true
+      $configure_wodle_cis_cat                         = true
+      $configure_wodle_osquery                         = true
+      $configure_wodle_syscollector                    = true
+      $configure_vulnerability_detector                = true
+      $configure_sca                                   = true
+      $configure_syscheck                              = true
+      $configure_command                               = true
+      $configure_localfile                             = true
+      $configure_ruleset                               = true
+      $configure_auth                                  = true
+      $configure_cluster                               = true
+      $configure_active_response                       = false
 
 
     # ossec.conf templates paths
-      $ossec_manager_template                      = 'wazuh/wazuh_manager.conf.erb'
-      $ossec_rootcheck_template                    = 'wazuh/fragments/_rootcheck.erb'
-      $ossec_wodle_openscap_template               = 'wazuh/fragments/_wodle_openscap.erb'
-      $ossec_wodle_cis_cat_template                = 'wazuh/fragments/_wodle_cis_cat.erb'
-      $ossec_wodle_osquery_template                = 'wazuh/fragments/_wodle_osquery.erb'
-      $ossec_wodle_syscollector_template           = 'wazuh/fragments/_wodle_syscollector.erb'
-      $ossec_wodle_vulnerability_detector_template = 'wazuh/fragments/_wodle_vulnerability_detector.erb'
-      $ossec_sca_template                          = 'wazuh/fragments/_sca.erb'
-      $ossec_syscheck_template                     = 'wazuh/fragments/_syscheck.erb'
-      $ossec_default_commands_template             = 'wazuh/default_commands.erb'
-      $ossec_localfile_template                    = 'wazuh/fragments/_localfile.erb'
-      $ossec_ruleset_template                      = 'wazuh/fragments/_ruleset.erb'
-      $ossec_auth_template                         = 'wazuh/fragments/_auth.erb'
-      $ossec_cluster_template                      = 'wazuh/fragments/_cluster.erb'
-      $ossec_active_response_template              = "wazuh/fragments/_default_activeresponse.erb"
+      $ossec_manager_template                          = 'wazuh/wazuh_manager.conf.erb'
+      $ossec_rootcheck_template                        = 'wazuh/fragments/_rootcheck.erb'
+      $ossec_wodle_openscap_template                   = 'wazuh/fragments/_wodle_openscap.erb'
+      $ossec_wodle_cis_cat_template                    = 'wazuh/fragments/_wodle_cis_cat.erb'
+      $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
+      $ossec_wodle_syscollector_template               = 'wazuh/fragments/_wodle_syscollector.erb'
+      $ossec_wodle_vulnerability_detector_template     = 'wazuh/fragments/_wodle_vulnerability_detector.erb'
+      $ossec_sca_template                              = 'wazuh/fragments/_sca.erb'
+      $ossec_syscheck_template                         = 'wazuh/fragments/_syscheck.erb'
+      $ossec_default_commands_template                 = 'wazuh/default_commands.erb'
+      $ossec_localfile_template                        = 'wazuh/fragments/_localfile.erb'
+      $ossec_ruleset_template                          = 'wazuh/fragments/_ruleset.erb'
+      $ossec_auth_template                             = 'wazuh/fragments/_auth.erb'
+      $ossec_cluster_template                          = 'wazuh/fragments/_cluster.erb'
+      $ossec_active_response_template                  = "wazuh/fragments/_default_activeresponse.erb"
 
       ## Rootcheck
 
-      $ossec_rootcheck_disabled            = "no"
-      $ossec_rootcheck_check_files         = "yes"
-      $ossec_rootcheck_check_trojans       = "yes"
-      $ossec_rootcheck_check_dev           = "yes"
-      $ossec_rootcheck_check_sys           = "yes"
-      $ossec_rootcheck_check_pids          = "yes"
-      $ossec_rootcheck_check_ports         = "yes"
-      $ossec_rootcheck_check_if            = "yes"
-      $ossec_rootcheck_frequency           = 43200
-      $ossec_rootcheck_rootkit_files       = "/var/ossec/etc/rootcheck/rootkit_files.txt"
-      $ossec_rootcheck_rootkit_trojans     = "/var/ossec/etc/rootcheck/rootkit_trojans.txt"
-      $ossec_rootcheck_skip_nfs            = "yes"
+      $ossec_rootcheck_disabled                        = "no"
+      $ossec_rootcheck_check_files                     = "yes"
+      $ossec_rootcheck_check_trojans                   = "yes"
+      $ossec_rootcheck_check_dev                       = "yes"
+      $ossec_rootcheck_check_sys                       = "yes"
+      $ossec_rootcheck_check_pids                      = "yes"
+      $ossec_rootcheck_check_ports                     = "yes"
+      $ossec_rootcheck_check_if                        = "yes"
+      $ossec_rootcheck_frequency                       = 43200
+      $ossec_rootcheck_rootkit_files                   = "/var/ossec/etc/rootcheck/rootkit_files.txt"
+      $ossec_rootcheck_rootkit_trojans                 = "/var/ossec/etc/rootcheck/rootkit_trojans.txt"
+      $ossec_rootcheck_skip_nfs                        = "yes"
       
       ## Wodles
 
       #openscap
-      $wodle_openscap_disabled             = true
-      $wodle_openscap_timeout              = "1800"
-      $wodle_openscap_interval             = "1d"
-      $wodle_openscap_scan_on_start        = "yes"
+      $wodle_openscap_disabled                         = true
+      $wodle_openscap_timeout                          = "1800"
+      $wodle_openscap_interval                         = "1d"
+      $wodle_openscap_scan_on_start                    = "yes"
       
       #cis-cat
-      $wodle_ciscat_disabled               = true
-      $wodle_ciscat_timeout                = "1800"
-      $wodle_ciscat_interval               = "1d"
-      $wodle_ciscat_scan_on_start          = "yes"
-      $wodle_ciscat_java_path              = "wodles/java"
-      $wodle_ciscat_ciscat_path            = "wodles/ciscat"
+      $wodle_ciscat_disabled                           = true
+      $wodle_ciscat_timeout                            = "1800"
+      $wodle_ciscat_interval                           = "1d"
+      $wodle_ciscat_scan_on_start                      = "yes"
+      $wodle_ciscat_java_path                          = "wodles/java"
+      $wodle_ciscat_ciscat_path                        = "wodles/ciscat"
 
       #osquery
 
-      $wodle_osquery_disabled             = true
-      $wodle_osquery_run_daemon           = "yes"
-      $wodle_osquery_log_path             = "/var/log/osquery/osqueryd.results.log"
-      $wodle_osquery_config_path          = "/etc/osquery/osquery.conf"
-      $wodle_osquery_add_labels           = "yes"
+      $wodle_osquery_disabled                          = true
+      $wodle_osquery_run_daemon                        = "yes"
+      $wodle_osquery_log_path                          = "/var/log/osquery/osqueryd.results.log"
+      $wodle_osquery_config_path                       = "/etc/osquery/osquery.conf"
+      $wodle_osquery_add_labels                        = "yes"
 
       #syscollector
-      $wodle_syscollector_disabled        = true
-      $wodle_syscollector_interval        = "1h"
-      $wodle_syscollector_scan_on_start   = "yes"
-      $wodle_syscollector_hardware        = "yes"
-      $wodle_syscollector_os              = "yes"
-      $wodle_syscollector_network         = "yes"
-      $wodle_syscollector_packages        = "yes"
-      $wodle_syscollector_ports           = "yes"
-      $wodle_syscollector_processes       = "yes"
+      $wodle_syscollector_disabled                     = true
+      $wodle_syscollector_interval                     = "1h"
+      $wodle_syscollector_scan_on_start                = "yes"
+      $wodle_syscollector_hardware                     = "yes"
+      $wodle_syscollector_os                           = "yes"
+      $wodle_syscollector_network                      = "yes"
+      $wodle_syscollector_packages                     = "yes"
+      $wodle_syscollector_ports                        = "yes"
+      $wodle_syscollector_processes                    = "yes"
 
       #vulnerability-detector
 
-      $wodle_vulnerability_detector_disabled             = true
-      $wodle_vulnerability_detector_interval             = "5m"
-      $wodle_vulnerability_detector_ignore_time          = "6h"
-      $wodle_vulnerability_detector_run_on_start         = "yes"
-      $wodle_vulnerability_detector_ubuntu_disabled      = "yes"
-      $wodle_vulnerability_detector_ubuntu_update        = "1h"
-      $wodle_vulnerability_detector_redhat_disable       = "yes"
-      $wodle_vulnerability_detector_redhat_update_from   = "2010"
-      $wodle_vulnerability_detector_redhat_update        = "1h"
-      $wodle_vulnerability_detector_debian_9_disable     = "yes"
-      $wodle_vulnerability_detector_debian_9_update      = "1h"
+      $wodle_vulnerability_detector_disabled           = true
+      $wodle_vulnerability_detector_interval           = "5m"
+      $wodle_vulnerability_detector_ignore_time        = "6h"
+      $wodle_vulnerability_detector_run_on_start       = "yes"
+      $wodle_vulnerability_detector_ubuntu_disabled    = "yes"
+      $wodle_vulnerability_detector_ubuntu_update      = "1h"
+      $wodle_vulnerability_detector_redhat_disable     = "yes"
+      $wodle_vulnerability_detector_redhat_update_from = "2010"
+      $wodle_vulnerability_detector_redhat_update      = "1h"
+      $wodle_vulnerability_detector_debian_9_disable   = "yes"
+      $wodle_vulnerability_detector_debian_9_update    = "1h"
 
       # syslog
 
-      $syslog_output                       = false
-      $syslog_output_level                 = 2
-      $syslog_output_port                  = 514
-      $syslog_output_server                = undef
-      $syslog_output_format                = undef
+      $syslog_output                                   = false
+      $syslog_output_level                             = 2
+      $syslog_output_port                              = 514
+      $syslog_output_server                            = undef
+      $syslog_output_format                            = undef
 
       # Authd configuration
 
-      $ossec_auth_disabled                 = "no"
-      $ossec_auth_port                     = 1515
-      $ossec_auth_use_source_ip            = "yes"
-      $ossec_auth_force_insert             = "yes"
-      $ossec_auth_force_time               = 0
-      $ossec_auth_purgue                   = "yes"
-      $ossec_auth_use_password             = "no"
-      $ossec_auth_limit_maxagents          = "yes"
-      $ossec_auth_ciphers                  = "HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH"
-      $ossec_auth_ssl_verify_host          = "no"
-      $ossec_auth_ssl_manager_cert         = "/var/ossec/etc/sslmanager.cert"
-      $ossec_auth_ssl_manager_key          = "/var/ossec/etc/sslmanager.key"
-      $ossec_auth_ssl_auto_negotiate       = "no"
+      $ossec_auth_disabled                             = "no"
+      $ossec_auth_port                                 = 1515
+      $ossec_auth_use_source_ip                        = "yes"
+      $ossec_auth_force_insert                         = "yes"
+      $ossec_auth_force_time                           = 0
+      $ossec_auth_purgue                               = "yes"
+      $ossec_auth_use_password                         = "no"
+      $ossec_auth_limit_maxagents                      = "yes"
+      $ossec_auth_ciphers                              = "HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH"
+      $ossec_auth_ssl_verify_host                      = "no"
+      $ossec_auth_ssl_manager_cert                     = "/var/ossec/etc/sslmanager.cert"
+      $ossec_auth_ssl_manager_key                      = "/var/ossec/etc/sslmanager.key"
+      $ossec_auth_ssl_auto_negotiate                   = "no"
 
 
       # syscheck
 
-      $ossec_syscheck_disabled            = "no"
-      $ossec_syscheck_frequency           = "43200"
-      $ossec_syscheck_scan_on_start       = "yes"
-      $ossec_syscheck_alert_new_files     = "yes"
-      $ossec_syscheck_auto_ignore         = "no"
-      $ossec_syscheck_directories_1       = "/etc,/usr/bin,/usr/sbin"
-      $ossec_syscheck_directories_2       = "/bin,/sbin,/boot"
-      $ossec_syscheck_ignore_list         = ["/etc/mtab",
+      $ossec_syscheck_disabled                         = "no"
+      $ossec_syscheck_frequency                        = "43200"
+      $ossec_syscheck_scan_on_start                    = "yes"
+      $ossec_syscheck_alert_new_files                  = "yes"
+      $ossec_syscheck_auto_ignore                      = "no"
+      $ossec_syscheck_directories_1                    = "/etc,/usr/bin,/usr/sbin"
+      $ossec_syscheck_directories_2                    = "/bin,/sbin,/boot"
+      $ossec_syscheck_ignore_list                      = ["/etc/mtab",
                                               "/etc/hosts.deny",
                                               "/etc/mail/statistics",
                                               "/etc/random-seed",
@@ -178,26 +175,26 @@ class wazuh::params_manager {
                                               "/sys/kernel/debug",
                                               "/dev/core",
                                             ]
-      $ossec_syscheck_ignore_type_1       = "^/proc"
-      $ossec_syscheck_ignore_type_2       = ".log$|.swp$"
+      $ossec_syscheck_ignore_type_1                    = "^/proc"
+      $ossec_syscheck_ignore_type_2                    = ".log$|.swp$"
       
 
-      $ossec_syscheck_nodiff              ="/etc/ssl/private.key"
-      $ossec_syscheck_skip_nfs            = "yes"
+      $ossec_syscheck_nodiff                           = "/etc/ssl/private.key"
+      $ossec_syscheck_skip_nfs                         = "yes"
 
       # Cluster
 
-      $ossec_cluster_name                 = "wazuh"
-      $ossec_cluster_node_name            = "node01"
-      $ossec_cluster_node_type            = "master"
-      $ossec_cluster_key                  = "c98b62a9b6169ac5f67dae55ae4a9088"
-      $ossec_cluster_port                 = "1516"
-      $ossec_cluster_bind_addr            = "0.0.0.0"
-      $ossec_cluster_nodes                = ["172.17.0.101"]
-      $ossec_cluster_hidden               = "no"
-      $ossec_cluster_disabled             = "no"
+      $ossec_cluster_name                              = "wazuh"
+      $ossec_cluster_node_name                         = "node01"
+      $ossec_cluster_node_type                         = "master"
+      $ossec_cluster_key                               = "KEY"
+      $ossec_cluster_port                              = "1516"
+      $ossec_cluster_bind_addr                         = "0.0.0.0"
+      $ossec_cluster_nodes                             = ["NODE_IP"]
+      $ossec_cluster_hidden                            = "no"
+      $ossec_cluster_disabled                          = "no"
 
-      $ossec_cluster_enable_firewall      = "no"
+      $ossec_cluster_enable_firewall                   = "no"
 
 
       #----- End of ossec.conf parameters -------
