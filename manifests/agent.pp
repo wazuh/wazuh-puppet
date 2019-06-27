@@ -1,9 +1,18 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
 class wazuh::agent(
+
+  # Versioning and package names
+
   $agent_package_version             = $wazuh::params_agent::agent_package_version,
   $agent_package_name                = $wazuh::params_agent::agent_package_name,
   $agent_service_name                = $wazuh::params_agent::agent_service_name,
+
+  # Manage repository
+
+  $manage_repo                       = $wazuh::params_agent::manage_repo,
+
+  # Authd registration options
   $manage_client_keys                = $wazuh::params_agent::manage_client_keys,
   $agent_name                        = $wazuh::params_agent::agent_name,
   $agent_group                       = $wazuh::params_agent::agent_group,
@@ -14,6 +23,9 @@ class wazuh::agent(
   $agent_auth_password               = $wazuh::params_agent::agent_auth_password,
   $wazuh_manager_root_ca_pem         = $wazuh::params_agent::wazuh_manager_root_ca_pem,
   $wazuh_manager_root_ca_pem_path    = $wazuh::params_agent::wazuh_manager_root_ca_pem_path,
+
+  ## ossec.conf generation parameters
+  # Generation variables
   $configure_rootcheck               = $wazuh::params_agent::configure_rootcheck,
   $configure_wodle_openscap          = $wazuh::params_agent::configure_wodle_openscap,
   $configure_wodle_cis_cat           = $wazuh::params_agent::configure_wodle_cis_cat,
@@ -23,6 +35,8 @@ class wazuh::agent(
   $configure_syscheck                = $wazuh::params_agent::configure_syscheck,
   $configure_localfile               = $wazuh::params_agent::configure_localfile,
   $configure_active_response         = $wazuh::params_agent::configure_active_response,
+
+  # Templates paths
   $ossec_conf_template               = $wazuh::params_agent::ossec_conf_template,
   $ossec_rootcheck_template          = $wazuh::params_agent::ossec_rootcheck_template,
   $ossec_wodle_openscap_template     = $wazuh::params_agent::ossec_wodle_openscap_template,
@@ -36,9 +50,11 @@ class wazuh::agent(
   $ossec_auth                        = $wazuh::params_agent::ossec_auth,
   $ossec_cluster                     = $wazuh::params_agent::ossec_cluster,
   $ossec_active_response_template    = $wazuh::params_agent::ossec_active_response_template,
+
+  # Server configuration
+
   $ossec_ip                          = $wazuh::params_agent::ossec_ip,
   $ossec_hostname                    = $wazuh::params_agent::ossec_hostname,
-  #$ossec_address                     = $wazuh::params_agent::ossec_address,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
@@ -47,6 +63,8 @@ class wazuh::agent(
   $ossec_crypto_method               = $wazuh::params_agent::ossec_crypto_method,
   $client_buffer_queue_size          = $wazuh::params_agent::client_buffer_queue_size,
   $client_buffer_events_per_second   = $wazuh::params_agent::client_buffer_events_per_second,
+
+  # Rootcheck
   $ossec_rootcheck_disabled          = $wazuh::params_agent::ossec_rootcheck_disabled,
   $ossec_rootcheck_check_files       = $wazuh::params_agent::ossec_rootcheck_check_files,
   $ossec_rootcheck_check_trojans     = $wazuh::params_agent::ossec_rootcheck_check_trojans,
@@ -59,21 +77,33 @@ class wazuh::agent(
   $ossec_rootcheck_rootkit_files     = $wazuh::params_agent::ossec_rootcheck_rootkit_files,
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
+
+  ## Wodles
+
+  # Openscap
   $wodle_openscap_disabled           = $wazuh::params_agent::wodle_openscap_disabled,
   $wodle_openscap_timeout            = $wazuh::params_agent::wodle_openscap_timeout,
   $wodle_openscap_interval           = $wazuh::params_agent::wodle_openscap_interval,
   $wodle_openscap_scan_on_start      = $wazuh::params_agent::wodle_openscap_scan_on_start,
+
+  # Ciscat
   $wodle_ciscat_disabled             = $wazuh::params_agent::wodle_ciscat_disabled,
   $wodle_ciscat_timeout              = $wazuh::params_agent::wodle_ciscat_timeout,
   $wodle_ciscat_interval             = $wazuh::params_agent::wodle_ciscat_interval,
   $wodle_ciscat_scan_on_start        = $wazuh::params_agent::wodle_ciscat_scan_on_start,
   $wodle_ciscat_java_path            = $wazuh::params_agent::wodle_ciscat_java_path,
   $wodle_ciscat_ciscat_path          = $wazuh::params_agent::wodle_ciscat_ciscat_path,
+
+  #Osquery
+
   $wodle_osquery_disabled            = $wazuh::params_agent::wodle_osquery_disabled,
   $wodle_osquery_run_daemon          = $wazuh::params_agent::wodle_osquery_run_daemon,
   $wodle_osquery_log_path            = $wazuh::params_agent::wodle_osquery_log_path,
   $wodle_osquery_config_path         = $wazuh::params_agent::wodle_osquery_config_path,
   $wodle_osquery_add_labels          = $wazuh::params_agent::wodle_osquery_add_labels,
+
+  # Syscollector
+
   $wodle_syscollector_disabled       = $wazuh::params_agent::wodle_syscollector_disabled,
   $wodle_syscollector_interval       = $wazuh::params_agent::wodle_syscollector_interval,
   $wodle_syscollector_scan_on_start  = $wazuh::params_agent::wodle_syscollector_scan_on_start,
@@ -83,7 +113,11 @@ class wazuh::agent(
   $wodle_syscollector_packages       = $wazuh::params_agent::wodle_syscollector_packages,
   $wodle_syscollector_ports          = $wazuh::params_agent::wodle_syscollector_ports,
   $wodle_syscollector_processes      = $wazuh::params_agent::wodle_syscollector_processes,
-  $ossec_local_iles                  = $wazuh::params_agent::ossec_local_iles,
+
+  # Localfile
+  $ossec_local_files                 = $wazuh::params_agent::default_local_files,
+  
+  # Syscheck
   $ossec_syscheck_disabled           = $wazuh::params_agent::ossec_syscheck_disabled,
   $ossec_syscheck_frequency          = $wazuh::params_agent::ossec_syscheck_frequency,
   $ossec_syscheck_scan_on_start      = $wazuh::params_agent::ossec_syscheck_scan_on_start,
@@ -96,9 +130,12 @@ class wazuh::agent(
   $ossec_syscheck_ignore_type_2      = $wazuh::params_agent::ossec_syscheck_ignore_type_2,
   $ossec_syscheck_nodiff             = $wazuh::params_agent::ossec_syscheck_nodiff,
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
+
+  ## Selinux
+
   $selinux                           = $wazuh::params_agent::selinux,
-  $manage_repo                       = $wazuh::params_agent::manage_repo,
-  $ossec_local_files                 = $wazuh::params_agent::default_local_files,
+  
+  
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
