@@ -1,3 +1,5 @@
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Installation of Elastic repository
 class wazuh::repo_elastic (
 
 ) {
@@ -43,23 +45,23 @@ class wazuh::repo_elastic (
             default: { fail('This ossec module has not been tested on your distribution.') }
           }
         ## Set up Elasticsearch repo
-        
+
         # Import GPG key
 
         exec { 'Install Elasticsearch GPG key':
-          path    => "/usr/bin",
-          command => "rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch",             
+          path    => '/usr/bin',
+          command => 'rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch',
         }
 
         # Adding repo by Puppet yumrepo resource
 
         yumrepo { 'elasticsearch':
-          name     => "elasticsearch",
+          ensure   => 'present',
           enabled  => 1,
           gpgcheck => 1,
           gpgkey   => $gpgkey,
           baseurl  => $baseurl,
-          ensure   => 'present',
+          name     => 'elasticsearch',
         }
       }
       default: { fail('This ossec module has not been tested on your distribution') }

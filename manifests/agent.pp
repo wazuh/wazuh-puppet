@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Setup for ossec client
 class wazuh::agent(
 
@@ -116,7 +116,7 @@ class wazuh::agent(
 
   # Localfile
   $ossec_local_files                 = $wazuh::params_agent::default_local_files,
-  
+
   # Syscheck
   $ossec_syscheck_disabled           = $wazuh::params_agent::ossec_syscheck_disabled,
   $ossec_syscheck_frequency          = $wazuh::params_agent::ossec_syscheck_frequency,
@@ -134,8 +134,13 @@ class wazuh::agent(
   ## Selinux
 
   $selinux                           = $wazuh::params_agent::selinux,
-  
-  
+  $manage_firewall                   = $wazuh::params_agent::manage_firewall,
+
+  ## Windows
+
+  $download_path                     = $wazuh::params_agent::download_path,
+
+
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
@@ -165,7 +170,7 @@ class wazuh::agent(
       }
     }
     'windows' : {
-      
+
       file { 'wazuh-agent':
           path               => "${download_path}wazuh-agent-${agent_package_version}.msi",
           owner              => 'Administrator',
@@ -174,24 +179,24 @@ class wazuh::agent(
           source             => "http://packages.wazuh.com/3.x/windows/wazuh-agent-${agent_package_version}.msi",
           source_permissions => ignore
       }
-      
+
       if ( $manage_client_keys == 'yes' ) {
         package { $agent_package_name:
-          ensure          => "${agent_package_version}", # lint:ignore:security_package_pinned_version
+          ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
           source          => "${download_path}/wazuh-agent-${agent_package_version}.msi",
-          install_options => [ '/q', "ADDRESS=${ossec_ip}", "AUTHD_SERVER=${ossec_ip}" ],  # silent installation
+          install_options => [ '/q', "ADDRESS=${ossec_ip}", "AUTHD_SERVER=${ossec_ip}" ],
           require         => File["${download_path}wazuh-agent-${agent_package_version}.msi"],
         }
       }
       else {
         package { $agent_package_name:
-          ensure          => "${agent_package_version}", # lint:ignore:security_package_pinned_version
+          ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
           source          => "${download_path}wazuh-agent-${agent_package_version}.msi",
           install_options => [ '/q' ],  # silent installation
           require         => File["${download_path}wazuh-agent-${agent_package_version}.msi"],
-       }
+        }
       }
     }
     default: { fail('OS not supported') }
@@ -201,26 +206,27 @@ class wazuh::agent(
 
   case $::operatingsystem{
     'Redhat', 'redhat':{
-      $apply_template_os = "rhel"
+      $apply_template_os = 'rhel'
       if ( $::operatingsystemrelease     =~ /^7.*/ ){
-        $rhel_version = "7"
+        $rhel_version = '7'
       }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
-        $rhel_version = "6"
+        $rhel_version = '6'
       }elsif ( $::operatingsystemrelease =~ /^5.*/ ){
-        $rhel_version = "5"
+        $rhel_version = '5'
       }else{
         fail('This ossec module has not been tested on your distribution')
       }
     }'Debian', 'debian':{
-      $apply_template_os = "debian"
-      if ( $::lsbdistcodename == "wheezy") or ($::lsbdistcodename == "jessie"){
-        $debian_additional_templates = "yes"
+      $apply_template_os = 'debian'
+      if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie'){
+        $debian_additional_templates = 'yes'
       }
     }'Amazon':{
-      $apply_template_os = "amazon"
+      $apply_template_os = 'amazon'
     }'CentOS','Centos','centos':{
-      $apply_template_os = "centos"
+      $apply_template_os = 'centos'
     }
+    default: { fail('This ossec module has not been tested on your distribution') }
   }
 
   concat { 'ossec.conf':
@@ -369,14 +375,14 @@ class wazuh::agent(
         validate_string($agent_name)
         $agent_auth_option_name = "-A \"${agent_name}\""
       }else{
-        $agent_auth_option_name = ""  
+        $agent_auth_option_name = ''
       }
 
       if $agent_group != undef {
         validate_string($agent_group)
         $agent_auth_option_group = "-G \"${agent_group}\""
       }else{
-        $agent_auth_option_group = ""
+        $agent_auth_option_group = ''
       }
 
     # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-agents-via-ssl
@@ -407,7 +413,8 @@ class wazuh::agent(
       $agent_auth_option_agent = "-x ${wazuh_agent_cert_path} -k ${wazuh_agent_key_path}"
     }
 
-    $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_manager} ${agent_auth_option_name} ${agent_auth_option_group} ${agent_auth_option_agent}"
+    $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_manager} ${agent_auth_option_name}\
+     ${agent_auth_option_group} ${agent_auth_option_agent}"
 
       if $agent_auth_password {
         exec { 'agent-auth-with-pwd':
@@ -428,21 +435,21 @@ class wazuh::agent(
       service { $agent_service_name:
         ensure    => running,
         enable    => true,
-        hasstatus => $service_has_status,
-        pattern   => $agent_service_name,
-        provider  => $ossec_service_provider,
+        hasstatus => $wazuh::params_agent::service_has_status,
+        pattern   => $wazuh::params_agent::agent_service_name,
+        provider  => $wazuh::params_agent::ossec_service_provider,
         require   => Package[$agent_package_name],
       }
     }
   }
-  
-  if $manage_client_keys != "yes"{
+
+  if $manage_client_keys != 'yes'{
     service { $agent_service_name:
           ensure    => stopped,
           enable    => false,
-          hasstatus => $service_has_status,
+          hasstatus => $wazuh::params_agent::service_has_status,
           pattern   => $agent_service_name,
-          provider  => $ossec_service_provider,
+          provider  => $wazuh::params_agent::ossec_service_provider,
           require   => Package[$agent_package_name],
     }
   }

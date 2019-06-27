@@ -1,7 +1,7 @@
-# Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Main ossec server config
-class wazuh::manager (    
-    
+class wazuh::manager (
+
     # Installation
 
       $server_package_version           = $wazuh::params_manager::server_package_version,
@@ -10,7 +10,7 @@ class wazuh::manager (
 
 
     ### Ossec.conf blocks
-      
+
       ## Global
 
       $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
@@ -75,7 +75,7 @@ class wazuh::manager (
       $ossec_rootcheck_rootkit_files        = $wazuh::params_manager::ossec_rootcheck_rootkit_files,
       $ossec_rootcheck_rootkit_trojans      = $wazuh::params_manager::ossec_rootcheck_rootkit_trojans,
       $ossec_rootcheck_skip_nfs             = $wazuh::params_manager::ossec_rootcheck_skip_nfs,
-        
+
       ## Wodles
 
       #openscap
@@ -83,7 +83,7 @@ class wazuh::manager (
       $wodle_openscap_timeout               = $wazuh::params_manager::wodle_openscap_timeout,
       $wodle_openscap_interval              = $wazuh::params_manager::wodle_openscap_interval,
       $wodle_openscap_scan_on_start         = $wazuh::params_manager::wodle_openscap_scan_on_start,
-        
+
       #cis-cat
       $wodle_ciscat_disabled                = $wazuh::params_manager::wodle_ciscat_disabled,
       $wodle_ciscat_timeout                 = $wazuh::params_manager::wodle_ciscat_timeout,
@@ -157,10 +157,10 @@ class wazuh::manager (
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
       $ossec_syscheck_ignore_list           = $wazuh::params_manager::ossec_syscheck_ignore_list,
-        
+
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
       $ossec_syscheck_ignore_type_2         = $wazuh::params_manager::ossec_syscheck_ignore_type_2,
-        
+
       $ossec_syscheck_nodiff                = $wazuh::params_manager::ossec_syscheck_nodiff,
       $ossec_syscheck_skip_nfs              = $wazuh::params_manager::ossec_syscheck_skip_nfs,
 
@@ -192,7 +192,7 @@ class wazuh::manager (
       $local_rules_template                 = $wazuh::params_manager::local_rules_template,
       $rule_exclude                         = $wazuh::params_manager::rule_exclude,
       $shared_agent_template                = $wazuh::params_manager::shared_agent_template,
-        
+
       $wazuh_manager_verify_manager_ssl     = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
       $wazuh_manager_server_crt             = $wazuh::params_manager::wazuh_manager_server_crt,
       $wazuh_manager_server_key             = $wazuh::params_manager::wazuh_manager_server_key,
@@ -210,7 +210,7 @@ class wazuh::manager (
 
   if ($::kernel == 'windows') {
     $kernel = 'Linux'
-    
+
   }else{
     $kernel = 'Linux'
     if ($::osfamily == 'Debian'){
@@ -276,34 +276,35 @@ class wazuh::manager (
     enable    => true,
     hasstatus => $wazuh::params_manager::service_has_status,
     pattern   => $wazuh::params_manager::server_service,
-    provider  => $ossec_service_provider,
+    provider  => $wazuh::params_manager::ossec_service_provider,
     require   => Package[$wazuh::params_manager::server_package],
   }
 
   ## Declaring variables for localfile and wodles generation
-  
+
   case $::operatingsystem{
     'Redhat', 'redhat':{
-      $apply_template_os = "rhel"
+      $apply_template_os = 'rhel'
       if ( $::operatingsystemrelease     =~ /^7.*/ ){
-        $rhel_version = "7"
+        $rhel_version = '7'
       }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
-        $rhel_version = "6"
+        $rhel_version = '6'
       }elsif ( $::operatingsystemrelease =~ /^5.*/ ){
-        $rhel_version = "5"
+        $rhel_version = '5'
       }else{
         fail('This ossec module has not been tested on your distribution')
       }
     }'Debian', 'debian':{
-      $apply_template_os = "debian"
-      if ( $::lsbdistcodename == "wheezy") or ($::lsbdistcodename == "jessie"){
-        $debian_additional_templates = "yes"
+      $apply_template_os = 'debian'
+      if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie'){
+        $debian_additional_templates = 'yes'
       }
     }'Amazon':{
-      $apply_template_os = "amazon"
+      $apply_template_os = 'amazon'
     }'CentOS','Centos','centos':{
-      $apply_template_os = "centos"
+      $apply_template_os = 'centos'
     }
+    default: { fail('This ossec module has not been tested on your distribution') }
   }
 
 
@@ -318,19 +319,19 @@ class wazuh::manager (
   }
   concat::fragment {
     'ossec.conf_header':
-      target => 'ossec.conf',
+      target  => 'ossec.conf',
       order   => 00,
       content => "<ossec_config>\n";
     'ossec.conf_main':
-      target => 'ossec.conf',
-      order => 01,
+      target  => 'ossec.conf',
+      order   => 01,
       content => template($ossec_manager_template);
   }
   if($configure_rootcheck == true){
     concat::fragment {
         'ossec.conf_rootcheck':
-          order => 10,
-          target => 'ossec.conf',
+          order   => 10,
+          target  => 'ossec.conf',
           content => template($ossec_rootcheck_template);
       }
   }
@@ -338,110 +339,110 @@ class wazuh::manager (
   if ($configure_wodle_openscap == true){
     concat::fragment {
       'ossec.conf_wodle_openscap':
-        order => 15,
-        target => 'ossec.conf',
+        order   => 15,
+        target  => 'ossec.conf',
         content => template($ossec_wodle_openscap_template);
     }
   }
   if ($configure_wodle_cis_cat == true){
     concat::fragment {
       'ossec.conf_wodle_ciscat':
-        order => 20,
-        target => 'ossec.conf',
+        order   => 20,
+        target  => 'ossec.conf',
         content => template($ossec_wodle_cis_cat_template);
     }
   }
   if ($configure_wodle_osquery== true){
     concat::fragment {
       'ossec.conf_wodle_osquery':
-        order => 25,
-        target => 'ossec.conf',
+        order   => 25,
+        target  => 'ossec.conf',
         content => template($ossec_wodle_osquery_template);
     }
   }
   if ($configure_wodle_syscollector == true){
     concat::fragment {
       'ossec.conf_wodle_syscollector':
-        order => 30,
-        target => 'ossec.conf',
+        order   => 30,
+        target  => 'ossec.conf',
         content => template($ossec_wodle_syscollector_template);
     }
   }
   if ($configure_sca == true){
     concat::fragment {
       'ossec.conf_sca':
-        order => 40,
-        target => 'ossec.conf',
+        order   => 40,
+        target  => 'ossec.conf',
         content => template($ossec_sca_template);
       }
   }
   if($configure_vulnerability_detector == true){
     concat::fragment {
       'ossec.conf_wodle_vulnerability_detector':
-        order => 45,
-        target => 'ossec.conf',
+        order   => 45,
+        target  => 'ossec.conf',
         content => template($ossec_wodle_vulnerability_detector_template);
     }
   }
   if($configure_syscheck == true){
     concat::fragment {
       'ossec.conf_syscheck':
-        order => 55,
-        target => 'ossec.conf',
+        order   => 55,
+        target  => 'ossec.conf',
         content => template($ossec_syscheck_template);
     }
   }
   if ($configure_command == true){
     concat::fragment {
           'ossec.conf_command':
-            order => 60,
-            target => 'ossec.conf',
+            order   => 60,
+            target  => 'ossec.conf',
             content => template($ossec_default_commands_template);
       }
   }
   if ($configure_localfile == true){
     concat::fragment {
       'ossec.conf_localfile':
-        order => 65,
-        target => 'ossec.conf',
+        order   => 65,
+        target  => 'ossec.conf',
         content => template($ossec_localfile_template);
     }
   }
   if($configure_ruleset == true){
     concat::fragment {
         'ossec.conf_ruleset':
-          order => 75,
-          target => 'ossec.conf',
+          order   => 75,
+          target  => 'ossec.conf',
           content => template($ossec_ruleset_template);
       }
   }
   if ($configure_auth == true){
     concat::fragment {
         'ossec.conf_auth':
-          order => 80,
-          target => 'ossec.conf',
+          order   => 80,
+          target  => 'ossec.conf',
           content => template($ossec_auth_template);
       }
   }
   if ($configure_cluster == true){
     concat::fragment {
         'ossec.conf_cluster':
-          order => 85,
-          target => 'ossec.conf',
+          order   => 85,
+          target  => 'ossec.conf',
           content => template($ossec_cluster_template);
       }
   }
   if ($configure_active_response == true){
     concat::fragment {
         'ossec.conf_active_response':
-          order => 90,
-          target => 'ossec.conf',
+          order   => 90,
+          target  => 'ossec.conf',
           content => template($ossec_active_response_template);
       }
   }
   concat::fragment {
     'ossec.conf_footer':
-      target => 'ossec.conf',
+      target  => 'ossec.conf',
       order   => 99,
       content => "</ossec_config>\n";
   }
@@ -500,7 +501,7 @@ class wazuh::manager (
         'ESTABLISHED'],
     }
   }
-  if $ossec_cluster_enable_firewall == "yes"{
+  if $ossec_cluster_enable_firewall == 'yes'{
     include firewall
     firewall { '1516 wazuh-manager':
       dport  => $ossec_cluster_port,
