@@ -1,9 +1,17 @@
 # Wazuh App Copyright (C) 2018 Wazuh Inc. (License GPLv2)
 # Main ossec server config
-class wazuh::manager (      
+class wazuh::manager (    
+    
+    # Installation
+
       $server_package_version           = $wazuh::params_manager::server_package_version,
       $manage_repos                     = $::wazuh::params_manager::manage_repos,
       $manage_firewall                  = $wazuh::params_manager::manage_firewall,
+
+
+    ### Ossec.conf blocks
+      
+      ## Global
 
       $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
       $ossec_emailto                    = $wazuh::params_manager::ossec_emailto,
@@ -18,6 +26,8 @@ class wazuh::manager (
       $ossec_remote_port                = $wazuh::params_manager::ossec_remote_port,
       $ossec_remote_protocol            = $wazuh::params_manager::ossec_remote_protocol,
       $ossec_remote_queue_size          = $wazuh::params_manager::ossec_remote_queue_size,
+
+      # ossec.conf generation parameters
 
       $configure_rootcheck                  = $wazuh::params_manager::configure_rootcheck,
       $configure_wodle_openscap             = $wazuh::params_manager::configure_wodle_openscap,
@@ -34,6 +44,7 @@ class wazuh::manager (
       $configure_cluster                    = $wazuh::params_manager::configure_cluster,
       $configure_active_response            = $wazuh::params_manager::configure_active_response,
 
+    # ossec.conf templates paths
       $ossec_manager_template                       = $wazuh::params_manager::ossec_manager_template,
       $ossec_rootcheck_template                     = $wazuh::params_manager::ossec_rootcheck_template,
       $ossec_wodle_openscap_template                = $wazuh::params_manager::ossec_wodle_openscap_template,
@@ -50,6 +61,8 @@ class wazuh::manager (
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
 
+      ## Rootcheck
+
       $ossec_rootcheck_disabled             = $wazuh::params_manager::ossec_rootcheck_disabled,
       $ossec_rootcheck_check_files          = $wazuh::params_manager::ossec_rootcheck_check_files,
       $ossec_rootcheck_check_trojans        = $wazuh::params_manager::ossec_rootcheck_check_trojans,
@@ -63,11 +76,15 @@ class wazuh::manager (
       $ossec_rootcheck_rootkit_trojans      = $wazuh::params_manager::ossec_rootcheck_rootkit_trojans,
       $ossec_rootcheck_skip_nfs             = $wazuh::params_manager::ossec_rootcheck_skip_nfs,
         
+      ## Wodles
+
+      #openscap
       $wodle_openscap_disabled              = $wazuh::params_manager::wodle_openscap_disabled,
       $wodle_openscap_timeout               = $wazuh::params_manager::wodle_openscap_timeout,
       $wodle_openscap_interval              = $wazuh::params_manager::wodle_openscap_interval,
       $wodle_openscap_scan_on_start         = $wazuh::params_manager::wodle_openscap_scan_on_start,
         
+      #cis-cat
       $wodle_ciscat_disabled                = $wazuh::params_manager::wodle_ciscat_disabled,
       $wodle_ciscat_timeout                 = $wazuh::params_manager::wodle_ciscat_timeout,
       $wodle_ciscat_interval                = $wazuh::params_manager::wodle_ciscat_interval,
@@ -75,12 +92,14 @@ class wazuh::manager (
       $wodle_ciscat_java_path               = $wazuh::params_manager::wodle_ciscat_java_path,
       $wodle_ciscat_ciscat_path             = $wazuh::params_manager::wodle_ciscat_ciscat_path,
 
+      #osquery
       $wodle_osquery_disabled               = $wazuh::params_manager::wodle_osquery_disabled,
       $wodle_osquery_run_daemon             = $wazuh::params_manager::wodle_osquery_run_daemon,
       $wodle_osquery_log_path               = $wazuh::params_manager::wodle_osquery_log_path,
       $wodle_osquery_config_path            = $wazuh::params_manager::wodle_osquery_config_path,
       $wodle_osquery_add_labels             = $wazuh::params_manager::wodle_osquery_add_labels,
 
+      #syscollector
       $wodle_syscollector_disabled          = $wazuh::params_manager::wodle_syscollector_disabled,
       $wodle_syscollector_interval          = $wazuh::params_manager::wodle_syscollector_interval,
       $wodle_syscollector_scan_on_start     = $wazuh::params_manager::wodle_syscollector_scan_on_start,
@@ -91,6 +110,7 @@ class wazuh::manager (
       $wodle_syscollector_ports             = $wazuh::params_manager::wodle_syscollector_ports,
       $wodle_syscollector_processes         = $wazuh::params_manager::wodle_syscollector_processes,
 
+      #vulnerability-detector
       $wodle_vulnerability_detector_disabled                = $wazuh::params_manager::wodle_vulnerability_detector_disabled,
       $wodle_vulnerability_detector_interval                = $wazuh::params_manager::wodle_vulnerability_detector_interval,
       $wodle_vulnerability_detector_ignore_time             = $wazuh::params_manager::wodle_vulnerability_detector_ignore_time,
@@ -103,11 +123,14 @@ class wazuh::manager (
       $wodle_vulnerability_detector_debian_9_disable        = $wazuh::params_manager::wodle_vulnerability_detector_debian_9_disable,
       $wodle_vulnerability_detector_debian_9_update         = $wazuh::params_manager::wodle_vulnerability_detector_debian_9_update,
 
+      # syslog
       $syslog_output                        = $::wazuh::params_manager::syslog_output,
       $syslog_output_level                  = $wazuh::params_manager::syslog_output_level,
       $syslog_output_port                   = $wazuh::params_manager::syslog_output_port,
       $syslog_output_server                 = $wazuh::params_manager::syslog_output_server,
       $syslog_output_format                 = $wazuh::params_manager::syslog_output_format,
+
+      # Authd configuration
 
       $ossec_auth_disabled                  = $wazuh::params_manager::ossec_auth_disabled,
       $ossec_auth_port                      = $wazuh::params_manager::ossec_auth_port,
@@ -122,6 +145,9 @@ class wazuh::manager (
       $ossec_auth_ssl_manager_cert          = $wazuh::params_manager::ossec_auth_ssl_manager_cert,
       $ossec_auth_ssl_manager_key           = $wazuh::params_manager::ossec_auth_ssl_manager_key,
       $ossec_auth_ssl_auto_negotiate        = $wazuh::params_manager::ossec_auth_ssl_auto_negotiate,
+
+
+      # syscheck
 
       $ossec_syscheck_disabled              = $wazuh::params_manager::ossec_syscheck_disabled,
       $ossec_syscheck_frequency             = $wazuh::params_manager::ossec_syscheck_frequency,
@@ -138,6 +164,8 @@ class wazuh::manager (
       $ossec_syscheck_nodiff                = $wazuh::params_manager::ossec_syscheck_nodiff,
       $ossec_syscheck_skip_nfs              = $wazuh::params_manager::ossec_syscheck_skip_nfs,
 
+      # Cluster
+
       $ossec_cluster_name                   = $wazuh::params_manager::ossec_cluster_name,
       $ossec_cluster_node_name              = $wazuh::params_manager::ossec_cluster_node_name,
       $ossec_cluster_node_type              = $wazuh::params_manager::ossec_cluster_node_type,
@@ -147,6 +175,8 @@ class wazuh::manager (
       $ossec_cluster_nodes                  = $wazuh::params_manager::ossec_cluster_nodes,
       $ossec_cluster_hidden                 = $wazuh::params_manager::ossec_cluster_hidden,
       $ossec_cluster_disabled               = $wazuh::params_manager::ossec_cluster_disabled,
+
+      #----- End of ossec.conf parameters -------
 
       $ossec_cluster_enable_firewall        = $wazuh::params_manager::ossec_cluster_enable_firewall,
 
