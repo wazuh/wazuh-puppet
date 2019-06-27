@@ -15,71 +15,78 @@ This module installs and configure Wazuh agent and manager.
 
 ## Directory structure
 
-    ├── wazuh-puppet
-    │ ├── files           
-    │ │ ├── client.keys
-    │ │ ├── ossec-logrotate.te
-    │ │ ├── wazuh-winagent-v2.1.1-1.exe
-    │
-    │ ├── manifest
-    │ │ ├── activeresponse.pp
-    │ │ ├── addlog.pp
-    │ │ ├── agentkey.pp
-    │ │ ├── client.pp
-    │ │ ├── collect_agent_keys.pp
-    │ │ ├── command.pp
-    │ │ ├── email_alert.pp
-    │ │ ├── export_agent_key.pp
-    │ │ ├── init.pp
-    │ │ ├── params.pp
-    │ │ ├── repo.pp
-    │ │ ├── reports.pp
-    │ │ ├── server.pp
-    │ │ 
-    │ ├── spec
-    │ │ ├── classes
-    │ │ │ ├── client_spec.rb
-    │ │ │ ├── init_spec.rb
-    │ │ │ ├── server_spec.rb
-    │ │ 
-    │ │ ├── spec_helper.rb
-    │
-    │ ├── templates
-    │ │ ├── api
-    │ │ │ ├── config.js.erb
-    │ │ 
-    │ │ ├── fragments
-    │ │ │ ├── _activeresponse.erb
-    │ │ │ ├── _common.erb
-    │ │ │ ├── _localfile.erb
-    │ │ │ ├── _reports.erb
-    │ │ │ ├── _rootcheck_linux.erb
-    │ │ │ ├── _rootcheck_windows.erb
-    │ │ │ ├── _syscheck_linux.erb
-    │ │ │ ├── _syscheck_windows.erb
-    │ │ │ ├── _wodle_openscap.erb 
-    │ │
-    │ │ ├── command.erb
-    │ │ ├── email_alert.erb
-    │ │ ├── local_decoder.xml.erb
-    │ │ ├── local_rules.xmk.erb
-    │ │ ├── ossec_shared_agent.conf.erb
-    │ │ ├── process_list.erb
-    │ │ ├── wazuh_agent.conf.erb
-    │ │ ├── wazuh_manager.conf.erb
-    |
-    │ ├── tests
-    │ │ ├── init.pp 
-    | 
-    │ ├── README.md
-    │ ├── VERSION
-    │ ├── CHANGELOG.md
-    │ ├── .travis.yml
-    │ ├── Gemfile
-    │ ├── LICENSE.txt
-    │ ├── Rakefile
-    │ ├── checksums.json
-    │ ├── metadata.json
+    wazuh-puppet/
+    ├── CHANGELOG.md
+    ├── checksums.json
+    ├── files
+    │   └── ossec-logrotate.te
+    ├── Gemfile
+    ├── LICENSE.txt
+    ├── manifests
+    │   ├── activeresponse.pp
+    │   ├── addlog.pp
+    │   ├── agent.pp
+    │   ├── command.pp
+    │   ├── elasticsearch.pp
+    │   ├── email_alert.pp
+    │   ├── filebeat.pp
+    │   ├── init.pp
+    │   ├── integration.pp
+    │   ├── kibana.pp
+    │   ├── manager.pp
+    │   ├── params_agent.pp
+    │   ├── params_elastic.pp
+    │   ├── params_manager.pp
+    │   ├── repo_elastic.pp
+    │   ├── repo.pp
+    │   ├── reports.pp
+    │   └── wazuh_api.pp
+    ├── metadata.json
+    ├── Rakefile
+    ├── README.md
+    ├── spec
+    │   ├── classes
+    │   │   ├── client_spec.rb
+    │   │   ├── init_spec.rb
+    │   │   └── server_spec.rb
+    │   └── spec_helper.rb
+    ├── templates
+    │   ├── api
+    │   │   └── config.js.erb
+    │   ├── command.erb
+    │   ├── default_commands.erb
+    │   ├── elasticsearch_yml.erb
+    │   ├── email_alert.erb
+    │   ├── filebeat_yml.erb
+    │   ├── fragments
+    │   │   ├── _activeresponse.erb
+    │   │   ├── _auth.erb
+    │   │   ├── _cluster.erb
+    │   │   ├── _default_activeresponse.erb
+    │   │   ├── _integration.erb
+    │   │   ├── _localfile.erb
+    │   │   ├── _localfile_generation.erb
+    │   │   ├── _reports.erb
+    │   │   ├── _rootcheck.erb
+    │   │   ├── _ruleset.erb
+    │   │   ├── _sca.erb
+    │   │   ├── _syscheck.erb
+    │   │   ├── _wodle_cis_cat.erb
+    │   │   ├── _wodle_openscap.erb
+    │   │   ├── _wodle_osquery.erb
+    │   │   ├── _wodle_syscollector.erb
+    │   │   └── _wodle_vulnerability_detector.erb
+    │   ├── jvm_options.erb
+    │   ├── kibana_yml.erb
+    │   ├── local_decoder.xml.erb
+    │   ├── local_rules.xml.erb
+    │   ├── ossec_shared_agent.conf.erb
+    │   ├── process_list.erb
+    │   ├── wazuh_agent.conf.erb
+    │   └── wazuh_manager.conf.erb
+    ├── tests
+    │   └── init.pp
+    └── VERSION
 
 ## Branches
 
@@ -100,7 +107,7 @@ This Puppet module has been authored by Nicolas Zin, and updated by Jonathan Gaz
 ## License and copyright
 
 WAZUH
-Copyright (C) 2016-2018 Wazuh Inc.  (License GPLv2)
+Copyright (C) 2019 Wazuh Inc.  (License GPLv2)
 
 Based on OSSEC
 Copyright (C) 2015 Trend Micro Inc.
