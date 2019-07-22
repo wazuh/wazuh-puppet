@@ -1,0 +1,22 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: puppet_apply
+  manifests_path: manifests
+  modules_path: modules
+  hiera_data_path: hieradata
+
+platforms:
+  - name: ubuntu-manager
+    driver_config:
+      image: ubuntu:14.04
+      platform: ubuntu
+  - name: ubuntu-agent
+    driver_config:
+      image: ubuntu:14.04
+      platform: ubuntu
+suites:
+  - name: default
+    manifest: site.pp

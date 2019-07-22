@@ -1,0 +1,35 @@
+  <cluster>
+  <% if @ossec_cluster_name -%>
+   <name><%=@ossec_cluster_name%></name>
+  <% end -%>
+  <% if @ossec_cluster_node_name -%>
+   <node_name><%=@ossec_cluster_node_name%></node_name>
+  <% end -%>
+  <% if @ossec_cluster_node_type -%>
+   <node_type><%=@ossec_cluster_node_type%></node_type>
+  <% end -%>
+  <% if @ossec_cluster_key -%>
+   <key><%=@ossec_cluster_key%></key>
+  <% end -%>
+  <% if @ossec_cluster_port -%>
+   <port><%=@ossec_cluster_port%></port>
+  <% end -%>
+  <% if @ossec_cluster_bind_addr -%>
+   <bind_addr><%=@ossec_cluster_bind_addr%></bind_addr>
+  <% end -%>
+  <% if @ossec_cluster_nodes -%>
+   <nodes>
+    <% @ossec_cluster_nodes.each do |node| -%>
+    <node><%= node %></node>
+    <% end -%>
+   </nodes>
+  <% end -%>
+  <% if @ossec_cluster_hidden -%>
+   <hidden><%=@ossec_cluster_hidden %></hidden>
+  <% end -%>
+  <% if @ossec_cluster_disabled -%>
+   <disabled><%=@ossec_cluster_disabled%></disabled>
+  <% end -%>
+  </cluster>
+
+

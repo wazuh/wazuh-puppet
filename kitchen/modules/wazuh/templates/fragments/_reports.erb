@@ -1,0 +1,29 @@
+  <reports>
+    <%- if defined?(@r_group) -%>
+    <group><%= @r_group %></group>
+    <%- end -%>
+    <%- if defined?(@r_category) -%>
+    <category><%= @r_category %></category>
+    <%- end -%>
+    <%- if defined?(@r_rule) -%>
+    <rule><%= @r_rule %></rule>
+    <%- end -%>
+    <%- if defined?(@r_level) -%>
+    <level><%= @r_level %></level>
+    <%- end -%>
+    <%- if defined?(@r_location) -%>
+    <location><%= @r_location %></location>
+    <%- end -%>
+    <%- if defined?(@r_srcip) -%>
+    <srcip><%= @r_srcip %><srcip/>
+    <%- end -%>
+    <%- if defined?(@r_user) -%>
+    <user><%= @r_user %></user>
+    <%- end -%>
+    <title><%= @r_title %></title>
+    <email_to><%= @r_email_to %></email_to>
+    <%- if defined?(@r_showlogs) -%>
+    <showlogs><%= @r_showlogs %></showlogs>
+    <%- end -%>
+  </reports>
+  
