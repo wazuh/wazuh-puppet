@@ -9,14 +9,19 @@ provisioner:
   hiera_data_path: hieradata
 
 platforms:
-  - name: ubuntu-manager
+  - name: ubuntu-manager_00
+    run_options: --ip 10.1.0.19
     driver_config:
       image: ubuntu:14.04
       platform: ubuntu
+      hostname: manager00_ubuntu
+
   - name: ubuntu-agent
     driver_config:
       image: ubuntu:14.04
       platform: ubuntu
+      hostname: agent00_ubuntu
+
 suites:
   - name: default
     manifest: site.pp

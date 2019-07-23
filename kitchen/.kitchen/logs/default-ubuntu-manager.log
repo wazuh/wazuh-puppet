@@ -1,0 +1,6 @@
+I, [2019-07-23T08:22:25.031139 #7844]  INFO -- default-ubuntu-manager: -----> Destroying <default-ubuntu-manager>...
+I, [2019-07-23T08:22:25.118855 #7844]  INFO -- default-ubuntu-manager: UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
+I, [2019-07-23T08:22:25.119042 #7844]  INFO -- default-ubuntu-manager: root                7658                908                 0                   08:20               ?                   00:00:00            /usr/sbin/sshd -D -o UseDNS=no -o UsePAM=no -o PasswordAuthentication=yes -o UsePrivilegeSeparation=no -o PidFile=/tmp/sshd.pid
+I, [2019-07-23T08:22:25.252979 #7844]  INFO -- default-ubuntu-manager: 88d9e34e0ef93a1e198bc23dab3d1f95186d88b7fc3b524a9879b32f6b24f446
+I, [2019-07-23T08:22:27.291019 #7844]  INFO -- default-ubuntu-manager: 88d9e34e0ef93a1e198bc23dab3d1f95186d88b7fc3b524a9879b32f6b24f446
+I, [2019-07-23T08:22:27.304787 #7844]  INFO -- default-ubuntu-manager: Finished destroying <default-ubuntu-manager> (0m2.27s).

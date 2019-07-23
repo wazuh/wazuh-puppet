@@ -1,0 +1,45 @@
+I, [2019-07-23T10:17:59.002025 #8573]  INFO -- default-ubuntu-manager-00: -----> Setting up <default-ubuntu-manager-00>...
+I, [2019-07-23T10:17:59.006152 #8573]  INFO -- default-ubuntu-manager-00: Finished setting up <default-ubuntu-manager-00> (0m0.00s).
+I, [2019-07-23T10:17:59.011137 #8573]  INFO -- default-ubuntu-manager-00: -----> Verifying <default-ubuntu-manager-00>...
+I, [2019-07-23T10:17:59.013168 #8573]  INFO -- default-ubuntu-manager-00: Preparing files for transfer
+I, [2019-07-23T10:17:59.840328 #8573]  INFO -- default-ubuntu-manager-00: -----> Installing Busser (busser)
+I, [2019-07-23T10:18:02.076746 #8573]  INFO -- default-ubuntu-manager-00: Fetching busser-0.7.1.gem
+I, [2019-07-23T10:18:02.403343 #8573]  INFO -- default-ubuntu-manager-00: Fetching thor-0.19.0.gem
+I, [2019-07-23T10:18:02.671005 #8573]  INFO -- default-ubuntu-manager-00: Successfully installed thor-0.19.0
+I, [2019-07-23T10:18:02.849250 #8573]  INFO -- default-ubuntu-manager-00: Successfully installed busser-0.7.1
+I, [2019-07-23T10:18:02.850637 #8573]  INFO -- default-ubuntu-manager-00: 2 gems installed
+I, [2019-07-23T10:18:03.777529 #8573]  INFO -- default-ubuntu-manager-00: -----> Installing Busser plugin: busser-bats
+I, [2019-07-23T10:18:07.641994 #8573]  INFO -- default-ubuntu-manager-00: Plugin bats installed (version 0.3.0)
+I, [2019-07-23T10:18:07.657188 #8573]  INFO -- default-ubuntu-manager-00: -----> Running postinstall for bats plugin
+I, [2019-07-23T10:18:07.689430 #8573]  INFO -- default-ubuntu-manager-00: Installed Bats to /tmp/verifier/vendor/bats/bin/bats
+I, [2019-07-23T10:18:08.470032 #8573]  INFO -- default-ubuntu-manager-00: -----> Installing Busser plugin: busser-serverspec
+I, [2019-07-23T10:18:13.567279 #8573]  INFO -- default-ubuntu-manager-00: Plugin serverspec installed (version 0.5.10)
+I, [2019-07-23T10:18:13.609424 #8573]  INFO -- default-ubuntu-manager-00: -----> Running postinstall for serverspec plugin
+I, [2019-07-23T10:18:15.713588 #8573]  INFO -- default-ubuntu-manager-00: Suite path directory /tmp/verifier/suites does not exist, skipping.
+I, [2019-07-23T10:18:15.723547 #8573]  INFO -- default-ubuntu-manager-00: Transferring files to <default-ubuntu-manager-00>
+I, [2019-07-23T10:18:17.491761 #8573]  INFO -- default-ubuntu-manager-00: -----> Running bats test suite
+I, [2019-07-23T10:18:17.630211 #8573]  INFO -- default-ubuntu-manager-00: [1G   wazuh is up and running[K[77G1/1[2G[1G ✓ wazuh is up and running[K
+I, [2019-07-23T10:18:17.631519 #8573]  INFO -- default-ubuntu-manager-00: [0m
+I, [2019-07-23T10:18:17.633267 #8573]  INFO -- default-ubuntu-manager-00: 1 test, 0 failures
+I, [2019-07-23T10:18:17.649514 #8573]  INFO -- default-ubuntu-manager-00: -----> Running serverspec test suite
+I, [2019-07-23T10:18:17.662488 #8573]  INFO -- default-ubuntu-manager-00: -----> Installing Serverspec..
+I, [2019-07-23T10:18:20.177130 #8573]  INFO -- default-ubuntu-manager-00: Fetching multi_json-1.13.1.gem
+I, [2019-07-23T10:18:20.211678 #8573]  INFO -- default-ubuntu-manager-00: Fetching diff-lcs-1.3.gem
+I, [2019-07-23T10:18:20.259767 #8573]  INFO -- default-ubuntu-manager-00: Fetching rspec-mocks-3.8.1.gem
+I, [2019-07-23T10:18:20.294508 #8573]  INFO -- default-ubuntu-manager-00: Fetching rspec-expectations-3.8.4.gem
+I, [2019-07-23T10:18:20.320990 #8573]  INFO -- default-ubuntu-manager-00: Fetching rspec-3.8.0.gem
+I, [2019-07-23T10:18:20.339805 #8573]  INFO -- default-ubuntu-manager-00: Fetching rspec-its-1.3.0.gem
+I, [2019-07-23T10:18:20.376763 #8573]  INFO -- default-ubuntu-manager-00: Fetching net-ssh-5.2.0.gem
+I, [2019-07-23T10:18:20.415817 #8573]  INFO -- default-ubuntu-manager-00: Fetching sfl-2.3.gem
+I, [2019-07-23T10:18:20.454777 #8573]  INFO -- default-ubuntu-manager-00: Fetching specinfra-2.79.0.gem
+I, [2019-07-23T10:18:20.640940 #8573]  INFO -- default-ubuntu-manager-00: Fetching net-scp-2.0.0.gem
+I, [2019-07-23T10:18:20.827778 #8573]  INFO -- default-ubuntu-manager-00: Fetching net-telnet-0.1.1.gem
+I, [2019-07-23T10:18:20.848781 #8573]  INFO -- default-ubuntu-manager-00: Fetching serverspec-2.41.4.gem
+I, [2019-07-23T10:18:23.050738 #8573]  INFO -- default-ubuntu-manager-00: -----> serverspec installed (version 2.41.4)
+I, [2019-07-23T10:18:23.554277 #8573]  INFO -- default-ubuntu-manager-00: /opt/chef/embedded/bin/ruby -I/tmp/verifier/suites/serverspec -I/tmp/verifier/gems/gems/rspec-support-3.8.2/lib:/tmp/verifier/gems/gems/rspec-core-3.8.2/lib /opt/chef/embedded/bin/rspec --pattern /tmp/verifier/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/verifier/suites/serverspec
+I, [2019-07-23T10:18:24.220756 #8573]  INFO -- default-ubuntu-manager-00: No examples found.
+I, [2019-07-23T10:18:24.222443 #8573]  INFO -- default-ubuntu-manager-00: 
+I, [2019-07-23T10:18:24.222558 #8573]  INFO -- default-ubuntu-manager-00: Finished in 0.00094 seconds (files took 0.19168 seconds to load)
+I, [2019-07-23T10:18:24.222691 #8573]  INFO -- default-ubuntu-manager-00: [32m0 examples, 0 failures[0m
+I, [2019-07-23T10:18:24.224070 #8573]  INFO -- default-ubuntu-manager-00: 
+I, [2019-07-23T10:18:24.265138 #8573]  INFO -- default-ubuntu-manager-00: Finished verifying <default-ubuntu-manager-00> (0m25.25s).

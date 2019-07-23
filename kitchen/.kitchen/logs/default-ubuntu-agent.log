@@ -1,0 +1,45 @@
+I, [2019-07-23T10:18:24.267908 #8573]  INFO -- default-ubuntu-agent: -----> Setting up <default-ubuntu-agent>...
+I, [2019-07-23T10:18:24.283445 #8573]  INFO -- default-ubuntu-agent: Finished setting up <default-ubuntu-agent> (0m0.00s).
+I, [2019-07-23T10:18:24.284845 #8573]  INFO -- default-ubuntu-agent: -----> Verifying <default-ubuntu-agent>...
+I, [2019-07-23T10:18:24.287352 #8573]  INFO -- default-ubuntu-agent: Preparing files for transfer
+I, [2019-07-23T10:18:25.002253 #8573]  INFO -- default-ubuntu-agent: -----> Installing Busser (busser)
+I, [2019-07-23T10:18:26.379590 #8573]  INFO -- default-ubuntu-agent: Fetching busser-0.7.1.gem
+I, [2019-07-23T10:18:26.414776 #8573]  INFO -- default-ubuntu-agent: Fetching thor-0.19.0.gem
+I, [2019-07-23T10:18:26.556301 #8573]  INFO -- default-ubuntu-agent: Successfully installed thor-0.19.0
+I, [2019-07-23T10:18:26.678727 #8573]  INFO -- default-ubuntu-agent: Successfully installed busser-0.7.1
+I, [2019-07-23T10:18:26.679206 #8573]  INFO -- default-ubuntu-agent: 2 gems installed
+I, [2019-07-23T10:18:27.395935 #8573]  INFO -- default-ubuntu-agent: -----> Installing Busser plugin: busser-bats
+I, [2019-07-23T10:18:30.857800 #8573]  INFO -- default-ubuntu-agent: Plugin bats installed (version 0.3.0)
+I, [2019-07-23T10:18:30.866782 #8573]  INFO -- default-ubuntu-agent: -----> Running postinstall for bats plugin
+I, [2019-07-23T10:18:30.894183 #8573]  INFO -- default-ubuntu-agent: Installed Bats to /tmp/verifier/vendor/bats/bin/bats
+I, [2019-07-23T10:18:31.582184 #8573]  INFO -- default-ubuntu-agent: -----> Installing Busser plugin: busser-serverspec
+I, [2019-07-23T10:18:36.377450 #8573]  INFO -- default-ubuntu-agent: Plugin serverspec installed (version 0.5.10)
+I, [2019-07-23T10:18:36.422099 #8573]  INFO -- default-ubuntu-agent: -----> Running postinstall for serverspec plugin
+I, [2019-07-23T10:18:38.400198 #8573]  INFO -- default-ubuntu-agent: Suite path directory /tmp/verifier/suites does not exist, skipping.
+I, [2019-07-23T10:18:38.411489 #8573]  INFO -- default-ubuntu-agent: Transferring files to <default-ubuntu-agent>
+I, [2019-07-23T10:18:39.475034 #8573]  INFO -- default-ubuntu-agent: -----> Running bats test suite
+I, [2019-07-23T10:18:39.586479 #8573]  INFO -- default-ubuntu-agent: [1G   wazuh is up and running[K[77G1/1[2G[1G ✓ wazuh is up and running[K
+I, [2019-07-23T10:18:39.587509 #8573]  INFO -- default-ubuntu-agent: [0m
+I, [2019-07-23T10:18:39.589007 #8573]  INFO -- default-ubuntu-agent: 1 test, 0 failures
+I, [2019-07-23T10:18:39.592626 #8573]  INFO -- default-ubuntu-agent: -----> Running serverspec test suite
+I, [2019-07-23T10:18:39.605978 #8573]  INFO -- default-ubuntu-agent: -----> Installing Serverspec..
+I, [2019-07-23T10:18:40.721472 #8573]  INFO -- default-ubuntu-agent: Fetching rspec-mocks-3.8.1.gem
+I, [2019-07-23T10:18:40.790475 #8573]  INFO -- default-ubuntu-agent: Fetching rspec-its-1.3.0.gem
+I, [2019-07-23T10:18:40.847998 #8573]  INFO -- default-ubuntu-agent: Fetching net-ssh-5.2.0.gem
+I, [2019-07-23T10:18:40.929520 #8573]  INFO -- default-ubuntu-agent: Fetching rspec-expectations-3.8.4.gem
+I, [2019-07-23T10:18:40.985176 #8573]  INFO -- default-ubuntu-agent: Fetching multi_json-1.13.1.gem
+I, [2019-07-23T10:18:41.002802 #8573]  INFO -- default-ubuntu-agent: Fetching rspec-3.8.0.gem
+I, [2019-07-23T10:18:41.021574 #8573]  INFO -- default-ubuntu-agent: Fetching diff-lcs-1.3.gem
+I, [2019-07-23T10:18:41.059171 #8573]  INFO -- default-ubuntu-agent: Fetching net-scp-2.0.0.gem
+I, [2019-07-23T10:18:41.096996 #8573]  INFO -- default-ubuntu-agent: Fetching net-telnet-0.1.1.gem
+I, [2019-07-23T10:18:41.134355 #8573]  INFO -- default-ubuntu-agent: Fetching specinfra-2.79.0.gem
+I, [2019-07-23T10:18:41.183727 #8573]  INFO -- default-ubuntu-agent: Fetching sfl-2.3.gem
+I, [2019-07-23T10:18:41.206212 #8573]  INFO -- default-ubuntu-agent: Fetching serverspec-2.41.4.gem
+I, [2019-07-23T10:18:43.135276 #8573]  INFO -- default-ubuntu-agent: -----> serverspec installed (version 2.41.4)
+I, [2019-07-23T10:18:43.569893 #8573]  INFO -- default-ubuntu-agent: /opt/chef/embedded/bin/ruby -I/tmp/verifier/suites/serverspec -I/tmp/verifier/gems/gems/rspec-support-3.8.2/lib:/tmp/verifier/gems/gems/rspec-core-3.8.2/lib /opt/chef/embedded/bin/rspec --pattern /tmp/verifier/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/verifier/suites/serverspec
+I, [2019-07-23T10:18:44.187782 #8573]  INFO -- default-ubuntu-agent: No examples found.
+I, [2019-07-23T10:18:44.189723 #8573]  INFO -- default-ubuntu-agent: 
+I, [2019-07-23T10:18:44.190579 #8573]  INFO -- default-ubuntu-agent: Finished in 0.0006 seconds (files took 0.19097 seconds to load)
+I, [2019-07-23T10:18:44.191962 #8573]  INFO -- default-ubuntu-agent: [32m0 examples, 0 failures[0m
+I, [2019-07-23T10:18:44.192077 #8573]  INFO -- default-ubuntu-agent: 
+I, [2019-07-23T10:18:44.221314 #8573]  INFO -- default-ubuntu-agent: Finished verifying <default-ubuntu-agent> (0m19.93s).

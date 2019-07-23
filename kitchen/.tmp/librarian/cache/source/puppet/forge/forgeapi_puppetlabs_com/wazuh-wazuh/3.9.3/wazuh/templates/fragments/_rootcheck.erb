@@ -1,0 +1,47 @@
+<%- if @kernel == 'Linux' -%>
+  <rootcheck>
+  <% if @ossec_rootcheck_disabled -%>
+    <disabled><%= @ossec_rootcheck_disabled %></disabled>
+  <%- end -%>
+  <% if @ossec_rootcheck_check_files -%>
+    <check_files><%= @ossec_rootcheck_check_files %></check_files>
+  <%- end -%>
+  <% if @ossec_rootcheck_check_trojans-%>
+    <check_trojans><%= @ossec_rootcheck_check_trojans %></check_trojans>
+  <%- end -%>
+  <% if @ossec_rootcheck_check_dev -%>
+    <check_dev><%= @ossec_rootcheck_check_dev %></check_dev>
+  <%- end -%>
+  <% if @ossec_rootcheck_check_sys -%>
+    <check_sys><%= @ossec_rootcheck_check_sys %></check_sys>
+  <%- end -%>
+  <% if @ossec_rootcheck_check_pids -%>
+    <check_pids><%= @ossec_rootcheck_check_pids %></check_pids>
+  <%- end -%>
+  <% if @ossec_rootcheck_check_ports -%>
+    <check_ports><%= @ossec_rootcheck_check_ports %></check_ports>
+  <%- end -%>
+  <% if @ossec_rootcheck_check_if -%>
+    <check_if><%= @ossec_rootcheck_check_if %></check_if>
+  <%- end -%>
+  <% if @ossec_rootcheck_frequency-%>
+    <frequency><%= @ossec_rootcheck_frequency %></frequency>
+  <%- end -%>
+  <% if @ossec_rootcheck_rootkit_files-%>
+    <rootkit_files><%= @ossec_rootcheck_rootkit_files %></rootkit_files>
+  <%- end -%>
+  <% if @ossec_rootcheck_rootkit_trojans-%>
+    <rootkit_trojans><%= @ossec_rootcheck_rootkit_trojans %></rootkit_trojans>
+  <%- end -%>
+  <% if @ossec_rootcheck_skip_nfs-%>
+    <skip_nfs><%= @ossec_rootcheck_skip_nfs%></skip_nfs>
+  <%- end -%>  
+  </rootcheck>
+<%- else -%>
+    <!-- Rootcheck files (static) -->
+  <rootcheck>
+    <windows_audit>./shared/win_audit_rcl.txt</windows_audit>
+    <windows_apps>./shared/win_applications_rcl.txt</windows_apps>
+    <windows_malware>./shared/win_malware_rcl.txt</windows_malware>
+  </rootcheck>
+<%- end -%>
