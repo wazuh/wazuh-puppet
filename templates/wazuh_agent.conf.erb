@@ -1,13 +1,7 @@
   <client>
   <server>
-  <%- if @ossec_ip then -%>
-    <address><%= @ossec_ip %></address>
-  <%- end -%>
-  <%- if @ossec_hostname then -%>
-    <address><%= @ossec_hostname %></address>
-  <%- end -%>
-  <%- if @ossec_address then -%>
-    <address><%= @ossec_address %></address>
+  <%- if @ossec_reporting_ip then -%>
+    <address><%= @ossec_reporting_ip %></address>
   <%- end -%>
   <%- if @ossec_protocol then -%>
     <protocol><%= @ossec_protocol %></protocol>
