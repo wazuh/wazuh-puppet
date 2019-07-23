@@ -354,7 +354,7 @@ class wazuh::agent(
 
       # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
 
-      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_reporting_ip}"
+      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_registration_ip}"
 
       if $wazuh_manager_root_ca_pem != undef {
         validate_string($wazuh_manager_root_ca_pem)
