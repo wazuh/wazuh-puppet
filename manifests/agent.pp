@@ -53,8 +53,8 @@ class wazuh::agent(
 
   # Server configuration
 
-  $ossec_ip                          = $wazuh::params_agent::ossec_ip,
-  $ossec_hostname                    = $wazuh::params_agent::ossec_hostname,
+  $ossec_registration_ip             = $wazuh::params_agent::ossec_registration_ip,
+  $ossec_reporting_ip                = $wazuh::params_agent::ossec_reporting_ip,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
@@ -151,9 +151,12 @@ class wazuh::agent(
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if ( ( $ossec_ip == undef ) and ( $ossec_hostname == undef ) and ( $ossec_address == undef ) ) {
-    fail('must pass either $ossec_ip or $ossec_hostname or $ossec_address to Class[\'wazuh::agent\'].')
+  if (($manage_client_keys == 'yes')){
+      if ( ( $ossec_registration_ip == undef ) or ( $ossec_reporting_ip == undef ) ) {
+        fail('must pass either $ossec_registration_ip  or $ossec_reporting_ip to Class[\'wazuh::agent\'].')
+      }
   }
+
 
   case $::kernel {
     'Linux' : {
@@ -185,7 +188,7 @@ class wazuh::agent(
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
           source          => "${download_path}/wazuh-agent-${agent_package_version}.msi",
-          install_options => [ '/q', "ADDRESS=${ossec_ip}", "AUTHD_SERVER=${ossec_ip}" ],
+          install_options => [ '/q', "ADDRESS=${ossec_registration_ip}", "AUTHD_SERVER=${ossec_registration_ip}" ],
           require         => File["${download_path}wazuh-agent-${agent_package_version}.msi"],
         }
       }
@@ -342,7 +345,6 @@ class wazuh::agent(
 
     if ($::kernel == 'Linux') {
       # Is this really Linux only?
-      $ossec_address = pick($ossec_ip, $ossec_hostname)
 
       file { $::wazuh::params_agent::keys_file:
         owner => $wazuh::params_agent::keys_owner,
@@ -352,7 +354,7 @@ class wazuh::agent(
 
       # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
 
-      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_address}"
+      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_reporting_ip}"
 
       if $wazuh_manager_root_ca_pem != undef {
         validate_string($wazuh_manager_root_ca_pem)
