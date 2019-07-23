@@ -1,9 +1,0 @@
----
-username: kitchen
-ssh_key: "/home/vagrant/wazuh-puppet/kitchen/.kitchen/docker_id_rsa"
-image_id: 5d1571d6990c
-container_id: efb3efea0e53015465c83a2af009df867e09a97de6c8ce6fad605b19c6306ef5
-hostname: localhost
-port: 32804
-last_action: verify
-last_error: 

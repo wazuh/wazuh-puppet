@@ -27,5 +27,5 @@
 /inventory.yaml
 ./kitchen/modules/.kitchen/logs/
 *.lock
-kitchen/.tmp/*
+kitchen/.tmp/
 kitchen/.kitchen/
