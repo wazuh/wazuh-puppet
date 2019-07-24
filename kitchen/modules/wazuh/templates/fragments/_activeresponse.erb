@@ -1,0 +1,15 @@
+  <active-response>
+    <command><%= @command_name %></command>
+    <% if @ar_agent_id != '' -%>
+      <agent_id><%= @ar_agent_id %></agent_id>
+    <% end -%>
+    <location><%= @ar_location %></location>
+    <level><%= @ar_level %></level>
+    <% if !@ar_rules_id.empty? -%>
+      <rules_id><% @ar_rules_id.each do |ruleid| -%><%= ruleid %>,<% end %></rules_id>
+    <% end %>
+    <timeout><%= @ar_timeout %></timeout>
+    <% if @ar_repeated_offenders != '' -%>
+      <repeated_offenders><%= @ar_repeated_offenders %></repeated_offenders>
+    <% end -%>
+  </active-response>

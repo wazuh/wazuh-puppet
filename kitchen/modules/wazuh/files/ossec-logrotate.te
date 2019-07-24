@@ -1,0 +1,10 @@
+module ossec-logrotate 1.2;
+
+require {
+type var_t;
+type logrotate_t;
+class file { read write getattr open };
+}
+
+#============= logrotate_t ==============
+allow logrotate_t var_t:file { read write getattr open };

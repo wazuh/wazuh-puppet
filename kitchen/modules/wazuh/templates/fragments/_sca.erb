@@ -1,0 +1,70 @@
+<%- if @kernel == 'Linux' -%>
+  <%- if @apply_template_os == 'centos' -%>
+    <sca>
+      <enabled>yes</enabled>
+      <scan_on_start>yes</scan_on_start>
+      <interval>12h</interval>
+      <skip_nfs>yes</skip_nfs>
+
+      <policies>
+        <policy>cis_rhel7_linux_rcl.yml</policy>
+        <policy>system_audit_rcl.yml</policy>
+        <policy>system_audit_ssh.yml</policy>
+        <policy>system_audit_pw.yml</policy>
+      </policies>
+    </sca>
+  <%- elsif @apply_template_os =='amazon' -%> 
+    <sca>
+      <enabled>yes</enabled>
+      <scan_on_start>yes</scan_on_start>
+      <interval>12h</interval>
+      <skip_nfs>yes</skip_nfs>
+
+      <policies>
+      <policy>system_audit_rcl.yml</policy>
+      <policy>system_audit_ssh.yml</policy>
+      <policy>system_audit_pw.yml</policy>
+      </policies>
+    </sca>
+  <%- elsif @apply_template_os =='rhel' -%> 
+    <sca>
+      <enabled>yes</enabled>
+      <scan_on_start>yes</scan_on_start>
+      <interval>12h</interval>
+      <skip_nfs>yes</skip_nfs>
+
+      <policies>
+      <%- if @rhel_version == '7' -%>
+      <policy>cis_rhel7_linux_rcl.yml</policy>
+      <%- elsif @rhel_version =='6' -%>
+      <policy>cis_rhel6_linux_rcl.yml</policy>
+      <%- elsif @rhel_version =='5' -%>
+      <policy>cis_rhel5_linux_rcl.yml</policy>
+      <%- end -%>
+      <policy>system_audit_rcl.yml</policy>
+      <policy>system_audit_ssh.yml</policy>
+      <policy>system_audit_pw.yml</policy>
+      </policies>
+    </sca>
+  <%- else -%>
+      <sca>
+      <enabled>yes</enabled>
+      <scan_on_start>yes</scan_on_start>
+      <interval>12h</interval>
+      <skip_nfs>yes</skip_nfs>
+
+      <policies>
+      <policy>cis_debian_linux_rcl.yml</policy>
+      <%- if @debian_additional_templates == 'yes' -%>
+      <policy>cis_debianlinux7-8_L1_rcl.yml</policy>
+      <policy>cis_debianlinux7-8_L2_rcl.yml</policy>
+      <%- end -%>
+      <policy>system_audit_rcl.yml</policy>
+      <policy>system_audit_ssh.yml</policy>
+      <policy>system_audit_pw.yml</policy>
+      </policies>
+    </sca>
+  <%- end -%>
+<%- end -%>
+    
+  

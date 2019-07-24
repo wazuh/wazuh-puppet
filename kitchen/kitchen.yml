@@ -1,0 +1,30 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: puppet_apply
+  manifests_path: manifests
+  modules_path: modules
+  hiera_data_path: hieradata
+
+platforms:
+  - name: ubuntu-manager_00
+    run_options: --ip 10.1.0.19
+    driver_config:
+      image: ubuntu:14.04
+      platform: ubuntu
+      hostname: manager00_ubuntu
+
+  - name: ubuntu-agent
+    driver_config:
+      image: ubuntu:14.04
+      platform: ubuntu
+      hostname: agent00_ubuntu
+
+suites:
+  - name: default
+    manifest: site.pp
+    verifier:
+      name: shell
+      command: py.test -v test/base
