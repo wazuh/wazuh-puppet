@@ -82,8 +82,8 @@ class wazuh::params_agent {
 
       ## Server block configuration
 
-      $ossec_registration_ip             = undef
-      $ossec_reporting_ip                = undef
+      $wazuh_register_endpoint           = undef
+      $wazuh_reporting_endpoint          = undef
       $ossec_port                        = '1514'
       $ossec_protocol                    = 'udp'
       $ossec_notify_time                 = 10
