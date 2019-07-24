@@ -1,2 +1,6 @@
 ---
+<<<<<<< HEAD
 LIBRARIAN_PUPPET_PATH: "/tmp/default-ubuntu-agent-sandbox-20190724-16473-15rk7iw/modules"
+=======
+LIBRARIAN_PUPPET_PATH: "/tmp/default-ubuntu-agent-sandbox-20190723-12267-988yf5/modules"
+>>>>>>> ff9547c01a587923eaa877c5b4763f28e15b2c1f

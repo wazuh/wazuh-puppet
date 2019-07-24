@@ -25,6 +25,9 @@ platforms:
 suites:
   - name: default
     manifest: site.pp
+<<<<<<< HEAD
     verifier:
       name: shell
       command: py.test -v test/base
+=======
+>>>>>>> ff9547c01a587923eaa877c5b4763f28e15b2c1f
