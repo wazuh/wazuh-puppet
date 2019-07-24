@@ -53,8 +53,8 @@ class wazuh::agent(
 
   # Server configuration
 
-  $ossec_registration_ip             = $wazuh::params_agent::ossec_registration_ip,
-  $ossec_reporting_ip                = $wazuh::params_agent::ossec_reporting_ip,
+  $wazuh_register_endpoint           = $wazuh::params_agent::wazuh_register_endpoint,
+  $wazuh_reporting_endpoint          = $wazuh::params_agent::wazuh_reporting_endpoint,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
@@ -152,11 +152,10 @@ class wazuh::agent(
   validate_string($agent_service_name)
 
   if (($manage_client_keys == 'yes')){
-      if ( ( $ossec_registration_ip == undef ) or ( $ossec_reporting_ip == undef ) ) {
-        fail('must pass either $ossec_registration_ip  or $ossec_reporting_ip to Class[\'wazuh::agent\'].')
+      if ( ( $wazuh_register_endpoint == undef ) ) {
+        fail('The $wazuh_register_endpoint parameter is needed in order to register the Agent.')
       }
   }
-
 
   case $::kernel {
     'Linux' : {
@@ -188,7 +187,7 @@ class wazuh::agent(
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
           source          => "${download_path}/wazuh-agent-${agent_package_version}.msi",
-          install_options => [ '/q', "ADDRESS=${ossec_registration_ip}", "AUTHD_SERVER=${ossec_registration_ip}" ],
+          install_options => [ '/q', "ADDRESS=${wazuh_register_endpoint}", "AUTHD_SERVER=${wazuh_register_endpoint}" ],
           require         => File["${download_path}wazuh-agent-${agent_package_version}.msi"],
         }
       }
@@ -354,7 +353,7 @@ class wazuh::agent(
 
       # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
 
-      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_registration_ip}"
+      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${wazuh_register_endpoint}"
 
       if $wazuh_manager_root_ca_pem != undef {
         validate_string($wazuh_manager_root_ca_pem)
@@ -433,19 +432,20 @@ class wazuh::agent(
           before  => Service[$agent_service_name],
         }
       }
-
-      service { $agent_service_name:
-        ensure    => running,
-        enable    => true,
-        hasstatus => $wazuh::params_agent::service_has_status,
-        pattern   => $wazuh::params_agent::agent_service_name,
-        provider  => $wazuh::params_agent::ossec_service_provider,
-        require   => Package[$agent_package_name],
+      if $wazuh_reporting_endpoint != undef {
+        service { $agent_service_name:
+          ensure    => running,
+          enable    => true,
+          hasstatus => $wazuh::params_agent::service_has_status,
+          pattern   => $wazuh::params_agent::agent_service_name,
+          provider  => $wazuh::params_agent::ossec_service_provider,
+          require   => Package[$agent_package_name],
+        }
       }
     }
   }
 
-  if $manage_client_keys != 'yes'{
+  if ( ( $manage_client_keys != 'yes') or ( $wazuh_reporting_endpoint == undef ) ){
     service { $agent_service_name:
           ensure    => stopped,
           enable    => false,
