@@ -1,6 +1,3 @@
-#node '75e919b02929' {
-#  include wazuh::manager
-#}
 node 'manager00_ubuntu' {
   class { "wazuh::manager":
         configure_wodle_openscap => false
