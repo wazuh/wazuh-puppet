@@ -9,7 +9,7 @@ test_host = testinfra.get_host('paramiko://{KITCHEN_USERNAME}@{KITCHEN_HOSTNAME}
 @pytest.mark.skipif('agent' in os.environ.get('KITCHEN_INSTANCE'), reason='Skip on wazuh manager instances')
 def test_wazuh_agent_package(host):
     name = "wazuh-manager"
-    version = "3.9.2"
+    version = "3.9.3"
     pkg = host.package(name)
     assert pkg.is_installed
     assert pkg.version.startswith(version)
@@ -18,22 +18,22 @@ def test_wazuh_agent_package(host):
 @pytest.mark.skipif('agent' in os.environ.get('KITCHEN_INSTANCE'), reason='Skip on wazuh manager instances')
 def get_wazuh_version():
     """This return the version of Wazuh."""
-    return "3.9.2"
+    return "3.9.3"
 
 @pytest.mark.filterwarnings('ignore')
 @pytest.mark.skipif('agent' in os.environ.get('KITCHEN_INSTANCE'), reason='Skip on wazuh manager instances')
 def test_wazuh_packages_are_installed(host):
     """Test if the main packages are installed."""
     manager = host.package("wazuh-manager")
-    api = host.package("wazuh-api")
+    #api = host.package("wazuh-api")
 
     distribution = host.system_info.distribution.lower()
     if distribution == 'centos':
         if host.system_info.release == "7":
             assert manager.is_installed
             assert manager.version.startswith(get_wazuh_version())
-            assert api.is_installed
-            assert api.version.startswith(get_wazuh_version())
+            #assert api.is_installed
+            #assert api.version.startswith(get_wazuh_version())
         elif host.system_info.release.startswith("6"):
             assert manager.is_installed
             assert manager.version.startswith(get_wazuh_version())

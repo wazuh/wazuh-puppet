@@ -294,7 +294,7 @@ class wazuh::manager (
       }else{
         fail('This ossec module has not been tested on your distribution')
       }
-    }'Debian', 'debian', 'Ubuntu':{
+    }'Debian', 'debian', 'Ubuntu', 'ubuntu':{
       $apply_template_os = 'debian'
       if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie'){
         $debian_additional_templates = 'yes'

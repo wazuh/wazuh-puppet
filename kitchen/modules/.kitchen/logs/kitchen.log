@@ -1,28 +1,31 @@
-E, [2019-07-22T08:59:08.020188 #14509] ERROR -- Kitchen: ------Exception-------
-E, [2019-07-22T08:59:08.020348 #14509] ERROR -- Kitchen: Class: Kitchen::UserError
-E, [2019-07-22T08:59:08.020465 #14509] ERROR -- Kitchen: Message: Kitchen YAML file /home/vagrant/puppet-kitchen/modules/kitchen.yml does not exist.
-E, [2019-07-22T08:59:08.020526 #14509] ERROR -- Kitchen: ----------------------
-E, [2019-07-22T08:59:08.020582 #14509] ERROR -- Kitchen: ------Backtrace-------
-E, [2019-07-22T08:59:08.020636 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/loader/yaml.rb:65:in `read'
-E, [2019-07-22T08:59:08.020739 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:152:in `data'
-E, [2019-07-22T08:59:08.020796 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:131:in `suites'
-E, [2019-07-22T08:59:08.020852 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:182:in `filter_instances'
-E, [2019-07-22T08:59:08.020936 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:141:in `build_instances'
-E, [2019-07-22T08:59:08.020995 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:117:in `instances'
-E, [2019-07-22T08:59:08.021052 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/command.rb:112:in `filtered_instances'
-E, [2019-07-22T08:59:08.021108 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/command.rb:142:in `parse_subcommand'
-E, [2019-07-22T08:59:08.021164 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/command/list.rb:30:in `call'
-E, [2019-07-22T08:59:08.021219 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/cli.rb:52:in `perform'
-E, [2019-07-22T08:59:08.021276 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/cli.rb:120:in `list'
-E, [2019-07-22T08:59:08.021332 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor/command.rb:27:in `run'
-E, [2019-07-22T08:59:08.021417 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor/invocation.rb:126:in `invoke_command'
-E, [2019-07-22T08:59:08.021476 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor.rb:387:in `dispatch'
-E, [2019-07-22T08:59:08.021532 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor/base.rb:466:in `start'
-E, [2019-07-22T08:59:08.021589 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/bin/kitchen:13:in `block in <top (required)>'
-E, [2019-07-22T08:59:08.021645 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/errors.rb:171:in `with_friendly_errors'
-E, [2019-07-22T08:59:08.021701 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/bin/kitchen:13:in `<top (required)>'
-E, [2019-07-22T08:59:08.021757 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/kitchen:23:in `load'
-E, [2019-07-22T08:59:08.021811 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/kitchen:23:in `<main>'
-E, [2019-07-22T08:59:08.021865 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/ruby_executable_hooks:15:in `eval'
-E, [2019-07-22T08:59:08.021949 #14509] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/ruby_executable_hooks:15:in `<main>'
-E, [2019-07-22T08:59:08.022004 #14509] ERROR -- Kitchen: ----End Backtrace-----
+I, [2019-07-29T13:16:42.860149 #11458]  INFO -- Kitchen: -----> Starting Kitchen (v2.2.5)
+E, [2019-07-29T13:16:42.866989 #11458] ERROR -- Kitchen: ------Exception-------
+E, [2019-07-29T13:16:42.867097 #11458] ERROR -- Kitchen: Class: Kitchen::UserError
+E, [2019-07-29T13:16:42.867155 #11458] ERROR -- Kitchen: Message: Kitchen YAML file /home/vagrant/wazuh-puppet/kitchen/modules/kitchen.yml does not exist.
+E, [2019-07-29T13:16:42.867211 #11458] ERROR -- Kitchen: ----------------------
+E, [2019-07-29T13:16:42.867268 #11458] ERROR -- Kitchen: ------Backtrace-------
+E, [2019-07-29T13:16:42.867324 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/loader/yaml.rb:65:in `read'
+E, [2019-07-29T13:16:42.867400 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:152:in `data'
+E, [2019-07-29T13:16:42.867482 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:131:in `suites'
+E, [2019-07-29T13:16:42.867546 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:182:in `filter_instances'
+E, [2019-07-29T13:16:42.867604 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:141:in `build_instances'
+E, [2019-07-29T13:16:42.867661 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/config.rb:117:in `instances'
+E, [2019-07-29T13:16:42.867724 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/command.rb:94:in `all_instances'
+E, [2019-07-29T13:16:42.867781 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/command.rb:142:in `parse_subcommand'
+E, [2019-07-29T13:16:42.867865 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/command/action.rb:35:in `block in call'
+E, [2019-07-29T13:16:42.867926 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/rubies/ruby-2.3.0/lib/ruby/2.3.0/benchmark.rb:293:in `measure'
+E, [2019-07-29T13:16:42.868030 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/command/action.rb:34:in `call'
+E, [2019-07-29T13:16:42.868083 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/cli.rb:52:in `perform'
+E, [2019-07-29T13:16:42.868133 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/cli.rb:193:in `block (2 levels) in <class:CLI>'
+E, [2019-07-29T13:16:42.868184 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor/command.rb:27:in `run'
+E, [2019-07-29T13:16:42.868234 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor/invocation.rb:126:in `invoke_command'
+E, [2019-07-29T13:16:42.868285 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor.rb:387:in `dispatch'
+E, [2019-07-29T13:16:42.868335 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/thor-0.20.3/lib/thor/base.rb:466:in `start'
+E, [2019-07-29T13:16:42.868385 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/bin/kitchen:13:in `block in <top (required)>'
+E, [2019-07-29T13:16:42.868435 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/lib/kitchen/errors.rb:171:in `with_friendly_errors'
+E, [2019-07-29T13:16:42.868562 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/gems/test-kitchen-2.2.5/bin/kitchen:13:in `<top (required)>'
+E, [2019-07-29T13:16:42.868615 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/kitchen:23:in `load'
+E, [2019-07-29T13:16:42.868664 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/kitchen:23:in `<main>'
+E, [2019-07-29T13:16:42.868712 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/ruby_executable_hooks:15:in `eval'
+E, [2019-07-29T13:16:42.868761 #11458] ERROR -- Kitchen: /home/vagrant/.rvm/gems/ruby-2.3.0/bin/ruby_executable_hooks:15:in `<main>'
+E, [2019-07-29T13:16:42.868823 #11458] ERROR -- Kitchen: ----End Backtrace-----

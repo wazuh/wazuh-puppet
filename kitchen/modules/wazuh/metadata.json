@@ -1,6 +1,6 @@
 {
   "name": "wazuh-wazuh",
-  "version": "3.9.2",
+  "version": "3.9.3",
   "author": "WAZUH",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
@@ -105,7 +105,7 @@
     "3.9",
     "wazuh"
   ],
-  "pdk-version": "1.10.0",
-  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git#1.10.0",
+  "pdk-version": "1.11.1",
+  "template-url": "pdk-default#1.10.0",
   "template-ref": "1.10.0-0-gbba9ac3"
 }
