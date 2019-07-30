@@ -32,3 +32,4 @@ kitchen/.kitchen/
 kitchen/venv
 kitchen/*.xml
 kitchen/test/Dockerfile
+*.log
