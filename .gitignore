@@ -33,3 +33,8 @@ kitchen/venv
 kitchen/*.xml
 kitchen/test/Dockerfile
 *.log
+*.pyc
+kitchen/.tmp/
+kitchen/.librarian/
+kitchen/.pytest_cache/
+kitchen/.*
