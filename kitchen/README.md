@@ -1,5 +1,6 @@
 **KITCHEN-PUPPET TESTING**
 
+
 **1.Building Kitchen Directory Structure**
 ```
 ├── chefignore
@@ -41,7 +42,54 @@ Once we have our list of gems prepared, we install them running the following co
 bundle install
 ```
 
-**3. Kitchen Environment Configuration**
+**3. Adding Dependencies**
+
+A step which is already applied here is the creation of `Puppetfile` using `puppet-librerian` by running the command:
+
+```
+± librarian-puppet init
+      create  Puppetfile
+```
+
+As you can see the, `Puppetfile` already exist with the following content:
+
+```
+#!/usr/bin/env ruby
+#^syntax detection
+
+forge "https://forgeapi.puppetlabs.com"
+
+# use dependencies defined in metadata.json
+#metadata
+
+mod "wazuh/wazuh"
+# use dependencies defined in Modulefile
+# modulefile
+
+# A module from the Puppet Forge
+# mod 'puppetlabs-stdlib'
+
+# A module from git
+# mod 'puppetlabs-ntp',
+#   :git => 'git://github.com/puppetlabs/puppetlabs-ntp.git'
+
+# A module from a git branch/tag
+# mod 'puppetlabs-apt',
+#   :git => 'https://github.com/puppetlabs/puppetlabs-apt.git',
+#   :ref => '1.4.x'
+
+# A module from Github pre-packaged tarball
+# mod 'puppetlabs-apache', '0.6.0', :github_tarball => 'puppetlabs/puppetlabs-apache'
+```
+
+Once `Puppetfile` is prepared, then we run need to get the requested module, by running:
+
+ ```
+ librarian-puppet install
+ ```
+ 
+
+**4. Kitchen Environment Configuration**
 
 In the file `kitchen.yml` we have to configure the machines were our tests will be running. This configuration includes information, such as : 
 * The virtualization tool `vagrant` or `docker`, 
@@ -84,7 +132,7 @@ suites:
       command: py.test -v test/base
 ```
 
-**4. Put Kitchen in action** 
+**5. Put Kitchen in action** 
 
 Once we have `kitchen.yml` prepared, then we can create the environment by running:
 
@@ -114,12 +162,15 @@ node 'agent00_ubuntu' {
 
 As you can see, we only want to install `wazuh-manager` and `wazuh-agent`.
 
+
+**6. Kitchen Converging: Installing the packages to be tested**
+
 Once `site.pp` is prepared, we run:
 ```
 kitchen converge
 ```
 
-**6. Testing time**
+**7. Testing**
 
 `Kitchen` offers a large variety of testing types, such as:
 * Bats tests.
