@@ -1,11 +1,13 @@
 #!/bin/bash
 
+# Adding Wazuh module from Puppet forge.
+librarian-puppet install
+
 rm -rf .kitchen/logs/* # removing old logs
 rm -rf .kitchen/def* # removing old .yml files associated for old kitchen instances
 rm -rf ./manifests/se* # removing all temporal manifests files.
 
 kitchen destroy all # destroying all existing kitchen instances
-docker rm -f $(docker ps -aq) # removing all existing containers.
 
 kitchen create # creating new kitchen instances
 
