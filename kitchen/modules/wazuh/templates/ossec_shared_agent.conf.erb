@@ -1,0 +1,44 @@
+<agent_config>
+<% if @ossec_rootcheck == false then -%>
+  <rootcheck>
+    <disabled>yes</disabled>
+  </rootcheck>
+<% end -%>
+
+<syscheck>
+    <!-- Frequency that syscheck is executed -->
+    <frequency><%= @ossec_syscheck_frequency %></frequency>
+    <disabled>no</disabled>
+  </syscheck>
+</agent_config>
+
+<agent_config os="Linux">
+  <%= scope.function_template(["wazuh/fragments/_rootcheck.erb"]) %>
+
+  <%= scope.function_template(["wazuh/fragments/_syscheck.erb"]) %>
+
+  <!-- Log analysis -->
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/ossec/logs/active-responses.log</location>
+  </localfile>
+</agent_config>
+
+<agent_config os="Windows">
+  <%= scope.function_template(["wazuh/fragments/_rootcheck.erb"]) %>
+
+  <%= scope.function_template(["wazuh/fragments/_syscheck.erb"]) %>
+
+  <localfile>
+    <log_format>eventlog</log_format>
+    <location>Application</location>
+  </localfile>
+  <localfile>
+    <log_format>eventlog</log_format>
+    <location>Security</location>
+  </localfile>
+  <localfile>
+    <log_format>eventlog</log_format>
+    <location>System</location>
+  </localfile>
+</agent_config>

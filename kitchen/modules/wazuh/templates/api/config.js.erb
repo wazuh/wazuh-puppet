@@ -1,0 +1,42 @@
+
+var config = {};
+
+// Basic configuration
+<% @api_config_params.each do |config| -%>
+config.<%= config['name'] %> = "<%= config['value'] %>";
+<% end -%>
+
+// Advanced configuration
+
+// Values for API log: disabled, info, warning, error, debug (each level includes the previous level).
+config.logs = "info";
+// Cross-origin resource sharing. Values: yes, no.
+config.cors = "yes";
+// Cache (time in milliseconds)
+config.cache_enabled = "yes";
+config.cache_debug = "no";
+config.cache_time = "750";
+// Log path
+config.log_path = config.ossec_path + "/logs/api.log";
+// Python
+config.python = [
+    // Default installation
+    {
+        bin: "python",
+        lib: ""
+    },
+    // Python 3
+    {
+        bin: "python3",
+        lib: ""
+    },
+    // Package 'python27' for CentOS 6
+    {
+        bin: "/opt/rh/python27/root/usr/bin/python",
+        lib: "/opt/rh/python27/root/usr/lib64"
+    }
+];
+// Shared library path
+config.ld_library_path = config.ossec_path + "/api/framework/lib"
+
+module.exports = config;

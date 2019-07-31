@@ -1,0 +1,8 @@
+# This file managed by Puppet.
+# Any changes will be overwritten
+<% if @syslog_output -%>
+CSYSLOG_DAEMON=ossec-csyslogd
+<% end -%>
+<% if @ossec_integratord_enabled -%>
+INTEGRATOR_DAEMON=ossec-integratord
+<% end -%>
