@@ -10,8 +10,8 @@ else
 	echo "Installing Wazuh module"
 	librarian-puppet install
 
-        sed "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/manager.pp
-        sed "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/agent.pp
+        sed -i "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/manager.pp
+        sed -i "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/agent.pp
 fi
 
 
