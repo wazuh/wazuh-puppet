@@ -38,4 +38,4 @@ kitchen/.tmp/
 kitchen/.librarian/
 kitchen/.pytest_cache/
 kitchen/.*
-kitchen/modules
+kitchen/modules/
