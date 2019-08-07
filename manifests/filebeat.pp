@@ -32,6 +32,20 @@ class wazuh::filebeat (
     notify  => Service['filebeat']
   }
 
+  exec { 'Installing filebeat module ...':
+    path    => '/usr/bin',
+    command => "curl -s https://packages-dev.wazuh.com/3.x/filebeat/wazuh-filebeat-0.1.tar.gz | tar -xvz -C /usr/share/filebeat/module",
+    notify  => Service['filebeat']
+  }
+
+  directory "/usr/share/filebeat/module/wazuh" do
+    owner 'root'
+    group 'root'
+    recursive true
+    action :create
+    mode '0755'
+  end
+
   service { 'filebeat':
     ensure => running,
     enable => true,
