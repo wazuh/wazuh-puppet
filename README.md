@@ -53,16 +53,16 @@ This module installs and configure Wazuh agent and manager.
     ├── templates
     │   ├── api
     │   │   └── config.js.erb
-    │   ├── command.erb
     │   ├── default_commands.erb
     │   ├── elasticsearch_yml.erb
-    │   ├── email_alert.erb
     │   ├── filebeat_yml.erb
     │   ├── fragments
     │   │   ├── _activeresponse.erb
     │   │   ├── _auth.erb
     │   │   ├── _cluster.erb
+    │   │   ├── _command.erb
     │   │   ├── _default_activeresponse.erb
+    │   │   ├── _email_alert.erb
     │   │   ├── _integration.erb
     │   │   ├── _localfile.erb
     │   │   ├── _localfile_generation.erb

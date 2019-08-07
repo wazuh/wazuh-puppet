@@ -9,6 +9,6 @@ define wazuh::email_alert(
   concat::fragment { $name:
     target  => 'ossec.conf',
     order   => 66,
-    content => template('wazuh/email_alert.erb'),
+    content => template('wazuh/fragments/_email_alert.erb'),
   }
 }
