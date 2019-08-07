@@ -5,7 +5,8 @@ node 'manager00_ubuntu' {
 }
 node 'agent00_ubuntu' {
   class { "wazuh::agent":
-        ossec_ip => "ubuntu_manager_ip",
+        wazuh_register_endpoint => "ubuntu_manager_ip",
+        wazuh_reporting_endpoint => "ubuntu_manager_ip",
         configure_wodle_openscap => false
   }
 }
@@ -16,7 +17,8 @@ node 'manager00_centos' {
 }
 node 'agent00_centos' {
   class { "wazuh::agent":
-        ossec_ip => "centos_manager_ip",
+        wazuh_register_endpoint => "centos_manager_ip",
+        wazuh_reporting_endpoint => "centos_manager_ip",
         configure_wodle_openscap => true
   }
 }
