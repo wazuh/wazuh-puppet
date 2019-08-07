@@ -38,13 +38,21 @@ class wazuh::filebeat (
     notify  => Service['filebeat']
   }
 
-  directory "/usr/share/filebeat/module/wazuh" do
-    owner 'root'
-    group 'root'
-    recursive true
-    action :create
-    mode '0755'
-  end
+  class directory_tree {
+
+    # or you can assign them to a variable and use them in the resource
+    $whisper_dirs = [ '/usr/share/filebeat', '/usr/share/filebeat/module',
+                      '/usr/share/filebeat/module/wazuh',
+                    ]
+
+    file { $whisper_dirs:
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'wheel',
+      mode   => '0755',
+    }
+
+  }
 
   service { 'filebeat':
     ensure => running,
