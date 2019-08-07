@@ -189,8 +189,8 @@ suites:
 ```
 
 In the folder test/base, we put our tests. By now we implemented 2 tests, one for `wazuh-manager` and another one for `wazuh-agent`. Please check both here: 
-* [manager](https://github.com/wazuh/wazuh-puppet/blob/3.9.3_7.2.0_kitchen_tests/kitchen/test/base/test_wazuh_manager.py)
-* [agent](https://github.com/wazuh/wazuh-puppet/blob/3.9.3_7.2.0_kitchen_tests/kitchen/test/base/test_wazuh_agent.py)
+* [manager](https://github.com/wazuh/wazuh-puppet/blob/3.9.4_7.2.0_kitchen_tests/kitchen/test/base/test_wazuh_manager.py)
+* [agent](https://github.com/wazuh/wazuh-puppet/blob/3.9.4_7.2.0_kitchen_tests/kitchen/test/base/test_wazuh_agent.py)
 
 Once we have our suite prepared, then we run:
 

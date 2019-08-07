@@ -18,7 +18,6 @@ All notable changes to this project will be documented in this file.
 
 
 
-
 ## Wazuh Puppet v3.9.3_7.2.0
 
 ### Added
