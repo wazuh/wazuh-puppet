@@ -60,9 +60,9 @@ This module installs and configure Wazuh agent and manager.
     │   │   ├── _activeresponse.erb
     │   │   ├── _auth.erb
     │   │   ├── _cluster.erb
-    │   │   ├── command.erb
+    │   │   ├── _command.erb
     │   │   ├── _default_activeresponse.erb
-    │   │   ├── email_alert.erb
+    │   │   ├── _email_alert.erb
     │   │   ├── _integration.erb
     │   │   ├── _localfile.erb
     │   │   ├── _localfile_generation.erb
