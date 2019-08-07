@@ -25,3 +25,17 @@
 .project
 .envrc
 /inventory.yaml
+./kitchen/modules/.kitchen/logs/
+*.lock
+kitchen/.tmp/
+kitchen/.kitchen/
+kitchen/venv
+kitchen/*.xml
+kitchen/test/Dockerfile
+*.log
+*.pyc
+kitchen/.tmp/
+kitchen/.librarian/
+kitchen/.pytest_cache/
+kitchen/.*
+kitchen/modules/
