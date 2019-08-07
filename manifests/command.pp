@@ -12,6 +12,6 @@ define wazuh::command(
   concat::fragment { $name:
     target  => 'ossec.conf',
     order   => 46,
-    content => template('wazuh/command.erb'),
+    content => template('wazuh/fragments/_command.erb'),
   }
 }
