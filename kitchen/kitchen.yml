@@ -11,19 +11,19 @@ provisioner:
   hiera_data_path: hieradata
 
 platforms:
-  - name: ubuntu-manager_00
+  - name: ubuntu-manager_00_kitchen
     driver_config:
       image: ubuntu:14.04
       platform: ubuntu
       hostname: manager00_ubuntu
 
-  - name: ubuntu-agent
+  - name: ubuntu-agent-kitchen
     driver_config:
       image: ubuntu:14.04
       platform: ubuntu
       hostname: agent00_ubuntu
 
-  - name: centos-manager_00
+  - name: centos-manager_00_kitchen
     driver_config:
       image: centos:7
       platform: centos
@@ -33,7 +33,7 @@ platforms:
       build_options:
         rm: true
 
-  - name: centos-agent
+  - name: centos-agent_kitchen
     driver_config:
       image: centos:7
       platform: centos
