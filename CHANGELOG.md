@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 
 - Update to Wazuh version 3.9.4_7.2.0
 
+- Added Filebeat module and adapted Elasticsearch IP[rshad](https://github.com/rshad) [PR#144] (https://github.com/wazuh/wazuh-puppet/pull/144)
+
+- Added Kitchen testing for Wazuh deployment with Puppet. [rshad](https://github.com/rshad) [PR#139](https://github.com/wazuh/wazuh-puppet/pull/139)
+
 - Moved command and email_alert templates to templates/fragments. [rshad](https://github.com/rshad) [PR#143](https://github.com/wazuh/wazuh-puppet/pull/143).
 
 - Fixed integration when group is not specified. [TheoPoc](https://github.com/TheoPoc) [PR#142](https://github.com/wazuh/wazuh-puppet/pull/142).
