@@ -1,7 +1,5 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Setup for Filebeat
-class {'wazuh::repo_elastic':}
-
 class wazuh::filebeat (
   $filebeat_elasticsearch_ip = 'localhost',
   $filebeat_elasticsearch_port = '9200',
@@ -15,6 +13,7 @@ class wazuh::filebeat (
   $wazuh_module_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
 ){
 
+  class {'wazuh::repo_elastic':}
 
   package { 'Installing Filebeat...':
     ensure => $filebeat_version,
