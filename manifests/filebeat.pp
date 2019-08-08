@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Setup for Filebeat
 class wazuh::filebeat (
-  $filebeat_elasticsearch_ip = '<Put Elasticsearch IP>',
+  $filebeat_elasticsearch_ip = '<YOUR_ELASTICSEARCH_IP>',
   $filebeat_elasticsearch_port = '9200',
   $elasticsearch_server_ip = "\"${filebeat_elasticsearch_ip}:${filebeat_elasticsearch_port}\"",
 
@@ -45,17 +45,9 @@ class wazuh::filebeat (
     notify  => Service['filebeat']
   }
 
-  class directory_tree {
-
-    # or you can assign them to a variable and use them in the resource
-    $whisper_dirs = [ '/usr/share/filebeat/module/wazuh',
-                    ]
-
-    file { $whisper_dirs:
-      ensure => 'directory',
-      mode   => '0755',
-    }
-
+  file { '/usr/share/filebeat/module/wazuh':
+    ensure => 'directory',
+    mode   => '0755',
   }
 
   service { 'filebeat':
