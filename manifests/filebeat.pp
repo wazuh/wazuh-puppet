@@ -36,7 +36,8 @@ class wazuh::filebeat (
   }
 
   exec { 'Installing filebeat module ... Downloading package':
-    command => "/usr/bin/wget -c https://packages-dev.wazuh.com/3.x/filebeat/${$wazuh_module_filebeat_module} -P /root/",
+   path    => '/usr/bin',
+   command => "curl -o /root/${$wazuh_module_filebeat_module} https://packages-dev.wazuh.com/3.x/filebeat/${$wazuh_module_filebeat_module}",
   }
 
   exec { 'Unpackaging ...':
