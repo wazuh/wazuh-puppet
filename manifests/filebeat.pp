@@ -1,5 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Setup for Filebeat
+class {'wazuh::repo_elastic':}
+
 class wazuh::filebeat (
   $filebeat_elasticsearch_ip = 'localhost',
   $filebeat_elasticsearch_port = '9200',
@@ -10,7 +12,9 @@ class wazuh::filebeat (
   $filebeat_version = '7.2.0',
   $wazuh_app_version = '3.9.4_7.2.0',
   $wazuh_extensions_version = 'v3.9.4',
+  $wazuh_module_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
 ){
+
 
   package { 'Installing Filebeat...':
     ensure => $filebeat_version,
@@ -32,23 +36,23 @@ class wazuh::filebeat (
     notify  => Service['filebeat']
   }
 
-  exec { 'Installing filebeat module ...':
-    path    => '/usr/bin',
-    command => "curl -s https://packages-dev.wazuh.com/3.x/filebeat/wazuh-filebeat-0.1.tar.gz | tar -xvz -C /usr/share/filebeat/module",
+  exec { 'Installing filebeat module ... Downloading package':
+    command => "/usr/bin/wget -c https://packages-dev.wazuh.com/3.x/filebeat/${$wazuh_module_filebeat_module} -P /root/",
+  }
+
+  exec { 'Unpackaging ...':
+    command => "/bin/tar -xzvf /root/wazuh-filebeat-0.1.tar.gz -C /usr/share/filebeat/module",
     notify  => Service['filebeat']
   }
 
   class directory_tree {
 
     # or you can assign them to a variable and use them in the resource
-    $whisper_dirs = [ '/usr/share/filebeat', '/usr/share/filebeat/module',
-                      '/usr/share/filebeat/module/wazuh',
+    $whisper_dirs = [ '/usr/share/filebeat/module/wazuh',
                     ]
 
     file { $whisper_dirs:
       ensure => 'directory',
-      owner  => 'root',
-      group  => 'wheel',
       mode   => '0755',
     }
 
@@ -58,6 +62,4 @@ class wazuh::filebeat (
     ensure => running,
     enable => true,
   }
-
-
 }

@@ -27,8 +27,6 @@ class wazuh::elasticsearch (
 
 ){
 
-  class {'wazuh::repo_elastic':}
-
   # install package
   package { 'Installing elasticsearch...':
     ensure => $elasticsearch_version,
