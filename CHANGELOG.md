@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 - Update to Wazuh version 3.9.5_7.2.1
 
+## Fixed
+
+- Fixed linting problems ([@jm404](https://github.com/jm404)) [#ca923c7](https://github.com/wazuh/wazuh-puppet/commit/ca923c71a8f13c75d1f8a0a4807dda6f3ba114a6)
+
+
+
 ## Wazuh Puppet v3.9.4_7.2.0
 
 ### Added
