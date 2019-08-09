@@ -36,12 +36,12 @@ class wazuh::filebeat (
   }
 
   exec { 'Installing filebeat module ... Downloading package':
-   path    => '/usr/bin',
-   command => "curl -o /root/${$wazuh_filebeat_module} https://packages-dev.wazuh.com/3.x/filebeat/${$wazuh_filebeat_module}",
+    path    => '/usr/bin',
+    command => "curl -o /root/${$wazuh_filebeat_module} https://packages-dev.wazuh.com/3.x/filebeat/${$wazuh_filebeat_module}",
   }
 
   exec { 'Unpackaging ...':
-    command => "/bin/tar -xzvf /root/wazuh-filebeat-0.1.tar.gz -C /usr/share/filebeat/module",
+    command => '/bin/tar -xzvf /root/wazuh-filebeat-0.1.tar.gz -C /usr/share/filebeat/module',
     notify  => Service['filebeat']
   }
 
