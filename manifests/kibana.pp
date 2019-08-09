@@ -6,7 +6,7 @@ class wazuh::kibana (
   $kibana_version = '7.2.0',
   $kibana_app_version = '3.9.4_7.2.0',
 
-  $kibana_elasticsearch_ip = 'localhost',
+  $kibana_elasticsearch_ip = '<YOUR_ELASTICSEARCH_IP>',
   $kibana_elasticsearch_port = '9200',
 
   $kibana_server_port = '5601',

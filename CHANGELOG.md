@@ -7,13 +7,17 @@ All notable changes to this project will be documented in this file.
 
 - Update to Wazuh version 3.9.4_7.2.0
 
-- Moved command and email_alert templates to templates/fragments. [rshad](https://github.com/rshad) [PR#143](https://github.com/wazuh/wazuh-puppet/pull/143).
+- Added Filebeat module and adapted Elasticsearch IP ([rshad](https://github.com/rshad)) [PR#144](https://github.com/wazuh/wazuh-puppet/pull/144)
 
-- Fixed integration when group is not specified. [TheoPoc](https://github.com/TheoPoc) [PR#142](https://github.com/wazuh/wazuh-puppet/pull/142).
+- Added Kitchen testing for Wazuh deployment with Puppet. ([rshad](https://github.com/rshad)) [PR#139](https://github.com/wazuh/wazuh-puppet/pull/139)
 
-- Added Ubuntu as a recognized operating system to Puppet manifests. [rshad](https://github.com/rshad) [PR#141](https://github.com/wazuh/wazuh-puppet/pull/141).
+- Moved command and email_alert templates to templates/fragments. ([rshad](https://github.com/rshad)) [PR#143](https://github.com/wazuh/wazuh-puppet/pull/143)
 
-- Made Wazuh Agent able to register and report to different IPs. ([@jm404](https://github.com/jm404)) [PR#136](https://github.com/wazuh/wazuh-puppet/pull/136).
+- Fixed integration when group is not specified. ([TheoPoc](https://github.com/TheoPoc)) [PR#142](https://github.com/wazuh/wazuh-puppet/pull/142)
+
+- Added Ubuntu as a recognized operating system to Puppet manifests. ([rshad](https://github.com/rshad)) [PR#141](https://github.com/wazuh/wazuh-puppet/pull/141)
+
+- Made Wazuh Agent able to register and report to different IPs. ([@jm404](https://github.com/jm404)) [PR#136](https://github.com/wazuh/wazuh-puppet/pull/136)
 
 
 
