@@ -10,7 +10,7 @@ class wazuh::filebeat (
   $filebeat_version = '7.2.0',
   $wazuh_app_version = '3.9.4_7.2.0',
   $wazuh_extensions_version = 'v3.9.4',
-  $wazuh_module_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
+  $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
 ){
 
   class {'wazuh::repo_elastic':}
@@ -37,7 +37,7 @@ class wazuh::filebeat (
 
   exec { 'Installing filebeat module ... Downloading package':
    path    => '/usr/bin',
-   command => "curl -o /root/${$wazuh_module_filebeat_module} https://packages-dev.wazuh.com/3.x/filebeat/${$wazuh_module_filebeat_module}",
+   command => "curl -o /root/${$wazuh_filebeat_module} https://packages-dev.wazuh.com/3.x/filebeat/${$wazuh_filebeat_module}",
   }
 
   exec { 'Unpackaging ...':
