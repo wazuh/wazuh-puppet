@@ -11,13 +11,13 @@ All notable changes to this project will be documented in this file.
 
 - Added Kitchen testing for Wazuh deployment with Puppet. ([rshad](https://github.com/rshad)) [PR#139](https://github.com/wazuh/wazuh-puppet/pull/139)
 
-- Moved command and email_alert templates to templates/fragments. ([rshad](https://github.com/rshad)) [PR#143](https://github.com/wazuh/wazuh-puppet/pull/143).
+- Moved command and email_alert templates to templates/fragments. ([rshad](https://github.com/rshad)) [PR#143](https://github.com/wazuh/wazuh-puppet/pull/143)
 
-- Fixed integration when group is not specified. ([TheoPoc](https://github.com/TheoPoc)) [PR#142](https://github.com/wazuh/wazuh-puppet/pull/142).
+- Fixed integration when group is not specified. ([TheoPoc](https://github.com/TheoPoc)) [PR#142](https://github.com/wazuh/wazuh-puppet/pull/142)
 
-- Added Ubuntu as a recognized operating system to Puppet manifests. ([rshad](https://github.com/rshad)) [PR#141](https://github.com/wazuh/wazuh-puppet/pull/141).
+- Added Ubuntu as a recognized operating system to Puppet manifests. ([rshad](https://github.com/rshad)) [PR#141](https://github.com/wazuh/wazuh-puppet/pull/141)
 
-- Made Wazuh Agent able to register and report to different IPs. ([@jm404](https://github.com/jm404)) [PR#136](https://github.com/wazuh/wazuh-puppet/pull/136).
+- Made Wazuh Agent able to register and report to different IPs. ([@jm404](https://github.com/jm404)) [PR#136](https://github.com/wazuh/wazuh-puppet/pull/136)
 
 
 
