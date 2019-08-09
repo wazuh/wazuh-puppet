@@ -6,7 +6,7 @@ class wazuh::params_agent {
 
 # Versions  
 
-      $agent_package_version             = '3.9.4-1'
+      $agent_package_version             = '3.9.5-1'
       $agent_package_name                = 'wazuh-agent'
       $agent_service_name                = 'wazuh-agent'
 
@@ -352,7 +352,7 @@ class wazuh::params_agent {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.9.4'
+      $agent_package  = 'Wazuh Agent 3.9.5'
       $server_service = ''
       $server_package = ''
       $api_service = ''
