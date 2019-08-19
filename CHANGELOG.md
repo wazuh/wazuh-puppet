@@ -1,6 +1,41 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.9.5_7.2.1
+
+### Added
+
+- Update to Wazuh version 3.9.5_7.2.1
+
+## Fixed
+
+- Fixed linting problems ([@jm404](https://github.com/jm404)) [#ca923c7](https://github.com/wazuh/wazuh-puppet/commit/ca923c71a8f13c75d1f8a0a4807dda6f3ba114a6)
+
+
+
+## Wazuh Puppet v3.9.4_7.2.0
+
+### Added
+
+- Update to Wazuh version 3.9.4_7.2.0
+
+- Added Filebeat module and adapted Elasticsearch IP ([rshad](https://github.com/rshad)) [PR#144](https://github.com/wazuh/wazuh-puppet/pull/144)
+
+- Added Kitchen testing for Wazuh deployment with Puppet. ([rshad](https://github.com/rshad)) [PR#139](https://github.com/wazuh/wazuh-puppet/pull/139)
+
+- Added Ubuntu as a recognized operating system to Puppet manifests. ([rshad](https://github.com/rshad)) [PR#141](https://github.com/wazuh/wazuh-puppet/pull/141)
+
+- Wazuh Agent is now able to register and report to different IPs. ([@jm404](https://github.com/jm404)) [PR#136](https://github.com/wazuh/wazuh-puppet/pull/136)
+
+### Fixed
+
+- Fixed integration when group is not specified. ([TheoPoc](https://github.com/TheoPoc)) [PR#142](https://github.com/wazuh/wazuh-puppet/pull/142)
+
+### Changed
+
+- Moved command and email_alert templates to templates/fragments. ([rshad](https://github.com/rshad)) [PR#143](https://github.com/wazuh/wazuh-puppet/pull/143)
+
+
 ## Wazuh Puppet v3.9.3_7.2.0
 
 ### Added

@@ -11,13 +11,13 @@ class wazuh::elasticsearch (
   $elasticsearch_node_max_local_storage_nodes = '1',
   $elasticsearch_service = 'elasticsearch',
   $elasticsearch_package = 'elasticsearch',
-  $elasticsearch_version = '7.2.0',
+  $elasticsearch_version = '7.2.1',
 
   $elasticsearch_path_data = '/var/lib/elasticsearch',
   $elasticsearch_path_logs = '/var/log/elasticsearch',
 
 
-  $elasticsearch_ip = 'localhost',
+  $elasticsearch_ip = '<YOUR_ELASTICSEARCH_IP>',
   $elasticsearch_port = '9200',
   $elasticsearch_discovery_option = 'discovery.type: single-node',
   $elasticsearch_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']",
@@ -26,8 +26,6 @@ class wazuh::elasticsearch (
   $jvm_options_memmory = '1g',
 
 ){
-
-  class {'wazuh::repo_elastic':}
 
   # install package
   package { 'Installing elasticsearch...':

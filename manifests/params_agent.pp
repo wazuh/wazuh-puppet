@@ -6,7 +6,7 @@ class wazuh::params_agent {
 
 # Versions  
 
-      $agent_package_version             = '3.9.3-1'
+      $agent_package_version             = '3.9.5-1'
       $agent_package_name                = 'wazuh-agent'
       $agent_service_name                = 'wazuh-agent'
 
@@ -82,9 +82,8 @@ class wazuh::params_agent {
 
       ## Server block configuration
 
-      $ossec_ip                          = 'YOUR_MANAGER_IP'
-      $ossec_hostname                    = undef
-      $ossec_address                     = undef
+      $wazuh_register_endpoint           = undef
+      $wazuh_reporting_endpoint          = undef
       $ossec_port                        = '1514'
       $ossec_protocol                    = 'udp'
       $ossec_notify_time                 = 10
@@ -353,7 +352,7 @@ class wazuh::params_agent {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.9.3'
+      $agent_package  = 'Wazuh Agent 3.9.5'
       $server_service = ''
       $server_package = ''
       $api_service = ''

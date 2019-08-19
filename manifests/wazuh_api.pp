@@ -4,7 +4,7 @@ class wazuh::wazuh_api (
 
   $wazuh_api_package = 'wazuh-api',
   $wazuh_api_service = 'wazuh-api',
-  $wazuh_api_version = '3.9.3-1',
+  $wazuh_api_version = '3.9.5-1',
 
   $nodejs_package = 'nodejs'
 

@@ -53,8 +53,8 @@ class wazuh::agent(
 
   # Server configuration
 
-  $ossec_ip                          = $wazuh::params_agent::ossec_ip,
-  $ossec_hostname                    = $wazuh::params_agent::ossec_hostname,
+  $wazuh_register_endpoint           = $wazuh::params_agent::wazuh_register_endpoint,
+  $wazuh_reporting_endpoint          = $wazuh::params_agent::wazuh_reporting_endpoint,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
@@ -151,8 +151,10 @@ class wazuh::agent(
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if ( ( $ossec_ip == undef ) and ( $ossec_hostname == undef ) and ( $ossec_address == undef ) ) {
-    fail('must pass either $ossec_ip or $ossec_hostname or $ossec_address to Class[\'wazuh::agent\'].')
+  if (($manage_client_keys == 'yes')){
+      if ( ( $wazuh_register_endpoint == undef ) ) {
+        fail('The $wazuh_register_endpoint parameter is needed in order to register the Agent.')
+      }
   }
 
   case $::kernel {
@@ -185,7 +187,7 @@ class wazuh::agent(
           ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
           provider        => 'windows',
           source          => "${download_path}/wazuh-agent-${agent_package_version}.msi",
-          install_options => [ '/q', "ADDRESS=${ossec_ip}", "AUTHD_SERVER=${ossec_ip}" ],
+          install_options => [ '/q', "ADDRESS=${wazuh_register_endpoint}", "AUTHD_SERVER=${wazuh_register_endpoint}" ],
           require         => File["${download_path}wazuh-agent-${agent_package_version}.msi"],
         }
       }
@@ -216,7 +218,7 @@ class wazuh::agent(
       }else{
         fail('This ossec module has not been tested on your distribution')
       }
-    }'Debian', 'debian':{
+    }'Debian', 'debian', 'Ubuntu', 'ubuntu':{
       $apply_template_os = 'debian'
       if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie'){
         $debian_additional_templates = 'yes'
@@ -342,7 +344,6 @@ class wazuh::agent(
 
     if ($::kernel == 'Linux') {
       # Is this really Linux only?
-      $ossec_address = pick($ossec_ip, $ossec_hostname)
 
       file { $::wazuh::params_agent::keys_file:
         owner => $wazuh::params_agent::keys_owner,
@@ -352,7 +353,7 @@ class wazuh::agent(
 
       # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
 
-      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${ossec_address}"
+      $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${wazuh_register_endpoint}"
 
       if $wazuh_manager_root_ca_pem != undef {
         validate_string($wazuh_manager_root_ca_pem)
@@ -431,19 +432,20 @@ class wazuh::agent(
           before  => Service[$agent_service_name],
         }
       }
-
-      service { $agent_service_name:
-        ensure    => running,
-        enable    => true,
-        hasstatus => $wazuh::params_agent::service_has_status,
-        pattern   => $wazuh::params_agent::agent_service_name,
-        provider  => $wazuh::params_agent::ossec_service_provider,
-        require   => Package[$agent_package_name],
+      if $wazuh_reporting_endpoint != undef {
+        service { $agent_service_name:
+          ensure    => running,
+          enable    => true,
+          hasstatus => $wazuh::params_agent::service_has_status,
+          pattern   => $wazuh::params_agent::agent_service_name,
+          provider  => $wazuh::params_agent::ossec_service_provider,
+          require   => Package[$agent_package_name],
+        }
       }
     }
   }
 
-  if $manage_client_keys != 'yes'{
+  if ( ( $manage_client_keys != 'yes') or ( $wazuh_reporting_endpoint == undef ) ){
     service { $agent_service_name:
           ensure    => stopped,
           enable    => false,

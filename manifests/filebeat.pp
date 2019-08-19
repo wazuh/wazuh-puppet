@@ -1,16 +1,19 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Setup for Filebeat
 class wazuh::filebeat (
-  $filebeat_elasticsearch_ip = 'localhost',
+  $filebeat_elasticsearch_ip = '<YOUR_ELASTICSEARCH_IP>',
   $filebeat_elasticsearch_port = '9200',
   $elasticsearch_server_ip = "\"${filebeat_elasticsearch_ip}:${filebeat_elasticsearch_port}\"",
 
   $filebeat_package = 'filebeat',
   $filebeat_service = 'filebeat',
-  $filebeat_version = '7.2.0',
-  $wazuh_app_version = '3.9.3_7.2.0',
-  $wazuh_extensions_version = 'v3.9.3',
+  $filebeat_version = '7.2.1',
+  $wazuh_app_version = '3.9.5_7.2.1',
+  $wazuh_extensions_version = 'v3.9.5',
+  $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
 ){
+
+  class {'wazuh::repo_elastic':}
 
   package { 'Installing Filebeat...':
     ensure => $filebeat_version,
@@ -32,10 +35,23 @@ class wazuh::filebeat (
     notify  => Service['filebeat']
   }
 
+  exec { 'Installing filebeat module ... Downloading package':
+    path    => '/usr/bin',
+    command => "curl -o /root/${$wazuh_filebeat_module} https://packages.wazuh.com/3.x/filebeat/${$wazuh_filebeat_module}",
+  }
+
+  exec { 'Unpackaging ...':
+    command => '/bin/tar -xzvf /root/wazuh-filebeat-0.1.tar.gz -C /usr/share/filebeat/module',
+    notify  => Service['filebeat']
+  }
+
+  file { '/usr/share/filebeat/module/wazuh':
+    ensure => 'directory',
+    mode   => '0755',
+  }
+
   service { 'filebeat':
     ensure => running,
     enable => true,
   }
-
-
 }

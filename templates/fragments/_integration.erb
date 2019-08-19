@@ -12,7 +12,9 @@
     <% if @in_level != '' -%>
       <level><%= @in_level %></level>
     <% end %>
-    <group><%= @in_group %></group>
+    <% if @in_group != '' -%>
+      <group><%= @in_group %></group>
+    <% end %>  
     <% if @in_location != '' -%>
       <event_location><%= @in_location %></event_location>
     <% end %>
