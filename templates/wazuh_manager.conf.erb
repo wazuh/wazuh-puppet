@@ -6,7 +6,7 @@
   <%- if @ossec_emailnotification -%>
     <email_notification>yes</email_notification>
     <%- @ossec_emailto.each do |emailto| -%>
-    <email_to><%= @ossec_emailto %></email_to>
+    <email_to><%= emailto %></email_to>
     <%- end -%>
     <smtp_server><%= @ossec_smtp_server %></smtp_server>
     <email_from><%= @ossec_emailfrom %></email_from>
