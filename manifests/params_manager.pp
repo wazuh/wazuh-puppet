@@ -16,7 +16,7 @@ class wazuh::params_manager {
       $ossec_emailto                                   = []
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
       $ossec_emailfrom                                 = 'ossecm@example.wazuh.com'
-      $ossec_email_maxperhour                          = undef
+      $ossec_email_maxperhour                          = 12
       $ossec_email_idsname                             = undef
       $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
       $ossec_alert_level                               = 3
