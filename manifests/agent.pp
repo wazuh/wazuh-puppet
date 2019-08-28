@@ -144,7 +144,7 @@ class wazuh::agent(
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
-  #   $selinux, $manage_repo, 
+  #   $selinux, $manage_repo,
   # )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
@@ -207,7 +207,7 @@ class wazuh::agent(
   ## ossec.conf generation concats
 
   case $::operatingsystem{
-    'Redhat', 'redhat':{
+    'Redhat', 'redhat', 'OracleLinux':{
       $apply_template_os = 'rhel'
       if ( $::operatingsystemrelease     =~ /^7.*/ ){
         $rhel_version = '7'
@@ -478,4 +478,3 @@ class wazuh::agent(
     }
   }
 }
-
