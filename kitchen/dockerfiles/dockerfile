@@ -8,7 +8,7 @@ RUN apt-get update
 # Clone the corresponding branch of wazuh-puppet
 RUN git clone -b $source_branch https://github.com/wazuh/wazuh-puppet.git
 
-RUN cd wazuh-puppet/kitchen && chmod +x ./run.sh && bundle install && librarian-puppet install
+RUN cd wazuh-puppet/kitchen && chmod +x ./run.sh && bundle install
 
 RUN gem uninstall puppet && gem uninstall puppet-module
 
