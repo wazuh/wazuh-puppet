@@ -18,7 +18,6 @@
 mkdir -p modules/wazuh
 
 cp -r ../files ./modules/wazuh/
-cp -r ../kitchen/ ./modules/wazuh/
 cp -r ../templates/ ./modules/wazuh/
 cp -r ../manifests/ ./modules/wazuh/
 
