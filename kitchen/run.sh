@@ -2,18 +2,25 @@
 
 # Adding Wazuh module from Puppet forge.
 
-LIBRARIAN_OUTPUT="$(librarian-puppet show)"
 
-if [[ $LIBRARIAN_OUTPUT == *"wazuh"* ]]; then
-	echo "Librarian-Puppet: Wazuh module already installed .. Continue"
-else
-	echo "Installing Wazuh module"
-	librarian-puppet install
+#LIBRARIAN_OUTPUT="$(librarian-puppet show)"
+#
+#if [[ $LIBRARIAN_OUTPUT == *"wazuh"* ]]; then
+#	echo "Librarian-Puppet: Wazuh module already installed .. Continue"
+#else
+#	echo "Installing Wazuh module"
+#	librarian-puppet install
+#
+#        sed -i "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/manager.pp
+#        sed -i "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/agent.pp
+#fi
 
-        sed -i "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/manager.pp
-        sed -i "s/'Debian', 'debian'/&, 'Ubuntu', 'ubuntu'/" modules/wazuh/manifests/agent.pp
-fi
+mkdir -p modules/wazuh
 
+cp -r ../files ./modules/wazuh/
+cp -r ../kitchen/ ./modules/wazuh/
+cp -r ../templates/ ./modules/wazuh/
+cp -r ../manifests/ ./modules/wazuh/
 
 echo "Deleting Old logs, old instances files, etc ..."
 rm -rf .kitchen/logs/* # removing old logs
