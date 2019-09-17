@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.9.5-1'
+      $server_package_version                          = '3.10.0-1'
       $manage_repos                                    = true
       $manage_firewall                                 = false
 
@@ -16,7 +16,7 @@ class wazuh::params_manager {
       $ossec_emailto                                   = []
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
       $ossec_emailfrom                                 = 'ossecm@example.wazuh.com'
-      $ossec_email_maxperhour                          = undef
+      $ossec_email_maxperhour                          = 12
       $ossec_email_idsname                             = undef
       $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
       $ossec_alert_level                               = 3
@@ -411,7 +411,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.9.5'
+      $agent_package  = 'Wazuh Agent 3.10.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
