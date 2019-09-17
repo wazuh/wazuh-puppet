@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.10.0_7.3.2
+
+### Added
+
+- Update to Wazuh version 3.10.0_7.3.2
+- Change Wazuh Filebeat Module to production. ([@jm404](https://github.com/jm404)) [#1bc6b792af68ff26fc0dfc9125e5d33f7831b32e](https://github.com/wazuh/wazuh-puppet/commit/1bc6b792af68ff26fc0dfc9125e5d33f7831b32e)
+
+## Fixed
+- Fixes for Ossec email notifications' config ([rshad](https://github.com/rshad)) [PR#150](https://github.com/wazuh/wazuh-puppet/pull/150)
+
 ## Wazuh Puppet v3.9.5_7.2.1
 
 ### Added
