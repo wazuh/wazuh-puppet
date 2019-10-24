@@ -237,6 +237,7 @@ class wazuh::agent(
     group   => $wazuh::params_agent::config_group,
     mode    => $wazuh::params_agent::config_mode,
     require => Package[$agent_package_name],
+    notify  => Service[$agent_service_name],
   }
 
   concat::fragment {
