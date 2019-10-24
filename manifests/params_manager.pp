@@ -289,7 +289,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $api_service = 'wazuh-api'
