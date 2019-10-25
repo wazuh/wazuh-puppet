@@ -325,17 +325,14 @@ class wazuh::params_agent {
       }
     }
     'windows': {
-      $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
-      $shared_agent_config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/shared/agent.conf'), '\\\\', '/')
+      $config_file = 'C:\\Program Files (x86)\\ossec-agent\\ossec.conf'
+      $shared_agent_config_file = 'C:\\Program Files (x86)\\ossec-agent\\shared\\agent.conf'
       $config_owner = 'Administrator'
       $config_group = 'Administrators'
       $download_path = 'C:\\Temp'
       $manage_firewall = false
 
-      $keys_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/client.keys'), '\\\\', '/')
-      $keys_mode = '0440'
-      $keys_owner = 'Administrator'
-      $keys_group = 'Administrators'
+      $keys_file = 'C:\\Program Files (x86)\\ossec-agent\\client.keys'
 
       $agent_package_name = 'Wazuh Agent'
       $agent_service_name = 'OssecSvc'

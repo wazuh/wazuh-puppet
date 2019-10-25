@@ -1,5 +1,6 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
-# Setup for ossec client
+
+# Puppet class that installs and manages the Wazuh agent
 class wazuh::agent (
 
   # Versioning and package names
@@ -172,28 +173,6 @@ class wazuh::agent (
       }
     }
     'windows': {
-      $install_options = [
-        '/q',
-        "WAZUH_MANAGER=$wazuh_reporting_endpoint",
-        "WAZUH_PROTOCOL=$ossec_protocol",
-      ]
-
-      if $manage_client_keys == 'yes' {
-        $registration_options = [
-          "WAZUH_REGISTRATION_SERVER=$wazuh_register_endpoint"
-        ]
-      } else {
-        $registration_options = []
-      }
-
-      if $agent_auth_password {
-        $registration_auth = [
-          "WAZUH_REGISTRATION_PASSWORD=$agent_auth_password"
-        ]
-      } else {
-        $registration_auth = []
-      }
-
       file { $download_path:
         ensure => directory,
       }
@@ -212,7 +191,11 @@ class wazuh::agent (
         ensure          => 'installed',
         provider        => 'windows',
         source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
-        install_options => concat($install_options, $registration_options, $registration_auth),
+        install_options => [
+          '/q',
+          "WAZUH_MANAGER=$wazuh_reporting_endpoint",
+          "WAZUH_PROTOCOL=$ossec_protocol",
+        ],
       }
     }
     default: { fail('OS not supported') }
@@ -369,6 +352,26 @@ class wazuh::agent (
 
   # Agent registration and service setup
   if ($manage_client_keys == 'yes') {
+    if $agent_name {
+      validate_string($agent_name)
+      $agent_auth_option_name = "-A \"${agent_name}\""
+    } else {
+      $agent_auth_option_name = ''
+    }
+
+    if $agent_group {
+      validate_string($agent_group)
+      $agent_auth_option_group = "-G \"${agent_group}\""
+    } else {
+      $agent_auth_option_group = ''
+    }
+
+    if $agent_auth_password {
+      $agent_auth_option_password = "-P \"${agent_auth_password}\""
+    } else {
+      $agent_auth_option_password = ''
+    }
+
     case $::kernel {
       'Linux': {
         file { $::wazuh::params_agent::keys_file:
@@ -377,10 +380,10 @@ class wazuh::agent (
           mode  => $wazuh::params_agent::keys_mode,
         }
 
-        # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
+        $agent_auth_executable = '/var/ossec/bin/agent-auth'
+        $agent_auth_base_command = "${agent_auth_executable} -m ${wazuh_register_endpoint}"
 
-        $agent_auth_base_command = "/var/ossec/bin/agent-auth -m ${wazuh_register_endpoint}"
-
+        # https://documentation.wazuh.com/3.10/user-manual/registering/manager-verification/manager-verification-registration.html
         if $wazuh_manager_root_ca_pem != undef {
           validate_string($wazuh_manager_root_ca_pem)
           file { '/var/ossec/etc/rootCA.pem':
@@ -398,21 +401,7 @@ class wazuh::agent (
           $agent_auth_option_manager = ''  # Avoid errors when compounding final command
         }
 
-        if $agent_name != undef {
-          validate_string($agent_name)
-          $agent_auth_option_name = "-A \"${agent_name}\""
-        } else {
-          $agent_auth_option_name = ''
-        }
-
-        if $agent_group != undef {
-          validate_string($agent_group)
-          $agent_auth_option_group = "-G \"${agent_group}\""
-        } else {
-          $agent_auth_option_group = ''
-        }
-
-        # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-agents-via-ssl
+        # https://documentation.wazuh.com/3.10/user-manual/registering/manager-verification/agent-verification-registration.html
         if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
           validate_string($wazuh_agent_cert)
           validate_string($wazuh_agent_key)
@@ -432,31 +421,20 @@ class wazuh::agent (
           }
 
           $agent_auth_option_agent = '-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key'
-        }
-
-        if ($wazuh_agent_cert_path != undef) and ($wazuh_agent_key_path != undef) {
+        } elsif ($wazuh_agent_cert_path != undef) and ($wazuh_agent_key_path != undef) {
           validate_string($wazuh_agent_cert_path)
           validate_string($wazuh_agent_key_path)
           $agent_auth_option_agent = "-x ${wazuh_agent_cert_path} -k ${wazuh_agent_key_path}"
         }
 
-        $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_manager} ${agent_auth_option_name}\
-         ${agent_auth_option_group} ${agent_auth_option_agent}"
+        $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_name} ${agent_auth_option_group} \
+          ${agent_auth_option_manager}  ${agent_auth_option_agent} ${agent_auth_option_password}"
 
-        if $agent_auth_password {
-          exec { 'agent-auth-with-pwd':
-            command => "${agent_auth_command} -P '${agent_auth_password}'",
-            unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
-            require => Concat['ossec.conf'],
-            before  => Service[$agent_service_name],
-          }
-        } else {
-          exec { 'agent-auth-without-pwd':
-            command => $agent_auth_command,
-            unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
-            require => Concat['ossec.conf'],
-            before  => Service[$agent_service_name],
-          }
+        exec { 'agent-auth-linux':
+          command => $agent_auth_command,
+          unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
+          require => Concat['ossec.conf'],
+          before  => Service[$agent_service_name],
         }
 
         service { $agent_service_name:
@@ -469,8 +447,23 @@ class wazuh::agent (
         }
       }
       'windows': {
-        # Since the Wazuh agent registration is made by the MSI file on Windows,
-        # we don't need to register the agent and we simply start the service.
+        $agent_auth_executable = "'C:\\Program Files (x86)\\ossec-agent\\agent-auth.exe'"
+        $agent_auth_base_command = "& ${agent_auth_executable} -m \"${wazuh_register_endpoint}\""
+
+        # TODO: Implement the support for Manager verification using SSL
+        # TODO: Implement the support for Agent verification using SSL
+
+        $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_name} ${agent_auth_option_group} \
+          ${agent_auth_option_password}"
+
+        exec { 'agent-auth-windows':
+          command  => $agent_auth_command,
+          provider => 'powershell',
+          onlyif   => "if ((Get-Item '${keys_file}').length -gt 0kb) {exit 1}",
+          require  => Concat['ossec.conf'],
+          before   => Service[$agent_service_name],
+        }
+
         service { $agent_service_name:
           ensure    => $agent_service_ensure,
           enable    => true,
