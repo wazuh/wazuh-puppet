@@ -14,7 +14,7 @@ class wazuh::repo_elastic (
           source => 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
         }
         case $::lsbdistcodename {
-          /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
+          /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
 
             apt::source { 'wazuh_elastic':
               ensure   => present,
