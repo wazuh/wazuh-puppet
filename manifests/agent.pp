@@ -178,7 +178,7 @@ class wazuh::agent (
       }
 
       -> file { 'wazuh-agent':
-        path               => "${download_path}wazuh-agent-${agent_package_version}.msi",
+        path               => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
         owner              => 'Administrator',
         group              => 'Administrators',
         mode               => '0774',
