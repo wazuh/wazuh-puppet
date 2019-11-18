@@ -205,7 +205,7 @@ class wazuh::agent (
   case $::kernel {
     'Linux': {
       case $::osfamily {
-        'Redhat', 'redhat': {
+        'Redhat', 'redhat', 'OracleLinux': {
           $apply_template_os = 'rhel'
           if ( $::operatingsystemrelease =~ /^7.*/ ) {
             $rhel_version = '7'
