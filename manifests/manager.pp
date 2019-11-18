@@ -283,7 +283,7 @@ class wazuh::manager (
   ## Declaring variables for localfile and wodles generation
 
   case $::operatingsystem{
-    'Redhat', 'redhat':{
+    'Redhat', 'redhat', 'OracleLinux':{
       $apply_template_os = 'rhel'
       if ( $::operatingsystemrelease     =~ /^7.*/ ){
         $rhel_version = '7'
