@@ -72,7 +72,7 @@ class wazuh::params_agent {
 
       # Wazuh config folders and modes
       $config_file = '/var/ossec/etc/ossec.conf'
-      $shared_agent_config_file = '/var/ossec/etc/shared/agent.conf'
+      $shared_agent_config_file = '/var/ossec/etc/shared/default/agent.conf'
 
       $config_mode = '0640'
       $config_owner = 'root'
