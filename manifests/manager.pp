@@ -156,7 +156,8 @@ class wazuh::manager (
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
-      $ossec_syscheck_whodata              = $wazuh::params_manager::ossec_syscheck_whodata,
+      $ossec_syscheck_whodata               = $wazuh::params_manager::ossec_syscheck_whodata,
+      $ossec_syscheck_realtime              = $wazuh::params_manager::ossec_syscheck_realtime,
       $ossec_syscheck_ignore_list           = $wazuh::params_manager::ossec_syscheck_ignore_list,
 
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
