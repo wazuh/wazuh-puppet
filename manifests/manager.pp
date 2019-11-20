@@ -522,4 +522,13 @@ class wazuh::manager (
         'ESTABLISHED'],
     }
   }
+
+  if($ossec_syscheck_whodata == '"yes"') {
+    exec { 'Ensure wazuh-fim rule is added to auditctl':
+      command => "auditctl -l",
+      unless  => "auditctl -l | grep wazuh_fim",
+      tries => 2
+    }
+  }
+
 }
