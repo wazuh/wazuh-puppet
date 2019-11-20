@@ -223,8 +223,9 @@ class wazuh::manager (
 
 
   if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
-    package { 'Installing Filebeat...':
+    package { 'Installing Auditd...':
       name   => "auditd",
+      ensure    => running
     }
   }
 
