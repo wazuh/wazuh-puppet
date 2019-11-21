@@ -150,6 +150,8 @@ class wazuh::params_agent {
       $ossec_syscheck_auto_ignore = undef
       $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
+      $ossec_syscheck_whodata = '"no"'
+      $ossec_syscheck_realtime = '"no"'
       $ossec_syscheck_ignore_list = ['/etc/mtab',
         '/etc/hosts.deny',
         '/etc/mail/statistics',
