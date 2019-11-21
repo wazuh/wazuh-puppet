@@ -61,6 +61,7 @@ class wazuh::params_agent {
       $configure_syscheck                = true
       $configure_localfile               = true
       $configure_active_response         = true
+      $configure_labels                  = true
 
 
     # ossec.conf templates paths
@@ -77,6 +78,7 @@ class wazuh::params_agent {
       $ossec_auth                        = 'wazuh/fragments/_auth.erb'
       $ossec_cluster                     = 'wazuh/fragments/_cluster.erb'
       $ossec_active_response_template    = 'wazuh/fragments/_default_activeresponse.erb'
+      $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
 
       ### Ossec.conf blocks
 

@@ -35,6 +35,7 @@ class wazuh::agent(
   $configure_syscheck                = $wazuh::params_agent::configure_syscheck,
   $configure_localfile               = $wazuh::params_agent::configure_localfile,
   $configure_active_response         = $wazuh::params_agent::configure_active_response,
+  $configure_labels                  = $wazuh::params_agent::configure_labels,
 
   # Templates paths
   $ossec_conf_template               = $wazuh::params_agent::ossec_conf_template,
@@ -50,6 +51,7 @@ class wazuh::agent(
   $ossec_auth                        = $wazuh::params_agent::ossec_auth,
   $ossec_cluster                     = $wazuh::params_agent::ossec_cluster,
   $ossec_active_response_template    = $wazuh::params_agent::ossec_active_response_template,
+  $ossec_labels_template             = $wazuh::params_agent::ossec_labels_template,
 
   # Server configuration
 
@@ -130,6 +132,9 @@ class wazuh::agent(
   $ossec_syscheck_ignore_type_2      = $wazuh::params_agent::ossec_syscheck_ignore_type_2,
   $ossec_syscheck_nodiff             = $wazuh::params_agent::ossec_syscheck_nodiff,
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
+
+  # Agent Labels
+  $ossec_labels                      = $wazuh::params_agent::ossec_labels,
 
   ## Selinux
 
@@ -330,6 +335,15 @@ class wazuh::agent(
         order   => 40,
         before  => Service[$agent_service_name],
         content => template($ossec_active_response_template);
+    }
+  }
+  if ($configure_labels == true){
+    concat::fragment {
+        'ossec.conf_labels':
+        target  => 'ossec.conf',
+        order   => 45,
+        before  => Service[$agent_service_name],
+        content => template($ossec_labels_template);
     }
   }
   concat::fragment {
