@@ -225,7 +225,7 @@ class wazuh::manager (
 
   if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
     package { 'Installing Auditd...':
-      name   => "auditd",
+      name   => "audit",
     }
     service { auditd:
       ensure    => running,
