@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Setup for Filebeat
 class wazuh::filebeat (
-  $filebeat_elasticsearch_ip = '<YOUR_ELASTICSEARCH_IP>',
+  $filebeat_elasticsearch_ip = 'localhost',
   $filebeat_elasticsearch_port = '9200',
   $elasticsearch_server_ip = "\"${filebeat_elasticsearch_ip}:${filebeat_elasticsearch_port}\"",
 

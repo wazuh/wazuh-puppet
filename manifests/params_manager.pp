@@ -159,6 +159,8 @@ class wazuh::params_manager {
       $ossec_syscheck_auto_ignore                      = 'no'
       $ossec_syscheck_directories_1                    = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2                    = '/bin,/sbin,/boot'
+      $ossec_syscheck_whodata                          = '"no"'
+      $ossec_syscheck_realtime                         = '"no"'
       $ossec_syscheck_ignore_list                      = ['/etc/mtab',
                                               '/etc/hosts.deny',
                                               '/etc/mail/statistics',
@@ -221,7 +223,7 @@ class wazuh::params_manager {
       ## Wazuh config folders and modes
 
       $config_file = '/var/ossec/etc/ossec.conf'
-      $shared_agent_config_file = '/var/ossec/etc/shared/agent.conf'
+      $shared_agent_config_file = '/var/ossec/etc/shared/default/agent.conf'
 
       $config_mode = '0640'
       $config_owner = 'root'
@@ -289,7 +291,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $api_service = 'wazuh-api'
