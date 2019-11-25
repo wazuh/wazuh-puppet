@@ -1,5 +1,5 @@
   <labels>
-    <%- @ossec_labels.each do |key, value| -%>
-    <label key="<%= key %>"><%= value %></label>
+    <%- @ossec_labels.each do |label| -%>
+    <label key="<%= label['key'] %>"><%= label['value'] %></label>
     <%- end -%>
   </labels>
