@@ -50,11 +50,6 @@ class wazuh::kibana (
     notify  => Service[$kibana_service],
   }
 
-  service { 'kibana':
-    ensure => running,
-    enable => true,
-  }
-
   exec { 'Verify Kibana folders owner':
     path    => '/usr/bin:/bin',
     command => "chown -R kibana:kibana /usr/share/kibana/optimize\
