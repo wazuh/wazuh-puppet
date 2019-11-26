@@ -15,7 +15,13 @@ class wazuh::filebeat (
 
   class {'wazuh::repo_elastic':}
 
-  package { 'Installing Filebeat...':
+  if $::osfamily == 'Debian' {
+    Class['wazuh::repo_elastic'] -> Class['apt::update'] -> Package['filebeat']
+  } else {
+    Class['wazuh::repo_elastic'] -> Package['filebeat']
+  }
+
+  package { 'filebeat':
     ensure => $filebeat_version,
     name   => $filebeat_package,
   }
