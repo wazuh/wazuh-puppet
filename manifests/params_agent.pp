@@ -4,7 +4,7 @@ class wazuh::params_agent {
   case $::kernel {
     'Linux': {
 
-# Versions  
+# Versions
 
       $agent_package_version             = '3.10.2-1'
       $agent_package_name                = 'wazuh-agent'
@@ -231,7 +231,22 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            'stretch': {
+              $server_service = 'wazuh-manager'
+              $server_package = 'wazuh-manager'
+              $api_service = 'wazuh-api'
+              $api_package = 'wazuh-api'
+              $wodle_openscap_content = {
+                'ssg-debian-9-ds.xml' => {
+                  'type' => 'xccdf',
+                  profiles => ['xccdf_org.ssgproject.content_profile_common'],
+                },
+                'cve-debian-9-oval.xml' => {
+                  'type' => 'oval',
+                }
+              }
+            }
+            /^(wheezy|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $api_service = 'wazuh-api'

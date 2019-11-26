@@ -289,7 +289,22 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            'stretch': {
+              $server_service = 'wazuh-manager'
+              $server_package = 'wazuh-manager'
+              $api_service = 'wazuh-api'
+              $api_package = 'wazuh-api'
+              $wodle_openscap_content = {
+                'ssg-debian-9-ds.xml' => {
+                  'type' => 'xccdf',
+                  profiles => ['xccdf_org.ssgproject.content_profile_common'],
+                },
+                'cve-debian-9-oval.xml' => {
+                  'type' => 'oval',
+                }
+              }
+            }
+            /^(wheezy|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $api_service = 'wazuh-api'
