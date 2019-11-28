@@ -33,6 +33,7 @@ class wazuh::kibana (
   service { 'kibana':
     ensure => running,
     enable => true,
+    hasrestart => true,
   }
 
   exec {'Waiting for elasticsearch...':
@@ -47,12 +48,6 @@ class wazuh::kibana (
     command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_app_version}.zip",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$kibana_service],
-
-  }
-    exec {'Enabling and restarting kibana...':
-      path    => '/usr/bin:/bin',
-      command => 'systemctl daemon-reload && systemctl enable kibana && systemctl restart kibana',
-
   }
 
   exec { 'Verify Kibana folders owner':
