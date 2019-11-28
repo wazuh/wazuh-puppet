@@ -28,7 +28,7 @@ class wazuh::elasticsearch (
 ){
 
   # install package
-  package { 'Installing elasticsearch...':
+  package { 'elasticsearch':
     ensure => $elasticsearch_version,
     name   => $elasticsearch_package,
   }
@@ -39,7 +39,8 @@ class wazuh::elasticsearch (
     group   => 'elasticsearch',
     mode    => '0644',
     notify  => Service[$elasticsearch_service], ## Restarts the service
-    content => template('wazuh/elasticsearch_yml.erb')
+    content => template('wazuh/elasticsearch_yml.erb'),
+    require => Package[$elasticsearch_package],
   }
 
   file { 'Configure jvm.options':
@@ -48,17 +49,20 @@ class wazuh::elasticsearch (
     group   => 'elasticsearch',
     mode    => '0660',
     notify  => Service[$elasticsearch_service], ## Restarts the service
-    content => template('wazuh/jvm_options.erb')
+    content => template('wazuh/jvm_options.erb'),
+    require => Package[$elasticsearch_package],
   }
 
   service { 'elasticsearch':
     ensure => running,
     enable => true,
+    require => Package[$elasticsearch_package],
   }
 
   exec { 'Insert line limits':
     path    => '/usr/bin:/bin/',
     command => "echo 'elasticsearch - nofile  65535\nelasticsearch - memlock unlimited' >> /etc/security/limits.conf",
+    require => Package[$elasticsearch_package],
 
   }
 
@@ -67,6 +71,7 @@ class wazuh::elasticsearch (
     command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch\
              && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch\
              && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
+    require => Package[$elasticsearch_package],
 
   }
 

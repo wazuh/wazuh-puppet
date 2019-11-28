@@ -15,7 +15,13 @@ class wazuh::filebeat (
 
   class {'wazuh::repo_elastic':}
 
-  package { 'Installing Filebeat...':
+  if $::osfamily == 'Debian' {
+    Class['wazuh::repo_elastic'] -> Class['apt::update'] -> Package['filebeat']
+  } else {
+    Class['wazuh::repo_elastic'] -> Package['filebeat']
+  }
+
+  package { 'filebeat':
     ensure => $filebeat_version,
     name   => $filebeat_package,
   }
@@ -27,12 +33,14 @@ class wazuh::filebeat (
     mode    => '0644',
     notify  => Service[$filebeat_service], ## Restarts the service
     content => template('wazuh/filebeat_yml.erb'),
+    require => Package['filebeat']
   }
 
   exec { 'Installing wazuh-template.json...':
     path    => '/usr/bin',
     command => "curl -so /etc/filebeat/wazuh-template.json 'https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json'",
-    notify  => Service['filebeat']
+    notify  => Service['filebeat'],
+    require => Package['filebeat']
   }
 
   exec { 'Installing filebeat module ... Downloading package':
@@ -42,16 +50,19 @@ class wazuh::filebeat (
 
   exec { 'Unpackaging ...':
     command => '/bin/tar -xzvf /root/wazuh-filebeat-0.1.tar.gz -C /usr/share/filebeat/module',
-    notify  => Service['filebeat']
+    notify  => Service['filebeat'],
+    require => Package['filebeat']
   }
 
   file { '/usr/share/filebeat/module/wazuh':
     ensure => 'directory',
     mode   => '0755',
+    require => Package['filebeat']
   }
 
   service { 'filebeat':
     ensure => running,
     enable => true,
+    require => Package['filebeat']
   }
 }

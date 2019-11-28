@@ -172,8 +172,9 @@ class wazuh::params_agent {
       $ossec_syscheck_ignore_type_1 = '^/proc'
       $ossec_syscheck_ignore_type_2 = ".log$|.swp$"
 
-      $configure_labels                  = true
+      $configure_labels                  = false
       $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
+      $ossec_labels                      = []
 
       $ossec_syscheck_nodiff = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs = 'yes'
