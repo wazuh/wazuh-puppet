@@ -1,9 +1,9 @@
   <wodle name="osquery">
-    <disabled>yes</disabled>
-    <run_daemon>yes</run_daemon>
-    <log_path>/var/log/osquery/osqueryd.results.log</log_path>
-    <config_path>/etc/osquery/osquery.conf</config_path>
-    <add_labels>yes</add_labels>
+    <disabled><%= @wodle_osquery_disabled %></disabled>
+    <run_daemon><%= @wodle_osquery_run_daemon %></run_daemon>
+    <log_path><%= @wodle_osquery_log_path %></log_path>
+    <config_path><%= @wodle_osquery_config_path %></config_path>
+    <add_labels><%= @wodle_osquery_add_labels %></add_labels>
   </wodle>
 
   

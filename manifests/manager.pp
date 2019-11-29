@@ -208,6 +208,9 @@ class wazuh::manager (
 
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
 
+  if $::osfamily == 'windows' {
+    fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
+  }
   if ($::kernel == 'windows') {
     $kernel = 'Linux'
 
@@ -231,9 +234,7 @@ class wazuh::manager (
     validate_array($ossec_emailto)
   }
 
-  if $::osfamily == 'windows' {
-    fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
-  }
+
 
   # Install wazuh-repository
 
@@ -296,8 +297,14 @@ class wazuh::manager (
       }
     }'Debian', 'debian', 'Ubuntu', 'ubuntu':{
       $apply_template_os = 'debian'
-      if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie'){
-        $debian_additional_templates = 'yes'
+      if ( $::operatingsystemrelease     =~ /^7.*/ ){
+        $debian_version = '7'
+      }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
+        $debian_version = '8'
+      }elsif ( $::operatingsystemrelease =~ /^9.*/ ){
+        $debian_version = '9'
+      }else{
+        fail('This ossec module has not been tested on your distribution')
       }
     }'Amazon':{
       $apply_template_os = 'amazon'
