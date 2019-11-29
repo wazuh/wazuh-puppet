@@ -206,21 +206,9 @@ class wazuh::manager (
     $decoder_exclude, $rule_exclude
   )
 
-  ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
-
+  ## Fail if host is Windows
   if $::osfamily == 'windows' {
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
-  }
-  if ($::kernel == 'windows') {
-    $kernel = 'Linux'
-
-  }else{
-    $kernel = 'Linux'
-    if ($::osfamily == 'Debian'){
-      $os_family = 'debian'
-    }else{
-      $os_family = 'centos'
-    }
   }
 
   # This allows arrays of integers, sadly
@@ -234,10 +222,7 @@ class wazuh::manager (
     validate_array($ossec_emailto)
   }
 
-
-
-  # Install wazuh-repository
-
+  ## Install wazuh-repository
   #if $manage_repos {
   #  # TODO: Allow filtering of EPEL requirement
   #  class { 'wazuh::repo':}
@@ -281,41 +266,6 @@ class wazuh::manager (
     require   => Package[$wazuh::params_manager::server_package],
   }
 
-  ## Declaring variables for localfile and wodles generation
-
-  case $::operatingsystem{
-    'Redhat', 'redhat':{
-      $apply_template_os = 'rhel'
-      if ( $::operatingsystemrelease     =~ /^7.*/ ){
-        $rhel_version = '7'
-      }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
-        $rhel_version = '6'
-      }elsif ( $::operatingsystemrelease =~ /^5.*/ ){
-        $rhel_version = '5'
-      }else{
-        fail('This ossec module has not been tested on your distribution')
-      }
-    }'Debian', 'debian', 'Ubuntu', 'ubuntu':{
-      $apply_template_os = 'debian'
-      if ( $::operatingsystemrelease     =~ /^7.*/ ){
-        $debian_version = '7'
-      }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
-        $debian_version = '8'
-      }elsif ( $::operatingsystemrelease =~ /^9.*/ ){
-        $debian_version = '9'
-      }else{
-        fail('This ossec module has not been tested on your distribution')
-      }
-    }'Amazon':{
-      $apply_template_os = 'amazon'
-    }'CentOS','Centos','centos':{
-      $apply_template_os = 'centos'
-    }
-    default: { fail('This ossec module has not been tested on your distribution') }
-  }
-
-
-
   concat { 'ossec.conf':
     path    => $wazuh::params_manager::config_file,
     owner   => $wazuh::params_manager::config_owner,
@@ -342,7 +292,6 @@ class wazuh::manager (
           content => template($ossec_rootcheck_template);
       }
   }
-
   if ($configure_wodle_openscap == true){
     concat::fragment {
       'ossec.conf_wodle_openscap':

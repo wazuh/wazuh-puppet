@@ -1,5 +1,4 @@
 <%- if @kernel == 'Linux' -%>
-  <%- if @apply_template_os == 'centos' -%>
     <sca>
       <enabled>yes</enabled>
       <scan_on_start>yes</scan_on_start>
@@ -7,69 +6,34 @@
       <skip_nfs>yes</skip_nfs>
 
       <policies>
+      <%- if @os['family'] == 'CentOS' -%>
         <policy>cis_rhel7_linux_rcl.yml</policy>
-        <policy>system_audit_rcl.yml</policy>
-        <policy>system_audit_ssh.yml</policy>
-        <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- elsif @apply_template_os =='amazon' -%> 
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
-        <policy>system_audit_rcl.yml</policy>
-        <policy>system_audit_ssh.yml</policy>
-        <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- elsif @apply_template_os =='rhel' -%> 
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
-        <%- if @rhel_version == '7' -%>
+      <%- elsif @os['family'] == 'Amazon' -%> 
+      <%- elsif @os['family'] =='RedHat' -%> 
+        <%- if @os['release']['major'] == '7' -%>
         <policy>cis_rhel7_linux_rcl.yml</policy>
-        <%- elsif @rhel_version =='6' -%>
+        <%- elsif @os['release']['major'] == '6' -%>
         <policy>cis_rhel6_linux_rcl.yml</policy>
-        <%- elsif @rhel_version =='5' -%>
+        <%- elsif @os['release']['major'] == '5' -%>
         <policy>cis_rhel5_linux_rcl.yml</policy>
         <%- end -%>
-        <policy>system_audit_rcl.yml</policy>
-        <policy>system_audit_ssh.yml</policy>
-        <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- elsif @apply_template_os == 'debian' -%>
-      <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
-        <%- if @debian_version == '7' -%>
+      <%- elsif @os['family'] == 'Debian' -%>
+        <%- if @os['release']['major'] == '7' -%>
         <policy>cis_debian7_L1.yml</policy>
         <policy>cis_debian7_L2.yml</policy>
-        <%- elsif @debian_version == '8' -%>
+        <%- elsif @os['release']['major'] == '8' -%>
         <policy>cis_debian8_L1.yml</policy>
         <policy>cis_debian8_L2.yml</policy>
-        <%- elsif @debian_version == '9' -%>
+        <%- elsif @os['release']['major'] == '9' -%>
         <policy>cis_debian9_L1.yml</policy>
         <policy>cis_debian9_L2.yml</policy>
         <%- end-%>
+      <%- end -%>
         <policy>system_audit_rcl.yml</policy>
         <policy>system_audit_ssh.yml</policy>
         <policy>system_audit_pw.yml</policy>
       </policies>
     </sca>
-  <%- end -%>
 <%- end -%>
     
   
