@@ -79,13 +79,13 @@ class wazuh::params_manager {
       ## Wodles
 
       #openscap
-      $wodle_openscap_disabled                         = true
+      $wodle_openscap_disabled                         = 'yes'
       $wodle_openscap_timeout                          = '1800'
       $wodle_openscap_interval                         = '1d'
       $wodle_openscap_scan_on_start                    = 'yes'
 
       #cis-cat
-      $wodle_ciscat_disabled                           = true
+      $wodle_ciscat_disabled                           = 'yes'
       $wodle_ciscat_timeout                            = '1800'
       $wodle_ciscat_interval                           = '1d'
       $wodle_ciscat_scan_on_start                      = 'yes'
@@ -94,7 +94,7 @@ class wazuh::params_manager {
 
       #osquery
 
-      $wodle_osquery_disabled                          = true
+      $wodle_osquery_disabled                          = 'yes'
       $wodle_osquery_run_daemon                        = 'yes'
       $wodle_osquery_log_path                          = '/var/log/osquery/osqueryd.results.log'
       $wodle_osquery_config_path                       = '/etc/osquery/osquery.conf'
@@ -183,6 +183,17 @@ class wazuh::params_manager {
 
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'
+
+      $ossec_ruleset_decoder_dir = "ruleset/decoders"
+      $ossec_ruleset_rule_dir = "ruleset/rules"
+      $ossec_ruleset_rule_exclude = "0215-policy_rules.xml"
+      $ossec_ruleset_list = [ 'etc/lists/audit-keys',
+        'etc/lists/amazon/aws-eventnames',
+        'etc/lists/security-eventchannel',
+      ]
+
+      $ossec_ruleset_user_defined_decoder_dir = "etc/decoders"
+      $ossec_ruleset_user_defined_rule_dir = "etc/rules"
 
       # Cluster
 
