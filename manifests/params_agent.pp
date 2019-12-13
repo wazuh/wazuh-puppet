@@ -109,6 +109,29 @@ class wazuh::params_agent {
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'
 
+      # SCA
+
+      ## Amazon
+      $sca_amazon_enabled = 'yes'
+      $sca_amazon_scan_on_start = 'yes'
+      $sca_amazon_interval = '12h'
+      $sca_amazon_skip_nfs = 'yes'
+      $sca_amazon_policies = []
+
+      ## RHEL
+      $sca_rhel_enabled = 'yes'
+      $sca_rhel_scan_on_start = 'yes'
+      $sca_rhel_interval = '12h'
+      $sca_rhel_skip_nfs = 'yes'
+      $sca_rhel_policies = []
+
+      ## <else>
+      $sca_else_enabled = 'yes'
+      $sca_else_scan_on_start = 'yes'
+      $sca_else_interval = '12h'
+      $sca_else_skip_nfs = 'yes'
+      $sca_else_policies = []
+
       # Wodles
 
       ## openscap
@@ -133,7 +156,7 @@ class wazuh::params_agent {
       $wodle_osquery_add_labels = 'yes'
 
       ## syscollector
-      $wodle_syscollector_disabled = true
+      $wodle_syscollector_disabled = 'no'
       $wodle_syscollector_interval = '1d'
       $wodle_syscollector_scan_on_start = 'yes'
       $wodle_syscollector_hardware = 'yes'
@@ -363,20 +386,6 @@ class wazuh::params_agent {
 
       # TODO
       $validate_cmd_conf = undef
-
-      # Wodles
-
-      ## openscap
-      $wodle_openscap_disabled = 'yes'
-
-      ## cis-cat
-      $wodle_ciscat_disabled = 'yes'
-
-      ## osquery
-      $wodle_osquery_disabled = 'yes'
-
-      ## syscollector
-      $wodle_syscollector_disabled = true
 
       # Pushed by shared agent config now
       $default_local_files = [
