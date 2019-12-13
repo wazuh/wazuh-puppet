@@ -76,16 +76,40 @@ class wazuh::params_manager {
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
 
+      # SCA
+
+      ## Amazon
+      $sca_amazon_enabled = 'yes'
+      $sca_amazon_scan_on_start = 'yes'
+      $sca_amazon_interval = '12h'
+      $sca_amazon_skip_nfs = 'yes'
+      $sca_amazon_policies = []
+
+      ## RHEL
+      $sca_rhel_enabled = 'yes'
+      $sca_rhel_scan_on_start = 'yes'
+      $sca_rhel_interval = '12h'
+      $sca_rhel_skip_nfs = 'yes'
+      $sca_rhel_policies = []
+
+      ## <else>
+      $sca_else_enabled = 'yes'
+      $sca_else_scan_on_start = 'yes'
+      $sca_else_interval = '12h'
+      $sca_else_skip_nfs = 'yes'
+      $sca_else_policies = []
+
+
       ## Wodles
 
       #openscap
-      $wodle_openscap_disabled                         = true
+      $wodle_openscap_disabled                         = 'yes'
       $wodle_openscap_timeout                          = '1800'
       $wodle_openscap_interval                         = '1d'
       $wodle_openscap_scan_on_start                    = 'yes'
 
       #cis-cat
-      $wodle_ciscat_disabled                           = true
+      $wodle_ciscat_disabled                           = 'yes'
       $wodle_ciscat_timeout                            = '1800'
       $wodle_ciscat_interval                           = '1d'
       $wodle_ciscat_scan_on_start                      = 'yes'
@@ -94,14 +118,14 @@ class wazuh::params_manager {
 
       #osquery
 
-      $wodle_osquery_disabled                          = true
+      $wodle_osquery_disabled                          = 'yes'
       $wodle_osquery_run_daemon                        = 'yes'
       $wodle_osquery_log_path                          = '/var/log/osquery/osqueryd.results.log'
       $wodle_osquery_config_path                       = '/etc/osquery/osquery.conf'
       $wodle_osquery_add_labels                        = 'yes'
 
       #syscollector
-      $wodle_syscollector_disabled                     = true
+      $wodle_syscollector_disabled                     = 'yes'
       $wodle_syscollector_interval                     = '1h'
       $wodle_syscollector_scan_on_start                = 'yes'
       $wodle_syscollector_hardware                     = 'yes'
@@ -124,6 +148,7 @@ class wazuh::params_manager {
       $wodle_vulnerability_detector_redhat_update      = '1h'
       $wodle_vulnerability_detector_debian_9_disable   = 'yes'
       $wodle_vulnerability_detector_debian_9_update    = '1h'
+
 
       # syslog
 
@@ -183,6 +208,17 @@ class wazuh::params_manager {
 
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'
+
+      $ossec_ruleset_decoder_dir = "ruleset/decoders"
+      $ossec_ruleset_rule_dir = "ruleset/rules"
+      $ossec_ruleset_rule_exclude = "0215-policy_rules.xml"
+      $ossec_ruleset_list = [ 'etc/lists/audit-keys',
+        'etc/lists/amazon/aws-eventnames',
+        'etc/lists/security-eventchannel',
+      ]
+
+      $ossec_ruleset_user_defined_decoder_dir = "etc/decoders"
+      $ossec_ruleset_user_defined_rule_dir = "etc/rules"
 
       # Cluster
 
