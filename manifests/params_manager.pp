@@ -76,6 +76,30 @@ class wazuh::params_manager {
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
 
+      # SCA
+
+      ## Amazon
+      $sca_amazon_enabled = 'yes'
+      $sca_amazon_scan_on_start = 'yes'
+      $sca_amazon_interval = '12h'
+      $sca_amazon_skip_nfs = 'yes'
+      $sca_amazon_policies = []
+
+      ## RHEL
+      $sca_rhel_enabled = 'yes'
+      $sca_rhel_scan_on_start = 'yes'
+      $sca_rhel_interval = '12h'
+      $sca_rhel_skip_nfs = 'yes'
+      $sca_rhel_policies = []
+
+      ## <else>
+      $sca_else_enabled = 'yes'
+      $sca_else_scan_on_start = 'yes'
+      $sca_else_interval = '12h'
+      $sca_else_skip_nfs = 'yes'
+      $sca_else_policies = []
+
+
       ## Wodles
 
       #openscap
@@ -101,7 +125,7 @@ class wazuh::params_manager {
       $wodle_osquery_add_labels                        = 'yes'
 
       #syscollector
-      $wodle_syscollector_disabled                     = true
+      $wodle_syscollector_disabled                     = 'yes'
       $wodle_syscollector_interval                     = '1h'
       $wodle_syscollector_scan_on_start                = 'yes'
       $wodle_syscollector_hardware                     = 'yes'
@@ -124,6 +148,7 @@ class wazuh::params_manager {
       $wodle_vulnerability_detector_redhat_update      = '1h'
       $wodle_vulnerability_detector_debian_9_disable   = 'yes'
       $wodle_vulnerability_detector_debian_9_update    = '1h'
+
 
       # syslog
 
