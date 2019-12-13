@@ -1,12 +1,30 @@
   <wodle name="syscollector">
-    <disabled>no</disabled>
-    <interval>1h</interval>
-    <scan_on_start>yes</scan_on_start>
-    <hardware>yes</hardware>
-    <os>yes</os>
-    <network>yes</network>
-    <packages>yes</packages>
-    <ports all="no">yes</ports>
-    <processes>yes</processes>
+    <% if @wodle_syscollector_disabled -%>
+    <disabled><%= @wodle_syscollector_disabled %></disabled>
+    <%- end -%>
+    <% if @wodle_syscollector_interval -%>
+    <interval><%= @wodle_syscollector_interval %></interval>
+    <%- end -%>
+    <% if @wodle_syscollector_scan_on_start -%>
+    <scan_on_start><%= @wodle_syscollector_scan_on_start %></scan_on_start>
+    <%- end -%>
+    <% if @wodle_syscollector_hardware -%>
+    <hardware><%= @wodle_syscollector_hardware %></hardware>
+    <%- end -%>
+    <% if @wodle_syscollector_os -%>
+    <os><%= @wodle_syscollector_os %></os>
+    <%- end -%>
+    <% if @wodle_syscollector_network -%>
+    <network><%= @wodle_syscollector_network %></network>
+    <%- end -%>
+    <% if @wodle_syscollector_packages -%>
+    <packages><%= @wodle_syscollector_packages %></packages>
+    <%- end -%>
+    <% if @wodle_syscollector_ports -%>
+    <ports><%= @wodle_syscollector_ports %></ports>
+    <%- end -%>
+    <% if @wodle_syscollector_processes -%>
+    <processes><%= @wodle_syscollector_processes %></processes>
+    <%- end -%>
   </wodle>
 
