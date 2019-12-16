@@ -18,6 +18,7 @@ class wazuh::manager (
       $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
       $ossec_emailfrom                  = $wazuh::params_manager::ossec_emailfrom,
       $ossec_email_maxperhour           = $wazuh::params_manager::ossec_email_maxperhour,
+      $ossec_email_log_source           = $wazuh::params_manager::ossec_email_log_source,
       $ossec_email_idsname              = $wazuh::params_manager::ossec_email_idsname,
       $ossec_white_list                 = $wazuh::params_manager::ossec_white_list,
       $ossec_alert_level                = $wazuh::params_manager::ossec_alert_level,
@@ -51,7 +52,7 @@ class wazuh::manager (
       $ossec_wodle_cis_cat_template                 = $wazuh::params_manager::ossec_wodle_cis_cat_template,
       $ossec_wodle_osquery_template                 = $wazuh::params_manager::ossec_wodle_osquery_template,
       $ossec_wodle_syscollector_template            = $wazuh::params_manager::ossec_wodle_syscollector_template,
-      $ossec_wodle_vulnerability_detector_template  = $wazuh::params_manager::ossec_wodle_vulnerability_detector_template,
+      $ossec_vulnerability_detector_template  = $wazuh::params_manager::ossec_vulnerability_detector_template,
       $ossec_sca_template                           = $wazuh::params_manager::ossec_sca_template,
       $ossec_syscheck_template                      = $wazuh::params_manager::ossec_syscheck_template,
       $ossec_default_commands_template              = $wazuh::params_manager::ossec_default_commands_template,
@@ -135,17 +136,33 @@ class wazuh::manager (
       $wodle_syscollector_processes         = $wazuh::params_manager::wodle_syscollector_processes,
 
       #vulnerability-detector
-      $wodle_vulnerability_detector_disabled                = $wazuh::params_manager::wodle_vulnerability_detector_disabled,
-      $wodle_vulnerability_detector_interval                = $wazuh::params_manager::wodle_vulnerability_detector_interval,
-      $wodle_vulnerability_detector_ignore_time             = $wazuh::params_manager::wodle_vulnerability_detector_ignore_time,
-      $wodle_vulnerability_detector_run_on_start            = $wazuh::params_manager::wodle_vulnerability_detector_run_on_start,
-      $wodle_vulnerability_detector_ubuntu_disabled         = $wazuh::params_manager::wodle_vulnerability_detector_ubuntu_disabled,
-      $wodle_vulnerability_detector_ubuntu_update           = $wazuh::params_manager::wodle_vulnerability_detector_ubuntu_update,
-      $wodle_vulnerability_detector_redhat_disable          = $wazuh::params_manager::wodle_vulnerability_detector_redhat_disable,
-      $wodle_vulnerability_detector_redhat_update_from      = $wazuh::params_manager::wodle_vulnerability_detector_redhat_update_from,
-      $wodle_vulnerability_detector_redhat_update           = $wazuh::params_manager::wodle_vulnerability_detector_redhat_update,
-      $wodle_vulnerability_detector_debian_9_disable        = $wazuh::params_manager::wodle_vulnerability_detector_debian_9_disable,
-      $wodle_vulnerability_detector_debian_9_update         = $wazuh::params_manager::wodle_vulnerability_detector_debian_9_update,
+      $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,                                               
+      $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
+      $vulnerability_detector_ignore_time                        = $wazuh::params_manager::vulnerability_detector_ignore_time,                                           
+      $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
+
+      $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
+      $vulnerability_detector_provider_canonical_enabled         = $wazuh::params_manager::vulnerability_detector_provider_canonical_enabled,          
+      $vulnerability_detector_provider_canonical_os              = $wazuh::params_manager::vulnerability_detector_provider_canonical_os,
+      $vulnerability_detector_provider_debian_canonical_interval = $wazuh::params_manager::vulnerability_detector_provider_canonical_update_interval,  
+
+      $vulnerability_detector_provider_debian                    = $wazuh::params_manager::vulnerability_detector_provider_debian, 
+      $vulnerability_detector_provider_debian_enabled            = $wazuh::params_manager::vulnerability_detector_provider_debian_enabled,          
+      $vulnerability_detector_provider_debian_os                 = $wazuh::params_manager::vulnerability_detector_provider_debian_os,
+      $vulnerability_detector_provider_debian_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_debian_update_interval,
+
+      $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,                
+      $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_manager::vulnerability_detector_provider_redhat_enabled,           
+      $vulnerability_detector_provider_redhat_os                 = $wazuh::params_manager::vulnerability_detector_provider_redhat_os,           
+      $vulnerability_detector_provider_redhat_update_from_year   = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_from_year,
+      $vulnerability_detector_provider_redhat_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_interval,
+
+      $vulnerability_detector_provider_nvd                       = $wazuh::params_manager::vulnerability_detector_provider_nvd,  
+      $vulnerability_detector_provider_nvd_enabled               = $wazuh::params_manager::vulnerability_detector_provider_nvd_enabled,
+      $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,             
+      $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
+      $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
+
 
       # syslog
       $syslog_output                        = $::wazuh::params_manager::syslog_output,
@@ -415,10 +432,10 @@ class wazuh::manager (
   }
   if($configure_vulnerability_detector == true){
     concat::fragment {
-      'ossec.conf_wodle_vulnerability_detector':
+      'ossec.conf_vulnerability_detector':
         order   => 45,
         target  => 'ossec.conf',
-        content => template($ossec_wodle_vulnerability_detector_template);
+        content => template($ossec_vulnerability_detector_template);
     }
   }
   if($configure_syscheck == true){
