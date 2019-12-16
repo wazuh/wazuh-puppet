@@ -12,13 +12,14 @@ class wazuh::params_manager {
     ### Ossec.conf blocks
 
       ## Global
-      $ossec_emailnotification                         = false
-      $ossec_emailto                                   = []
+      $ossec_emailnotification                         = 'yes'
+      $ossec_emailto                                   = ['recipient@example.wazuh.com']
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
       $ossec_emailfrom                                 = 'ossecm@example.wazuh.com'
       $ossec_email_maxperhour                          = 12
       $ossec_email_idsname                             = undef
-      $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
+      $ossec_email_log_source                          = 'alerts.log'
+      $ossec_white_list                                = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
       $ossec_alert_level                               = 3
       $ossec_email_alert_level                         = 12
       $ossec_remote_connection                         = 'secure'
@@ -51,7 +52,7 @@ class wazuh::params_manager {
       $ossec_wodle_cis_cat_template                    = 'wazuh/fragments/_wodle_cis_cat.erb'
       $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
       $ossec_wodle_syscollector_template               = 'wazuh/fragments/_wodle_syscollector.erb'
-      $ossec_wodle_vulnerability_detector_template     = 'wazuh/fragments/_wodle_vulnerability_detector.erb'
+      $ossec_vulnerability_detector_template           = 'wazuh/fragments/_vulnerability_detector.erb'
       $ossec_sca_template                              = 'wazuh/fragments/_sca.erb'
       $ossec_syscheck_template                         = 'wazuh/fragments/_syscheck.erb'
       $ossec_default_commands_template                 = 'wazuh/default_commands.erb'
@@ -125,7 +126,7 @@ class wazuh::params_manager {
       $wodle_osquery_add_labels                        = 'yes'
 
       #syscollector
-      $wodle_syscollector_disabled                     = 'yes'
+      $wodle_syscollector_disabled                     = 'no'
       $wodle_syscollector_interval                     = '1h'
       $wodle_syscollector_scan_on_start                = 'yes'
       $wodle_syscollector_hardware                     = 'yes'
@@ -137,20 +138,43 @@ class wazuh::params_manager {
 
       #vulnerability-detector
 
-      $wodle_vulnerability_detector_disabled           = true
-      $wodle_vulnerability_detector_interval           = '5m'
-      $wodle_vulnerability_detector_ignore_time        = '6h'
-      $wodle_vulnerability_detector_run_on_start       = 'yes'
-      $wodle_vulnerability_detector_ubuntu_disabled    = 'yes'
-      $wodle_vulnerability_detector_ubuntu_update      = '1h'
-      $wodle_vulnerability_detector_redhat_disable     = 'yes'
-      $wodle_vulnerability_detector_redhat_update_from = '2010'
-      $wodle_vulnerability_detector_redhat_update      = '1h'
-      $wodle_vulnerability_detector_debian_9_disable   = 'yes'
-      $wodle_vulnerability_detector_debian_9_update    = '1h'
+      $vulnerability_detector_enabled                            = 'no'
+      $vulnerability_detector_interval                           = '5m'
+      $vulnerability_detector_ignore_time                        = '6h'
+      $vulnerability_detector_run_on_start                       = 'yes'
+
+      $vulnerability_detector_provider_canonical                 = 'yes'
+      $vulnerability_detector_provider_canonical_enabled         = 'no'
+      $vulnerability_detector_provider_canonical_os              = ['precise',
+        'trusty',
+        'xenial',
+        'bionic'
+      ]
+      $vulnerability_detector_provider_canonical_update_interval = '1h'
 
 
-      # syslog
+      $vulnerability_detector_provider_debian                 = 'yes'
+      $vulnerability_detector_provider_debian_enabled         = 'no'
+      $vulnerability_detector_provider_debian_os              = ['wheezy',
+        'stretch',
+        'jessie',
+        'buster'
+      ]
+      $vulnerability_detector_provider_debian_update_interval = '1h'
+   
+
+      $vulnerability_detector_provider_redhat                    = 'yes'
+      $vulnerability_detector_provider_redhat_enabled            = 'no'
+      $vulnerability_detector_provider_redhat_os                 = []
+      $vulnerability_detector_provider_redhat_update_from_year   = '2010'
+      $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
+
+
+      $vulnerability_detector_provider_nvd                    = 'yes'
+      $vulnerability_detector_provider_nvd_enabled            = 'no'
+      $vulnerability_detector_provider_nvd_os                 = []
+      $vulnerability_detector_provider_nvd_update_from_year   = '2010'
+      $vulnerability_detector_provider_nvd_update_interval    = '1h'
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
