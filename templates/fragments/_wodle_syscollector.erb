@@ -1,12 +1,12 @@
   <wodle name="syscollector">
-    <disabled>no</disabled>
-    <interval>1h</interval>
-    <scan_on_start>yes</scan_on_start>
-    <hardware>yes</hardware>
-    <os>yes</os>
-    <network>yes</network>
-    <packages>yes</packages>
-    <ports all="no">yes</ports>
-    <processes>yes</processes>
+    <disabled><%= @wodle_syscollector_disabled %></disabled>
+    <interval><%= @wodle_syscollector_interval %></interval>
+    <scan_on_start><%= @wodle_syscollector_scan_on_start %></scan_on_start>
+    <hardware><%= @wodle_syscollector_hardware %></hardware>
+    <os><%= @wodle_syscollector_os %></os>
+    <network><%= @wodle_syscollector_network %></network>
+    <packages><%= @wodle_syscollector_packages %></packages>
+    <ports all="no"><%= @wodle_syscollector_ports %></ports>
+    <processes><%= @wodle_syscollector_processes %></processes>
   </wodle>
 

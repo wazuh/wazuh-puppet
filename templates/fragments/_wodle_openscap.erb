@@ -1,9 +1,9 @@
   <wodle name="open-scap">
-    <disabled>yes</disabled>
-    <timeout>1800</timeout>
-    <interval>1d</interval>
-    <scan-on-start>yes</scan-on-start>
-  
+    <disabled><%= @wodle_openscap_disabled %></disabled>
+    <timeout><%= @wodle_openscap_timeout %></timeout>
+    <interval><%= @wodle_openscap_interval %></interval>
+    <scan-on-start><%= @wodle_openscap_scan_on_start %></scan-on-start>
+
     <%- @wodle_openscap_content.each do |path, value| -%>
     <content type="<%= value['type'] %>" path="<%= path %>">
       <%- if value['profiles'] then -%>
@@ -15,4 +15,3 @@
     <%- end -%>
   </wodle>
 
-  

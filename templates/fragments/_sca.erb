@@ -1,39 +1,27 @@
-<%- if @kernel == 'Linux' -%>
-  <%- if @apply_template_os == 'centos' -%>
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
+  <sca>
+    <enabled><%= @sca_enabled %></enabled>
+    <scan_on_start><%= @sca_scan_on_start %></scan_on_start>
+    <interval><%= @sca_interval %></interval>
+    <skip_nfs><%= @sca_skip_nfs %></skip_nfs>
 
-      <policies>
-        <policy>cis_rhel7_linux_rcl.yml</policy>
-        <policy>system_audit_rcl.yml</policy>
-        <policy>system_audit_ssh.yml</policy>
-        <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- elsif @apply_template_os =='amazon' -%> 
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
+    <%- if @kernel == 'Linux' -%>
+    <%- if @apply_template_os == 'centos' -%>
+    <policies>
+      <policy>cis_rhel7_linux_rcl.yml</policy>
       <policy>system_audit_rcl.yml</policy>
       <policy>system_audit_ssh.yml</policy>
       <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- elsif @apply_template_os =='rhel' -%> 
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
+    </policies>
 
-      <policies>
+    <%- elsif @apply_template_os =='amazon' -%>
+    <policies>
+      <policy>system_audit_rcl.yml</policy>
+      <policy>system_audit_ssh.yml</policy>
+      <policy>system_audit_pw.yml</policy>
+    </policies>
+
+    <%- elsif @apply_template_os =='rhel' -%>
+    <policies>
       <%- if @rhel_version == '7' -%>
       <policy>cis_rhel7_linux_rcl.yml</policy>
       <%- elsif @rhel_version =='6' -%>
@@ -44,16 +32,10 @@
       <policy>system_audit_rcl.yml</policy>
       <policy>system_audit_ssh.yml</policy>
       <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- else -%>
-      <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
+    </policies>
 
-      <policies>
+    <%- else -%>
+    <policies>
       <policy>cis_debian_linux_rcl.yml</policy>
       <%- if @debian_additional_templates == 'yes' -%>
       <policy>cis_debianlinux7-8_L1_rcl.yml</policy>
@@ -62,9 +44,7 @@
       <policy>system_audit_rcl.yml</policy>
       <policy>system_audit_ssh.yml</policy>
       <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- end -%>
-<%- end -%>
-    
-  
+    </policies>
+    <%- end -%>
+    <%- end -%>
+  </sca>

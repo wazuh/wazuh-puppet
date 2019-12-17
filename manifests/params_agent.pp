@@ -10,6 +10,9 @@ class wazuh::params_agent {
   # Enable/Disable agent registration
   $manage_client_keys = 'yes'
 
+  # Configure the format of internal logs
+  $logging_log_format = 'plain'
+
   # Agents registration parameters
   $wazuh_agent_cert = undef
   $wazuh_agent_key = undef
@@ -22,8 +25,6 @@ class wazuh::params_agent {
   # ossec.conf generation variables
   $configure_rootcheck = true
   $configure_wodle_openscap = false
-  $configure_wodle_cis_cat = true
-  $configure_wodle_osquery = true
   $configure_wodle_syscollector = true
   $configure_sca = true
   $configure_syscheck = true
@@ -40,7 +41,6 @@ class wazuh::params_agent {
   $ossec_sca_template = 'wazuh/fragments/_sca.erb'
   $ossec_syscheck_template = 'wazuh/fragments/_syscheck.erb'
   $ossec_localfile_template = 'wazuh/fragments/_localfile.erb'
-  $ossec_ruleset = 'wazuh/fragments/_ruleset.erb'
   $ossec_auth = 'wazuh/fragments/_auth.erb'
   $ossec_cluster = 'wazuh/fragments/_cluster.erb'
   $ossec_active_response_template = 'wazuh/fragments/_default_activeresponse.erb'
@@ -64,6 +64,33 @@ class wazuh::params_agent {
 
   ## localfile
   $ossec_local_files = $::wazuh::params_agent::default_local_files
+
+  ## Security Configuration Assessment
+  $sca_enabled = 'yes'
+  $sca_scan_on_start = 'yes'
+  $sca_interval = '12h'
+  $sca_skip_nfs = 'yes'
+
+  ## syscheck
+  $ossec_syscheck_disabled = 'no'
+  $ossec_syscheck_frequency = '43200'
+  $ossec_syscheck_scan_on_start = 'yes'
+  $ossec_syscheck_alert_new_files = undef
+  $ossec_syscheck_auto_ignore = undef
+  $ossec_syscheck_skip_nfs = 'yes'
+
+  # Wodle
+
+  ## syscollector
+  $wodle_syscollector_disabled = 'no'
+  $wodle_syscollector_interval = '1d'
+  $wodle_syscollector_scan_on_start = 'yes'
+  $wodle_syscollector_hardware = 'yes'
+  $wodle_syscollector_os = 'yes'
+  $wodle_syscollector_network = 'yes'
+  $wodle_syscollector_packages = 'yes'
+  $wodle_syscollector_ports = 'yes'
+  $wodle_syscollector_processes = 'yes'
 
   # OS specific configurations
   case $::kernel {
@@ -93,6 +120,10 @@ class wazuh::params_agent {
       $processlist_owner = 'root'
       $processlist_group = 'ossec'
 
+      # Configure wodles on Linux
+      $configure_wodle_cis_cat = true
+      $configure_wodle_osquery = true
+
       # ossec.conf blocks
 
       ## Rootcheck
@@ -111,8 +142,8 @@ class wazuh::params_agent {
 
       # Wodles
 
-      ## openscap
-      $wodle_openscap_disabled = 'no'
+      ## open-scap
+      $wodle_openscap_disabled = 'yes'
       $wodle_openscap_timeout = '1800'
       $wodle_openscap_interval = '1d'
       $wodle_openscap_scan_on_start = 'yes'
@@ -132,23 +163,7 @@ class wazuh::params_agent {
       $wodle_osquery_config_path = '/etc/osquery/osquery.conf'
       $wodle_osquery_add_labels = 'yes'
 
-      ## syscollector
-      $wodle_syscollector_disabled = true
-      $wodle_syscollector_interval = '1d'
-      $wodle_syscollector_scan_on_start = 'yes'
-      $wodle_syscollector_hardware = 'yes'
-      $wodle_syscollector_os = 'yes'
-      $wodle_syscollector_network = 'yes'
-      $wodle_syscollector_packages = 'yes'
-      $wodle_syscollector_ports = 'yes'
-      $wodle_syscollector_processes = 'yes'
-
       ## syscheck
-      $ossec_syscheck_disabled = 'no'
-      $ossec_syscheck_frequency = '43200'
-      $ossec_syscheck_scan_on_start = 'yes'
-      $ossec_syscheck_alert_new_files = undef
-      $ossec_syscheck_auto_ignore = undef
       $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
       $ossec_syscheck_whodata = '"no"'
@@ -171,13 +186,12 @@ class wazuh::params_agent {
       ]
       $ossec_syscheck_ignore_type_1 = '^/proc'
       $ossec_syscheck_ignore_type_2 = ".log$|.swp$"
+      $ossec_syscheck_nodiff = '/etc/ssl/private.key'
+      $ossec_syscheck_skip_nfs = 'yes'
 
       $configure_labels                  = false
       $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
       $ossec_labels                      = []
-
-      $ossec_syscheck_nodiff = '/etc/ssl/private.key'
-      $ossec_syscheck_skip_nfs = 'yes'
 
       # others
       $manage_firewall = false
@@ -350,12 +364,16 @@ class wazuh::params_agent {
       $service_has_status = true
       $ossec_service_provider = undef
 
+      # Don't enable wodle that won't work on Windows
+      $configure_wodle_cis_cat = false
+      $configure_wodle_osquery = false
+
       # TODO
       $validate_cmd_conf = undef
 
       # Wodles
 
-      ## openscap
+      ## open-scap
       $wodle_openscap_disabled = 'yes'
 
       ## cis-cat
@@ -364,19 +382,20 @@ class wazuh::params_agent {
       ## osquery
       $wodle_osquery_disabled = 'yes'
 
-      ## syscollector
-      $wodle_syscollector_disabled = true
-
       # Pushed by shared agent config now
       $default_local_files = [
         {
+          'location'   => 'Application',
+          'log_format' => 'eventchannel'
+        },
+        {
           'location'   => 'Security',
           'log_format' => 'eventchannel',
-          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID!= 4703 and EventID != 4907]'
+          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID != 4703 and EventID != 4907 and EventID != 5152 and EventID != 5157]'
         },
         {
           'location'   => 'System',
-          'log_format' => 'eventlog'
+          'log_format' => 'eventchannel'
         },
         {
           'location'   => 'active-response\active-responses.log',

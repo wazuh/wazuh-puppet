@@ -49,7 +49,6 @@ class wazuh::agent (
   $ossec_sca_template                = $wazuh::params_agent::ossec_sca_template,
   $ossec_syscheck_template           = $wazuh::params_agent::ossec_syscheck_template,
   $ossec_localfile_template          = $wazuh::params_agent::ossec_localfile_template,
-  $ossec_ruleset                     = $wazuh::params_agent::ossec_ruleset,
   $ossec_auth                        = $wazuh::params_agent::ossec_auth,
   $ossec_cluster                     = $wazuh::params_agent::ossec_cluster,
   $ossec_active_response_template    = $wazuh::params_agent::ossec_active_response_template,
@@ -149,6 +148,9 @@ class wazuh::agent (
   ## Windows
 
   $download_path                     = $wazuh::params_agent::download_path,
+
+  # Logging
+  $logging_log_format                = $wazuh::params_agent::logging_log_format,
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
