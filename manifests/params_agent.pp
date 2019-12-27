@@ -170,7 +170,7 @@ class wazuh::params_agent {
         '/dev/core',
       ]
       $ossec_syscheck_ignore_type_1 = '^/proc'
-      $ossec_syscheck_ignore_type_2 = ".log$|.swp$"
+      $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
 
       $configure_labels                  = false
       $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
@@ -372,7 +372,9 @@ class wazuh::params_agent {
         {
           'location'   => 'Security',
           'log_format' => 'eventchannel',
-          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID!= 4703 and EventID != 4907]'
+          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447\ 
+and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 \
+EventID!= 4703 and EventID != 4907]'
         },
         {
           'location'   => 'System',

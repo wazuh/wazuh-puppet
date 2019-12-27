@@ -31,8 +31,8 @@ class wazuh::kibana (
   }
 
   service { 'kibana':
-    ensure => running,
-    enable => true,
+    ensure     => running,
+    enable     => true,
     hasrestart => true,
   }
 

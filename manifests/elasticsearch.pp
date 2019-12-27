@@ -54,8 +54,8 @@ class wazuh::elasticsearch (
   }
 
   service { 'elasticsearch':
-    ensure => running,
-    enable => true,
+    ensure  => running,
+    enable  => true,
     require => Package[$elasticsearch_package],
   }
 

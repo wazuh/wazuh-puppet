@@ -55,14 +55,14 @@ class wazuh::filebeat (
   }
 
   file { '/usr/share/filebeat/module/wazuh':
-    ensure => 'directory',
-    mode   => '0755',
+    ensure  => 'directory',
+    mode    => '0755',
     require => Package['filebeat']
   }
 
   service { 'filebeat':
-    ensure => running,
-    enable => true,
+    ensure  => running,
+    enable  => true,
     require => Package['filebeat']
   }
 }
