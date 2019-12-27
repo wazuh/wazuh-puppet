@@ -3,10 +3,10 @@
 class wazuh::kibana (
   $kibana_package = 'kibana',
   $kibana_service = 'kibana',
-  $kibana_version = '7.3.2',
-  $kibana_app_version = '3.10.2_7.3.2',
+  $kibana_version = '7.5.1',
+  $kibana_app_version = '3.11.0_7.5.1',
 
-  $kibana_elasticsearch_ip = '<YOUR_ELASTICSEARCH_IP>',
+  $kibana_elasticsearch_ip = 'localhost',
   $kibana_elasticsearch_port = '9200',
 
   $kibana_server_port = '5601',
@@ -31,8 +31,9 @@ class wazuh::kibana (
   }
 
   service { 'kibana':
-    ensure => running,
-    enable => true,
+    ensure     => running,
+    enable     => true,
+    hasrestart => true,
   }
 
   exec {'Waiting for elasticsearch...':
@@ -47,12 +48,6 @@ class wazuh::kibana (
     command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_app_version}.zip",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$kibana_service],
-
-  }
-    exec {'Enabling and restarting kibana...':
-      path    => '/usr/bin:/bin',
-      command => 'systemctl daemon-reload && systemctl enable kibana && systemctl restart kibana',
-
   }
 
   exec { 'Verify Kibana folders owner':

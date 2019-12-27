@@ -11,13 +11,13 @@ class wazuh::elasticsearch (
   $elasticsearch_node_max_local_storage_nodes = '1',
   $elasticsearch_service = 'elasticsearch',
   $elasticsearch_package = 'elasticsearch',
-  $elasticsearch_version = '7.3.2',
+  $elasticsearch_version = '7.5.1',
 
   $elasticsearch_path_data = '/var/lib/elasticsearch',
   $elasticsearch_path_logs = '/var/log/elasticsearch',
 
 
-  $elasticsearch_ip = '<YOUR_ELASTICSEARCH_IP>',
+  $elasticsearch_ip = 'localhost',
   $elasticsearch_port = '9200',
   $elasticsearch_discovery_option = 'discovery.type: single-node',
   $elasticsearch_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']",
@@ -28,7 +28,7 @@ class wazuh::elasticsearch (
 ){
 
   # install package
-  package { 'Installing elasticsearch...':
+  package { 'elasticsearch':
     ensure => $elasticsearch_version,
     name   => $elasticsearch_package,
   }
@@ -39,7 +39,8 @@ class wazuh::elasticsearch (
     group   => 'elasticsearch',
     mode    => '0644',
     notify  => Service[$elasticsearch_service], ## Restarts the service
-    content => template('wazuh/elasticsearch_yml.erb')
+    content => template('wazuh/elasticsearch_yml.erb'),
+    require => Package[$elasticsearch_package],
   }
 
   file { 'Configure jvm.options':
@@ -48,17 +49,20 @@ class wazuh::elasticsearch (
     group   => 'elasticsearch',
     mode    => '0660',
     notify  => Service[$elasticsearch_service], ## Restarts the service
-    content => template('wazuh/jvm_options.erb')
+    content => template('wazuh/jvm_options.erb'),
+    require => Package[$elasticsearch_package],
   }
 
   service { 'elasticsearch':
-    ensure => running,
-    enable => true,
+    ensure  => running,
+    enable  => true,
+    require => Package[$elasticsearch_package],
   }
 
   exec { 'Insert line limits':
     path    => '/usr/bin:/bin/',
     command => "echo 'elasticsearch - nofile  65535\nelasticsearch - memlock unlimited' >> /etc/security/limits.conf",
+    require => Package[$elasticsearch_package],
 
   }
 
@@ -67,6 +71,7 @@ class wazuh::elasticsearch (
     command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch\
              && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch\
              && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
+    require => Package[$elasticsearch_package],
 
   }
 

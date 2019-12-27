@@ -1,6 +1,6 @@
 {
   "name": "wazuh-wazuh",
-  "version": "3.10.2",
+  "version": "3.11.0",
   "author": "WAZUH",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
@@ -31,6 +31,10 @@
     {
       "name": "puppetlabs/firewall",
       "version_requirement": ">= 1.7.0 < 3.0.0"
+    },
+    {
+      "name": "puppetlabs/powershell",
+      "version_requirement": ">= 2.0.0 < 3.0.0"
     }
   ],
   "operatingsystem_support": [

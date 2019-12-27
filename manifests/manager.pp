@@ -156,6 +156,8 @@ class wazuh::manager (
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
+      $ossec_syscheck_whodata               = $wazuh::params_manager::ossec_syscheck_whodata,
+      $ossec_syscheck_realtime              = $wazuh::params_manager::ossec_syscheck_realtime,
       $ossec_syscheck_ignore_list           = $wazuh::params_manager::ossec_syscheck_ignore_list,
 
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
@@ -217,6 +219,17 @@ class wazuh::manager (
       $os_family = 'debian'
     }else{
       $os_family = 'centos'
+    }
+  }
+
+
+  if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
+    package { 'Installing Auditd...':
+      name   => 'audit',
+    }
+    service { 'auditd':
+      ensure => running,
+      enable => true,
     }
   }
 
@@ -283,7 +296,7 @@ class wazuh::manager (
   ## Declaring variables for localfile and wodles generation
 
   case $::operatingsystem{
-    'Redhat', 'redhat':{
+    'Redhat', 'redhat', 'OracleLinux':{
       $apply_template_os = 'rhel'
       if ( $::operatingsystemrelease     =~ /^7.*/ ){
         $rhel_version = '7'
@@ -513,4 +526,13 @@ class wazuh::manager (
         'ESTABLISHED'],
     }
   }
+
+  if($ossec_syscheck_whodata == '"yes"') {
+    exec { 'Ensure wazuh-fim rule is added to auditctl':
+      command => '/sbin/auditctl -l',
+      unless  => '/sbin/auditctl -l | grep wazuh_fim',
+      tries   => 2
+    }
+  }
+
 }

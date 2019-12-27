@@ -12,9 +12,10 @@ class wazuh::repo_elastic (
         apt::key { 'elastic':
           id     => '46095ACC8548582C1A2699A9D27D666CD88E42B4',
           source => 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+          server => 'pgp.mit.edu'
         }
         case $::lsbdistcodename {
-          /(jessie|wheezy|stretch|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
+          /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
 
             apt::source { 'wazuh_elastic':
               ensure   => present,
