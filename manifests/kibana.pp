@@ -12,8 +12,15 @@ class wazuh::kibana (
   $kibana_server_port = '5601',
   $kibana_server_host = '0.0.0.0',
   $kibana_elasticsearch_server_hosts ="http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
-
-){
+  $kibana_wazuh_api_credentials = [ {
+                                      'id'       => 'default',
+                                      'url'      => 'http://localhost',
+                                      'port'     => '55000',
+                                      'user'     => 'foo',
+                                      'password' => 'bar',
+                                    },
+                                  ]
+) {
 
   # install package
   package { 'Installing Kibana...':
