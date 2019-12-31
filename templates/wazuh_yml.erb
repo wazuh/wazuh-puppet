@@ -124,19 +124,10 @@
 #     user: <user>
 #     password: <password>
 hosts:
-<% if @kibana_wazuh_api_credentials.length > 0 %>
 <% @kibana_wazuh_api_credentials.each do |api_profile| -%>
-  - <%= @kibana_wazuh_api_credentials[api_profile][id] %>:
-      url: <%= @kibana_wazuh_api_credentials[api_profile][url] %>:
-      port:  <%= @kibana_wazuh_api_credentials[api_profile][port] %>:
-      user:  <%= @kibana_wazuh_api_credentials[api_profile][user] %>:
-      password:  <%= @kibana_wazuh_api_credentials[api_profile][password] %>:
-<% end -%>
-<% end -%>
-
-<% @database_profile_array.each do |arrayValue| -%>
-[<%= arrayValue %>]
-<% database_profile_hash[arrayValue].each do |key,value| -%>
-<%= key %>=<%= value %>
-<% end %>
+  - <%= api_profile['id'] %>:
+      url: <%= api_profile['url'] %>
+      port: <%= api_profile['port'] %>
+      user: <%= api_profile['user'] %>
+      password: <%= api_profile['password'] %>
 <% end -%>
