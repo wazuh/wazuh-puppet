@@ -57,6 +57,13 @@ class wazuh::kibana (
     notify  => Service[$kibana_service],
   }
 
+  exec {'Removing .wazuh index...':
+    path    => '/usr/bin',
+    command => "curl -s -XDELETE -sL -w '%{http_code}' -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null)",
+    creates => '/usr/share/kibana/plugins/wazuh/package.json',
+    notify  => Service[$kibana_service],
+  }
+
   file { '/usr/share/kibana/plugins/wazuh/wazuh.yml':
         owner   => $wazuh::params_manager::config_owner,
         group   => $wazuh::params_manager::config_group,
