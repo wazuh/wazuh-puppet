@@ -50,6 +50,12 @@ class wazuh::kibana (
     try_sleep => 3,
   }
 
+  exec {'Removing old Wazuh Kibana App Plugin if exists...':
+    path    => '/usr/bin',
+    command => "sudo rm /usr/share/kibana/plugins/wazuh -rf",
+    notify  => Service[$kibana_service],
+  }
+
   exec {'Installing Wazuh App...':
     path    => '/usr/bin',
     command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_app_version}.zip",
