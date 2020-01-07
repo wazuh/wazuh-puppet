@@ -73,12 +73,12 @@ class wazuh::kibana (
   }
 
   file { '/usr/share/kibana/plugins/wazuh/wazuh.yml':
-        owner   => $wazuh::params_manager::config_owner,
-        group   => $wazuh::params_manager::config_group,
-        mode    => $wazuh::params_manager::config_mode,
+        owner   => 'kibana',
+        group   => 'kibana',
+        mode    => '0644',
         content => template('wazuh/wazuh_yml.erb'),
         notify  => Service[$kibana_service]
-    }
+  }
   exec { 'Verify Kibana folders owner':
     path    => '/usr/bin:/bin',
     command => "chown -R kibana:kibana /usr/share/kibana/optimize\
