@@ -266,11 +266,11 @@ class wazuh::manager (
 
   if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
     package { 'Installing Auditd...':
-      name   => "audit",
+      name   => 'audit',
     }
-    service { auditd:
-      ensure    => running,
-      enable    => true,
+    service { 'auditd':
+      ensure => running,
+      enable => true,
     }
   }
 
@@ -570,9 +570,9 @@ class wazuh::manager (
 
   if($ossec_syscheck_whodata == '"yes"') {
     exec { 'Ensure wazuh-fim rule is added to auditctl':
-      command => "/sbin/auditctl -l",
-      unless  => "/sbin/auditctl -l | grep wazuh_fim",
-      tries => 2
+      command => '/sbin/auditctl -l',
+      unless  => '/sbin/auditctl -l | grep wazuh_fim',
+      tries   => 2
     }
   }
 

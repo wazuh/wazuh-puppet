@@ -184,11 +184,11 @@ class wazuh::agent (
 
   if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
     package { 'Installing Audit...':
-      name   => "audit",
+      name   => 'audit',
     }
-    service { auditd:
-      ensure    => running,
-      enable    => true,
+    service { 'auditd':
+      ensure => running,
+      enable => true,
     }
   }
 
@@ -235,8 +235,8 @@ class wazuh::agent (
         source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
         install_options => [
           '/q',
-          "WAZUH_MANAGER=$wazuh_reporting_endpoint",
-          "WAZUH_PROTOCOL=$ossec_protocol",
+          "WAZUH_MANAGER=${wazuh_reporting_endpoint}",
+          "WAZUH_PROTOCOL=${ossec_protocol}",
         ],
       }
     }
@@ -512,7 +512,7 @@ class wazuh::agent (
         exec { 'agent-auth-windows':
           command  => $agent_auth_command,
           provider => 'powershell',
-          onlyif   => "if ((Get-Item '${keys_file}').length -gt 0kb) {exit 1}",
+          onlyif   => "if ((Get-Item '${$::wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
           require  => Concat['ossec.conf'],
           before   => Service[$agent_service_name],
         }

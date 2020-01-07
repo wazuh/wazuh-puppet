@@ -6,6 +6,7 @@ class wazuh::params_manager {
 
     # Installation
       $server_package_version                          = '3.11.1-1'
+
       $manage_repos                                    = true
       $manage_firewall                                 = false
 
@@ -227,7 +228,7 @@ class wazuh::params_manager {
                                               '/dev/core',
                                             ]
       $ossec_syscheck_ignore_type_1                    = '^/proc'
-      $ossec_syscheck_ignore_type_2                    = ".log$|.swp$"
+      $ossec_syscheck_ignore_type_2                    = '.log$|.swp$'
 
 
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
