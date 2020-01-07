@@ -73,11 +73,11 @@ class wazuh::kibana (
   }
 
   file { '/usr/share/kibana/plugins/wazuh/wazuh.yml':
-        owner   => 'kibana',
-        group   => 'kibana',
-        mode    => '0644',
-        content => template('wazuh/wazuh_yml.erb'),
-        notify  => Service[$kibana_service]
+    owner   => 'kibana',
+    group   => 'kibana',
+    mode    => '0644',
+    content => template('wazuh/wazuh_yml.erb'),
+    notify  => Service[$kibana_service]
   }
   exec { 'Verify Kibana folders owner':
     path    => '/usr/bin:/bin',
