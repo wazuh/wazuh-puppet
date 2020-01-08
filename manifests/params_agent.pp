@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.11.0-1'
+  $agent_package_version = '3.11.1-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -109,6 +109,29 @@ class wazuh::params_agent {
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'
 
+      # SCA
+
+      ## Amazon
+      $sca_amazon_enabled = 'yes'
+      $sca_amazon_scan_on_start = 'yes'
+      $sca_amazon_interval = '12h'
+      $sca_amazon_skip_nfs = 'yes'
+      $sca_amazon_policies = []
+
+      ## RHEL
+      $sca_rhel_enabled = 'yes'
+      $sca_rhel_scan_on_start = 'yes'
+      $sca_rhel_interval = '12h'
+      $sca_rhel_skip_nfs = 'yes'
+      $sca_rhel_policies = []
+
+      ## <else>
+      $sca_else_enabled = 'yes'
+      $sca_else_scan_on_start = 'yes'
+      $sca_else_interval = '12h'
+      $sca_else_skip_nfs = 'yes'
+      $sca_else_policies = []
+
       # Wodles
 
       ## openscap
@@ -133,7 +156,7 @@ class wazuh::params_agent {
       $wodle_osquery_add_labels = 'yes'
 
       ## syscollector
-      $wodle_syscollector_disabled = true
+      $wodle_syscollector_disabled = 'no'
       $wodle_syscollector_interval = '1d'
       $wodle_syscollector_scan_on_start = 'yes'
       $wodle_syscollector_hardware = 'yes'
@@ -171,6 +194,17 @@ class wazuh::params_agent {
       ]
       $ossec_syscheck_ignore_type_1 = '^/proc'
       $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
+
+      $ossec_ruleset_decoder_dir = 'ruleset/decoders'
+      $ossec_ruleset_rule_dir = 'ruleset/rules'
+      $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
+      $ossec_ruleset_list = [ 'etc/lists/audit-keys',
+        'etc/lists/amazon/aws-eventnames',
+        'etc/lists/security-eventchannel',
+      ]
+
+      $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
+      $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
       $configure_labels                  = false
       $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
@@ -352,20 +386,6 @@ class wazuh::params_agent {
 
       # TODO
       $validate_cmd_conf = undef
-
-      # Wodles
-
-      ## openscap
-      $wodle_openscap_disabled = 'yes'
-
-      ## cis-cat
-      $wodle_ciscat_disabled = 'yes'
-
-      ## osquery
-      $wodle_osquery_disabled = 'yes'
-
-      ## syscollector
-      $wodle_syscollector_disabled = true
 
       # Pushed by shared agent config now
       $default_local_files = [

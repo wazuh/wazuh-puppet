@@ -5,19 +5,21 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.11.0-1'
+      $server_package_version                          = '3.11.1-1'
+
       $manage_repos                                    = true
       $manage_firewall                                 = false
 
     ### Ossec.conf blocks
 
       ## Global
-      $ossec_emailnotification                         = false
-      $ossec_emailto                                   = []
+      $ossec_emailnotification                         = 'yes'
+      $ossec_emailto                                   = ['recipient@example.wazuh.com']
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
       $ossec_emailfrom                                 = 'ossecm@example.wazuh.com'
       $ossec_email_maxperhour                          = 12
       $ossec_email_idsname                             = undef
+      $ossec_email_log_source                          = 'alerts.log'
       $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
       $ossec_alert_level                               = 3
       $ossec_email_alert_level                         = 12
@@ -51,7 +53,7 @@ class wazuh::params_manager {
       $ossec_wodle_cis_cat_template                    = 'wazuh/fragments/_wodle_cis_cat.erb'
       $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
       $ossec_wodle_syscollector_template               = 'wazuh/fragments/_wodle_syscollector.erb'
-      $ossec_wodle_vulnerability_detector_template     = 'wazuh/fragments/_wodle_vulnerability_detector.erb'
+      $ossec_vulnerability_detector_template           = 'wazuh/fragments/_vulnerability_detector.erb'
       $ossec_sca_template                              = 'wazuh/fragments/_sca.erb'
       $ossec_syscheck_template                         = 'wazuh/fragments/_syscheck.erb'
       $ossec_default_commands_template                 = 'wazuh/default_commands.erb'
@@ -76,16 +78,40 @@ class wazuh::params_manager {
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
 
+      # SCA
+
+      ## Amazon
+      $sca_amazon_enabled = 'yes'
+      $sca_amazon_scan_on_start = 'yes'
+      $sca_amazon_interval = '12h'
+      $sca_amazon_skip_nfs = 'yes'
+      $sca_amazon_policies = []
+
+      ## RHEL
+      $sca_rhel_enabled = 'yes'
+      $sca_rhel_scan_on_start = 'yes'
+      $sca_rhel_interval = '12h'
+      $sca_rhel_skip_nfs = 'yes'
+      $sca_rhel_policies = []
+
+      ## <else>
+      $sca_else_enabled = 'yes'
+      $sca_else_scan_on_start = 'yes'
+      $sca_else_interval = '12h'
+      $sca_else_skip_nfs = 'yes'
+      $sca_else_policies = []
+
+
       ## Wodles
 
       #openscap
-      $wodle_openscap_disabled                         = true
+      $wodle_openscap_disabled                         = 'yes'
       $wodle_openscap_timeout                          = '1800'
       $wodle_openscap_interval                         = '1d'
       $wodle_openscap_scan_on_start                    = 'yes'
 
       #cis-cat
-      $wodle_ciscat_disabled                           = true
+      $wodle_ciscat_disabled                           = 'yes'
       $wodle_ciscat_timeout                            = '1800'
       $wodle_ciscat_interval                           = '1d'
       $wodle_ciscat_scan_on_start                      = 'yes'
@@ -94,14 +120,14 @@ class wazuh::params_manager {
 
       #osquery
 
-      $wodle_osquery_disabled                          = true
+      $wodle_osquery_disabled                          = 'yes'
       $wodle_osquery_run_daemon                        = 'yes'
       $wodle_osquery_log_path                          = '/var/log/osquery/osqueryd.results.log'
       $wodle_osquery_config_path                       = '/etc/osquery/osquery.conf'
       $wodle_osquery_add_labels                        = 'yes'
 
       #syscollector
-      $wodle_syscollector_disabled                     = true
+      $wodle_syscollector_disabled                     = 'no'
       $wodle_syscollector_interval                     = '1h'
       $wodle_syscollector_scan_on_start                = 'yes'
       $wodle_syscollector_hardware                     = 'yes'
@@ -113,19 +139,41 @@ class wazuh::params_manager {
 
       #vulnerability-detector
 
-      $wodle_vulnerability_detector_disabled           = true
-      $wodle_vulnerability_detector_interval           = '5m'
-      $wodle_vulnerability_detector_ignore_time        = '6h'
-      $wodle_vulnerability_detector_run_on_start       = 'yes'
-      $wodle_vulnerability_detector_ubuntu_disabled    = 'yes'
-      $wodle_vulnerability_detector_ubuntu_update      = '1h'
-      $wodle_vulnerability_detector_redhat_disable     = 'yes'
-      $wodle_vulnerability_detector_redhat_update_from = '2010'
-      $wodle_vulnerability_detector_redhat_update      = '1h'
-      $wodle_vulnerability_detector_debian_9_disable   = 'yes'
-      $wodle_vulnerability_detector_debian_9_update    = '1h'
+      $vulnerability_detector_enabled                            = 'no'
+      $vulnerability_detector_interval                           = '5m'
+      $vulnerability_detector_ignore_time                        = '6h'
+      $vulnerability_detector_run_on_start                       = 'yes'
 
-      # syslog
+      $vulnerability_detector_provider_canonical                 = 'yes'
+      $vulnerability_detector_provider_canonical_enabled         = 'no'
+      $vulnerability_detector_provider_canonical_os              = ['precise',
+        'trusty',
+        'xenial',
+        'bionic'
+      ]
+      $vulnerability_detector_provider_canonical_update_interval = '1h'
+
+
+      $vulnerability_detector_provider_debian                 = 'yes'
+      $vulnerability_detector_provider_debian_enabled         = 'no'
+      $vulnerability_detector_provider_debian_os              = ['wheezy',
+        'stretch',
+        'jessie',
+        'buster'
+      ]
+      $vulnerability_detector_provider_debian_update_interval = '1h'
+      $vulnerability_detector_provider_redhat                    = 'yes'
+      $vulnerability_detector_provider_redhat_enabled            = 'no'
+      $vulnerability_detector_provider_redhat_os                 = []
+      $vulnerability_detector_provider_redhat_update_from_year   = '2010'
+      $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
+
+
+      $vulnerability_detector_provider_nvd                    = 'yes'
+      $vulnerability_detector_provider_nvd_enabled            = 'no'
+      $vulnerability_detector_provider_nvd_os                 = []
+      $vulnerability_detector_provider_nvd_update_from_year   = '2010'
+      $vulnerability_detector_provider_nvd_update_interval    = '1h'
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
@@ -183,6 +231,17 @@ class wazuh::params_manager {
 
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'
+
+      $ossec_ruleset_decoder_dir = 'ruleset/decoders'
+      $ossec_ruleset_rule_dir = 'ruleset/rules'
+      $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
+      $ossec_ruleset_list = [ 'etc/lists/audit-keys',
+        'etc/lists/amazon/aws-eventnames',
+        'etc/lists/security-eventchannel',
+      ]
+
+      $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
+      $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
       # Cluster
 
@@ -413,7 +472,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.11.0'
+      $agent_package  = 'Wazuh Agent 3.11.1'
       $server_service = ''
       $server_package = ''
       $api_service = ''
