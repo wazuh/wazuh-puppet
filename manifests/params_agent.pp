@@ -195,16 +195,16 @@ class wazuh::params_agent {
       $ossec_syscheck_ignore_type_1 = '^/proc'
       $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
 
-      $ossec_ruleset_decoder_dir = "ruleset/decoders"
-      $ossec_ruleset_rule_dir = "ruleset/rules"
-      $ossec_ruleset_rule_exclude = "0215-policy_rules.xml"
+      $ossec_ruleset_decoder_dir = 'ruleset/decoders'
+      $ossec_ruleset_rule_dir = 'ruleset/rules'
+      $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
       $ossec_ruleset_list = [ 'etc/lists/audit-keys',
         'etc/lists/amazon/aws-eventnames',
         'etc/lists/security-eventchannel',
       ]
 
-      $ossec_ruleset_user_defined_decoder_dir = "etc/decoders"
-      $ossec_ruleset_user_defined_rule_dir = "etc/rules"
+      $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
+      $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
       $configure_labels                  = false
       $ossec_labels_template             = 'wazuh/fragments/_labels.erb'

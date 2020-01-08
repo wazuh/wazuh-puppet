@@ -20,7 +20,7 @@ class wazuh::params_manager {
       $ossec_email_maxperhour                          = 12
       $ossec_email_idsname                             = undef
       $ossec_email_log_source                          = 'alerts.log'
-      $ossec_white_list                                = ["127.0.0.1","^localhost.localdomain$","10.0.0.2"]
+      $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
       $ossec_alert_level                               = 3
       $ossec_email_alert_level                         = 12
       $ossec_remote_connection                         = 'secure'
@@ -162,8 +162,6 @@ class wazuh::params_manager {
         'buster'
       ]
       $vulnerability_detector_provider_debian_update_interval = '1h'
-   
-
       $vulnerability_detector_provider_redhat                    = 'yes'
       $vulnerability_detector_provider_redhat_enabled            = 'no'
       $vulnerability_detector_provider_redhat_os                 = []
@@ -234,16 +232,16 @@ class wazuh::params_manager {
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'
 
-      $ossec_ruleset_decoder_dir = "ruleset/decoders"
-      $ossec_ruleset_rule_dir = "ruleset/rules"
-      $ossec_ruleset_rule_exclude = "0215-policy_rules.xml"
+      $ossec_ruleset_decoder_dir = 'ruleset/decoders'
+      $ossec_ruleset_rule_dir = 'ruleset/rules'
+      $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
       $ossec_ruleset_list = [ 'etc/lists/audit-keys',
         'etc/lists/amazon/aws-eventnames',
         'etc/lists/security-eventchannel',
       ]
 
-      $ossec_ruleset_user_defined_decoder_dir = "etc/decoders"
-      $ossec_ruleset_user_defined_rule_dir = "etc/rules"
+      $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
+      $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
       # Cluster
 

@@ -136,32 +136,33 @@ class wazuh::manager (
       $wodle_syscollector_processes         = $wazuh::params_manager::wodle_syscollector_processes,
 
       #vulnerability-detector
-      $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,                                               
+      $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
       $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
-      $vulnerability_detector_ignore_time                        = $wazuh::params_manager::vulnerability_detector_ignore_time,                                           
+      $vulnerability_detector_ignore_time                        = $wazuh::params_manager::vulnerability_detector_ignore_time,
       $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
-
+# lint:ignore:140chars
       $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
-      $vulnerability_detector_provider_canonical_enabled         = $wazuh::params_manager::vulnerability_detector_provider_canonical_enabled,          
+      $vulnerability_detector_provider_canonical_enabled         = $wazuh::params_manager::vulnerability_detector_provider_canonical_enabled,
       $vulnerability_detector_provider_canonical_os              = $wazuh::params_manager::vulnerability_detector_provider_canonical_os,
-      $vulnerability_detector_provider_debian_canonical_interval = $wazuh::params_manager::vulnerability_detector_provider_canonical_update_interval,  
+      $vulnerability_detector_provider_debian_canonical_interval = $wazuh::params_manager::vulnerability_detector_provider_canonical_update_interval,
 
-      $vulnerability_detector_provider_debian                    = $wazuh::params_manager::vulnerability_detector_provider_debian, 
-      $vulnerability_detector_provider_debian_enabled            = $wazuh::params_manager::vulnerability_detector_provider_debian_enabled,          
+      $vulnerability_detector_provider_debian                    = $wazuh::params_manager::vulnerability_detector_provider_debian,
+      $vulnerability_detector_provider_debian_enabled            = $wazuh::params_manager::vulnerability_detector_provider_debian_enabled,
       $vulnerability_detector_provider_debian_os                 = $wazuh::params_manager::vulnerability_detector_provider_debian_os,
       $vulnerability_detector_provider_debian_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_debian_update_interval,
 
-      $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,                
-      $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_manager::vulnerability_detector_provider_redhat_enabled,           
-      $vulnerability_detector_provider_redhat_os                 = $wazuh::params_manager::vulnerability_detector_provider_redhat_os,           
+      $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,
+      $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_manager::vulnerability_detector_provider_redhat_enabled,
+      $vulnerability_detector_provider_redhat_os                 = $wazuh::params_manager::vulnerability_detector_provider_redhat_os,
       $vulnerability_detector_provider_redhat_update_from_year   = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_from_year,
       $vulnerability_detector_provider_redhat_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_interval,
 
-      $vulnerability_detector_provider_nvd                       = $wazuh::params_manager::vulnerability_detector_provider_nvd,  
+      $vulnerability_detector_provider_nvd                       = $wazuh::params_manager::vulnerability_detector_provider_nvd,
       $vulnerability_detector_provider_nvd_enabled               = $wazuh::params_manager::vulnerability_detector_provider_nvd_enabled,
-      $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,             
+      $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,
       $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
       $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
+      #lint:endignore
 
 
       # syslog
