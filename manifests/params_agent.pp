@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.11.0-1'
+  $agent_package_version = '3.11.1-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
