@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 
 - Adapt to new Wazuh API configuration ([@jm404](https://github.com/jm404)) [PR#195](https://github.com/wazuh/wazuh-puppet/pull/195)
 
+- Some templates have been parametrized ([@rshad](https://github.com/rshad)) [PR#187](https://github.com/wazuh/wazuh-puppet/pull/187)
+
 ### Changed
 
 - Implemented Changes to make `ossec.conf` equivalent to the default version ([@rshad](https://github.com/rshad)) [PR#190](https://github.com/wazuh/wazuh-puppet/pull/190)
