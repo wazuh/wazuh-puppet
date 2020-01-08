@@ -83,6 +83,29 @@ class wazuh::agent (
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
 
+  # SCA
+
+  ## Amazon
+  $sca_amazon_amazon_enabled = $wazuh::params_agent::sca_amazon_enabled,
+  $sca_amazon_amazon_scan_on_start = $wazuh::params_agent::sca_amazon_scan_on_start,
+  $sca_amazon_amazon_interval = $wazuh::params_agent::sca_amazon_interval,
+  $sca_amazon_amazon_skip_nfs = $wazuh::params_agent::sca_amazon_skip_nfs,
+  $sca_amazon_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
+
+  ## RHEL
+  $sca_amazon_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
+  $sca_amazon_rhel_scan_on_start = $wazuh::params_agent::sca_rhel_scan_on_start,
+  $sca_amazon_rhel_interval = $wazuh::params_agent::sca_rhel_interval,
+  $sca_amazon_rhel_skip_nfs = $wazuh::params_agent::sca_rhel_skip_nfs,
+  $sca_amazon_rhel_policies = $wazuh::params_agent::sca_rhel_policies,
+
+  ## <else>
+  $sca_amazon_else_enabled = $wazuh::params_agent::sca_else_enabled,
+  $sca_amazon_else_scan_on_start = $wazuh::params_agent::sca_else_scan_on_start,
+  $sca_amazon_else_interval = $wazuh::params_agent::sca_else_interval,
+  $sca_amazon_else_skip_nfs = $wazuh::params_agent::sca_else_skip_nfs,
+  $sca_amazon_else_policies = $wazuh::params_agent::sca_else_policies,
+
   ## Wodles
 
   # Openscap
@@ -413,7 +436,7 @@ class wazuh::agent (
         $agent_auth_executable = '/var/ossec/bin/agent-auth'
         $agent_auth_base_command = "${agent_auth_executable} -m ${wazuh_register_endpoint}"
 
-        # https://documentation.wazuh.com/3.10/user-manual/registering/manager-verification/manager-verification-registration.html
+        # https://documentation.wazuh.com/3.11/user-manual/registering/manager-verification/manager-verification-registration.html
         if $wazuh_manager_root_ca_pem != undef {
           validate_string($wazuh_manager_root_ca_pem)
           file { '/var/ossec/etc/rootCA.pem':
@@ -431,7 +454,7 @@ class wazuh::agent (
           $agent_auth_option_manager = ''  # Avoid errors when compounding final command
         }
 
-        # https://documentation.wazuh.com/3.10/user-manual/registering/manager-verification/agent-verification-registration.html
+        # https://documentation.wazuh.com/3.11/user-manual/registering/manager-verification/agent-verification-registration.html
         if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
           validate_string($wazuh_agent_cert)
           validate_string($wazuh_agent_key)
