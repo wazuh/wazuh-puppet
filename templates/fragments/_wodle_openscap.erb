@@ -13,6 +13,7 @@
   <scan-on-start><%= @wodle_openscap_scan_on_start %></scan-on-start>
   <%- end -%>
 
+  <%- if not @wodle_openscap_content.nil? -%>
   <%- @wodle_openscap_content.each do |path, value| -%>
   <content type="<%= value['type'] %>" path="<%= path %>">
     <%- if value['profiles'] then -%>
@@ -22,6 +23,7 @@
     <%- end -%>
   </content>
   <%- end -%>
+  %- end -%>
 </wodle>
 
   
