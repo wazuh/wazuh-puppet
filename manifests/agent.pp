@@ -268,6 +268,7 @@ class wazuh::agent (
       }'CentOS','Centos','centos':{
         $apply_template_os = 'centos'
       }
+      default: { fail('OS not supported') }
     }
   }'windows': {
       $apply_template_os = 'windows'
