@@ -65,33 +65,6 @@ class wazuh::params_agent {
   ## localfile
   $ossec_local_files = $::wazuh::params_agent::default_local_files
 
-  ## Security Configuration Assessment
-  $sca_enabled = 'yes'
-  $sca_scan_on_start = 'yes'
-  $sca_interval = '12h'
-  $sca_skip_nfs = 'yes'
-
-  ## syscheck
-  $ossec_syscheck_disabled = 'no'
-  $ossec_syscheck_frequency = '43200'
-  $ossec_syscheck_scan_on_start = 'yes'
-  $ossec_syscheck_alert_new_files = undef
-  $ossec_syscheck_auto_ignore = undef
-  $ossec_syscheck_skip_nfs = 'yes'
-
-  # Wodle
-
-  ## syscollector
-  $wodle_syscollector_disabled = 'no'
-  $wodle_syscollector_interval = '1d'
-  $wodle_syscollector_scan_on_start = 'yes'
-  $wodle_syscollector_hardware = 'yes'
-  $wodle_syscollector_os = 'yes'
-  $wodle_syscollector_network = 'yes'
-  $wodle_syscollector_packages = 'yes'
-  $wodle_syscollector_ports = 'yes'
-  $wodle_syscollector_processes = 'yes'
-
   # OS specific configurations
   case $::kernel {
     'Linux': {
@@ -119,10 +92,6 @@ class wazuh::params_agent {
       $processlist_mode = '0640'
       $processlist_owner = 'root'
       $processlist_group = 'ossec'
-
-      # Configure wodles on Linux
-      $configure_wodle_cis_cat = true
-      $configure_wodle_osquery = true
 
       # ossec.conf blocks
 
@@ -165,8 +134,11 @@ class wazuh::params_agent {
 
       # Wodles
 
+      $configure_wodle_cis_cat = true
+      $configure_wodle_osquery = true
+
       ## open-scap
-      $wodle_openscap_disabled = 'yes'
+      $wodle_openscap_disabled = 'no'
       $wodle_openscap_timeout = '1800'
       $wodle_openscap_interval = '1d'
       $wodle_openscap_scan_on_start = 'yes'
@@ -198,6 +170,11 @@ class wazuh::params_agent {
       $wodle_syscollector_processes = 'yes'
 
       ## syscheck
+      $ossec_syscheck_disabled = 'no'
+      $ossec_syscheck_frequency = '43200'
+      $ossec_syscheck_scan_on_start = 'yes'
+      $ossec_syscheck_alert_new_files = undef
+      $ossec_syscheck_auto_ignore = undef
       $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
       $ossec_syscheck_whodata = '"no"'
@@ -236,6 +213,9 @@ class wazuh::params_agent {
       $configure_labels                  = false
       $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
       $ossec_labels                      = []
+
+      $ossec_syscheck_nodiff = '/etc/ssl/private.key'
+      $ossec_syscheck_skip_nfs = 'yes'
 
       # others
       $manage_firewall = false
