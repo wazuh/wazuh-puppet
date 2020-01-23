@@ -4,8 +4,8 @@
   <disabled><%= @active_response_disabled %></disabled>
 <%- end -%>
 <%- if @kernel == 'windows' -%>
-<% if @active_response_windows_ca_store -%>
-  <ca_store><%= @active_response_windows_disabled %></ca_store>
+<% if @ossec_active_response_windows_ca_store -%>
+  <ca_store><%= @ossec_active_response_windows_ca_store %></ca_store>
 <%- end -%>
 <%- elsif @kernel == 'Linux' -%>
 <% if @active_response_linux_ca_store -%>

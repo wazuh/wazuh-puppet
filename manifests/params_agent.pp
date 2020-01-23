@@ -25,6 +25,8 @@ class wazuh::params_agent {
   # ossec.conf generation variables
   $configure_rootcheck = true
   $configure_wodle_openscap = false
+  $configure_wodle_cis_cat = true
+  $configure_wodle_osquery = true
   $configure_wodle_syscollector = true
   $configure_sca = true
   $configure_syscheck = true
@@ -138,9 +140,6 @@ class wazuh::params_agent {
       $sca_else_policies = []
 
       # Wodles
-
-      $configure_wodle_cis_cat = true
-      $configure_wodle_osquery = true
 
       ## open-scap
       $wodle_openscap_disabled = 'no'
@@ -407,10 +406,34 @@ class wazuh::params_agent {
       $ossec_syscheck_disabled = 'no'
       $ossec_syscheck_frequency = '43200'      
   
+      # Wodles
 
-      # Don't enable wodle that won't work on Windows
-      $configure_wodle_cis_cat = false
-      $configure_wodle_osquery = false
+      ## syscollector
+      $wodle_syscollector_disabled = 'no'
+      $wodle_syscollector_interval = '1h'
+      $wodle_syscollector_scan_on_start = 'yes'
+      $wodle_syscollector_hardware = 'yes'
+      $wodle_syscollector_os = 'yes'
+      $wodle_syscollector_network = 'yes'
+      $wodle_syscollector_packages = 'yes'
+      $wodle_syscollector_ports = 'yes'
+      $wodle_syscollector_processes = 'yes'
+
+      ## cis-cat
+      $wodle_ciscat_disabled = 'yes'
+      $wodle_ciscat_timeout = '1800'
+      $wodle_ciscat_interval = '1d'
+      $wodle_ciscat_scan_on_start = 'yes'
+      $wodle_ciscat_java_path = '\server\jre\bin\java.exe'
+      $wodle_ciscat_ciscat_path = 'C:\cis-cat'
+
+      ## osquery
+      $wodle_osquery_disabled = 'yes'
+      $wodle_osquery_run_daemon = 'yes'
+      $wodle_osquery_bin_path = 'C:\Program Files\osquery\osqueryd'
+      $wodle_osquery_log_path = 'C:\Program Files\osquery\log\osqueryd.results.log'
+      $wodle_osquery_config_path = 'C:\Program Files\osquery\osquery.conf'
+      $wodle_osquery_add_labels = 'yes'
 
       # active-response
       $active_response_windows_ca_store = 'wpk_root.pem'
@@ -427,9 +450,7 @@ class wazuh::params_agent {
         {
           'location'   => 'Security',
           'log_format' => 'eventchannel',
-          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447\
-           and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670\
-           and EventID != 4690 and EventID != 4703 and EventID != 4907 and EventID != 5152 and EventID != 5157]'
+          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID != 4703 and EventID != 4907 and EventID != 5152 and EventID != 5157]'
         },
         {
           'location'   => 'System',
