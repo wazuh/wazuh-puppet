@@ -167,6 +167,12 @@ class wazuh::agent (
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
   $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,       
 
+  # active-response
+  $ossec_active_response_disabled          =  $wazuh::params_agent::active_response_disabled  
+  $ossec_active_response_linux_ca_store    =  $wazuh::params_agent::active_response_linux_ca_store
+  $ossec_active_response_windows_ca_store  =  $wazuh::params_agent::active_response_windows_ca_store
+  $ossec_active_response_ca_verification   =  $wazuh::params_agent::active_response_ca_verification
+
   # Agent Labels
   $ossec_labels                      = $wazuh::params_agent::ossec_labels,
 

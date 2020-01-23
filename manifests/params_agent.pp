@@ -43,7 +43,7 @@ class wazuh::params_agent {
   $ossec_localfile_template = 'wazuh/fragments/_localfile.erb'
   $ossec_auth = 'wazuh/fragments/_auth.erb'
   $ossec_cluster = 'wazuh/fragments/_cluster.erb'
-  $ossec_active_response_template = 'wazuh/fragments/_default_activeresponse.erb'
+  $ossec_active_response_template = 'wazuh/fragments/_activeresponse.erb'
 
   # ossec.conf blocks
 
@@ -64,6 +64,11 @@ class wazuh::params_agent {
 
   ## localfile
   $ossec_local_files = $::wazuh::params_agent::default_local_files
+
+  # active response
+  $active_response_disabled = 'no'
+  
+  $active_response_ca_verification = 'yes'
 
   # OS specific configurations
   case $::kernel {
@@ -216,6 +221,9 @@ class wazuh::params_agent {
 
       $ossec_syscheck_nodiff = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs = 'yes'
+
+      # active-response
+      $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
 
       # others
       $manage_firewall = false
@@ -395,9 +403,17 @@ class wazuh::params_agent {
       $sca_windows_skip_nfs = 'yes'
       $sca_windows_policies = []
 
+      # Syscheck
+      $ossec_syscheck_disabled = 'no'
+      $ossec_syscheck_frequency = '43200'      
+  
+
       # Don't enable wodle that won't work on Windows
       $configure_wodle_cis_cat = false
       $configure_wodle_osquery = false
+
+      # active-response
+      $active_response_windows_ca_store = 'wpk_root.pem'
 
       # TODO
       $validate_cmd_conf = undef
