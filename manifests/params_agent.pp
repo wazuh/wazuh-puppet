@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.10.2-1'
+  $agent_package_version = '3.11.2-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -140,6 +140,29 @@ class wazuh::params_agent {
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'
 
+      # SCA
+
+      ## Amazon
+      $sca_amazon_enabled = 'yes'
+      $sca_amazon_scan_on_start = 'yes'
+      $sca_amazon_interval = '12h'
+      $sca_amazon_skip_nfs = 'yes'
+      $sca_amazon_policies = []
+
+      ## RHEL
+      $sca_rhel_enabled = 'yes'
+      $sca_rhel_scan_on_start = 'yes'
+      $sca_rhel_interval = '12h'
+      $sca_rhel_skip_nfs = 'yes'
+      $sca_rhel_policies = []
+
+      ## <else>
+      $sca_else_enabled = 'yes'
+      $sca_else_scan_on_start = 'yes'
+      $sca_else_interval = '12h'
+      $sca_else_skip_nfs = 'yes'
+      $sca_else_policies = []
+
       # Wodles
 
       ## open-scap
@@ -163,6 +186,17 @@ class wazuh::params_agent {
       $wodle_osquery_config_path = '/etc/osquery/osquery.conf'
       $wodle_osquery_add_labels = 'yes'
 
+      ## syscollector
+      $wodle_syscollector_disabled = 'no'
+      $wodle_syscollector_interval = '1d'
+      $wodle_syscollector_scan_on_start = 'yes'
+      $wodle_syscollector_hardware = 'yes'
+      $wodle_syscollector_os = 'yes'
+      $wodle_syscollector_network = 'yes'
+      $wodle_syscollector_packages = 'yes'
+      $wodle_syscollector_ports = 'yes'
+      $wodle_syscollector_processes = 'yes'
+
       ## syscheck
       $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
@@ -185,9 +219,19 @@ class wazuh::params_agent {
         '/dev/core',
       ]
       $ossec_syscheck_ignore_type_1 = '^/proc'
-      $ossec_syscheck_ignore_type_2 = ".log$|.swp$"
-      $ossec_syscheck_nodiff = '/etc/ssl/private.key'
-      $ossec_syscheck_skip_nfs = 'yes'
+
+      $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
+
+      $ossec_ruleset_decoder_dir = 'ruleset/decoders'
+      $ossec_ruleset_rule_dir = 'ruleset/rules'
+      $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
+      $ossec_ruleset_list = [ 'etc/lists/audit-keys',
+        'etc/lists/amazon/aws-eventnames',
+        'etc/lists/security-eventchannel',
+      ]
+
+      $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
+      $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
       $configure_labels                  = false
       $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
@@ -371,17 +415,6 @@ class wazuh::params_agent {
       # TODO
       $validate_cmd_conf = undef
 
-      # Wodles
-
-      ## open-scap
-      $wodle_openscap_disabled = 'yes'
-
-      ## cis-cat
-      $wodle_ciscat_disabled = 'yes'
-
-      ## osquery
-      $wodle_osquery_disabled = 'yes'
-
       # Pushed by shared agent config now
       $default_local_files = [
         {
@@ -391,7 +424,9 @@ class wazuh::params_agent {
         {
           'location'   => 'Security',
           'log_format' => 'eventchannel',
-          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID != 4703 and EventID != 4907 and EventID != 5152 and EventID != 5157]'
+          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447\
+           and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670\
+           and EventID != 4690 and EventID != 4703 and EventID != 4907 and EventID != 5152 and EventID != 5157]'
         },
         {
           'location'   => 'System',
@@ -402,6 +437,8 @@ class wazuh::params_agent {
           'log_format' => 'syslog'
         },
       ]
+   
+      $windows_audit_interval = 300
     }
     default: { fail('This ossec module has not been tested on your distribution') }
   }

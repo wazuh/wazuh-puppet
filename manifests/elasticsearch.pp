@@ -11,7 +11,7 @@ class wazuh::elasticsearch (
   $elasticsearch_node_max_local_storage_nodes = '1',
   $elasticsearch_service = 'elasticsearch',
   $elasticsearch_package = 'elasticsearch',
-  $elasticsearch_version = '7.3.2',
+  $elasticsearch_version = '7.5.1',
 
   $elasticsearch_path_data = '/var/lib/elasticsearch',
   $elasticsearch_path_logs = '/var/log/elasticsearch',
@@ -54,8 +54,8 @@ class wazuh::elasticsearch (
   }
 
   service { 'elasticsearch':
-    ensure => running,
-    enable => true,
+    ensure  => running,
+    enable  => true,
     require => Package[$elasticsearch_package],
   }
 

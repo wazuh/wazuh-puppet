@@ -1,6 +1,44 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.11.2_7.5.1
+
+### Added
+
+- Update to Wazuh version 3.11.2_7.5.1 
+
+### Fixed
+
+- Fixed installation for Amazon Linux OS ([@rshad](https://github.com/rshad)) [PR#197](https://github.com/wazuh/wazuh-puppet/pull/197)
+
+## Wazuh Puppet v3.11.1_7.5.1
+
+### Added
+
+- Update to Wazuh version 3.11.1_7.5.1 
+
+- Adapt to new Wazuh API configuration ([@jm404](https://github.com/jm404)) [PR#195](https://github.com/wazuh/wazuh-puppet/pull/195)
+
+- Some templates have been parametrized ([@rshad](https://github.com/rshad)) [PR#187](https://github.com/wazuh/wazuh-puppet/pull/187)
+
+### Changed
+
+- Implemented Changes to make `ossec.conf` equivalent to the default version ([@rshad](https://github.com/rshad)) [PR#190](https://github.com/wazuh/wazuh-puppet/pull/190)
+
+## Wazuh Puppet v3.11.0_7.5.1
+
+### Added
+
+- Update to Wazuh version 3.11.0_7.5.1
+
+- Added Debian Buster support ([@aderumier](https://github.com/aderumier)) [PR#167](https://github.com/wazuh/wazuh-puppet/pull/167)
+
+- Add OracleLinux to manager and agent ([@rwaffen](https://github.com/rwaffen)) [PR#153](https://github.com/wazuh/wazuh-puppet/pull/153)
+
+### Fixed
+
+- Fixed Windows Agent Installation ([@JPLachance](https://github.com/JPLachance)) [PR#163](https://github.com/wazuh/wazuh-puppet/pull/163)
+
 ## Wazuh Puppet v3.10.2_7.3.2
 
 ### Added

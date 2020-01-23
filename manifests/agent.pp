@@ -82,6 +82,29 @@ class wazuh::agent (
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
 
+  # SCA
+
+  ## Amazon
+  $sca_amazon_amazon_enabled = $wazuh::params_agent::sca_amazon_enabled,
+  $sca_amazon_amazon_scan_on_start = $wazuh::params_agent::sca_amazon_scan_on_start,
+  $sca_amazon_amazon_interval = $wazuh::params_agent::sca_amazon_interval,
+  $sca_amazon_amazon_skip_nfs = $wazuh::params_agent::sca_amazon_skip_nfs,
+  $sca_amazon_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
+
+  ## RHEL
+  $sca_amazon_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
+  $sca_amazon_rhel_scan_on_start = $wazuh::params_agent::sca_rhel_scan_on_start,
+  $sca_amazon_rhel_interval = $wazuh::params_agent::sca_rhel_interval,
+  $sca_amazon_rhel_skip_nfs = $wazuh::params_agent::sca_rhel_skip_nfs,
+  $sca_amazon_rhel_policies = $wazuh::params_agent::sca_rhel_policies,
+
+  ## <else>
+  $sca_amazon_else_enabled = $wazuh::params_agent::sca_else_enabled,
+  $sca_amazon_else_scan_on_start = $wazuh::params_agent::sca_else_scan_on_start,
+  $sca_amazon_else_interval = $wazuh::params_agent::sca_else_interval,
+  $sca_amazon_else_skip_nfs = $wazuh::params_agent::sca_else_skip_nfs,
+  $sca_amazon_else_policies = $wazuh::params_agent::sca_else_policies,
+
   ## Wodles
 
   # Openscap
@@ -136,6 +159,7 @@ class wazuh::agent (
   $ossec_syscheck_ignore_type_2      = $wazuh::params_agent::ossec_syscheck_ignore_type_2,
   $ossec_syscheck_nodiff             = $wazuh::params_agent::ossec_syscheck_nodiff,
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
+  $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,       
 
   # Agent Labels
   $ossec_labels                      = $wazuh::params_agent::ossec_labels,
@@ -163,11 +187,11 @@ class wazuh::agent (
 
   if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
     package { 'Installing Audit...':
-      name   => "audit",
+      name   => 'audit',
     }
-    service { auditd:
-      ensure    => running,
-      enable    => true,
+    service { 'auditd':
+      ensure => running,
+      enable => true,
     }
   }
 
@@ -214,50 +238,47 @@ class wazuh::agent (
         source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
         install_options => [
           '/q',
-          "WAZUH_MANAGER=$wazuh_reporting_endpoint",
-          "WAZUH_PROTOCOL=$ossec_protocol",
+          "WAZUH_MANAGER=${wazuh_reporting_endpoint}",
+          "WAZUH_PROTOCOL=${ossec_protocol}",
         ],
       }
     }
     default: { fail('OS not supported') }
   }
 
-  ## ossec.conf generation concats
   case $::kernel {
-    'Linux': {
-      case $::osfamily {
-        'Redhat', 'redhat', 'OracleLinux': {
-          $apply_template_os = 'rhel'
-          if ( $::operatingsystemrelease =~ /^7.*/ ) {
-            $rhel_version = '7'
-          } elsif ( $::operatingsystemrelease =~ /^6.*/ ) {
-            $rhel_version = '6'
-          } elsif ( $::operatingsystemrelease =~ /^5.*/ ) {
-            $rhel_version = '5'
-          } else {
-            fail('This ossec module has not been tested on your distribution')
-          }
+  'Linux': {
+    ## ossec.conf generation concats
+    case $::operatingsystem {
+      'RedHat', 'OracleLinux':{
+        $apply_template_os = 'rhel'
+        if ( $::operatingsystemrelease     =~ /^7.*/ ){
+          $rhel_version = '7'
+        }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
+          $rhel_version = '6'
+        }elsif ( $::operatingsystemrelease =~ /^5.*/ ){
+          $rhel_version = '5'
+        }else{
+          fail('This ossec module has not been tested on your distribution')
         }
-        'Debian', 'debian', 'Ubuntu', 'ubuntu': {
-          $apply_template_os = 'debian'
-          if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie') {
-            $debian_additional_templates = 'yes'
-          }
+      }'Debian', 'debian', 'Ubuntu', 'ubuntu':{
+        $apply_template_os = 'debian'
+        if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie'){
+          $debian_additional_templates = 'yes'
         }
-        'Amazon': {
-          $apply_template_os = 'amazon'
-        }
-        'CentOS', 'Centos', 'centos': {
-          $apply_template_os = 'centos'
-        }
-        default: { fail('This ossec module has not been tested on your distribution') }
+      }'Amazon':{
+        $apply_template_os = 'amazon'
+      }'CentOS','Centos','centos':{
+        $apply_template_os = 'centos'
       }
+      default: { fail('OS not supported') }
     }
-    'windows': {
+  }'windows': {
       $apply_template_os = 'windows'
     }
     default: { fail('OS not supported') }
   }
+
 
   concat { 'ossec.conf':
     path    => $wazuh::params_agent::config_file,
@@ -415,7 +436,7 @@ class wazuh::agent (
         $agent_auth_executable = '/var/ossec/bin/agent-auth'
         $agent_auth_base_command = "${agent_auth_executable} -m ${wazuh_register_endpoint}"
 
-        # https://documentation.wazuh.com/3.10/user-manual/registering/manager-verification/manager-verification-registration.html
+        # https://documentation.wazuh.com/3.11/user-manual/registering/manager-verification/manager-verification-registration.html
         if $wazuh_manager_root_ca_pem != undef {
           validate_string($wazuh_manager_root_ca_pem)
           file { '/var/ossec/etc/rootCA.pem':
@@ -433,7 +454,7 @@ class wazuh::agent (
           $agent_auth_option_manager = ''  # Avoid errors when compounding final command
         }
 
-        # https://documentation.wazuh.com/3.10/user-manual/registering/manager-verification/agent-verification-registration.html
+        # https://documentation.wazuh.com/3.11/user-manual/registering/manager-verification/agent-verification-registration.html
         if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
           validate_string($wazuh_agent_cert)
           validate_string($wazuh_agent_key)
@@ -491,7 +512,7 @@ class wazuh::agent (
         exec { 'agent-auth-windows':
           command  => $agent_auth_command,
           provider => 'powershell',
-          onlyif   => "if ((Get-Item '${keys_file}').length -gt 0kb) {exit 1}",
+          onlyif   => "if ((Get-Item '${$::wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
           require  => Concat['ossec.conf'],
           before   => Service[$agent_service_name],
         }

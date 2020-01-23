@@ -32,7 +32,7 @@ class wazuh::repo_elastic (
           default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
         }
       }
-      'Redhat' : {
+      'RedHat' : {
           case $::os[name] {
             /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
               if ( $::operatingsystemrelease =~ /^5.*/ ) {
