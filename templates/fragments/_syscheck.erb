@@ -118,7 +118,7 @@
   <registry_ignore>HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\ADOVMPPackage\Final</registry_ignore>
 
   <!-- Frequency for ACL checking (seconds) -->
-  <windows_audit_interval>@ossec_syscheck_windows_audit_interval</windows_audit_interval>
+  <windows_audit_interval><%= @ossec_syscheck_windows_audit_interval %></windows_audit_interval>
 
 <%- else -%>
   <%- if @ossec_syscheck_directories_1 -%>
