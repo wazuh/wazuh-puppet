@@ -92,18 +92,24 @@ class wazuh::agent (
   $sca_amazon_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
 
   ## RHEL
-  $sca_amazon_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
-  $sca_amazon_rhel_scan_on_start = $wazuh::params_agent::sca_rhel_scan_on_start,
-  $sca_amazon_rhel_interval = $wazuh::params_agent::sca_rhel_interval,
-  $sca_amazon_rhel_skip_nfs = $wazuh::params_agent::sca_rhel_skip_nfs,
-  $sca_amazon_rhel_policies = $wazuh::params_agent::sca_rhel_policies,
+  $sca_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
+  $sca_rhel_scan_on_start = $wazuh::params_agent::sca_rhel_scan_on_start,
+  $sca_rhel_interval = $wazuh::params_agent::sca_rhel_interval,
+  $sca_rhel_skip_nfs = $wazuh::params_agent::sca_rhel_skip_nfs,
+  $sca_rhel_policies = $wazuh::params_agent::sca_rhel_policies,
 
-  ## <else>
-  $sca_amazon_else_enabled = $wazuh::params_agent::sca_else_enabled,
-  $sca_amazon_else_scan_on_start = $wazuh::params_agent::sca_else_scan_on_start,
-  $sca_amazon_else_interval = $wazuh::params_agent::sca_else_interval,
-  $sca_amazon_else_skip_nfs = $wazuh::params_agent::sca_else_skip_nfs,
-  $sca_amazon_else_policies = $wazuh::params_agent::sca_else_policies,
+  ## <Linux else>
+  $sca_else_enabled = $wazuh::params_agent::sca_else_enabled,
+  $sca_else_scan_on_start = $wazuh::params_agent::sca_else_scan_on_start,
+  $sca_else_interval = $wazuh::params_agent::sca_else_interval,
+  $sca_else_skip_nfs = $wazuh::params_agent::sca_else_skip_nfs,
+  $sca_else_policies = $wazuh::params_agent::sca_else_policies,
+
+  $sca_windows_enabled = $wazuh::params_agent::sca_windows_enabled,
+  $sca_windows_scan_on_start = $wazuh::params_agent::sca_windows_scan_on_start,
+  $sca_windows_interval = $wazuh::params_agent::sca_windows_interval,
+  $sca_windows_skip_nfs = $wazuh::params_agent::sca_windows_skip_nfs,
+  $sca_windows_policies = $wazuh::params_agent::sca_windows_policies,
 
   ## Wodles
 
