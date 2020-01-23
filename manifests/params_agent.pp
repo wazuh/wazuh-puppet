@@ -388,6 +388,13 @@ class wazuh::params_agent {
       $service_has_status = true
       $ossec_service_provider = undef
 
+      # sca
+      $sca_windows_enabled = 'yes'
+      $sca_windows_scan_on_start = 'yes'
+      $sca_windows_interval = '12h'
+      $sca_windows_skip_nfs = 'yes'
+      $sca_windows_policies = []
+
       # Don't enable wodle that won't work on Windows
       $configure_wodle_cis_cat = false
       $configure_wodle_osquery = false
