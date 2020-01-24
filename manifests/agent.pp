@@ -82,6 +82,12 @@ class wazuh::agent (
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
 
+
+  # rootcheck windows
+  $ossec_rootcheck_windows_disabled        = $wazuh::params_agent::ossec_rootcheck_windows_disabled,
+  $ossec_rootcheck_windows_windows_apps    = $wazuh::params_agent::ossec_rootcheck_windows_windows_apps,
+  $ossec_rootcheck_windows_windows_malware = $wazuh::params_agent::ossec_rootcheck_windows_windows_malware,
+  
   # SCA
 
   ## Amazon

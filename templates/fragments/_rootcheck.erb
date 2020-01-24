@@ -42,10 +42,14 @@
 <%- else -%>
 <!-- Rootcheck files (static) -->
 <rootcheck>
-  <disabled>no</disabled>
-  <windows_apps>./shared/win_applications_rcl.txt</windows_apps>
-  <windows_malware>./shared/win_malware_rcl.txt</windows_malware>
+<% if @ossec_rootcheck_windows_disabled-%>
+  <disabled><%= @ossec_rootcheck_windows_disabled %></disabled>
+<%- end -%>
+<% if @ossec_rootcheck_windows_windows_apps-%>
+  <windows_apps><%= @ossec_rootcheck_windows_windows_apps %></windows_apps>
+<%- end -%>
+<% if @ossec_rootcheck_windows_windows_malware-%>
+  <windows_malware><%= @ossec_rootcheck_windows_windows_malware %></windows_malware>
 </rootcheck>
 <%- end -%>
-
-
+<%- end -%>

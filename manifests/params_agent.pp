@@ -395,6 +395,11 @@ class wazuh::params_agent {
       $service_has_status = true
       $ossec_service_provider = undef
 
+      # Rootcheck Windows
+      $ossec_rootcheck_windows_disabled = 'no'
+      $ossec_rootcheck_windows_windows_apps = './shared/win_applications_rcl.txt'
+      $ossec_rootcheck_windows_windows_malware = './shared/win_malware_rcl.txt'
+
       # sca
       $sca_windows_enabled = 'yes'
       $sca_windows_scan_on_start = 'yes'
@@ -424,7 +429,7 @@ class wazuh::params_agent {
       $wodle_ciscat_timeout = '1800'
       $wodle_ciscat_interval = '1d'
       $wodle_ciscat_scan_on_start = 'yes'
-      $wodle_ciscat_java_path = '\server\jre\bin\java.exe'
+      $wodle_ciscat_java_path = '\\server\jre\bin\java.exe'
       $wodle_ciscat_ciscat_path = 'C:\cis-cat'
 
       ## osquery
