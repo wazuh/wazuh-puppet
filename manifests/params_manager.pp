@@ -378,7 +378,7 @@ class wazuh::params_manager {
               {  'location' => '/var/ossec/logs/active-responses.log' , 'log_format' => 'syslog'},
               {  'location' => '/var/log/messages', 'log_format' => 'syslog'},
               {  'location' => '/var/log/secure' , 'log_format' => 'syslog'},
-              {  'location' => '/var/log/maillog' , 'log_format' => 'apache'},
+              {  'location' => '/var/log/maillog' , 'log_format' => 'syslog'},
           ]
           case $::operatingsystem {
             'Amazon': {
