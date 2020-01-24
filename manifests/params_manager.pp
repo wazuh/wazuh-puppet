@@ -13,7 +13,7 @@ class wazuh::params_manager {
     ### Ossec.conf blocks
 
       ## Global
-      $ossec_emailnotification                         = 'yes'
+      $ossec_emailnotification                         = 'no'
       $ossec_emailto                                   = ['recipient@example.wazuh.com']
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
       $ossec_emailfrom                                 = 'ossecm@example.wazuh.com'
