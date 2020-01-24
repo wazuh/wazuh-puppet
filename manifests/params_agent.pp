@@ -165,7 +165,7 @@ class wazuh::params_agent {
 
       ## syscollector
       $wodle_syscollector_disabled = 'no'
-      $wodle_syscollector_interval = '1d'
+      $wodle_syscollector_interval = '1h'
       $wodle_syscollector_scan_on_start = 'yes'
       $wodle_syscollector_hardware = 'yes'
       $wodle_syscollector_os = 'yes'
