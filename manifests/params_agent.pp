@@ -54,7 +54,8 @@ class wazuh::params_agent {
   $wazuh_reporting_endpoint = undef
   $ossec_port = '1514'
   $ossec_protocol = 'udp'
-  $ossec_config_profiles = undef
+  $ossec_config_ubuntu_profiles = 'ubuntu, ubuntu18, ubuntu18.04'
+  $ossec_config_centos_profiles = 'centos, centos7, centos7.6'
   $ossec_notify_time = 10
   $ossec_time_reconnect = 60
   $ossec_auto_restart = 'yes'
