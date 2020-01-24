@@ -143,7 +143,7 @@ class wazuh::params_agent {
       # Wodles
 
       ## open-scap
-      $wodle_openscap_disabled = 'no'
+      $wodle_openscap_disabled = 'yes'
       $wodle_openscap_timeout = '1800'
       $wodle_openscap_interval = '1d'
       $wodle_openscap_scan_on_start = 'yes'
