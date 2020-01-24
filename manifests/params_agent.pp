@@ -24,7 +24,7 @@ class wazuh::params_agent {
 
   # ossec.conf generation variables
   $configure_rootcheck = true
-  $configure_wodle_openscap = false
+  $configure_wodle_openscap = true
   $configure_wodle_cis_cat = true
   $configure_wodle_osquery = true
   $configure_wodle_syscollector = true
