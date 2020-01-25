@@ -11,7 +11,7 @@
   <% if @sca_amazon_interval -%>
   <interval><%= @sca_amazon_interval %></interval>
   <%- end -%>
-  <% if @sca_amazon_interval -%>
+  <% if @sca_amazon_skip_nfs -%>
   <skip_nfs><%= @sca_amazon_skip_nfs %></skip_nfs>
   <%- end -%>
   
@@ -34,7 +34,7 @@
   <% if @sca_rhel_interval -%>
   <interval><%= @sca_rhel_interval %></interval>
   <%- end -%>
-  <% if @sca_rhel_interval -%>
+  <% if @sca_rhel_skip_nfs -%>
   <skip_nfs><%= @sca_rhel_skip_nfs %></skip_nfs>
   <%- end -%>
   
@@ -54,10 +54,10 @@
   <% if @sca_else_scan_on_start -%>
   <scan_on_start><%= @sca_else_scan_on_start %></scan_on_start>
   <%- end -%>
-  <% if @sca_rhel_interval -%>
+  <% if @sca_else_interval -%>
   <interval><%= @sca_else_interval %></interval>
   <%- end -%>
-  <% if @sca_else_interval -%>
+  <% if @sca_else_skip_nfs -%>
   <skip_nfs><%= @sca_else_skip_nfs %></skip_nfs>
   <%- end -%>
   
