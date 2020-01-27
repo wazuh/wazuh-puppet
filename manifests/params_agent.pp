@@ -242,7 +242,6 @@ class wazuh::params_agent {
             { 'location' => '/var/log/auth.log', 'log_format' => 'syslog' },
             { 'location' => '/var/log/dpkg.log', 'log_format' => 'syslog' },
             { 'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog' },
-            { 'location' => '/var/log/messages', 'log_format' => 'syslog' },
           ]
           case $::lsbdistcodename {
             'xenial': {
