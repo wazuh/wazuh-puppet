@@ -70,7 +70,7 @@ class wazuh::params_agent {
 
   # active response
   $active_response_disabled = 'no'
-  
+
   $active_response_ca_verification = 'yes'
 
   # OS specific configurations
@@ -411,8 +411,8 @@ class wazuh::params_agent {
 
       # Syscheck
       $ossec_syscheck_disabled = 'no'
-      $ossec_syscheck_frequency = '43200'      
-  
+      $ossec_syscheck_frequency = '43200'
+
       # Wodles
 
       ## syscollector
@@ -457,7 +457,9 @@ class wazuh::params_agent {
         {
           'location'   => 'Security',
           'log_format' => 'eventchannel',
-          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID != 4703 and EventID != 4907 and EventID != 5152 and EventID != 5157]'
+          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 \
+and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID != 4703 and EventID != 4907 \
+and EventID != 5152 and EventID != 5157]'
         },
         {
           'location'   => 'System',
@@ -468,7 +470,6 @@ class wazuh::params_agent {
           'log_format' => 'syslog'
         },
       ]
-   
       $windows_audit_interval = 300
     }
     default: { fail('This ossec module has not been tested on your distribution') }

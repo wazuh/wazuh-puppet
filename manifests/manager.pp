@@ -267,7 +267,7 @@ class wazuh::manager (
   }
 
 
-  if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) { # Install Audit if whodata is enabled
+  if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
     package { 'Installing Auditd...':
       name   => 'auditd',
     }

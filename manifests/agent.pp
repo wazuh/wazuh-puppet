@@ -88,7 +88,7 @@ class wazuh::agent (
   $ossec_rootcheck_windows_disabled        = $wazuh::params_agent::ossec_rootcheck_windows_disabled,
   $ossec_rootcheck_windows_windows_apps    = $wazuh::params_agent::ossec_rootcheck_windows_windows_apps,
   $ossec_rootcheck_windows_windows_malware = $wazuh::params_agent::ossec_rootcheck_windows_windows_malware,
-  
+
   # SCA
 
   ## Amazon
@@ -175,7 +175,7 @@ class wazuh::agent (
   $ossec_syscheck_ignore_type_2      = $wazuh::params_agent::ossec_syscheck_ignore_type_2,
   $ossec_syscheck_nodiff             = $wazuh::params_agent::ossec_syscheck_nodiff,
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
-  $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,       
+  $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,
 
   # active-response
   $ossec_active_response_disabled          =  $wazuh::params_agent::active_response_disabled,
@@ -207,7 +207,7 @@ class wazuh::agent (
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) { # Install Audit if whodata is enabled
+  if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
     package { 'Installing Audit...':
       name   => 'audit',
     }
