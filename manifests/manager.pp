@@ -87,18 +87,18 @@ class wazuh::manager (
   $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
 
   ## RHEL
-  $sca_amazon_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
-  $sca_amazon_rhel_scan_on_start = $wazuh::params_manager::sca_rhel_scan_on_start,
-  $sca_amazon_rhel_interval = $wazuh::params_manager::sca_rhel_interval,
-  $sca_amazon_rhel_skip_nfs = $wazuh::params_manager::sca_rhel_skip_nfs,
-  $sca_amazon_rhel_policies = $wazuh::params_manager::sca_rhel_policies,
+  $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
+  $sca_rhel_scan_on_start = $wazuh::params_manager::sca_rhel_scan_on_start,
+  $sca_rhel_interval = $wazuh::params_manager::sca_rhel_interval,
+  $sca_rhel_skip_nfs = $wazuh::params_manager::sca_rhel_skip_nfs,
+  $sca_rhel_policies = $wazuh::params_manager::sca_rhel_policies,
 
-  ## <else>
-  $sca_amazon_else_enabled = $wazuh::params_manager::sca_else_enabled,
-  $sca_amazon_else_scan_on_start = $wazuh::params_manager::sca_else_scan_on_start,
-  $sca_amazon_else_interval = $wazuh::params_manager::sca_else_interval,
-  $sca_amazon_else_skip_nfs = $wazuh::params_manager::sca_else_skip_nfs,
-  $sca_amazon_else_policies = $wazuh::params_manager::sca_else_policies,
+  ## <Linux else>
+  $sca_else_enabled = $wazuh::params_manager::sca_else_enabled,
+  $sca_else_scan_on_start = $wazuh::params_manager::sca_else_scan_on_start,
+  $sca_else_interval = $wazuh::params_manager::sca_else_interval,
+  $sca_else_skip_nfs = $wazuh::params_manager::sca_else_skip_nfs,
+  $sca_else_policies = $wazuh::params_manager::sca_else_policies,
 
 
       ## Wodles
@@ -198,8 +198,10 @@ class wazuh::manager (
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
-      $ossec_syscheck_whodata               = $wazuh::params_manager::ossec_syscheck_whodata,
-      $ossec_syscheck_realtime              = $wazuh::params_manager::ossec_syscheck_realtime,
+      $ossec_syscheck_whodata_directories_1            = $wazuh::params_manager::ossec_syscheck_whodata_directories_1,
+      $ossec_syscheck_realtime_directories_1           = $wazuh::params_manager::ossec_syscheck_realtime_directories_1,
+      $ossec_syscheck_whodata_directories_2            = $wazuh::params_manager::ossec_syscheck_whodata_directories_2,
+      $ossec_syscheck_realtime_directories_2           = $wazuh::params_manager::ossec_syscheck_realtime_directories_2,
       $ossec_syscheck_ignore_list           = $wazuh::params_manager::ossec_syscheck_ignore_list,
 
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
@@ -265,9 +267,9 @@ class wazuh::manager (
   }
 
 
-  if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
+  if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
     package { 'Installing Auditd...':
-      name   => 'audit',
+      name   => 'auditd',
     }
     service { 'auditd':
       ensure => running,
@@ -569,7 +571,7 @@ class wazuh::manager (
     }
   }
 
-  if($ossec_syscheck_whodata == '"yes"') {
+  if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
     exec { 'Ensure wazuh-fim rule is added to auditctl':
       command => '/sbin/auditctl -l',
       unless  => '/sbin/auditctl -l | grep wazuh_fim',

@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.11.2-1'
+  $agent_package_version = '3.11.3-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -9,6 +9,9 @@ class wazuh::params_agent {
 
   # Enable/Disable agent registration
   $manage_client_keys = 'yes'
+
+  # Configure the format of internal logs
+  $logging_log_format = 'plain'
 
   # Agents registration parameters
   $wazuh_agent_cert = undef
@@ -21,7 +24,7 @@ class wazuh::params_agent {
 
   # ossec.conf generation variables
   $configure_rootcheck = true
-  $configure_wodle_openscap = false
+  $configure_wodle_openscap = true
   $configure_wodle_cis_cat = true
   $configure_wodle_osquery = true
   $configure_wodle_syscollector = true
@@ -40,10 +43,9 @@ class wazuh::params_agent {
   $ossec_sca_template = 'wazuh/fragments/_sca.erb'
   $ossec_syscheck_template = 'wazuh/fragments/_syscheck.erb'
   $ossec_localfile_template = 'wazuh/fragments/_localfile.erb'
-  $ossec_ruleset = 'wazuh/fragments/_ruleset.erb'
   $ossec_auth = 'wazuh/fragments/_auth.erb'
   $ossec_cluster = 'wazuh/fragments/_cluster.erb'
-  $ossec_active_response_template = 'wazuh/fragments/_default_activeresponse.erb'
+  $ossec_active_response_template = 'wazuh/fragments/_activeresponse.erb'
 
   # ossec.conf blocks
 
@@ -52,7 +54,8 @@ class wazuh::params_agent {
   $wazuh_reporting_endpoint = undef
   $ossec_port = '1514'
   $ossec_protocol = 'udp'
-  $ossec_config_profiles = undef
+  $ossec_config_ubuntu_profiles = 'ubuntu, ubuntu18, ubuntu18.04'
+  $ossec_config_centos_profiles = 'centos, centos7, centos7.6'
   $ossec_notify_time = 10
   $ossec_time_reconnect = 60
   $ossec_auto_restart = 'yes'
@@ -64,6 +67,11 @@ class wazuh::params_agent {
 
   ## localfile
   $ossec_local_files = $::wazuh::params_agent::default_local_files
+
+  # active response
+  $active_response_disabled = 'no'
+
+  $active_response_ca_verification = 'yes'
 
   # OS specific configurations
   case $::kernel {
@@ -134,8 +142,8 @@ class wazuh::params_agent {
 
       # Wodles
 
-      ## openscap
-      $wodle_openscap_disabled = 'no'
+      ## open-scap
+      $wodle_openscap_disabled = 'yes'
       $wodle_openscap_timeout = '1800'
       $wodle_openscap_interval = '1d'
       $wodle_openscap_scan_on_start = 'yes'
@@ -157,7 +165,7 @@ class wazuh::params_agent {
 
       ## syscollector
       $wodle_syscollector_disabled = 'no'
-      $wodle_syscollector_interval = '1d'
+      $wodle_syscollector_interval = '1h'
       $wodle_syscollector_scan_on_start = 'yes'
       $wodle_syscollector_hardware = 'yes'
       $wodle_syscollector_os = 'yes'
@@ -174,8 +182,10 @@ class wazuh::params_agent {
       $ossec_syscheck_auto_ignore = undef
       $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
-      $ossec_syscheck_whodata = '"no"'
-      $ossec_syscheck_realtime = '"no"'
+      $ossec_syscheck_whodata_directories_1 = 'no'
+      $ossec_syscheck_realtime_directories_1 = 'no'
+      $ossec_syscheck_whodata_directories_2 = 'no'
+      $ossec_syscheck_realtime_directories_2 = 'no'
       $ossec_syscheck_ignore_list = ['/etc/mtab',
         '/etc/hosts.deny',
         '/etc/mail/statistics',
@@ -193,6 +203,7 @@ class wazuh::params_agent {
         '/dev/core',
       ]
       $ossec_syscheck_ignore_type_1 = '^/proc'
+
       $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
 
       $ossec_ruleset_decoder_dir = 'ruleset/decoders'
@@ -213,6 +224,9 @@ class wazuh::params_agent {
       $ossec_syscheck_nodiff = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs = 'yes'
 
+      # active-response
+      $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
+
       # others
       $manage_firewall = false
       $selinux = false
@@ -230,7 +244,6 @@ class wazuh::params_agent {
             { 'location' => '/var/log/auth.log', 'log_format' => 'syslog' },
             { 'location' => '/var/log/dpkg.log', 'log_format' => 'syslog' },
             { 'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog' },
-            { 'location' => '/var/log/messages', 'log_format' => 'syslog' },
           ]
           case $::lsbdistcodename {
             'xenial': {
@@ -384,27 +397,80 @@ class wazuh::params_agent {
       $service_has_status = true
       $ossec_service_provider = undef
 
+      # Rootcheck Windows
+      $ossec_rootcheck_windows_disabled = 'no'
+      $ossec_rootcheck_windows_windows_apps = './shared/win_applications_rcl.txt'
+      $ossec_rootcheck_windows_windows_malware = './shared/win_malware_rcl.txt'
+
+      # sca
+      $sca_windows_enabled = 'yes'
+      $sca_windows_scan_on_start = 'yes'
+      $sca_windows_interval = '12h'
+      $sca_windows_skip_nfs = 'yes'
+      $sca_windows_policies = []
+
+      # Syscheck
+      $ossec_syscheck_disabled = 'no'
+      $ossec_syscheck_frequency = '43200'
+
+      # Wodles
+
+      ## syscollector
+      $wodle_syscollector_disabled = 'no'
+      $wodle_syscollector_interval = '1h'
+      $wodle_syscollector_scan_on_start = 'yes'
+      $wodle_syscollector_hardware = 'yes'
+      $wodle_syscollector_os = 'yes'
+      $wodle_syscollector_network = 'yes'
+      $wodle_syscollector_packages = 'yes'
+      $wodle_syscollector_ports = 'yes'
+      $wodle_syscollector_processes = 'yes'
+
+      ## cis-cat
+      $wodle_ciscat_disabled = 'yes'
+      $wodle_ciscat_timeout = '1800'
+      $wodle_ciscat_interval = '1d'
+      $wodle_ciscat_scan_on_start = 'yes'
+      $wodle_ciscat_java_path = '\\server\jre\bin\java.exe'
+      $wodle_ciscat_ciscat_path = 'C:\cis-cat'
+
+      ## osquery
+      $wodle_osquery_disabled = 'yes'
+      $wodle_osquery_run_daemon = 'yes'
+      $wodle_osquery_bin_path = 'C:\Program Files\osquery\osqueryd'
+      $wodle_osquery_log_path = 'C:\Program Files\osquery\log\osqueryd.results.log'
+      $wodle_osquery_config_path = 'C:\Program Files\osquery\osquery.conf'
+      $wodle_osquery_add_labels = 'yes'
+
+      # active-response
+      $active_response_windows_ca_store = 'wpk_root.pem'
+
       # TODO
       $validate_cmd_conf = undef
 
       # Pushed by shared agent config now
       $default_local_files = [
         {
+          'location'   => 'Application',
+          'log_format' => 'eventchannel'
+        },
+        {
           'location'   => 'Security',
           'log_format' => 'eventchannel',
-          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447\ 
-and EventID != 4656 and EventID != 4658 and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 \
-EventID!= 4703 and EventID != 4907]'
+          'query'      => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658 \
+and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID != 4703 and EventID != 4907 \
+and EventID != 5152 and EventID != 5157]'
         },
         {
           'location'   => 'System',
-          'log_format' => 'eventlog'
+          'log_format' => 'eventchannel'
         },
         {
           'location'   => 'active-response\active-responses.log',
           'log_format' => 'syslog'
         },
       ]
+      $windows_audit_interval = 300
     }
     default: { fail('This ossec module has not been tested on your distribution') }
   }

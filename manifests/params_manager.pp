@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.11.2-1'
+      $server_package_version                          = '3.11.3-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -13,7 +13,7 @@ class wazuh::params_manager {
     ### Ossec.conf blocks
 
       ## Global
-      $ossec_emailnotification                         = 'yes'
+      $ossec_emailnotification                         = 'no'
       $ossec_emailto                                   = ['recipient@example.wazuh.com']
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
       $ossec_emailfrom                                 = 'ossecm@example.wazuh.com'
@@ -207,8 +207,10 @@ class wazuh::params_manager {
       $ossec_syscheck_auto_ignore                      = 'no'
       $ossec_syscheck_directories_1                    = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2                    = '/bin,/sbin,/boot'
-      $ossec_syscheck_whodata                          = '"no"'
-      $ossec_syscheck_realtime                         = '"no"'
+      $ossec_syscheck_whodata_directories_1            = 'no'
+      $ossec_syscheck_realtime_directories_1           = 'no'
+      $ossec_syscheck_whodata_directories_2            = 'no'
+      $ossec_syscheck_realtime_directories_2           = 'no'
       $ossec_syscheck_ignore_list                      = ['/etc/mtab',
                                               '/etc/hosts.deny',
                                               '/etc/mail/statistics',
@@ -314,11 +316,8 @@ class wazuh::params_manager {
           $api_service_provider = undef
           $default_local_files = [
             {  'location' => '/var/log/syslog' , 'log_format' => 'syslog'},
-            {  'location' => '/var/log/kern.log' , 'log_format' => 'syslog'},
-            {  'location' => '/var/log/auth.log' , 'log_format' => 'syslog'},
             {  'location' => '/var/log/dpkg.log', 'log_format' => 'syslog'},
             {  'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog'},
-            {  'location' => '/var/log/messages' , 'log_format' => 'syslog'},
           ]
           case $::lsbdistcodename {
             'xenial': {
@@ -378,7 +377,7 @@ class wazuh::params_manager {
               {  'location' => '/var/ossec/logs/active-responses.log' , 'log_format' => 'syslog'},
               {  'location' => '/var/log/messages', 'log_format' => 'syslog'},
               {  'location' => '/var/log/secure' , 'log_format' => 'syslog'},
-              {  'location' => '/var/log/maillog' , 'log_format' => 'apache'},
+              {  'location' => '/var/log/maillog' , 'log_format' => 'syslog'},
           ]
           case $::operatingsystem {
             'Amazon': {
@@ -472,7 +471,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.11.2'
+      $agent_package  = 'Wazuh Agent 3.11.3'
       $server_service = ''
       $server_package = ''
       $api_service = ''
