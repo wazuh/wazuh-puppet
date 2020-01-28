@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.11.3_7.5.2
+
+### Added
+
+- Update to Wazuh version 3.11.3_7.5.2
+
+- Improved agent Windows config. and secondary fixes ([@rshad](https://github.com/rshad)) [PR#205](https://github.com/wazuh/wazuh-puppet/pull/205)
+
 ## Wazuh Puppet v3.11.2_7.5.1
 
 ### Added
