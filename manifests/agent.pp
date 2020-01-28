@@ -166,8 +166,10 @@ class wazuh::agent (
   $ossec_syscheck_auto_ignore        = $wazuh::params_agent::ossec_syscheck_auto_ignore,
   $ossec_syscheck_directories_1      = $wazuh::params_agent::ossec_syscheck_directories_1,
   $ossec_syscheck_directories_2      = $wazuh::params_agent::ossec_syscheck_directories_2,
-  $ossec_syscheck_whodata            = $wazuh::params_agent::ossec_syscheck_whodata,
-  $ossec_syscheck_realtime           = $wazuh::params_agent::ossec_syscheck_realtime,
+  $ossec_syscheck_whodata_directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
+  $ossec_syscheck_realtime_directories_1           = $wazuh::params_agent::ossec_syscheck_realtime_directories_1,
+  $ossec_syscheck_whodata_directories_2            = $wazuh::params_agent::ossec_syscheck_whodata_directories_2,
+  $ossec_syscheck_realtime_directories_2           = $wazuh::params_agent::ossec_syscheck_realtime_directories_2,
   $ossec_syscheck_ignore_list        = $wazuh::params_agent::ossec_syscheck_ignore_list,
   $ossec_syscheck_ignore_type_1      = $wazuh::params_agent::ossec_syscheck_ignore_type_1,
   $ossec_syscheck_ignore_type_2      = $wazuh::params_agent::ossec_syscheck_ignore_type_2,
@@ -205,7 +207,7 @@ class wazuh::agent (
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
+  if (( $ossec_syscheck_whodata_directories_1 == '"yes"' ) or ( $ossec_syscheck_whodata_directories_2 == '"yes"' )) { # Install Audit if whodata is enabled
     package { 'Installing Audit...':
       name   => 'audit',
     }

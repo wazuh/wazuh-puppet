@@ -198,8 +198,10 @@ class wazuh::manager (
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
-      $ossec_syscheck_whodata               = $wazuh::params_manager::ossec_syscheck_whodata,
-      $ossec_syscheck_realtime              = $wazuh::params_manager::ossec_syscheck_realtime,
+      $ossec_syscheck_whodata_directories_1            = $wazuh::params_manager::ossec_syscheck_whodata_directories_1,
+      $ossec_syscheck_realtime_directories_1           = $wazuh::params_manager::ossec_syscheck_realtime_directories_1,
+      $ossec_syscheck_whodata_directories_2            = $wazuh::params_manager::ossec_syscheck_whodata_directories_2,
+      $ossec_syscheck_realtime_directories_2           = $wazuh::params_manager::ossec_syscheck_realtime_directories_2,
       $ossec_syscheck_ignore_list           = $wazuh::params_manager::ossec_syscheck_ignore_list,
 
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
@@ -265,9 +267,9 @@ class wazuh::manager (
   }
 
 
-  if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
+  if ( $ossec_syscheck_whodata_directories_1 == '"yes"' ) or ( $ossec_syscheck_whodata_directories_2 == '"yes"' ) { # Install Audit if whodata is enabled
     package { 'Installing Auditd...':
-      name   => 'audit',
+      name   => 'auditd',
     }
     service { 'auditd':
       ensure => running,
@@ -569,7 +571,7 @@ class wazuh::manager (
     }
   }
 
-  if($ossec_syscheck_whodata == '"yes"') {
+  if ( $ossec_syscheck_whodata_directories_1 == '"yes"' ) or ( $ossec_syscheck_whodata_directories_2 == '"yes"' ) {
     exec { 'Ensure wazuh-fim rule is added to auditctl':
       command => '/sbin/auditctl -l',
       unless  => '/sbin/auditctl -l | grep wazuh_fim',
