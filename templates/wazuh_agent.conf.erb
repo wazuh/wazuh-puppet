@@ -8,8 +8,10 @@
   <%- end -%>
     <port><%= @ossec_port %></port>
   </server>
-  <%- if @ossec_config_profiles then -%>
-    <config-profile><%= @ossec_config_profiles.join(',') %></config-profile>
+  <%- if @operatingsystem == 'Ubuntu' or @operatingsystem == 'ubuntu' -%>
+    <config-profile><%= @ossec_config_ubuntu_profiles %></config-profile>
+  <%- elsif @operatingsystem == 'CentOS' or @operatingsystem == 'Centos' or @operatingsystem == 'centos' -%>
+    <config-profile><%= @ossec_config_centos_profiles %></config-profile>
   <%- end -%>
   <%- if @ossec_notify_time then -%>
     <notify_time><%= @ossec_notify_time %></notify_time>
@@ -26,7 +28,7 @@
   </client>
   
   <logging>
-    <log_format>plain</log_format>
+    <log_format><%= @logging_log_format %></log_format>
   </logging>
 
   <client_buffer>

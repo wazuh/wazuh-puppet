@@ -6,6 +6,9 @@
   <% if @wodle_osquery_run_daemon -%>
   <run_daemon><%= @wodle_osquery_run_daemon %></run_daemon>
   <%- end -%>
+  <% if @wodle_osquery_bin_path -%>
+  <bin_path><%= @wodle_osquery_bin_path %></bin_path>
+  <%- end -%>
   <% if @wodle_osquery_log_path -%>
   <log_path><%= @wodle_osquery_log_path %></log_path>
   <%- end -%>

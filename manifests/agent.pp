@@ -49,7 +49,6 @@ class wazuh::agent (
   $ossec_sca_template                = $wazuh::params_agent::ossec_sca_template,
   $ossec_syscheck_template           = $wazuh::params_agent::ossec_syscheck_template,
   $ossec_localfile_template          = $wazuh::params_agent::ossec_localfile_template,
-  $ossec_ruleset                     = $wazuh::params_agent::ossec_ruleset,
   $ossec_auth                        = $wazuh::params_agent::ossec_auth,
   $ossec_cluster                     = $wazuh::params_agent::ossec_cluster,
   $ossec_active_response_template    = $wazuh::params_agent::ossec_active_response_template,
@@ -61,7 +60,8 @@ class wazuh::agent (
   $wazuh_reporting_endpoint          = $wazuh::params_agent::wazuh_reporting_endpoint,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
-  $ossec_config_profiles             = $wazuh::params_agent::ossec_config_profiles,
+  $ossec_config_ubuntu_profiles      = $wazuh::params_agent::ossec_config_ubuntu_profiles,
+  $ossec_config_centos_profiles      = $wazuh::params_agent::ossec_config_centos_profiles,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
   $ossec_time_reconnect              = $wazuh::params_agent::ossec_time_reconnect,
   $ossec_auto_restart                = $wazuh::params_agent::ossec_auto_restart,
@@ -83,6 +83,12 @@ class wazuh::agent (
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
 
+
+  # rootcheck windows
+  $ossec_rootcheck_windows_disabled        = $wazuh::params_agent::ossec_rootcheck_windows_disabled,
+  $ossec_rootcheck_windows_windows_apps    = $wazuh::params_agent::ossec_rootcheck_windows_windows_apps,
+  $ossec_rootcheck_windows_windows_malware = $wazuh::params_agent::ossec_rootcheck_windows_windows_malware,
+
   # SCA
 
   ## Amazon
@@ -93,18 +99,24 @@ class wazuh::agent (
   $sca_amazon_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
 
   ## RHEL
-  $sca_amazon_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
-  $sca_amazon_rhel_scan_on_start = $wazuh::params_agent::sca_rhel_scan_on_start,
-  $sca_amazon_rhel_interval = $wazuh::params_agent::sca_rhel_interval,
-  $sca_amazon_rhel_skip_nfs = $wazuh::params_agent::sca_rhel_skip_nfs,
-  $sca_amazon_rhel_policies = $wazuh::params_agent::sca_rhel_policies,
+  $sca_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
+  $sca_rhel_scan_on_start = $wazuh::params_agent::sca_rhel_scan_on_start,
+  $sca_rhel_interval = $wazuh::params_agent::sca_rhel_interval,
+  $sca_rhel_skip_nfs = $wazuh::params_agent::sca_rhel_skip_nfs,
+  $sca_rhel_policies = $wazuh::params_agent::sca_rhel_policies,
 
-  ## <else>
-  $sca_amazon_else_enabled = $wazuh::params_agent::sca_else_enabled,
-  $sca_amazon_else_scan_on_start = $wazuh::params_agent::sca_else_scan_on_start,
-  $sca_amazon_else_interval = $wazuh::params_agent::sca_else_interval,
-  $sca_amazon_else_skip_nfs = $wazuh::params_agent::sca_else_skip_nfs,
-  $sca_amazon_else_policies = $wazuh::params_agent::sca_else_policies,
+  ## <Linux else>
+  $sca_else_enabled = $wazuh::params_agent::sca_else_enabled,
+  $sca_else_scan_on_start = $wazuh::params_agent::sca_else_scan_on_start,
+  $sca_else_interval = $wazuh::params_agent::sca_else_interval,
+  $sca_else_skip_nfs = $wazuh::params_agent::sca_else_skip_nfs,
+  $sca_else_policies = $wazuh::params_agent::sca_else_policies,
+
+  $sca_windows_enabled = $wazuh::params_agent::sca_windows_enabled,
+  $sca_windows_scan_on_start = $wazuh::params_agent::sca_windows_scan_on_start,
+  $sca_windows_interval = $wazuh::params_agent::sca_windows_interval,
+  $sca_windows_skip_nfs = $wazuh::params_agent::sca_windows_skip_nfs,
+  $sca_windows_policies = $wazuh::params_agent::sca_windows_policies,
 
   ## Wodles
 
@@ -126,6 +138,7 @@ class wazuh::agent (
 
   $wodle_osquery_disabled            = $wazuh::params_agent::wodle_osquery_disabled,
   $wodle_osquery_run_daemon          = $wazuh::params_agent::wodle_osquery_run_daemon,
+  $wodle_osquery_bin_path            = $wazuh::params_agent::wodle_osquery_bin_path,
   $wodle_osquery_log_path            = $wazuh::params_agent::wodle_osquery_log_path,
   $wodle_osquery_config_path         = $wazuh::params_agent::wodle_osquery_config_path,
   $wodle_osquery_add_labels          = $wazuh::params_agent::wodle_osquery_add_labels,
@@ -153,13 +166,22 @@ class wazuh::agent (
   $ossec_syscheck_auto_ignore        = $wazuh::params_agent::ossec_syscheck_auto_ignore,
   $ossec_syscheck_directories_1      = $wazuh::params_agent::ossec_syscheck_directories_1,
   $ossec_syscheck_directories_2      = $wazuh::params_agent::ossec_syscheck_directories_2,
-  $ossec_syscheck_whodata            = $wazuh::params_agent::ossec_syscheck_whodata,
-  $ossec_syscheck_realtime           = $wazuh::params_agent::ossec_syscheck_realtime,
+  $ossec_syscheck_whodata_directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
+  $ossec_syscheck_realtime_directories_1           = $wazuh::params_agent::ossec_syscheck_realtime_directories_1,
+  $ossec_syscheck_whodata_directories_2            = $wazuh::params_agent::ossec_syscheck_whodata_directories_2,
+  $ossec_syscheck_realtime_directories_2           = $wazuh::params_agent::ossec_syscheck_realtime_directories_2,
   $ossec_syscheck_ignore_list        = $wazuh::params_agent::ossec_syscheck_ignore_list,
   $ossec_syscheck_ignore_type_1      = $wazuh::params_agent::ossec_syscheck_ignore_type_1,
   $ossec_syscheck_ignore_type_2      = $wazuh::params_agent::ossec_syscheck_ignore_type_2,
   $ossec_syscheck_nodiff             = $wazuh::params_agent::ossec_syscheck_nodiff,
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
+  $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,
+
+  # active-response
+  $ossec_active_response_disabled          =  $wazuh::params_agent::active_response_disabled,
+  $ossec_active_response_linux_ca_store    =  $wazuh::params_agent::active_response_linux_ca_store,
+  $ossec_active_response_windows_ca_store  =  $wazuh::params_agent::active_response_windows_ca_store,
+  $ossec_active_response_ca_verification   =  $wazuh::params_agent::active_response_ca_verification,
 
   # Agent Labels
   $ossec_labels                      = $wazuh::params_agent::ossec_labels,
@@ -172,6 +194,9 @@ class wazuh::agent (
   ## Windows
 
   $download_path                     = $wazuh::params_agent::download_path,
+
+  # Logging
+  $logging_log_format                = $wazuh::params_agent::logging_log_format,
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
@@ -182,7 +207,7 @@ class wazuh::agent (
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if($ossec_syscheck_whodata == '"yes"') { # Install Audit if whodata is enabled
+  if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
     package { 'Installing Audit...':
       name   => 'audit',
     }
