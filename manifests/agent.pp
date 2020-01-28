@@ -207,7 +207,7 @@ class wazuh::agent (
   validate_string($agent_package_name)
   validate_string($agent_service_name)
 
-  if (( $ossec_syscheck_whodata_directories_1 == '"yes"' ) or ( $ossec_syscheck_whodata_directories_2 == '"yes"' )) { # Install Audit if whodata is enabled
+  if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) { # Install Audit if whodata is enabled
     package { 'Installing Audit...':
       name   => 'audit',
     }
