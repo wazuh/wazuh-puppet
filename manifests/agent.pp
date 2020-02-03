@@ -4,7 +4,6 @@
 class wazuh::agent (
 
   # Versioning and package names
-asdasdasdasdsadq_ ?
   $agent_package_version             = $wazuh::params_agent::agent_package_version,
   $agent_package_name                = $wazuh::params_agent::agent_package_name,
   $agent_service_name                = $wazuh::params_agent::agent_service_name,
