@@ -208,12 +208,25 @@ class wazuh::agent (
   validate_string($agent_service_name)
 
   if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
-    package { 'Installing Audit...':
-      name   => 'audit',
-    }
-    service { 'auditd':
-      ensure => running,
-      enable => true,
+    case $::kernel {
+      'Linux': {
+        case $::operatingsystem {
+          'Debian', 'debian', 'Ubuntu', 'ubuntu': {
+            package { 'Installing Audit...':
+              name   => 'auditd',
+            }
+          }
+          default: {
+            package { 'Installing Audit...':
+              name   => 'audit',
+            }
+          }
+        }
+        service { 'auditd':
+          ensure => running,
+          enable => true,
+        }
+      }
     }
   }
 
