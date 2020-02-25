@@ -133,6 +133,13 @@ class wazuh::params_agent {
       $sca_rhel_skip_nfs = 'yes'
       $sca_rhel_policies = []
 
+      ## DEBIAN
+      $sca_debian_enabled = 'yes'
+      $sca_debian_scan_on_start = 'yes'
+      $sca_debian_interval = '12h'
+      $sca_debian_skip_nfs = 'yes'
+      $sca_debian_policies = []
+
       ## <else>
       $sca_else_enabled = 'yes'
       $sca_else_scan_on_start = 'yes'

@@ -105,6 +105,13 @@ class wazuh::agent (
   $sca_rhel_skip_nfs = $wazuh::params_agent::sca_rhel_skip_nfs,
   $sca_rhel_policies = $wazuh::params_agent::sca_rhel_policies,
 
+  ## DEBIAN
+  $sca_debian_enabled = $wazuh::params_agent::sca_debian_enabled,
+  $sca_debian_scan_on_start = $wazuh::params_agent::sca_debian_scan_on_start,
+  $sca_debian_interval = $wazuh::params_agent::sca_debian_interval,
+  $sca_debian_skip_nfs = $wazuh::params_agent::sca_debian_skip_nfs,
+  $sca_debian_policies = $wazuh::params_agent::sca_debian_policies,
+
   ## <Linux else>
   $sca_else_enabled = $wazuh::params_agent::sca_else_enabled,
   $sca_else_scan_on_start = $wazuh::params_agent::sca_else_scan_on_start,

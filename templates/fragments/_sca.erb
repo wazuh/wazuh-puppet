@@ -46,6 +46,29 @@
   </policies>
   <%- end -%>
 </sca>
+<%- elsif @apply_template_os =='debian' -%>
+<sca>
+  <% if @sca_debian_enabled -%>
+  <enabled><%= @sca_debian_enabled %></enabled>
+  <%- end -%>
+  <% if @sca_debian_scan_on_start -%>
+  <scan_on_start><%= @sca_debian_scan_on_start %></scan_on_start>
+  <%- end -%>
+  <% if @sca_debian_interval -%>
+  <interval><%= @sca_debian_interval %></interval>
+  <%- end -%>
+  <% if @sca_debian_skip_nfs -%>
+  <skip_nfs><%= @sca_debian_skip_nfs %></skip_nfs>
+  <%- end -%>
+
+  <% if !@sca_debian_policies.empty? -%>
+  <policies>
+  <% @sca_debian_policies.each do |policy| -%>
+      <policy><%= policy %></policy>
+  <%- end -%>
+  </policies>
+  <%- end -%>
+</sca>
 <%- else -%>
 <sca>
   <% if @sca_else_enabled -%>
