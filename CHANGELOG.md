@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.11.4_7.6.1
+
+### Added
+
+- Update to Wazuh version 3.11.4_7.6.1
+
 ## Wazuh Puppet v3.11.3_7.5.2
 
 ### Added
@@ -13,7 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Update to Wazuh version 3.11.2_7.5.1 
+- Update to Wazuh version 3.11.2_7.5.1
 
 ### Fixed
 
@@ -23,7 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Update to Wazuh version 3.11.1_7.5.1 
+- Update to Wazuh version 3.11.1_7.5.1
 
 - Adapt to new Wazuh API configuration ([@jm404](https://github.com/jm404)) [PR#195](https://github.com/wazuh/wazuh-puppet/pull/195)
 
@@ -145,7 +151,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.9.0]
 
-### Added 
+### Added
 
 - Allow certificates to be defined by file path ([#112](https://github.com/wazuh/wazuh-puppet/pull/112))
 
@@ -166,16 +172,16 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.8.0]
 
-### Added 
+### Added
 - Feature/agent auth cert key ([#98](https://github.com/wazuh/wazuh-puppet/pull/98))
 - Install package even if repos are not managed by wazuh ([#99](https://github.com/wazuh/wazuh-puppet/pull/99))
 
-### Added 
+### Added
 - Updating params.pp and _common.erb so all the options of localfile can be used ([#97](https://github.com/wazuh/wazuh-puppet/pull/97))
 
 ## [v3.7.2]
 
-### Added 
+### Added
 - Updating params.pp and _common.erb so all the options of localfile can be used ([#97](https://github.com/wazuh/wazuh-puppet/pull/97))
 
 ### Fixed
@@ -197,7 +203,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Updated metadata.json. 
+- Updated metadata.json.
 - Changed addlog for command support. ([#90](https://github.com/wazuh/wazuh-puppet/pull/90))
 
 ## v3.7.0-3701
@@ -211,7 +217,7 @@ All notable changes to this project will be documented in this file.
 
 - Fix username (puppet to puppetlabs). ([#74](https://github.com/wazuh/wazuh-puppet/pull/74))
 
-## Change Log old version. 
+## Change Log old version.
 
 
  ## 2017-xx-xx support@wazuh.com  - 2.0.23
