@@ -79,6 +79,7 @@ class wazuh::agent (
   $ossec_rootcheck_check_ports       = $wazuh::params_agent::ossec_rootcheck_check_ports,
   $ossec_rootcheck_check_if          = $wazuh::params_agent::ossec_rootcheck_check_if,
   $ossec_rootcheck_frequency         = $wazuh::params_agent::ossec_rootcheck_frequency,
+  $ossec_rootcheck_ignore_list       = $wazuh::params_agent::ossec_rootcheck_ignore_list,
   $ossec_rootcheck_rootkit_files     = $wazuh::params_agent::ossec_rootcheck_rootkit_files,
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
