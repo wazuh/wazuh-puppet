@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.11.3-1'
+      $server_package_version                          = '3.11.4-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -74,6 +74,7 @@ class wazuh::params_manager {
       $ossec_rootcheck_check_ports                     = 'yes'
       $ossec_rootcheck_check_if                        = 'yes'
       $ossec_rootcheck_frequency                       = 43200
+      $ossec_rootcheck_ignore_list                     = []
       $ossec_rootcheck_rootkit_files                   = '/var/ossec/etc/rootcheck/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
@@ -471,7 +472,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.11.3'
+      $agent_package  = 'Wazuh Agent 3.11.4'
       $server_service = ''
       $server_package = ''
       $api_service = ''

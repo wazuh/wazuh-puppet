@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.11.3-1'
+  $agent_package_version = '3.11.4-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -113,6 +113,7 @@ class wazuh::params_agent {
       $ossec_rootcheck_check_ports = 'yes'
       $ossec_rootcheck_check_if = 'yes'
       $ossec_rootcheck_frequency = 43200
+      $ossec_rootcheck_ignore_list = []
       $ossec_rootcheck_rootkit_files = '/var/ossec/etc/shared/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'

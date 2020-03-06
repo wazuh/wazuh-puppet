@@ -1,11 +1,13 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh API installation
 class wazuh::wazuh_api (
-  Boolean $manage_nodejs_package = true,
-  String[1] $nodejs_package = 'nodejs',
-  String[1] $wazuh_api_package = 'wazuh-api',
-  String[1] $wazuh_api_service = 'wazuh-api',
-  String[1] $wazuh_api_version = '3.11.3-1'
+  
+  $manage_nodejs_package = true,
+  $wazuh_api_package = 'wazuh-api',
+  $wazuh_api_service = 'wazuh-api',
+  $wazuh_api_version = '3.11.4-1',
+  $nodejs_package = 'nodejs',
+
 ){
   if $manage_nodejs_package {
     contain wazuh::wazuh_api::nodejs
