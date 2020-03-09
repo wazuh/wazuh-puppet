@@ -73,6 +73,9 @@ class wazuh::params_agent {
 
   $active_response_ca_verification = 'yes'
 
+  ## system audit
+  $ossec_rootcheck_system_audit = $::wazuh::params_agent::default_rootcheck_system_audit
+
   # OS specific configurations
   case $::kernel {
     'Linux': {
@@ -232,6 +235,11 @@ class wazuh::params_agent {
       $selinux = false
 
       $manage_repo = true
+
+      $default_rootcheck_system_audit = [
+        "./shared/system_audit_rcl.txt",
+        "./shared/system_audit_ssh.txt",
+      ]
 
       case $::osfamily {
         'Debian': {
