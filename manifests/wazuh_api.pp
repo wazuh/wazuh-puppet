@@ -6,7 +6,6 @@ class wazuh::wazuh_api (
   $wazuh_api_package = 'wazuh-api',
   $wazuh_api_service = 'wazuh-api',
   $wazuh_api_version = '3.11.4-1',
-  $nodejs_package = 'nodejs',
 
 ){
   if $manage_nodejs_package {
@@ -33,7 +32,9 @@ class wazuh::wazuh_api (
   }
 }
 
-class wazuh::wazuh_api::nodejs {
+class wazuh::wazuh_api::nodejs (
+  $nodejs_package = 'nodejs'
+){
   if $::osfamily == 'Debian' {
     exec { 'Updating repositories...':
       path    => '/usr/bin',
