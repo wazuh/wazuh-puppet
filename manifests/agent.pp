@@ -177,6 +177,12 @@ class wazuh::agent (
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
   $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,
 
+  # Audit
+  $audit_manage_rules                = $wazuh::params_agent::audit_manage_rules,
+  $audit_buffer_bytes                = $wazuh::params_agent::audit_buffer_bytes,
+  $audit_backlog_wait_time           = $wazuh::params_agent::audit_backlog_wait_time,
+  $audit_rules                       = $wazuh::params_agent::audit_rules,
+
   # active-response
   $ossec_active_response_disabled          =  $wazuh::params_agent::active_response_disabled,
   $ossec_active_response_linux_ca_store    =  $wazuh::params_agent::active_response_linux_ca_store,
@@ -208,12 +214,11 @@ class wazuh::agent (
   validate_string($agent_service_name)
 
   if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
-    package { 'Installing Audit...':
-      name   => 'audit',
-    }
-    service { 'auditd':
-      ensure => running,
-      enable => true,
+     class { "wazuh::audit":
+      audit_manage_rules => $audit_manage_rules,
+      audit_backlog_wait_time => $audit_backlog_wait_time,
+      audit_buffer_bytes => $audit_buffer_bytes,
+      audit_rules => $audit_rules,
     }
   }
 

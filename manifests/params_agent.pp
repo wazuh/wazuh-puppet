@@ -224,6 +224,12 @@ class wazuh::params_agent {
       $ossec_syscheck_nodiff = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs = 'yes'
 
+      # Audit
+      $audit_manage_rules                = false
+      $audit_buffer_bytes                = "8192"
+      $audit_backlog_wait_time           = "0"
+      $audit_rules                       = []
+
       # active-response
       $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
 
