@@ -38,7 +38,7 @@ class wazuh::wazuh_api::nodejs (
   if $::osfamily == 'Debian' {
     exec { 'Updating repositories...':
       path    => '/usr/bin',
-      command => 'curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -',
+      command => 'curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -',
     }
     package { $nodejs_package:
       provider => 'apt',
@@ -46,7 +46,7 @@ class wazuh::wazuh_api::nodejs (
   } else {
     exec { 'Updating repositories...':
       path    => '/usr/bin',
-      command => 'curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -',
+      command => 'curl --silent --location https://rpm.nodesource.com/setup_10.x | bash -',
 
     }
     package { $nodejs_package:
