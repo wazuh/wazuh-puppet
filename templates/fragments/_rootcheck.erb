@@ -35,7 +35,7 @@
   <% if @ossec_rootcheck_rootkit_trojans-%>
   <rootkit_trojans><%= @ossec_rootcheck_rootkit_trojans %></rootkit_trojans>
   <%- end -%>
-  <%- if @ossec_rootcheck_system_audit -%>
+  <%- if !@ossec_rootcheck_system_audit.empty? -%>
     <%- @ossec_rootcheck_system_audit.each do |audit_file| -%>
       <system_audit><%= audit_file %></system_audit>
     <%- end -%>
