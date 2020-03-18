@@ -1,18 +1,5 @@
-## First rule - delete all
--D
-
-## Increase the buffers to survive stress events.
-## Make this bigger for busy systems
--b <%= @audit_buffer_bytes %>
-
-## This determine how long to wait in burst of events
---backlog_wait_time <%= @audit_backlog_wait_time %>
-
-## Set failure mode to syslog
--f 1
-
 <% if !@audit_rules.empty? -%>
-  <% @audit_rules.each do |audit_rule| -%>
-    <%= audit_rule %>
-  <%- end -%>
+<% @audit_rules.each do |audit_rule| -%>
+<%= audit_rule %>
+<%- end -%>
 <%- end -%>
