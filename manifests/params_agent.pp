@@ -116,10 +116,9 @@ class wazuh::params_agent {
       $ossec_rootcheck_rootkit_files = '/var/ossec/etc/shared/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'
-      $ossec_rootcheck_system_audit = [
-        "/var/ossec/etc/shared/system_audit_rcl.txt",
-        "/var/ossec/etc/shared/system_audit_ssh.txt",
-      ]
+
+      # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
+      $ossec_rootcheck_system_audit = [] 
 
       # SCA
 
