@@ -40,6 +40,11 @@
   <% if @ossec_rootcheck_rootkit_trojans-%>
   <rootkit_trojans><%= @ossec_rootcheck_rootkit_trojans %></rootkit_trojans>
   <%- end -%>
+  <%- if !@ossec_rootcheck_system_audit.empty? -%>
+    <%- @ossec_rootcheck_system_audit.each do |audit_file| -%>
+      <system_audit><%= audit_file %></system_audit>
+    <%- end -%>
+  <%- end -%>
   <% if @ossec_rootcheck_skip_nfs-%>
   <skip_nfs><%= @ossec_rootcheck_skip_nfs%></skip_nfs>
   <%- end -%>

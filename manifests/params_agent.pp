@@ -118,6 +118,9 @@ class wazuh::params_agent {
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'
 
+      # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
+      $ossec_rootcheck_system_audit = [] 
+
       # SCA
 
       ## Amazon
@@ -402,6 +405,7 @@ class wazuh::params_agent {
       $ossec_rootcheck_windows_disabled = 'no'
       $ossec_rootcheck_windows_windows_apps = './shared/win_applications_rcl.txt'
       $ossec_rootcheck_windows_windows_malware = './shared/win_malware_rcl.txt'
+      $ossec_rootcheck_system_audit = []
 
       # sca
       $sca_windows_enabled = 'yes'

@@ -83,6 +83,7 @@ class wazuh::agent (
   $ossec_rootcheck_rootkit_files     = $wazuh::params_agent::ossec_rootcheck_rootkit_files,
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
+  $ossec_rootcheck_system_audit      = $wazuh::params_agent::ossec_rootcheck_system_audit,
 
 
   # rootcheck windows
