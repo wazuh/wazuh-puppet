@@ -229,7 +229,6 @@ class wazuh::params_agent {
       $audit_buffer_bytes                = "8192"
       $audit_backlog_wait_time           = "0"
       $audit_rules                       = [
-        '-D',
         "-b ${audit_buffer_bytes}",
         "--backlog_wait_time ${audit_backlog_wait_time}",
         "-f 1"
