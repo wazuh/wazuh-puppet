@@ -74,6 +74,7 @@ class wazuh::params_manager {
       $ossec_rootcheck_check_ports                     = 'yes'
       $ossec_rootcheck_check_if                        = 'yes'
       $ossec_rootcheck_frequency                       = 43200
+      $ossec_rootcheck_ignore_list                     = []
       $ossec_rootcheck_rootkit_files                   = '/var/ossec/etc/rootcheck/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'

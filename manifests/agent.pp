@@ -79,6 +79,7 @@ class wazuh::agent (
   $ossec_rootcheck_check_ports       = $wazuh::params_agent::ossec_rootcheck_check_ports,
   $ossec_rootcheck_check_if          = $wazuh::params_agent::ossec_rootcheck_check_if,
   $ossec_rootcheck_frequency         = $wazuh::params_agent::ossec_rootcheck_frequency,
+  $ossec_rootcheck_ignore_list       = $wazuh::params_agent::ossec_rootcheck_ignore_list,
   $ossec_rootcheck_rootkit_files     = $wazuh::params_agent::ossec_rootcheck_rootkit_files,
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
@@ -166,7 +167,12 @@ class wazuh::agent (
   $ossec_syscheck_auto_ignore        = $wazuh::params_agent::ossec_syscheck_auto_ignore,
   $ossec_syscheck_directories_1      = $wazuh::params_agent::ossec_syscheck_directories_1,
   $ossec_syscheck_directories_2      = $wazuh::params_agent::ossec_syscheck_directories_2,
-  $ossec_syscheck_whodata_directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
+  $ossec_syscheck_
+  
+  
+  
+  
+  _directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
   $ossec_syscheck_realtime_directories_1           = $wazuh::params_agent::ossec_syscheck_realtime_directories_1,
   $ossec_syscheck_whodata_directories_2            = $wazuh::params_agent::ossec_syscheck_whodata_directories_2,
   $ossec_syscheck_realtime_directories_2           = $wazuh::params_agent::ossec_syscheck_realtime_directories_2,
