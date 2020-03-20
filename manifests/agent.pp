@@ -167,12 +167,8 @@ class wazuh::agent (
   $ossec_syscheck_auto_ignore        = $wazuh::params_agent::ossec_syscheck_auto_ignore,
   $ossec_syscheck_directories_1      = $wazuh::params_agent::ossec_syscheck_directories_1,
   $ossec_syscheck_directories_2      = $wazuh::params_agent::ossec_syscheck_directories_2,
-  $ossec_syscheck_
-  
-  
-  
-  
-  _directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
+   
+  $ossec_syscheck_whodata_directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
   $ossec_syscheck_realtime_directories_1           = $wazuh::params_agent::ossec_syscheck_realtime_directories_1,
   $ossec_syscheck_whodata_directories_2            = $wazuh::params_agent::ossec_syscheck_whodata_directories_2,
   $ossec_syscheck_realtime_directories_2           = $wazuh::params_agent::ossec_syscheck_realtime_directories_2,
