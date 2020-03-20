@@ -26,14 +26,16 @@ class wazuh::audit (
       }
 
       if $audit_manage_rules == true {
+        file { '/etc/audit/rules.d/audit.rules':
+          ensure => present
+        }
 
-        file { 'Configure audit.rules':
-          owner   => 'root',
-          group   => 'root',
-          path    => '/etc/audit/rules.d/audit.rules',
-          mode    => '0644',
-          notify  => Service['auditd'], ## Restarts the service
-          content => template('wazuh/audit_rules.erb')
+        $audit_rules.each |String $rule| {
+          file_line { "Append rule ${rule} to /etc/audit/rules.d/audit.rules":
+            path    => '/etc/audit/rules.d/audit.rules',
+            line    => $rule,
+            require => File['/etc/audit/rules.d/audit.rules']
+          }
         }
       }
     }
