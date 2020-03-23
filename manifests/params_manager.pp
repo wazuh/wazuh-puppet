@@ -78,6 +78,7 @@ class wazuh::params_manager {
       $ossec_rootcheck_rootkit_files                   = '/var/ossec/etc/rootcheck/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
+      $ossec_rootcheck_system_audit                    = []
 
       # SCA
 
