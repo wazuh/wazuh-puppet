@@ -62,6 +62,16 @@ class wazuh::manager (
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
 
+      # active-response
+      $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
+      $ossec_active_response_location               =  $wazuh::params_manager::active_response_location,
+      $ossec_active_response_level                  =  $wazuh::params_manager::active_response_level,            
+      $ossec_active_response_agent_id               =  $wazuh::params_manager::active_response_agent_id,         
+      $ossec_active_response_rules_id               =  $wazuh::params_manager::active_response_rules_id,         
+      $ossec_active_response_timeout                =  $wazuh::params_manager::active_response_timeout,          
+      $ossec_active_response_repeated_offenders     =  $wazuh::params_manager::active_response_repeated_offenders,
+
+
       ## Rootcheck
 
       $ossec_rootcheck_disabled             = $wazuh::params_manager::ossec_rootcheck_disabled,
@@ -491,12 +501,16 @@ class wazuh::manager (
       }
   }
   if ($configure_active_response == true){
-    concat::fragment {
-        'ossec.conf_active_response':
-          order   => 90,
-          target  => 'ossec.conf',
-          content => template($ossec_active_response_template);
-      }
+    wazuh::activeresponse { 'blockWebattack':
+      active_response_command            => $ossec_active_response_command,
+      active_response_location           => $ossec_active_response_location,
+      active_response_level              => $ossec_active_response_level,
+      active_response_agent_id           => $ossec_active_response_agent_id,
+      active_response_rules_id           => $ossec_active_response_rules_id,
+      active_response_timeout            => $ossec_active_response_timeout,
+      active_response_repeated_offenders => $ossec_active_response_repeated_offenders,
+      order_arg                          => 90
+    }
   }
   concat::fragment {
     'ossec.conf_footer':
