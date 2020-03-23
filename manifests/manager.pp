@@ -185,7 +185,6 @@ class wazuh::manager (
       $syslog_output_format                 = $wazuh::params_manager::syslog_output_format,
 
       # Authd configuration
-
       $ossec_auth_disabled                  = $wazuh::params_manager::ossec_auth_disabled,
       $ossec_auth_port                      = $wazuh::params_manager::ossec_auth_port,
       $ossec_auth_use_source_ip             = $wazuh::params_manager::ossec_auth_use_source_ip,
@@ -202,7 +201,6 @@ class wazuh::manager (
 
 
       # syscheck
-
       $ossec_syscheck_disabled              = $wazuh::params_manager::ossec_syscheck_disabled,
       $ossec_syscheck_frequency             = $wazuh::params_manager::ossec_syscheck_frequency,
       $ossec_syscheck_scan_on_start         = $wazuh::params_manager::ossec_syscheck_scan_on_start,

@@ -139,6 +139,16 @@ class wazuh::params_manager {
       $wodle_syscollector_ports                        = 'yes'
       $wodle_syscollector_processes                    = 'yes'
 
+
+      #active-response
+      $active_response_command                         = 'firewall-drop'
+      $active_response_location                        = 'local'
+      $active_response_level                           = 9
+      $active_response_agent_id                        = '001'
+      $active_response_rules_id                        = [31153,31151]
+      $active_response_timeout                         = 300
+      $active_response_repeated_offenders              = ['30,60,120']
+
       #vulnerability-detector
 
       $vulnerability_detector_enabled                            = 'no'
