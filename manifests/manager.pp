@@ -91,26 +91,26 @@ class wazuh::manager (
 
       # SCA
 
-  ## Amazon
-  $sca_amazon_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
-  $sca_amazon_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
-  $sca_amazon_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
-  $sca_amazon_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
-  $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
+      ## Amazon
+      $sca_amazon_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
+      $sca_amazon_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
+      $sca_amazon_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
+      $sca_amazon_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
+      $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
 
-  ## RHEL
-  $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
-  $sca_rhel_scan_on_start = $wazuh::params_manager::sca_rhel_scan_on_start,
-  $sca_rhel_interval = $wazuh::params_manager::sca_rhel_interval,
-  $sca_rhel_skip_nfs = $wazuh::params_manager::sca_rhel_skip_nfs,
-  $sca_rhel_policies = $wazuh::params_manager::sca_rhel_policies,
+      ## RHEL
+      $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
+      $sca_rhel_scan_on_start = $wazuh::params_manager::sca_rhel_scan_on_start,
+      $sca_rhel_interval = $wazuh::params_manager::sca_rhel_interval,
+      $sca_rhel_skip_nfs = $wazuh::params_manager::sca_rhel_skip_nfs,
+      $sca_rhel_policies = $wazuh::params_manager::sca_rhel_policies,
 
-  ## <Linux else>
-  $sca_else_enabled = $wazuh::params_manager::sca_else_enabled,
-  $sca_else_scan_on_start = $wazuh::params_manager::sca_else_scan_on_start,
-  $sca_else_interval = $wazuh::params_manager::sca_else_interval,
-  $sca_else_skip_nfs = $wazuh::params_manager::sca_else_skip_nfs,
-  $sca_else_policies = $wazuh::params_manager::sca_else_policies,
+      ## <Linux else>
+      $sca_else_enabled = $wazuh::params_manager::sca_else_enabled,
+      $sca_else_scan_on_start = $wazuh::params_manager::sca_else_scan_on_start,
+      $sca_else_interval = $wazuh::params_manager::sca_else_interval,
+      $sca_else_skip_nfs = $wazuh::params_manager::sca_else_skip_nfs,
+      $sca_else_policies = $wazuh::params_manager::sca_else_policies,
 
 
       ## Wodles
