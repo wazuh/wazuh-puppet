@@ -187,10 +187,17 @@ class wazuh::agent (
   $audit_rules                       = $wazuh::params_agent::audit_rules,
 
   # active-response
-  $ossec_active_response_disabled          =  $wazuh::params_agent::active_response_disabled,
-  $ossec_active_response_linux_ca_store    =  $wazuh::params_agent::active_response_linux_ca_store,
-  $ossec_active_response_windows_ca_store  =  $wazuh::params_agent::active_response_windows_ca_store,
-  $ossec_active_response_ca_verification   =  $wazuh::params_agent::active_response_ca_verification,
+  $ossec_active_response_disabled             =  $wazuh::params_agent::active_response_disabled,
+  $ossec_active_response_linux_ca_store       =  $wazuh::params_agent::active_response_linux_ca_store,
+  
+  $ossec_active_response_ca_verification      =  $wazuh::params_agent::active_response_ca_verification,
+  $ossec_active_response_command              =  $wazuh::params_agent::active_response_command,
+  $ossec_active_response_location             =  $wazuh::params_agent::active_response_location,
+  $ossec_active_response_level                =  $wazuh::params_agent::active_response_level,            
+  $ossec_active_response_agent_id             =  $wazuh::params_agent::active_response_agent_id,         
+  $ossec_active_response_rules_id             =  $wazuh::params_agent::active_response_rules_id,         
+  $ossec_active_response_timeout              =  $wazuh::params_agent::active_response_timeout,          
+  $ossec_active_response_repeated_offenders   =  $wazuh::params_agent::active_response_repeated_offenders,
 
   # Agent Labels
   $ossec_labels                      = $wazuh::params_agent::ossec_labels,
@@ -406,12 +413,19 @@ class wazuh::agent (
     }
   }
   if ($configure_active_response == true) {
-    concat::fragment {
-      'ossec.conf_active_response':
-        target  => 'ossec.conf',
-        order   => 40,
-        before  => Service[$agent_service_name],
-        content => template($ossec_active_response_template);
+    wazuh::activeresponse { 'blockWebattack':
+      active_response_disabled           =>  $ossec_active_response_disabled,
+      active_response_linux_ca_store     =>  $ossec_active_response_linux_ca_store,
+      active_response_ca_verification    =>  $ossec_active_response_ca_verification,
+      active_response_command            =>  $ossec_active_response_command,
+      active_response_location           =>  $ossec_active_response_location,
+      active_response_level              =>  $ossec_active_response_level,
+      active_response_agent_id           =>  $ossec_active_response_agent_id,
+      active_response_rules_id           =>  $ossec_active_response_rules_id,
+      active_response_timeout            =>  $ossec_active_response_timeout,
+      active_response_repeated_offenders =>  $ossec_active_response_repeated_offenders,
+      order_arg                          => 40,
+      before_arg                         => Service[$agent_service_name]
     }
   }
 

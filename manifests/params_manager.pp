@@ -78,6 +78,7 @@ class wazuh::params_manager {
       $ossec_rootcheck_rootkit_files                   = '/var/ossec/etc/rootcheck/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
+      $ossec_rootcheck_system_audit                    = []
 
       # SCA
 
@@ -137,6 +138,16 @@ class wazuh::params_manager {
       $wodle_syscollector_packages                     = 'yes'
       $wodle_syscollector_ports                        = 'yes'
       $wodle_syscollector_processes                    = 'yes'
+
+
+      #active-response
+      $active_response_command                         = 'firewall-drop'
+      $active_response_location                        = 'local'
+      $active_response_level                           = 9
+      $active_response_agent_id                        = '001'
+      $active_response_rules_id                        = [31153,31151]
+      $active_response_timeout                         = 300
+      $active_response_repeated_offenders              = ['30,60,120']
 
       #vulnerability-detector
 

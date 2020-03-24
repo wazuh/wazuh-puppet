@@ -69,9 +69,15 @@ class wazuh::params_agent {
   $ossec_local_files = $::wazuh::params_agent::default_local_files
 
   # active response
-  $active_response_disabled = 'no'
+  $active_response_disabled                        = 'no'
+  $active_response_ca_verification                 = 'yes'
+  $active_response_location                        = undef
+  $active_response_level                           = undef
+  $active_response_agent_id                        = undef
+  $active_response_rules_id                        = []
+  $active_response_timeout                         = undef
+  $active_response_repeated_offenders              = []
 
-  $active_response_ca_verification = 'yes'
 
   # OS specific configurations
   case $::kernel {

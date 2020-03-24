@@ -62,6 +62,16 @@ class wazuh::manager (
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
 
+      # active-response
+      $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
+      $ossec_active_response_location               =  $wazuh::params_manager::active_response_location,
+      $ossec_active_response_level                  =  $wazuh::params_manager::active_response_level,            
+      $ossec_active_response_agent_id               =  $wazuh::params_manager::active_response_agent_id,         
+      $ossec_active_response_rules_id               =  $wazuh::params_manager::active_response_rules_id,         
+      $ossec_active_response_timeout                =  $wazuh::params_manager::active_response_timeout,          
+      $ossec_active_response_repeated_offenders     =  $wazuh::params_manager::active_response_repeated_offenders,
+
+
       ## Rootcheck
 
       $ossec_rootcheck_disabled             = $wazuh::params_manager::ossec_rootcheck_disabled,
@@ -77,29 +87,30 @@ class wazuh::manager (
       $ossec_rootcheck_rootkit_files        = $wazuh::params_manager::ossec_rootcheck_rootkit_files,
       $ossec_rootcheck_rootkit_trojans      = $wazuh::params_manager::ossec_rootcheck_rootkit_trojans,
       $ossec_rootcheck_skip_nfs             = $wazuh::params_manager::ossec_rootcheck_skip_nfs,
+      $ossec_rootcheck_system_audit         = $wazuh::params_manager::ossec_rootcheck_system_audit,
 
       # SCA
 
-  ## Amazon
-  $sca_amazon_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
-  $sca_amazon_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
-  $sca_amazon_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
-  $sca_amazon_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
-  $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
+      ## Amazon
+      $sca_amazon_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
+      $sca_amazon_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
+      $sca_amazon_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
+      $sca_amazon_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
+      $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
 
-  ## RHEL
-  $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
-  $sca_rhel_scan_on_start = $wazuh::params_manager::sca_rhel_scan_on_start,
-  $sca_rhel_interval = $wazuh::params_manager::sca_rhel_interval,
-  $sca_rhel_skip_nfs = $wazuh::params_manager::sca_rhel_skip_nfs,
-  $sca_rhel_policies = $wazuh::params_manager::sca_rhel_policies,
+      ## RHEL
+      $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
+      $sca_rhel_scan_on_start = $wazuh::params_manager::sca_rhel_scan_on_start,
+      $sca_rhel_interval = $wazuh::params_manager::sca_rhel_interval,
+      $sca_rhel_skip_nfs = $wazuh::params_manager::sca_rhel_skip_nfs,
+      $sca_rhel_policies = $wazuh::params_manager::sca_rhel_policies,
 
-  ## <Linux else>
-  $sca_else_enabled = $wazuh::params_manager::sca_else_enabled,
-  $sca_else_scan_on_start = $wazuh::params_manager::sca_else_scan_on_start,
-  $sca_else_interval = $wazuh::params_manager::sca_else_interval,
-  $sca_else_skip_nfs = $wazuh::params_manager::sca_else_skip_nfs,
-  $sca_else_policies = $wazuh::params_manager::sca_else_policies,
+      ## <Linux else>
+      $sca_else_enabled = $wazuh::params_manager::sca_else_enabled,
+      $sca_else_scan_on_start = $wazuh::params_manager::sca_else_scan_on_start,
+      $sca_else_interval = $wazuh::params_manager::sca_else_interval,
+      $sca_else_skip_nfs = $wazuh::params_manager::sca_else_skip_nfs,
+      $sca_else_policies = $wazuh::params_manager::sca_else_policies,
 
 
       ## Wodles
@@ -174,7 +185,6 @@ class wazuh::manager (
       $syslog_output_format                 = $wazuh::params_manager::syslog_output_format,
 
       # Authd configuration
-
       $ossec_auth_disabled                  = $wazuh::params_manager::ossec_auth_disabled,
       $ossec_auth_port                      = $wazuh::params_manager::ossec_auth_port,
       $ossec_auth_use_source_ip             = $wazuh::params_manager::ossec_auth_use_source_ip,
@@ -191,7 +201,6 @@ class wazuh::manager (
 
 
       # syscheck
-
       $ossec_syscheck_disabled              = $wazuh::params_manager::ossec_syscheck_disabled,
       $ossec_syscheck_frequency             = $wazuh::params_manager::ossec_syscheck_frequency,
       $ossec_syscheck_scan_on_start         = $wazuh::params_manager::ossec_syscheck_scan_on_start,
@@ -492,12 +501,16 @@ class wazuh::manager (
       }
   }
   if ($configure_active_response == true){
-    concat::fragment {
-        'ossec.conf_active_response':
-          order   => 90,
-          target  => 'ossec.conf',
-          content => template($ossec_active_response_template);
-      }
+    wazuh::activeresponse { 'blockWebattack':
+      active_response_command            => $ossec_active_response_command,
+      active_response_location           => $ossec_active_response_location,
+      active_response_level              => $ossec_active_response_level,
+      active_response_agent_id           => $ossec_active_response_agent_id,
+      active_response_rules_id           => $ossec_active_response_rules_id,
+      active_response_timeout            => $ossec_active_response_timeout,
+      active_response_repeated_offenders => $ossec_active_response_repeated_offenders,
+      order_arg                          => 90
+    }
   }
   concat::fragment {
     'ossec.conf_footer':
