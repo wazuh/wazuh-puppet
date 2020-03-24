@@ -191,7 +191,7 @@ class wazuh::agent (
   $ossec_active_response_linux_ca_store       =  $wazuh::params_agent::active_response_linux_ca_store,
   
   $ossec_active_response_ca_verification      =  $wazuh::params_agent::active_response_ca_verification,
-  $ossec_active_response_command              =  $wazuh::params_manager::active_response_command,
+  $ossec_active_response_command              =  $wazuh::params_agent::active_response_command,
   $ossec_active_response_location             =  $wazuh::params_agent::active_response_location,
   $ossec_active_response_level                =  $wazuh::params_agent::active_response_level,            
   $ossec_active_response_agent_id             =  $wazuh::params_agent::active_response_agent_id,         
