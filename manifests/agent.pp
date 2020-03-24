@@ -168,7 +168,7 @@ class wazuh::agent (
   $ossec_syscheck_auto_ignore        = $wazuh::params_agent::ossec_syscheck_auto_ignore,
   $ossec_syscheck_directories_1      = $wazuh::params_agent::ossec_syscheck_directories_1,
   $ossec_syscheck_directories_2      = $wazuh::params_agent::ossec_syscheck_directories_2,
-   
+
   $ossec_syscheck_whodata_directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
   $ossec_syscheck_realtime_directories_1           = $wazuh::params_agent::ossec_syscheck_realtime_directories_1,
   $ossec_syscheck_whodata_directories_2            = $wazuh::params_agent::ossec_syscheck_whodata_directories_2,
@@ -189,14 +189,14 @@ class wazuh::agent (
   # active-response
   $ossec_active_response_disabled             =  $wazuh::params_agent::active_response_disabled,
   $ossec_active_response_linux_ca_store       =  $wazuh::params_agent::active_response_linux_ca_store,
-  
+
   $ossec_active_response_ca_verification      =  $wazuh::params_agent::active_response_ca_verification,
   $ossec_active_response_command              =  $wazuh::params_agent::active_response_command,
   $ossec_active_response_location             =  $wazuh::params_agent::active_response_location,
-  $ossec_active_response_level                =  $wazuh::params_agent::active_response_level,            
-  $ossec_active_response_agent_id             =  $wazuh::params_agent::active_response_agent_id,         
-  $ossec_active_response_rules_id             =  $wazuh::params_agent::active_response_rules_id,         
-  $ossec_active_response_timeout              =  $wazuh::params_agent::active_response_timeout,          
+  $ossec_active_response_level                =  $wazuh::params_agent::active_response_level,
+  $ossec_active_response_agent_id             =  $wazuh::params_agent::active_response_agent_id,
+  $ossec_active_response_rules_id             =  $wazuh::params_agent::active_response_rules_id,
+  $ossec_active_response_timeout              =  $wazuh::params_agent::active_response_timeout,
   $ossec_active_response_repeated_offenders   =  $wazuh::params_agent::active_response_repeated_offenders,
 
   # Agent Labels
@@ -224,7 +224,7 @@ class wazuh::agent (
   validate_string($agent_service_name)
 
   if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
-     class { "wazuh::audit":
+    class { "wazuh::audit":
       audit_manage_rules => $audit_manage_rules,
       audit_backlog_wait_time => $audit_backlog_wait_time,
       audit_buffer_bytes => $audit_buffer_bytes,

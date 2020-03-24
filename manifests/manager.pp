@@ -65,10 +65,10 @@ class wazuh::manager (
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
       $ossec_active_response_location               =  $wazuh::params_manager::active_response_location,
-      $ossec_active_response_level                  =  $wazuh::params_manager::active_response_level,            
-      $ossec_active_response_agent_id               =  $wazuh::params_manager::active_response_agent_id,         
-      $ossec_active_response_rules_id               =  $wazuh::params_manager::active_response_rules_id,         
-      $ossec_active_response_timeout                =  $wazuh::params_manager::active_response_timeout,          
+      $ossec_active_response_level                  =  $wazuh::params_manager::active_response_level,
+      $ossec_active_response_agent_id               =  $wazuh::params_manager::active_response_agent_id,
+      $ossec_active_response_rules_id               =  $wazuh::params_manager::active_response_rules_id,
+      $ossec_active_response_timeout                =  $wazuh::params_manager::active_response_timeout,
       $ossec_active_response_repeated_offenders     =  $wazuh::params_manager::active_response_repeated_offenders,
 
 

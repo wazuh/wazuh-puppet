@@ -125,7 +125,7 @@ class wazuh::params_agent {
       $ossec_rootcheck_skip_nfs = 'yes'
 
       # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
-      $ossec_rootcheck_system_audit = [] 
+      $ossec_rootcheck_system_audit = []
 
       # SCA
 
