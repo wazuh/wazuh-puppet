@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file.
 
 - Fixes #225 : Option to configure audit rules from this module itself ([@djmgit](https://github.com/djmgit)) [PR#226](https://github.com/wazuh/wazuh-puppet/pull/226)
 
+- Fixes #221 : No kern.log, auth.log, mail.log in default localfile config for Debian family ([@rshad](https://github.com/rshad)) [Issue#221](https://github.com/wazuh/wazuh-puppet/issues/221)
+
 ## Wazuh Puppet v3.11.4_7.6.1
 
 ### Added
