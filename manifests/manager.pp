@@ -156,7 +156,7 @@ class wazuh::manager (
       $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
       $vulnerability_detector_provider_canonical_enabled         = $wazuh::params_manager::vulnerability_detector_provider_canonical_enabled,
       $vulnerability_detector_provider_canonical_os              = $wazuh::params_manager::vulnerability_detector_provider_canonical_os,
-      $vulnerability_detector_provider_debian_canonical_interval = $wazuh::params_manager::vulnerability_detector_provider_canonical_update_interval,
+      $vulnerability_detector_provider_canonical_update_interval = $wazuh::params_manager::vulnerability_detector_provider_canonical_update_interval,
 
       $vulnerability_detector_provider_debian                    = $wazuh::params_manager::vulnerability_detector_provider_debian,
       $vulnerability_detector_provider_debian_enabled            = $wazuh::params_manager::vulnerability_detector_provider_debian_enabled,
