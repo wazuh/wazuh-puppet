@@ -1,6 +1,32 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.12.0_7.6.1
+
+### Added
+
+- Update to Wazuh version 3.12.0_7.6.1
+
+- Add a parameter ossec_rootcheck_ignore_list ([@Hexta](https://github.com/Hexta)) [PR#212](https://github.com/wazuh/wazuh-puppet/pull/212)
+
+- Add a parameter wazuh_api::manage_nodejs_package ([@Hexta](https://github.com/Hexta)) [PR#213](https://github.com/wazuh/wazuh-puppet/pull/213)
+
+- Upgrade to NodeJS v10 ([@xr09](https://github.com/xr09)) [PR#230](https://github.com/wazuh/wazuh-puppet/pull/230)
+
+- Always treat $ossec_emailnotification as a boolean ([@alanwevans](https://github.com/alanwevans)) [PR#229](https://github.com/wazuh/wazuh-puppet/pull/229)
+
+- Adapt active-response definition ([@rshad](https://github.com/rshad)) [PR#234](https://github.com/wazuh/wazuh-puppet/pull/234)
+
+### Fixed
+
+- Fixes #215: Fix audit package name for Debian ([@djmgit](https://github.com/djmgit)) [PR#216](https://github.com/wazuh/wazuh-puppet/pull/216)
+
+- Fixes #227 : Add system_audit subsection in rootcheck ([@djmgit](https://github.com/djmgit)) [PR#228](https://github.com/wazuh/wazuh-puppet/pull/228)
+
+- Fixes #225 : Option to configure audit rules from this module itself ([@djmgit](https://github.com/djmgit)) [PR#226](https://github.com/wazuh/wazuh-puppet/pull/226)
+
+- Fixes #221 : No kern.log, auth.log, mail.log in default localfile config for Debian family ([@rshad](https://github.com/rshad)) [Issue#221](https://github.com/wazuh/wazuh-puppet/issues/221)
+
 ## Wazuh Puppet v3.11.4_7.6.1
 
 ### Added

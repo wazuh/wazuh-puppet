@@ -29,15 +29,25 @@
   <% if @ossec_rootcheck_frequency-%>
   <frequency><%= @ossec_rootcheck_frequency %></frequency>
   <%- end -%>
+  <%- if @ossec_rootcheck_ignore_list -%>
+    <%- @ossec_rootcheck_ignore_list.each do |ignore_element| -%>
+  <ignore><%= ignore_element %></ignore>
+    <%- end -%>
+  <%- end -%>
   <% if @ossec_rootcheck_rootkit_files-%>
   <rootkit_files><%= @ossec_rootcheck_rootkit_files %></rootkit_files>
   <%- end -%>
   <% if @ossec_rootcheck_rootkit_trojans-%>
   <rootkit_trojans><%= @ossec_rootcheck_rootkit_trojans %></rootkit_trojans>
   <%- end -%>
+  <%- if !@ossec_rootcheck_system_audit.empty? -%>
+    <%- @ossec_rootcheck_system_audit.each do |audit_file| -%>
+      <system_audit><%= audit_file %></system_audit>
+    <%- end -%>
+  <%- end -%>
   <% if @ossec_rootcheck_skip_nfs-%>
   <skip_nfs><%= @ossec_rootcheck_skip_nfs%></skip_nfs>
-  <%- end -%>  
+  <%- end -%>
 </rootcheck>
 <%- else -%>
 <!-- Rootcheck files (static) -->

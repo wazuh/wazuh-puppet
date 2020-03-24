@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.11.4-1'
+      $server_package_version                          = '3.12.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -13,7 +13,7 @@ class wazuh::params_manager {
     ### Ossec.conf blocks
 
       ## Global
-      $ossec_emailnotification                         = 'no'
+      $ossec_emailnotification                         = false
       $ossec_emailto                                   = ['recipient@example.wazuh.com']
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
       $ossec_emailfrom                                 = 'ossecm@example.wazuh.com'
@@ -74,9 +74,11 @@ class wazuh::params_manager {
       $ossec_rootcheck_check_ports                     = 'yes'
       $ossec_rootcheck_check_if                        = 'yes'
       $ossec_rootcheck_frequency                       = 43200
+      $ossec_rootcheck_ignore_list                     = []
       $ossec_rootcheck_rootkit_files                   = '/var/ossec/etc/rootcheck/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
+      $ossec_rootcheck_system_audit                    = []
 
       # SCA
 
@@ -136,6 +138,16 @@ class wazuh::params_manager {
       $wodle_syscollector_packages                     = 'yes'
       $wodle_syscollector_ports                        = 'yes'
       $wodle_syscollector_processes                    = 'yes'
+
+
+      #active-response
+      $active_response_command                         = 'firewall-drop'
+      $active_response_location                        = 'local'
+      $active_response_level                           = 9
+      $active_response_agent_id                        = '001'
+      $active_response_rules_id                        = [31153,31151]
+      $active_response_timeout                         = 300
+      $active_response_repeated_offenders              = ['30,60,120']
 
       #vulnerability-detector
 
@@ -315,8 +327,10 @@ class wazuh::params_manager {
           $ossec_service_provider = undef
           $api_service_provider = undef
           $default_local_files = [
-            {  'location' => '/var/log/syslog' , 'log_format' => 'syslog'},
-            {  'location' => '/var/log/dpkg.log', 'log_format' => 'syslog'},
+            { 'location' => '/var/log/syslog' , 'log_format' => 'syslog' },
+            { 'location' => '/var/log/dpkg.log', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/kern.log', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/auth.log', 'log_format' => 'syslog' },
             {  'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog'},
           ]
           case $::lsbdistcodename {
@@ -471,7 +485,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.11.4'
+      $agent_package  = 'Wazuh Agent 3.12.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''

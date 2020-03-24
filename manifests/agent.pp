@@ -79,9 +79,11 @@ class wazuh::agent (
   $ossec_rootcheck_check_ports       = $wazuh::params_agent::ossec_rootcheck_check_ports,
   $ossec_rootcheck_check_if          = $wazuh::params_agent::ossec_rootcheck_check_if,
   $ossec_rootcheck_frequency         = $wazuh::params_agent::ossec_rootcheck_frequency,
+  $ossec_rootcheck_ignore_list       = $wazuh::params_agent::ossec_rootcheck_ignore_list,
   $ossec_rootcheck_rootkit_files     = $wazuh::params_agent::ossec_rootcheck_rootkit_files,
   $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
+  $ossec_rootcheck_system_audit      = $wazuh::params_agent::ossec_rootcheck_system_audit,
 
 
   # rootcheck windows
@@ -166,6 +168,7 @@ class wazuh::agent (
   $ossec_syscheck_auto_ignore        = $wazuh::params_agent::ossec_syscheck_auto_ignore,
   $ossec_syscheck_directories_1      = $wazuh::params_agent::ossec_syscheck_directories_1,
   $ossec_syscheck_directories_2      = $wazuh::params_agent::ossec_syscheck_directories_2,
+
   $ossec_syscheck_whodata_directories_1            = $wazuh::params_agent::ossec_syscheck_whodata_directories_1,
   $ossec_syscheck_realtime_directories_1           = $wazuh::params_agent::ossec_syscheck_realtime_directories_1,
   $ossec_syscheck_whodata_directories_2            = $wazuh::params_agent::ossec_syscheck_whodata_directories_2,
@@ -177,11 +180,24 @@ class wazuh::agent (
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
   $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,
 
+  # Audit
+  $audit_manage_rules                = $wazuh::params_agent::audit_manage_rules,
+  $audit_buffer_bytes                = $wazuh::params_agent::audit_buffer_bytes,
+  $audit_backlog_wait_time           = $wazuh::params_agent::audit_backlog_wait_time,
+  $audit_rules                       = $wazuh::params_agent::audit_rules,
+
   # active-response
-  $ossec_active_response_disabled          =  $wazuh::params_agent::active_response_disabled,
-  $ossec_active_response_linux_ca_store    =  $wazuh::params_agent::active_response_linux_ca_store,
-  $ossec_active_response_windows_ca_store  =  $wazuh::params_agent::active_response_windows_ca_store,
-  $ossec_active_response_ca_verification   =  $wazuh::params_agent::active_response_ca_verification,
+  $ossec_active_response_disabled             =  $wazuh::params_agent::active_response_disabled,
+  $ossec_active_response_linux_ca_store       =  $wazuh::params_agent::active_response_linux_ca_store,
+
+  $ossec_active_response_ca_verification      =  $wazuh::params_agent::active_response_ca_verification,
+  $ossec_active_response_command              =  $wazuh::params_agent::active_response_command,
+  $ossec_active_response_location             =  $wazuh::params_agent::active_response_location,
+  $ossec_active_response_level                =  $wazuh::params_agent::active_response_level,
+  $ossec_active_response_agent_id             =  $wazuh::params_agent::active_response_agent_id,
+  $ossec_active_response_rules_id             =  $wazuh::params_agent::active_response_rules_id,
+  $ossec_active_response_timeout              =  $wazuh::params_agent::active_response_timeout,
+  $ossec_active_response_repeated_offenders   =  $wazuh::params_agent::active_response_repeated_offenders,
 
   # Agent Labels
   $ossec_labels                      = $wazuh::params_agent::ossec_labels,
@@ -208,12 +224,11 @@ class wazuh::agent (
   validate_string($agent_service_name)
 
   if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
-    package { 'Installing Audit...':
-      name   => 'audit',
-    }
-    service { 'auditd':
-      ensure => running,
-      enable => true,
+    class { "wazuh::audit":
+      audit_manage_rules => $audit_manage_rules,
+      audit_backlog_wait_time => $audit_backlog_wait_time,
+      audit_buffer_bytes => $audit_buffer_bytes,
+      audit_rules => $audit_rules,
     }
   }
 
@@ -398,12 +413,19 @@ class wazuh::agent (
     }
   }
   if ($configure_active_response == true) {
-    concat::fragment {
-      'ossec.conf_active_response':
-        target  => 'ossec.conf',
-        order   => 40,
-        before  => Service[$agent_service_name],
-        content => template($ossec_active_response_template);
+    wazuh::activeresponse { 'blockWebattack':
+      active_response_disabled           =>  $ossec_active_response_disabled,
+      active_response_linux_ca_store     =>  $ossec_active_response_linux_ca_store,
+      active_response_ca_verification    =>  $ossec_active_response_ca_verification,
+      active_response_command            =>  $ossec_active_response_command,
+      active_response_location           =>  $ossec_active_response_location,
+      active_response_level              =>  $ossec_active_response_level,
+      active_response_agent_id           =>  $ossec_active_response_agent_id,
+      active_response_rules_id           =>  $ossec_active_response_rules_id,
+      active_response_timeout            =>  $ossec_active_response_timeout,
+      active_response_repeated_offenders =>  $ossec_active_response_repeated_offenders,
+      order_arg                          => 40,
+      before_arg                         => Service[$agent_service_name]
     }
   }
 

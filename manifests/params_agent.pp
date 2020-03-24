@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.11.4-1'
+  $agent_package_version = '3.12.0-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -69,9 +69,15 @@ class wazuh::params_agent {
   $ossec_local_files = $::wazuh::params_agent::default_local_files
 
   # active response
-  $active_response_disabled = 'no'
+  $active_response_disabled                        = 'no'
+  $active_response_ca_verification                 = 'yes'
+  $active_response_location                        = undef
+  $active_response_level                           = undef
+  $active_response_agent_id                        = undef
+  $active_response_rules_id                        = []
+  $active_response_timeout                         = undef
+  $active_response_repeated_offenders              = []
 
-  $active_response_ca_verification = 'yes'
 
   # OS specific configurations
   case $::kernel {
@@ -113,9 +119,13 @@ class wazuh::params_agent {
       $ossec_rootcheck_check_ports = 'yes'
       $ossec_rootcheck_check_if = 'yes'
       $ossec_rootcheck_frequency = 43200
+      $ossec_rootcheck_ignore_list = []
       $ossec_rootcheck_rootkit_files = '/var/ossec/etc/shared/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'
+
+      # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
+      $ossec_rootcheck_system_audit = []
 
       # SCA
 
@@ -223,6 +233,16 @@ class wazuh::params_agent {
 
       $ossec_syscheck_nodiff = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs = 'yes'
+
+      # Audit
+      $audit_manage_rules                = false
+      $audit_buffer_bytes                = "8192"
+      $audit_backlog_wait_time           = "0"
+      $audit_rules                       = [
+        "-b ${audit_buffer_bytes}",
+        "--backlog_wait_time ${audit_backlog_wait_time}",
+        "-f 1"
+      ]
 
       # active-response
       $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
@@ -401,6 +421,7 @@ class wazuh::params_agent {
       $ossec_rootcheck_windows_disabled = 'no'
       $ossec_rootcheck_windows_windows_apps = './shared/win_applications_rcl.txt'
       $ossec_rootcheck_windows_windows_malware = './shared/win_malware_rcl.txt'
+      $ossec_rootcheck_system_audit = []
 
       # sca
       $sca_windows_enabled = 'yes'
