@@ -327,8 +327,10 @@ class wazuh::params_manager {
           $ossec_service_provider = undef
           $api_service_provider = undef
           $default_local_files = [
-            {  'location' => '/var/log/syslog' , 'log_format' => 'syslog'},
-            {  'location' => '/var/log/dpkg.log', 'log_format' => 'syslog'},
+            { 'location' => '/var/log/syslog' , 'log_format' => 'syslog' },
+            { 'location' => '/var/log/dpkg.log', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/kern.log', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/auth.log', 'log_format' => 'syslog' },
             {  'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog'},
           ]
           case $::lsbdistcodename {
