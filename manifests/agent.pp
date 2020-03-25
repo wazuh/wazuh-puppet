@@ -413,7 +413,7 @@ class wazuh::agent (
     }
   }
   if ($configure_active_response == true) {
-    wazuh::activeresponse { 'blockWebattack':
+    wazuh::activeresponse { 'active-response configuration':
       active_response_disabled           =>  $ossec_active_response_disabled,
       active_response_linux_ca_store     =>  $ossec_active_response_linux_ca_store,
       active_response_ca_verification    =>  $ossec_active_response_ca_verification,
