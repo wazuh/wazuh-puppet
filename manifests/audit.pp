@@ -1,7 +1,10 @@
+# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Define an ossec command
+
 class wazuh::audit (
   $audit_manage_rules = false,
-  $audit_buffer_bytes = "8192",
-  $audit_backlog_wait_time = "0",
+  $audit_buffer_bytes = '8192',
+  $audit_backlog_wait_time = '0',
   $audit_rules = [],
 ) {
 
@@ -38,6 +41,9 @@ class wazuh::audit (
           }
         }
       }
+    }
+    default: {
+      fail("Module Audit not supported on ${::operatingsystem}")
     }
   }
 }
