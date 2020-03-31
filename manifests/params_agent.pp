@@ -183,7 +183,6 @@ class wazuh::params_agent {
       $wodle_syscollector_packages = 'yes'
       $wodle_syscollector_ports = 'yes'
       $wodle_syscollector_processes = 'yes'
-      $wodle_syscollector_hotfixes = 'yes'
 
       ## syscheck
       $ossec_syscheck_disabled = 'no'
@@ -447,6 +446,7 @@ class wazuh::params_agent {
       $wodle_syscollector_packages = 'yes'
       $wodle_syscollector_ports = 'yes'
       $wodle_syscollector_processes = 'yes'
+      $wodle_syscollector_hotfixes = 'yes'
 
       ## cis-cat
       $wodle_ciscat_disabled = 'yes'
