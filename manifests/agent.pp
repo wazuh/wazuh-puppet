@@ -243,7 +243,7 @@ class wazuh::agent (
   case $::kernel {
     'Linux': {
       if $manage_repo {
-        class { 'wazuh::repo': }
+        include wazuh::repo
         if $::osfamily == 'Debian' {
           Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
         } else {
