@@ -1,0 +1,22 @@
+
+<wodle name="cis-cat">    
+  <% if @wodle_ciscat_disabled -%>
+  <disabled><%= @wodle_ciscat_disabled %></disabled>
+  <%- end -%>
+  <% if @wodle_ciscat_timeout -%>
+  <timeout><%= @wodle_ciscat_timeout %></timeout>
+  <%- end -%>
+  <% if @wodle_ciscat_interval -%>
+  <interval><%= @wodle_ciscat_interval %></interval>
+  <%- end -%>
+  <% if @wodle_ciscat_scan_on_start -%>
+  <scan-on-start><%= @wodle_ciscat_scan_on_start %></scan-on-start>
+  <%- end -%>
+  <% if @wodle_ciscat_java_path -%>
+  <java_path><%= @wodle_ciscat_java_path %></java_path>
+  <%- end -%>
+  <% if @wodle_ciscat_ciscat_path -%>
+  <ciscat_path><%= @wodle_ciscat_ciscat_path %></ciscat_path>
+  <%- end -%>
+</wodle>
+

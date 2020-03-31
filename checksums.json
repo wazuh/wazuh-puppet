@@ -25,8 +25,8 @@
   "templates/90_ossec.conf.erb": "698695c984a8d6829d3a331b8a4196ec",
   "templates/99_ossec_agent.conf.erb": "386ab8ad1d31566eed64a06e0a8d4d9a",
   "templates/activeresponse.erb": "8a3bd90af1c0b8199af57f37bf5314d2",
-  "templates/command.erb": "e37530e43ad73dbfe1e17c0d9da042f9",
-  "templates/email_alert.erb": "3aa50ecb0e284ed3a443ee89d21260b0",
+  "templates/fragments/_command.erb": "e37530e43ad73dbfe1e17c0d9da042f9",
+  "templates/fragments/_email_alert.erb": "3aa50ecb0e284ed3a443ee89d21260b0",
   "templates/ossec_shared_agent.conf.erb": "131307a6afdf7e83053cdbc9f6d44368",
   "tests/init.pp": "2eac4e89d806c23f7d72d6ac924d1921"
 }

@@ -1,27 +1,40 @@
   <client>
-  <%- if @ossec_server_ip then -%>
-    <server-ip><%= @ossec_server_ip %></server-ip>
+  <server>
+  <%- if @wazuh_reporting_endpoint then -%>
+    <address><%= @wazuh_reporting_endpoint %></address>
   <%- end -%>
-  <%- if @ossec_server_hostname then -%>
-    <server-hostname><%= @ossec_server_hostname %></server-hostname>
+  <%- if @ossec_protocol then -%>
+    <protocol><%= @ossec_protocol %></protocol>
   <%- end -%>
-  <%- if @ossec_server_protocol then -%>
-    <protocol><%= @ossec_server_protocol %></protocol>
+    <port><%= @ossec_port %></port>
+  </server>
+  <%- if @operatingsystem == 'Ubuntu' or @operatingsystem == 'ubuntu' -%>
+    <config-profile><%= @ossec_config_ubuntu_profiles %></config-profile>
+  <%- elsif @operatingsystem == 'CentOS' or @operatingsystem == 'Centos' or @operatingsystem == 'centos' -%>
+    <config-profile><%= @ossec_config_centos_profiles %></config-profile>
   <%- end -%>
-    <port><%= @ossec_server_port %></port>
-  <%- if @ossec_config_profiles then -%>
-    <config-profile><%= @ossec_config_profiles.join(',') %></config-profile>
+  <%- if @ossec_notify_time then -%>
+    <notify_time><%= @ossec_notify_time %></notify_time>
   <%- end -%>
-  <%- if @ossec_server_notify_time then -%>
-    <notify_time><%= @ossec_server_notify_time %></notify_time>
+  <%- if @ossec_time_reconnect then -%>
+    <time-reconnect><%= @ossec_time_reconnect %></time-reconnect>
   <%- end -%>
-  <%- if @ossec_server_time_reconnect then -%>
-    <time-reconnect><%= @ossec_server_time_reconnect %></time-reconnect>
+  <%- if @ossec_crypto_method then -%>
+    <crypto_method><%= @ossec_crypto_method %></crypto_method>
+  <%- end -%>
+  <%- if @ossec_auto_restart then -%>
+    <auto_restart><%= @ossec_auto_restart %></auto_restart>
   <%- end -%>
   </client>
+  
+  <logging>
+    <log_format><%= @logging_log_format %></log_format>
+  </logging>
 
-  <%= scope.function_template(["wazuh/fragments/_common.erb"]) -%>
+  <client_buffer>
+    <!-- Agent buffer options -->
+    <disabled>no</disabled>
+    <queue_size><%= @client_buffer_queue_size %></queue_size>
+    <events_per_second><%= @client_buffer_events_per_second %></events_per_second>
+  </client_buffer>
 
-  <%- if @enable_wodle_openscap and @wodle_openscap_content -%>
-  <%= scope.function_template(["wazuh/fragments/_wodle_openscap.erb"]) -%>
-  <%- end -%>

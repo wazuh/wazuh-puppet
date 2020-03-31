@@ -1,0 +1,27 @@
+
+
+
+<ruleset>
+  <!-- Default ruleset -->
+  <% if @ossec_ruleset_decoder_dir -%>
+  <decoder_dir><%= @ossec_ruleset_decoder_dir %></decoder_dir>
+  <%- end -%>
+  <% if @ossec_ruleset_rule_dir -%>
+  <rule_dir><%= @ossec_ruleset_rule_dir %></rule_dir>
+  <%- end -%>
+  <% if @ossec_ruleset_rule_exclude -%>
+  <rule_exclude><%= @ossec_ruleset_rule_exclude %></rule_exclude>
+  <%- end -%>
+  <%- @ossec_ruleset_list.each do |list_element| -%>
+  <list><%= list_element %></list>
+  <%- end -%>
+  
+  <!-- User-defined ruleset -->
+  <% if @ossec_ruleset_user_defined_decoder_dir -%>
+  <decoder_dir><%= @ossec_ruleset_user_defined_decoder_dir %></decoder_dir>
+  <%- end -%>
+  <% if @ossec_ruleset_user_defined_rule_dir -%>
+  <rule_dir><%= @ossec_ruleset_user_defined_rule_dir %></rule_dir>
+  <%- end -%>
+</ruleset>
+

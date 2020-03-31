@@ -1,0 +1,23 @@
+
+<wodle name="osquery">
+  <% if @wodle_osquery_disabled -%>
+  <disabled><%= @wodle_osquery_disabled %></disabled>
+  <%- end -%>
+  <% if @wodle_osquery_run_daemon -%>
+  <run_daemon><%= @wodle_osquery_run_daemon %></run_daemon>
+  <%- end -%>
+  <% if @wodle_osquery_bin_path -%>
+  <bin_path><%= @wodle_osquery_bin_path %></bin_path>
+  <%- end -%>
+  <% if @wodle_osquery_log_path -%>
+  <log_path><%= @wodle_osquery_log_path %></log_path>
+  <%- end -%>
+  <% if @wodle_osquery_config_path -%>
+  <config_path><%= @wodle_osquery_config_path %></config_path>
+  <%- end -%>
+  <% if @wodle_osquery_add_labels -%>
+  <add_labels><%= @wodle_osquery_add_labels %></add_labels>
+  <%- end -%>
+</wodle>
+
+  
