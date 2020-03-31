@@ -156,6 +156,7 @@ class wazuh::agent (
   $wodle_syscollector_packages       = $wazuh::params_agent::wodle_syscollector_packages,
   $wodle_syscollector_ports          = $wazuh::params_agent::wodle_syscollector_ports,
   $wodle_syscollector_processes      = $wazuh::params_agent::wodle_syscollector_processes,
+  $wodle_syscollector_hotfixes       = $wazuh::params_agent::wodle_syscollector_hotfixes,
 
   # Localfile
   $ossec_local_files                 = $wazuh::params_agent::default_local_files,
