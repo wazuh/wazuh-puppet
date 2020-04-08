@@ -501,7 +501,7 @@ class wazuh::manager (
       }
   }
   if ($configure_active_response == true){
-    wazuh::activeresponse { 'blockWebattack':
+    wazuh::activeresponse { 'active-response configuration':
       active_response_command            => $ossec_active_response_command,
       active_response_location           => $ossec_active_response_location,
       active_response_level              => $ossec_active_response_level,

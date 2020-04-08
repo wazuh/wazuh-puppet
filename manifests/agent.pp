@@ -224,11 +224,11 @@ class wazuh::agent (
   validate_string($agent_service_name)
 
   if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
-    class { "wazuh::audit":
-      audit_manage_rules => $audit_manage_rules,
+    class { 'wazuh::audit':
+      audit_manage_rules      => $audit_manage_rules,
       audit_backlog_wait_time => $audit_backlog_wait_time,
-      audit_buffer_bytes => $audit_buffer_bytes,
-      audit_rules => $audit_rules,
+      audit_buffer_bytes      => $audit_buffer_bytes,
+      audit_rules             => $audit_rules,
     }
   }
 
@@ -413,7 +413,7 @@ class wazuh::agent (
     }
   }
   if ($configure_active_response == true) {
-    wazuh::activeresponse { 'blockWebattack':
+    wazuh::activeresponse { 'active-response configuration':
       active_response_disabled           =>  $ossec_active_response_disabled,
       active_response_linux_ca_store     =>  $ossec_active_response_linux_ca_store,
       active_response_ca_verification    =>  $ossec_active_response_ca_verification,
