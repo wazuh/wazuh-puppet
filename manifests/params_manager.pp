@@ -158,8 +158,7 @@ class wazuh::params_manager {
 
       $vulnerability_detector_provider_canonical                 = 'yes'
       $vulnerability_detector_provider_canonical_enabled         = 'no'
-      $vulnerability_detector_provider_canonical_os              = ['precise',
-        'trusty',
+      $vulnerability_detector_provider_canonical_os              = ['trusty',
         'xenial',
         'bionic'
       ]
