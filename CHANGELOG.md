@@ -1,6 +1,90 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.12.2_7.6.2
+
+### Added
+
+- Update to Wazuh version 3.12.2_7.6.2
+
+## Wazuh Puppet v3.12.0_7.6.1
+
+### Added
+
+- Update to Wazuh version 3.12.0_7.6.1
+
+- Add a parameter ossec_rootcheck_ignore_list ([@Hexta](https://github.com/Hexta)) [PR#212](https://github.com/wazuh/wazuh-puppet/pull/212)
+
+- Add a parameter wazuh_api::manage_nodejs_package ([@Hexta](https://github.com/Hexta)) [PR#213](https://github.com/wazuh/wazuh-puppet/pull/213)
+
+- Upgrade to NodeJS v10 ([@xr09](https://github.com/xr09)) [PR#230](https://github.com/wazuh/wazuh-puppet/pull/230)
+
+- Always treat $ossec_emailnotification as a boolean ([@alanwevans](https://github.com/alanwevans)) [PR#229](https://github.com/wazuh/wazuh-puppet/pull/229)
+
+- Adapt active-response definition ([@rshad](https://github.com/rshad)) [PR#234](https://github.com/wazuh/wazuh-puppet/pull/234)
+
+### Fixed
+
+- Fixes #215: Fix audit package name for Debian ([@djmgit](https://github.com/djmgit)) [PR#216](https://github.com/wazuh/wazuh-puppet/pull/216)
+
+- Fixes #227 : Add system_audit subsection in rootcheck ([@djmgit](https://github.com/djmgit)) [PR#228](https://github.com/wazuh/wazuh-puppet/pull/228)
+
+- Fixes #225 : Option to configure audit rules from this module itself ([@djmgit](https://github.com/djmgit)) [PR#226](https://github.com/wazuh/wazuh-puppet/pull/226)
+
+- Fixes #221 : No kern.log, auth.log, mail.log in default localfile config for Debian family ([@rshad](https://github.com/rshad)) [Issue#221](https://github.com/wazuh/wazuh-puppet/issues/221)
+
+## Wazuh Puppet v3.11.4_7.6.1
+
+### Added
+
+- Update to Wazuh version 3.11.4_7.6.1
+
+## Wazuh Puppet v3.11.3_7.5.2
+
+### Added
+
+- Update to Wazuh version 3.11.3_7.5.2
+
+- Improved agent Windows config. and secondary fixes ([@rshad](https://github.com/rshad)) [PR#205](https://github.com/wazuh/wazuh-puppet/pull/205)
+
+## Wazuh Puppet v3.11.2_7.5.1
+
+### Added
+
+- Update to Wazuh version 3.11.2_7.5.1
+
+### Fixed
+
+- Fixed installation for Amazon Linux OS ([@rshad](https://github.com/rshad)) [PR#197](https://github.com/wazuh/wazuh-puppet/pull/197)
+
+## Wazuh Puppet v3.11.1_7.5.1
+
+### Added
+
+- Update to Wazuh version 3.11.1_7.5.1
+
+- Adapt to new Wazuh API configuration ([@jm404](https://github.com/jm404)) [PR#195](https://github.com/wazuh/wazuh-puppet/pull/195)
+
+- Some templates have been parametrized ([@rshad](https://github.com/rshad)) [PR#187](https://github.com/wazuh/wazuh-puppet/pull/187)
+
+### Changed
+
+- Implemented Changes to make `ossec.conf` equivalent to the default version ([@rshad](https://github.com/rshad)) [PR#190](https://github.com/wazuh/wazuh-puppet/pull/190)
+
+## Wazuh Puppet v3.11.0_7.5.1
+
+### Added
+
+- Update to Wazuh version 3.11.0_7.5.1
+
+- Added Debian Buster support ([@aderumier](https://github.com/aderumier)) [PR#167](https://github.com/wazuh/wazuh-puppet/pull/167)
+
+- Add OracleLinux to manager and agent ([@rwaffen](https://github.com/rwaffen)) [PR#153](https://github.com/wazuh/wazuh-puppet/pull/153)
+
+### Fixed
+
+- Fixed Windows Agent Installation ([@JPLachance](https://github.com/JPLachance)) [PR#163](https://github.com/wazuh/wazuh-puppet/pull/163)
+
 ## Wazuh Puppet v3.10.2_7.3.2
 
 ### Added
@@ -99,7 +183,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.9.0]
 
-### Added 
+### Added
 
 - Allow certificates to be defined by file path ([#112](https://github.com/wazuh/wazuh-puppet/pull/112))
 
@@ -120,16 +204,16 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.8.0]
 
-### Added 
+### Added
 - Feature/agent auth cert key ([#98](https://github.com/wazuh/wazuh-puppet/pull/98))
 - Install package even if repos are not managed by wazuh ([#99](https://github.com/wazuh/wazuh-puppet/pull/99))
 
-### Added 
+### Added
 - Updating params.pp and _common.erb so all the options of localfile can be used ([#97](https://github.com/wazuh/wazuh-puppet/pull/97))
 
 ## [v3.7.2]
 
-### Added 
+### Added
 - Updating params.pp and _common.erb so all the options of localfile can be used ([#97](https://github.com/wazuh/wazuh-puppet/pull/97))
 
 ### Fixed
@@ -151,7 +235,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Updated metadata.json. 
+- Updated metadata.json.
 - Changed addlog for command support. ([#90](https://github.com/wazuh/wazuh-puppet/pull/90))
 
 ## v3.7.0-3701
@@ -165,7 +249,7 @@ All notable changes to this project will be documented in this file.
 
 - Fix username (puppet to puppetlabs). ([#74](https://github.com/wazuh/wazuh-puppet/pull/74))
 
-## Change Log old version. 
+## Change Log old version.
 
 
  ## 2017-xx-xx support@wazuh.com  - 2.0.23

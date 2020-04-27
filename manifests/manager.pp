@@ -18,6 +18,7 @@ class wazuh::manager (
       $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
       $ossec_emailfrom                  = $wazuh::params_manager::ossec_emailfrom,
       $ossec_email_maxperhour           = $wazuh::params_manager::ossec_email_maxperhour,
+      $ossec_email_log_source           = $wazuh::params_manager::ossec_email_log_source,
       $ossec_email_idsname              = $wazuh::params_manager::ossec_email_idsname,
       $ossec_white_list                 = $wazuh::params_manager::ossec_white_list,
       $ossec_alert_level                = $wazuh::params_manager::ossec_alert_level,
@@ -51,7 +52,7 @@ class wazuh::manager (
       $ossec_wodle_cis_cat_template                 = $wazuh::params_manager::ossec_wodle_cis_cat_template,
       $ossec_wodle_osquery_template                 = $wazuh::params_manager::ossec_wodle_osquery_template,
       $ossec_wodle_syscollector_template            = $wazuh::params_manager::ossec_wodle_syscollector_template,
-      $ossec_wodle_vulnerability_detector_template  = $wazuh::params_manager::ossec_wodle_vulnerability_detector_template,
+      $ossec_vulnerability_detector_template  = $wazuh::params_manager::ossec_vulnerability_detector_template,
       $ossec_sca_template                           = $wazuh::params_manager::ossec_sca_template,
       $ossec_syscheck_template                      = $wazuh::params_manager::ossec_syscheck_template,
       $ossec_default_commands_template              = $wazuh::params_manager::ossec_default_commands_template,
@@ -60,6 +61,16 @@ class wazuh::manager (
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
+
+      # active-response
+      $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
+      $ossec_active_response_location               =  $wazuh::params_manager::active_response_location,
+      $ossec_active_response_level                  =  $wazuh::params_manager::active_response_level,
+      $ossec_active_response_agent_id               =  $wazuh::params_manager::active_response_agent_id,
+      $ossec_active_response_rules_id               =  $wazuh::params_manager::active_response_rules_id,
+      $ossec_active_response_timeout                =  $wazuh::params_manager::active_response_timeout,
+      $ossec_active_response_repeated_offenders     =  $wazuh::params_manager::active_response_repeated_offenders,
+
 
       ## Rootcheck
 
@@ -72,9 +83,35 @@ class wazuh::manager (
       $ossec_rootcheck_check_ports          = $wazuh::params_manager::ossec_rootcheck_check_ports,
       $ossec_rootcheck_check_if             = $wazuh::params_manager::ossec_rootcheck_check_if,
       $ossec_rootcheck_frequency            = $wazuh::params_manager::ossec_rootcheck_frequency,
+      $ossec_rootcheck_ignore_list          = $wazuh::params_manager::ossec_rootcheck_ignore_list,
       $ossec_rootcheck_rootkit_files        = $wazuh::params_manager::ossec_rootcheck_rootkit_files,
       $ossec_rootcheck_rootkit_trojans      = $wazuh::params_manager::ossec_rootcheck_rootkit_trojans,
       $ossec_rootcheck_skip_nfs             = $wazuh::params_manager::ossec_rootcheck_skip_nfs,
+      $ossec_rootcheck_system_audit         = $wazuh::params_manager::ossec_rootcheck_system_audit,
+
+      # SCA
+
+      ## Amazon
+      $sca_amazon_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
+      $sca_amazon_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
+      $sca_amazon_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
+      $sca_amazon_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
+      $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
+
+      ## RHEL
+      $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
+      $sca_rhel_scan_on_start = $wazuh::params_manager::sca_rhel_scan_on_start,
+      $sca_rhel_interval = $wazuh::params_manager::sca_rhel_interval,
+      $sca_rhel_skip_nfs = $wazuh::params_manager::sca_rhel_skip_nfs,
+      $sca_rhel_policies = $wazuh::params_manager::sca_rhel_policies,
+
+      ## <Linux else>
+      $sca_else_enabled = $wazuh::params_manager::sca_else_enabled,
+      $sca_else_scan_on_start = $wazuh::params_manager::sca_else_scan_on_start,
+      $sca_else_interval = $wazuh::params_manager::sca_else_interval,
+      $sca_else_skip_nfs = $wazuh::params_manager::sca_else_skip_nfs,
+      $sca_else_policies = $wazuh::params_manager::sca_else_policies,
+
 
       ## Wodles
 
@@ -111,17 +148,34 @@ class wazuh::manager (
       $wodle_syscollector_processes         = $wazuh::params_manager::wodle_syscollector_processes,
 
       #vulnerability-detector
-      $wodle_vulnerability_detector_disabled                = $wazuh::params_manager::wodle_vulnerability_detector_disabled,
-      $wodle_vulnerability_detector_interval                = $wazuh::params_manager::wodle_vulnerability_detector_interval,
-      $wodle_vulnerability_detector_ignore_time             = $wazuh::params_manager::wodle_vulnerability_detector_ignore_time,
-      $wodle_vulnerability_detector_run_on_start            = $wazuh::params_manager::wodle_vulnerability_detector_run_on_start,
-      $wodle_vulnerability_detector_ubuntu_disabled         = $wazuh::params_manager::wodle_vulnerability_detector_ubuntu_disabled,
-      $wodle_vulnerability_detector_ubuntu_update           = $wazuh::params_manager::wodle_vulnerability_detector_ubuntu_update,
-      $wodle_vulnerability_detector_redhat_disable          = $wazuh::params_manager::wodle_vulnerability_detector_redhat_disable,
-      $wodle_vulnerability_detector_redhat_update_from      = $wazuh::params_manager::wodle_vulnerability_detector_redhat_update_from,
-      $wodle_vulnerability_detector_redhat_update           = $wazuh::params_manager::wodle_vulnerability_detector_redhat_update,
-      $wodle_vulnerability_detector_debian_9_disable        = $wazuh::params_manager::wodle_vulnerability_detector_debian_9_disable,
-      $wodle_vulnerability_detector_debian_9_update         = $wazuh::params_manager::wodle_vulnerability_detector_debian_9_update,
+      $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
+      $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
+      $vulnerability_detector_ignore_time                        = $wazuh::params_manager::vulnerability_detector_ignore_time,
+      $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
+# lint:ignore:140chars
+      $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
+      $vulnerability_detector_provider_canonical_enabled         = $wazuh::params_manager::vulnerability_detector_provider_canonical_enabled,
+      $vulnerability_detector_provider_canonical_os              = $wazuh::params_manager::vulnerability_detector_provider_canonical_os,
+      $vulnerability_detector_provider_canonical_update_interval = $wazuh::params_manager::vulnerability_detector_provider_canonical_update_interval,
+
+      $vulnerability_detector_provider_debian                    = $wazuh::params_manager::vulnerability_detector_provider_debian,
+      $vulnerability_detector_provider_debian_enabled            = $wazuh::params_manager::vulnerability_detector_provider_debian_enabled,
+      $vulnerability_detector_provider_debian_os                 = $wazuh::params_manager::vulnerability_detector_provider_debian_os,
+      $vulnerability_detector_provider_debian_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_debian_update_interval,
+
+      $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,
+      $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_manager::vulnerability_detector_provider_redhat_enabled,
+      $vulnerability_detector_provider_redhat_os                 = $wazuh::params_manager::vulnerability_detector_provider_redhat_os,
+      $vulnerability_detector_provider_redhat_update_from_year   = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_from_year,
+      $vulnerability_detector_provider_redhat_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_interval,
+
+      $vulnerability_detector_provider_nvd                       = $wazuh::params_manager::vulnerability_detector_provider_nvd,
+      $vulnerability_detector_provider_nvd_enabled               = $wazuh::params_manager::vulnerability_detector_provider_nvd_enabled,
+      $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,
+      $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
+      $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
+      #lint:endignore
+
 
       # syslog
       $syslog_output                        = $::wazuh::params_manager::syslog_output,
@@ -131,7 +185,6 @@ class wazuh::manager (
       $syslog_output_format                 = $wazuh::params_manager::syslog_output_format,
 
       # Authd configuration
-
       $ossec_auth_disabled                  = $wazuh::params_manager::ossec_auth_disabled,
       $ossec_auth_port                      = $wazuh::params_manager::ossec_auth_port,
       $ossec_auth_use_source_ip             = $wazuh::params_manager::ossec_auth_use_source_ip,
@@ -148,7 +201,6 @@ class wazuh::manager (
 
 
       # syscheck
-
       $ossec_syscheck_disabled              = $wazuh::params_manager::ossec_syscheck_disabled,
       $ossec_syscheck_frequency             = $wazuh::params_manager::ossec_syscheck_frequency,
       $ossec_syscheck_scan_on_start         = $wazuh::params_manager::ossec_syscheck_scan_on_start,
@@ -156,6 +208,10 @@ class wazuh::manager (
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
+      $ossec_syscheck_whodata_directories_1            = $wazuh::params_manager::ossec_syscheck_whodata_directories_1,
+      $ossec_syscheck_realtime_directories_1           = $wazuh::params_manager::ossec_syscheck_realtime_directories_1,
+      $ossec_syscheck_whodata_directories_2            = $wazuh::params_manager::ossec_syscheck_whodata_directories_2,
+      $ossec_syscheck_realtime_directories_2           = $wazuh::params_manager::ossec_syscheck_realtime_directories_2,
       $ossec_syscheck_ignore_list           = $wazuh::params_manager::ossec_syscheck_ignore_list,
 
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
@@ -220,9 +276,21 @@ class wazuh::manager (
     }
   }
 
+
+  if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
+    package { 'Installing Auditd...':
+      name   => 'auditd',
+    }
+    service { 'auditd':
+      ensure => running,
+      enable => true,
+    }
+  }
+
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  if ($ossec_emailnotification == true) {
+  validate_bool($ossec_emailnotification)
+  if ($ossec_emailnotification) {
     if $ossec_smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
@@ -283,7 +351,7 @@ class wazuh::manager (
   ## Declaring variables for localfile and wodles generation
 
   case $::operatingsystem{
-    'Redhat', 'redhat':{
+    'RedHat', 'OracleLinux':{
       $apply_template_os = 'rhel'
       if ( $::operatingsystemrelease     =~ /^7.*/ ){
         $rhel_version = '7'
@@ -378,10 +446,10 @@ class wazuh::manager (
   }
   if($configure_vulnerability_detector == true){
     concat::fragment {
-      'ossec.conf_wodle_vulnerability_detector':
+      'ossec.conf_vulnerability_detector':
         order   => 45,
         target  => 'ossec.conf',
-        content => template($ossec_wodle_vulnerability_detector_template);
+        content => template($ossec_vulnerability_detector_template);
     }
   }
   if($configure_syscheck == true){
@@ -433,12 +501,16 @@ class wazuh::manager (
       }
   }
   if ($configure_active_response == true){
-    concat::fragment {
-        'ossec.conf_active_response':
-          order   => 90,
-          target  => 'ossec.conf',
-          content => template($ossec_active_response_template);
-      }
+    wazuh::activeresponse { 'active-response configuration':
+      active_response_command            => $ossec_active_response_command,
+      active_response_location           => $ossec_active_response_location,
+      active_response_level              => $ossec_active_response_level,
+      active_response_agent_id           => $ossec_active_response_agent_id,
+      active_response_rules_id           => $ossec_active_response_rules_id,
+      active_response_timeout            => $ossec_active_response_timeout,
+      active_response_repeated_offenders => $ossec_active_response_repeated_offenders,
+      order_arg                          => 90
+    }
   }
   concat::fragment {
     'ossec.conf_footer':
@@ -513,4 +585,13 @@ class wazuh::manager (
         'ESTABLISHED'],
     }
   }
+
+  if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
+    exec { 'Ensure wazuh-fim rule is added to auditctl':
+      command => '/sbin/auditctl -l',
+      unless  => '/sbin/auditctl -l | grep wazuh_fim',
+      tries   => 2
+    }
+  }
+
 }

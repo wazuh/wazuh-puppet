@@ -1,70 +1,102 @@
+
 <%- if @kernel == 'Linux' -%>
-  <%- if @apply_template_os == 'centos' -%>
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
-        <policy>cis_rhel7_linux_rcl.yml</policy>
-        <policy>system_audit_rcl.yml</policy>
-        <policy>system_audit_ssh.yml</policy>
-        <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- elsif @apply_template_os =='amazon' -%> 
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
-      <policy>system_audit_rcl.yml</policy>
-      <policy>system_audit_ssh.yml</policy>
-      <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- elsif @apply_template_os =='rhel' -%> 
-    <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
-      <%- if @rhel_version == '7' -%>
-      <policy>cis_rhel7_linux_rcl.yml</policy>
-      <%- elsif @rhel_version =='6' -%>
-      <policy>cis_rhel6_linux_rcl.yml</policy>
-      <%- elsif @rhel_version =='5' -%>
-      <policy>cis_rhel5_linux_rcl.yml</policy>
-      <%- end -%>
-      <policy>system_audit_rcl.yml</policy>
-      <policy>system_audit_ssh.yml</policy>
-      <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
-  <%- else -%>
-      <sca>
-      <enabled>yes</enabled>
-      <scan_on_start>yes</scan_on_start>
-      <interval>12h</interval>
-      <skip_nfs>yes</skip_nfs>
-
-      <policies>
-      <policy>cis_debian_linux_rcl.yml</policy>
-      <%- if @debian_additional_templates == 'yes' -%>
-      <policy>cis_debianlinux7-8_L1_rcl.yml</policy>
-      <policy>cis_debianlinux7-8_L2_rcl.yml</policy>
-      <%- end -%>
-      <policy>system_audit_rcl.yml</policy>
-      <policy>system_audit_ssh.yml</policy>
-      <policy>system_audit_pw.yml</policy>
-      </policies>
-    </sca>
+<%- if @apply_template_os =='amazon' -%> 
+<sca>
+  <% if @sca_amazon_enabled -%>
+  <enabled><%= @sca_amazon_enabled %></enabled>
   <%- end -%>
+  <% if @sca_amazon_scan_on_start -%>
+  <scan_on_start><%= @sca_amazon_scan_on_start %></scan_on_start>
+  <%- end -%>
+  <% if @sca_amazon_interval -%>
+  <interval><%= @sca_amazon_interval %></interval>
+  <%- end -%>
+  <% if @sca_amazon_skip_nfs -%>
+  <skip_nfs><%= @sca_amazon_skip_nfs %></skip_nfs>
+  <%- end -%>
+  
+  <% if !@sca_amazon_policies.empty? -%>
+  <policies>
+  <% @sca_amazon_policies.each do |policy| -%>
+      <policy><%= policy %></policy>
+  <%- end -%>
+  </policies>
+  <%- end -%>
+</sca>
+<%- elsif @apply_template_os =='rhel' -%> 
+<sca>
+  <% if @sca_rhel_enabled -%>
+  <enabled><%= @sca_rhel_enabled %></enabled>
+  <%- end -%>
+  <% if @sca_rhel_scan_on_start -%>
+  <scan_on_start><%= @sca_rhel_scan_on_start %></scan_on_start>
+  <%- end -%>
+  <% if @sca_rhel_interval -%>
+  <interval><%= @sca_rhel_interval %></interval>
+  <%- end -%>
+  <% if @sca_rhel_skip_nfs -%>
+  <skip_nfs><%= @sca_rhel_skip_nfs %></skip_nfs>
+  <%- end -%>
+  
+  <% if !@sca_rhel_policies.empty? -%>
+  <policies>
+  <% @sca_rhel_policies.each do |policy| -%>
+      <policy><%= policy %></policy>
+  <%- end -%>
+  </policies>
+  <%- end -%>
+</sca>
+<%- else -%>
+<sca>
+  <% if @sca_else_enabled -%>
+  <enabled><%= @sca_else_enabled %></enabled>
+  <%- end -%>
+  <% if @sca_else_scan_on_start -%>
+  <scan_on_start><%= @sca_else_scan_on_start %></scan_on_start>
+  <%- end -%>
+  <% if @sca_else_interval -%>
+  <interval><%= @sca_else_interval %></interval>
+  <%- end -%>
+  <% if @sca_else_skip_nfs -%>
+  <skip_nfs><%= @sca_else_skip_nfs %></skip_nfs>
+  <%- end -%>
+  
+  <% if !@sca_else_policies.empty? -%>
+  <policies>
+  <% @sca_else_policies.each do |policy| -%>
+      <policy><%= policy %></policy>
+  <%- end -%>
+  <policies>
+  <%- if @debian_additional_templates == 'yes' -%>
+    <policy>cis_debianlinux7-8_L1_rcl.yml</policy>
+    <policy>cis_debianlinux7-8_L2_rcl.yml</policy>
+  <%- end -%>
+  </policies>
+  <%- end -%>
+</sca>
+<%- end -%>
+<%- elsif @kernel == 'windows' -%>
+<sca>
+  <% if @sca_windows_enabled -%>
+  <enabled><%= @sca_windows_enabled %></enabled>
+  <%- end -%>
+  <% if @sca_windows_scan_on_start -%>
+  <scan_on_start><%= @sca_windows_scan_on_start %></scan_on_start>
+  <%- end -%>
+  <% if @sca_windows_interval -%>
+  <interval><%= @sca_windows_interval %></interval>
+  <%- end -%>
+  <% if @sca_windows_skip_nfs -%>
+  <skip_nfs><%= @sca_windows_skip_nfs %></skip_nfs>
+  <%- end -%>
+  <% if !@sca_windows_policies.empty? -%>
+  <policies>
+  <% @sca_windows_policies.each do |policy| -%>
+      <policy><%= policy %></policy>
+  <%- end -%>
+  </policies>
+  <%- end -%>
+</sca>
 <%- end -%>
     
   
