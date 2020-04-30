@@ -6,7 +6,7 @@ class wazuh::audit (
   $audit_buffer_bytes = '8192',
   $audit_backlog_wait_time = '0',
   $audit_rules = [],
-  $audit_package_title = "Installing Audit..",
+  $audit_package_title = 'Installing Audit..',
 ) {
 
   case $::kernel {
@@ -25,14 +25,14 @@ class wazuh::audit (
       }
 
       service { 'auditd':
-        ensure => running,
-        enable => true,
+        ensure  => running,
+        enable  => true,
         require => Package[$audit_package_title],
       }
 
       if $audit_manage_rules == true {
         file { '/etc/audit/rules.d/audit.rules':
-          ensure => present,
+          ensure  => present,
           require => Service['auditd'],
         }
 
