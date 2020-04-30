@@ -204,7 +204,6 @@ class wazuh::manager (
       $ossec_syscheck_disabled              = $wazuh::params_manager::ossec_syscheck_disabled,
       $ossec_syscheck_frequency             = $wazuh::params_manager::ossec_syscheck_frequency,
       $ossec_syscheck_scan_on_start         = $wazuh::params_manager::ossec_syscheck_scan_on_start,
-      $ossec_syscheck_alert_new_files       = $wazuh::params_manager::ossec_syscheck_alert_new_files,
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,

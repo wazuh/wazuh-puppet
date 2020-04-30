@@ -188,7 +188,6 @@ class wazuh::params_agent {
       $ossec_syscheck_disabled = 'no'
       $ossec_syscheck_frequency = '43200'
       $ossec_syscheck_scan_on_start = 'yes'
-      $ossec_syscheck_alert_new_files = undef
       $ossec_syscheck_auto_ignore = undef
       $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'

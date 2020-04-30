@@ -9,9 +9,6 @@
   <%- if @ossec_syscheck_scan_on_start -%>
   <scan_on_start><%=@ossec_syscheck_scan_on_start%></scan_on_start>
   <%- end -%>
-  <%- if @ossec_syscheck_alert_new_files -%>
-  <alert_new_files><%=@ossec_syscheck_alert_new_files%></alert_new_files>
-  <%- end -%>
   <%- if @ossec_syscheck_auto_ignore -%>
   <auto_ignore frequency="10" timeframe="3600"><%=@ossec_syscheck_auto_ignore%></auto_ignore>
   <%- end -%>
@@ -130,7 +127,7 @@
   <%- if @ossec_syscheck_ignore_list -%>
     <%- @ossec_syscheck_ignore_list.each do |ignore_element| -%>
   <ignore><%= ignore_element %></ignore>
-    <%- end -%>  
+    <%- end -%>
   <%- end -%>
   <%- if @ossec_syscheck_ignore_type_1 -%>
   <ignore type="sregex"><%=@ossec_syscheck_ignore_type_1%></ignore>
