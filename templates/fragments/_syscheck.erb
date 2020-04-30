@@ -141,6 +141,22 @@
   <%- if @ossec_syscheck_skip_nfs -%>
   <skip_nfs><%=@ossec_syscheck_skip_nfs%></skip_nfs>
   <%- end -%>
+  <%- if @ossec_syscheck_max_eps -%>
+  <max_eps><%=@ossec_syscheck_max_eps%></max_eps>
+  <%- end -%>
+  <%- if @ossec_syscheck_process_priority -%>
+  <process_priority><%=@ossec_syscheck_process_priority%></process_priority>
+  <%- end -%>
+  <%- if @ossec_syscheck_synchronization_enabled == 'yes'-%>
+  <synchronization>
+    <enabled><%=@ossec_syscheck_synchronization_enabled%></enabled>
+    <interval><%=@ossec_syscheck_synchronization_interval%></interval>
+    <max_interval><%=@ossec_syscheck_synchronization_max_interval%></max_interval>
+    <max_eps><%=@ossec_syscheck_synchronization_max_eps%></max_eps>
+  <synchronization>
+  <%- end -%>
+  <skip_nfs><%=@ossec_syscheck_skip_nfs%></skip_nfs>
+  <%- end -%>
 <%- end -%>
 </syscheck>
 
