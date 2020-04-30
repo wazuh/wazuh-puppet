@@ -240,6 +240,12 @@ class wazuh::params_manager {
       $ossec_syscheck_ignore_type_1                    = '^/proc'
       $ossec_syscheck_ignore_type_2                    = '.log$|.swp$'
 
+      $ossec_syscheck_max_eps = '100'
+      $ossec_syscheck_process_priority = '10'
+      $ossec_syscheck_synchronization_enabled = 'yes'
+      $ossec_syscheck_synchronization_interval = '5m'
+      $ossec_syscheck_synchronization_max_eps = '10'
+      $ossec_syscheck_synchronization_max_interval = '1h'
 
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'

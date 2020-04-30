@@ -215,6 +215,11 @@ class wazuh::manager (
 
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
       $ossec_syscheck_ignore_type_2         = $wazuh::params_manager::ossec_syscheck_ignore_type_2,
+      $ossec_syscheck_process_priority             = $wazuh::params_manager::ossec_syscheck_process_priority,
+      $ossec_syscheck_synchronization_enabled      = $wazuh::params_manager::ossec_syscheck_synchronization_enabled,
+      $ossec_syscheck_synchronization_interval     = $wazuh::params_manager::ossec_syscheck_synchronization_interval,
+      $ossec_syscheck_synchronization_max_eps      = $wazuh::params_manager::ossec_syscheck_synchronization_max_eps,
+      $ossec_syscheck_synchronization_max_interval = $wazuh::params_manager::ossec_syscheck_synchronization_max_interval,
 
       $ossec_syscheck_nodiff                = $wazuh::params_manager::ossec_syscheck_nodiff,
       $ossec_syscheck_skip_nfs              = $wazuh::params_manager::ossec_syscheck_skip_nfs,
