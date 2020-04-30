@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.12.2-1'
+      $server_package_version                          = '3.12.3-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -214,7 +214,6 @@ class wazuh::params_manager {
       $ossec_syscheck_disabled                         = 'no'
       $ossec_syscheck_frequency                        = '43200'
       $ossec_syscheck_scan_on_start                    = 'yes'
-      $ossec_syscheck_alert_new_files                  = 'yes'
       $ossec_syscheck_auto_ignore                      = 'no'
       $ossec_syscheck_directories_1                    = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2                    = '/bin,/sbin,/boot'
@@ -241,6 +240,12 @@ class wazuh::params_manager {
       $ossec_syscheck_ignore_type_1                    = '^/proc'
       $ossec_syscheck_ignore_type_2                    = '.log$|.swp$'
 
+      $ossec_syscheck_max_eps = '100'
+      $ossec_syscheck_process_priority = '10'
+      $ossec_syscheck_synchronization_enabled = 'yes'
+      $ossec_syscheck_synchronization_interval = '5m'
+      $ossec_syscheck_synchronization_max_eps = '10'
+      $ossec_syscheck_synchronization_max_interval = '1h'
 
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'
@@ -484,7 +489,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.12.2'
+      $agent_package  = 'Wazuh Agent 3.12.3'
       $server_service = ''
       $server_package = ''
       $api_service = ''

@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.12.2-1'
+  $agent_package_version = '3.12.3-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -188,12 +188,13 @@ class wazuh::params_agent {
       $ossec_syscheck_disabled = 'no'
       $ossec_syscheck_frequency = '43200'
       $ossec_syscheck_scan_on_start = 'yes'
-      $ossec_syscheck_alert_new_files = undef
       $ossec_syscheck_auto_ignore = undef
       $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
+      $ossec_syscheck_report_changes_directories_1 = 'no'
       $ossec_syscheck_whodata_directories_1 = 'no'
       $ossec_syscheck_realtime_directories_1 = 'no'
+      $ossec_syscheck_report_changes_directories_2 = 'no'
       $ossec_syscheck_whodata_directories_2 = 'no'
       $ossec_syscheck_realtime_directories_2 = 'no'
       $ossec_syscheck_ignore_list = ['/etc/mtab',
@@ -213,8 +214,14 @@ class wazuh::params_agent {
         '/dev/core',
       ]
       $ossec_syscheck_ignore_type_1 = '^/proc'
-
       $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
+
+      $ossec_syscheck_max_eps = '100'
+      $ossec_syscheck_process_priority = '10'
+      $ossec_syscheck_synchronization_enabled = 'yes'
+      $ossec_syscheck_synchronization_interval = '5m'
+      $ossec_syscheck_synchronization_max_eps = '10'
+      $ossec_syscheck_synchronization_max_interval = '1h'
 
       $ossec_ruleset_decoder_dir = 'ruleset/decoders'
       $ossec_ruleset_rule_dir = 'ruleset/rules'
