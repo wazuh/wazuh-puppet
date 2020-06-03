@@ -11,4 +11,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build and launch Linting test
-      uses: 'wazuh/puppet-validate@0.0.1'
+      uses: 'wazuh/wazuh-puppet@feature-264-github-actions'
