@@ -1,0 +1,14 @@
+name: Verify Linting
+
+on: [push]
+
+jobs:
+  build:
+    name: Linting Verifier
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+
+    - name: Build and launch Linting test
+      uses: '.github/actions/test_linting.yml'
