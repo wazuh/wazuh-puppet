@@ -24,6 +24,7 @@ RUN apk add --no-cache \
 
 RUN gem install \
     --no-document \
+    json \
     pdk -v $PUPPET_DEVELOPMENT_KIT_VERSION
 
 RUN gem update --system
