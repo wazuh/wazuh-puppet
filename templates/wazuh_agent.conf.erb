@@ -1,5 +1,5 @@
   <client>
-  <%- if @wazuh_reporting_endpoint_list then -%>
+  <%- if not @wazuh_reporting_endpoint_list.nil? -%>
   <%- @wazuh_reporting_endpoint_list.each do |hostname| -%>
   <server>
     <address><%= hostname %></address>
