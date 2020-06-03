@@ -58,6 +58,7 @@ class wazuh::agent (
 
   $wazuh_register_endpoint           = $wazuh::params_agent::wazuh_register_endpoint,
   $wazuh_reporting_endpoint          = $wazuh::params_agent::wazuh_reporting_endpoint,
+  $wazuh_reporting_endpoint_list     = $wazuh::params_agent::wazuh_reporting_endpoint_list,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
   $ossec_config_ubuntu_profiles      = $wazuh::params_agent::ossec_config_ubuntu_profiles,
