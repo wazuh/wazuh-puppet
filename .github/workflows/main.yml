@@ -11,4 +11,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build and launch Linting test
-      uses: './.github/actions/validate_module'
+      uses: '.github/actions/validate_module'
