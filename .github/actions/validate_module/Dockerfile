@@ -1,7 +1,7 @@
 FROM alpine:3.11
 
 
-LABEL "com.github.actions.name"="puppet-linting"
+LABEL "com.github.actions.name"="puppet-validate"
 LABEL "com.github.actions.description"="Runs Puppet module validation tasks"
 
 LABEL "name"="Validate Wazuh module"
