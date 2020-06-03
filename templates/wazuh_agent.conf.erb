@@ -1,4 +1,15 @@
   <client>
+  <%- if @wazuh_reporting_endpoint_list then -%>
+  <%- @wazuh_reporting_endpoint_list.each do |hostname| -%>
+  <server>
+    <address><%= hostname %></address>
+  <%- if @ossec_protocol then -%>
+    <protocol><%= @ossec_protocol %></protocol>
+  <%- end -%>
+    <port><%= @ossec_port %></port>
+  </server>
+  <%- end -%>
+  <%- end -%>
   <server>
   <%- if @wazuh_reporting_endpoint then -%>
     <address><%= @wazuh_reporting_endpoint %></address>
