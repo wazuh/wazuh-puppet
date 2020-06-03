@@ -26,6 +26,8 @@ RUN gem install \
     --no-document \
     pdk -v $PUPPET_DEVELOPMENT_KIT_VERSION
 
+RUN gem update --system
+
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
