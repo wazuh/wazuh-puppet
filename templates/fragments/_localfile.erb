@@ -1,5 +1,6 @@
 
 
+<%- if not @ossec_local_files.nil? -%>
 <%- @ossec_local_files.each do |localfile| -%>
 <localfile>
   <log_format><%= localfile['log_format'] %></log_format>
@@ -50,4 +51,4 @@
   <frequency>360</frequency>
 </localfile>
 <%- end %>
-
+<%- end %>
