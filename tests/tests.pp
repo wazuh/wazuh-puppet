@@ -1,3 +1,3 @@
-node 'manager_platform_release' {
+node 'default-centos-7' {
   class { "wazuh::manager":}
 }
