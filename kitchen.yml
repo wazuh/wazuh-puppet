@@ -1,6 +1,6 @@
 ---
 driver:
-  name: dokken
+  name: docker
   privileged: true # because Docker and SystemD/Upstart
   chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
   chef_license: accept-no-persist
@@ -9,7 +9,7 @@ driver:
     ]
 
 transport:
-  name: dokken
+  name: docker
 
 provisioner:
   name: puppet_apply
