@@ -13,8 +13,10 @@ transport:
 
 provisioner:
   name: puppet_apply
-  deprecations_as_errors: true
-  chef_license: accept-no-persist
+  manifests_path: manifests
+  modules_path: modules
+  hiera_data_path: hieradata
+
 
 verifier:
   name: inspec
