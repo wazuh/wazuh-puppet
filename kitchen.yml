@@ -27,7 +27,7 @@ platforms:
 
 suites:
   - name: default
-    manifest: tests/test.pp
+    manifest: test.pp
 
 ###############################
 # docker_installation resources
