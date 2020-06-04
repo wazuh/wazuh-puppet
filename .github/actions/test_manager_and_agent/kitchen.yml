@@ -66,74 +66,75 @@ suites:
 ###############################
 # docker_installation resources
 ###############################
-- name: installation_script_main
-  includes: [
-    'ubuntu-16.04',
-    'ubuntu-18.04'
-   ]
-  attributes:
-    docker:
-      repo: 'main'
-  run_list:
-  - recipe[docker_test::installation_script]
-
+#- name: installation_script_main
+#  includes: [
+#    'ubuntu-16.04',
+#    'ubuntu-18.04'
+#   ]
+#  attributes:
+#    docker:
+#      repo: 'main'
+#  run_list:
+#  - recipe[docker_test::installation_script]
+#
 
 ##################
 # resource testing
 ##################
 
-- name: resources
-  attributes:
-    docker:
-      version: '19.03.8'
-  run_list:
-  - recipe[docker_test::default]
-  - recipe[docker_test::image]
-  - recipe[docker_test::container]
-  - recipe[docker_test::exec]
-  - recipe[docker_test::plugin]
-
-- name: network
-  includes: [
-    'ubuntu-18.04',
-   ]
-  attributes:
-    docker:
-      version: '19.03.8'
-  run_list:
-  - recipe[docker_test::default]
-  - recipe[docker_test::network]
-
-- name: volume
-  includes: [
-    'ubuntu-18.04',
-   ]
-  attributes:
-    docker:
-      version: '19.03.8'
-  run_list:
-  - recipe[docker_test::default]
-  - recipe[docker_test::volume]
-
-- name: registry
-  includes: [
-    'ubuntu-18.04',
-   ]
-  attributes:
-    docker:
-      version: '19.03.8'
-  run_list:
-  - recipe[docker_test::default]
-  - recipe[docker_test::registry]
-
-#############################
-# quick service smoke testing
-#############################
-
-- name: smoke
-  includes: [
-    'ubuntu-16.04',
-    'ubuntu-18.04'
-   ]
-  run_list:
-  - recipe[docker_test::smoke]
+#- name: resources
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::image]
+#  - recipe[docker_test::container]
+#  - recipe[docker_test::exec]
+#  - recipe[docker_test::plugin]
+#
+#- name: network
+#  includes: [
+#    'ubuntu-18.04',
+#   ]
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::network]
+#
+#- name: volume
+#  includes: [
+#    'ubuntu-18.04',
+#   ]
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::volume]
+#
+#- name: registry
+#  includes: [
+#    'ubuntu-18.04',
+#   ]
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::registry]
+#
+##############################
+## quick service smoke testing
+##############################
+#
+#- name: smoke
+#  includes: [
+#    'ubuntu-16.04',
+#    'ubuntu-18.04'
+#   ]
+#  run_list:
+#  - recipe[docker_test::smoke]
+#
