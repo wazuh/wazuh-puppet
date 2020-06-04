@@ -12,7 +12,7 @@ transport:
   name: dokken
 
 provisioner:
-  name: dokken
+  name: puppet_apply
   deprecations_as_errors: true
   chef_license: accept-no-persist
 
