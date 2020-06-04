@@ -1,7 +1,7 @@
 
 name: kitchen
 
-on: [pull_request]
+on: [push]
 
 jobs:
   dokken:
