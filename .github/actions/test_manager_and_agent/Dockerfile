@@ -87,5 +87,8 @@ RUN apt install python3-venv python3-pip -y && \
 
 # Adding systemd compatibility.
 VOLUME [ "/sys/fs/cgroup", "/run", "/run/lock" ]
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
-CMD [ "/lib/systemd/systemd" ]
+ENTRYPOINT ["/entrypoint.sh"]
+
