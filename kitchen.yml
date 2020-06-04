@@ -1,0 +1,140 @@
+---
+driver:
+  name: dokken
+  privileged: true # because Docker and SystemD/Upstart
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+  chef_license: accept-no-persist
+  volumes: [
+    '/var/lib/docker', '/var/lib/docker-one', '/var/lib/docker-two'
+    ]
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  deprecations_as_errors: true
+  chef_license: accept-no-persist
+
+verifier:
+  name: inspec
+
+platforms:
+- name: amazonlinux-2
+  driver:
+    image: dokken/amazonlinux-2
+    pid_one_command: /usr/lib/systemd/systemd
+
+- name: debian-9
+  driver:
+    image: dokken/debian-9
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: debian-10
+  driver:
+    image: dokken/debian-10
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: centos-7
+  driver:
+    image: dokken/centos-7
+    pid_one_command: /usr/lib/systemd/systemd
+
+- name: fedora-latest
+  driver:
+    image: dokken/fedora-latest
+    pid_one_command: /usr/lib/systemd/systemd
+
+- name: ubuntu-16.04
+  driver:
+    image: dokken/ubuntu-16.04
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: ubuntu-18.04
+  driver:
+    image: dokken/ubuntu-18.04
+    pid_one_command: /bin/systemd
+
+suites:
+
+###############################
+# docker_installation resources
+###############################
+#- name: installation_script_main
+#  includes: [
+#    'ubuntu-16.04',
+#    'ubuntu-18.04'
+#   ]
+#  attributes:
+#    docker:
+#      repo: 'main'
+#  run_list:
+#  - recipe[docker_test::installation_script]
+#
+
+##################
+# resource testing
+##################
+
+#- name: resources
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::image]
+#  - recipe[docker_test::container]
+#  - recipe[docker_test::exec]
+#  - recipe[docker_test::plugin]
+#
+#- name: network
+#  includes: [
+#    'ubuntu-18.04',
+#   ]
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::network]
+#
+#- name: volume
+#  includes: [
+#    'ubuntu-18.04',
+#   ]
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::volume]
+#
+#- name: registry
+#  includes: [
+#    'ubuntu-18.04',
+#   ]
+#  attributes:
+#    docker:
+#      version: '19.03.8'
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::registry]
+#
+##############################
+## quick service smoke testing
+##############################
+#
+#- name: smoke
+#  includes: [
+#    'ubuntu-16.04',
+#    'ubuntu-18.04'
+#   ]
+#  run_list:
+#  - recipe[docker_test::smoke]
+#
