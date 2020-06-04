@@ -1,14 +1,40 @@
-name: Verify Linting
+name: kitchen
 
 on: [push]
 
 jobs:
-  build:
-    name: Linting Verifier
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone repository
-      uses: actions/checkout@v2
+  dokken:
 
-    - name: Build and launch Linting test
-      uses: './.github/actions/validate_module'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: ['debian-8']
+        suite: ['default']
+      fail-fast: false
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@master
+    - name: Install Chef
+      uses: actionshub/chef-install@master
+    - name: Dokken
+      uses: actionshub/kitchen-dokken@creation
+      env:
+        suite: ${{ matrix.suite }}
+        os: ${{ matrix.os }}
+        CHEF_LICENSE: accept-no-persist
+        KITCHEN_LOCAL_YAML: kitchen.yml
+
+#jobs:
+#  build:
+#    name: Linting Verifier
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Clone repository
+#      uses: actions/checkout@v2
+#
+#    - name: Build and launch Linting test
+#      uses: './.github/actions/validate_module'
+
+
+
