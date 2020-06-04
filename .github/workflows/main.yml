@@ -18,7 +18,7 @@ jobs:
     - name: Install Chef
       uses: actionshub/chef-install@master
     - name: Dokken
-      uses: actionshub/kitchen-dokken@creation
+      uses: actionshub/kitchen-dokken@v1.0.0
       env:
         suite: ${{ matrix.suite }}
         os: ${{ matrix.os }}
