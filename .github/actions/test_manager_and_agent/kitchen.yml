@@ -62,6 +62,10 @@ platforms:
     pid_one_command: /bin/systemd
 
 suites:
+  - name: default
+    manifest: tests/tests.pp
+
+
 
 ###############################
 # docker_installation resources
@@ -75,8 +79,8 @@ suites:
 #    docker:
 #      repo: 'main'
 #  run_list:
-#  - recipe[docker_test::installation_script]
-#
+#  - recipe[manifests::installation_script]
+
 
 ##################
 # resource testing
