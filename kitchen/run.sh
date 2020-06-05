@@ -2,12 +2,11 @@
 
 set -e
 
+mkdir -p modules/wazuh
+cd ..
 echo `ls -lah`
-echo `pwd`
-mkdir -p kitchen/modules/wazuh
-
-cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
-
+cp ./* kitchen/modules/wazuh -r
+echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
 
 kitchen converge
