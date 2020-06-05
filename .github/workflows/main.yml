@@ -16,6 +16,8 @@ jobs:
       run: |
         chmod +x ./kitchen/run.sh
         ./kitchen/run.sh
+    - name: Debug
+      run: cat ./kitchen/logs/*
 
 
 #name: kitchen
