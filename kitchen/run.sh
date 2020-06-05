@@ -3,8 +3,8 @@
 set -e
 
 
-mkdir ./modules
-mkdir ./modules/wazuh
+mkdir .kitchen/modules
+mkdir .kitchen/modules/wazuh
 echo `ls -lah ./`
 echo `ls -lah kitchen/modules`
 cp ./* kitchen/modules/wazuh/ -r
