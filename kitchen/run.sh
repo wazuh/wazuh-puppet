@@ -2,11 +2,12 @@
 
 set -e
 
-mkdir -p modules/wazuh/
 
+mkdir ./modules
+mkdir ./modules/wazuh
 echo `ls -lah ./`
 echo `ls -lah kitchen/modules`
-cp ./* kitchen/modules/wazuh -r
+cp ./* kitchen/modules/wazuh/ -r
 echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
 
