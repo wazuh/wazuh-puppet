@@ -7,7 +7,7 @@ jobs:
   testing:
     runs-on: ubuntu-latest
 
-    container: jm404/wazuh-puppet
+    container: jm404/wazuh-puppet:master
 
     steps:
     - name: Check out code
