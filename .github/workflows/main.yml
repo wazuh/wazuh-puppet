@@ -13,7 +13,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
     - name: Running converge
-      run: "kitchen converge"
+      run: "./kitchen/run.sh"
 
 
 #name: kitchen
