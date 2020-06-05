@@ -14,8 +14,15 @@ provisioner:
 platforms:
 
   - name: ubuntu-18.04
-    driver:
+    driver_config:
       image: jrei/systemd-ubuntu:18.04
+      platform: ubuntu
+      run_command: /sbin/init
+      privileged: true
+      volume:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      provision_command:
+        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
   - name: default
