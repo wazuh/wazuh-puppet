@@ -12,8 +12,9 @@ echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
 kitchen list
 kitchen destroy
-#kitchen diagnose --all
-#kitchen converge -l=debug
+kitchen diagnose --all
+kitchen converge -l=debug
+
 
 
 #echo "Kitchen is creating the new instances"
