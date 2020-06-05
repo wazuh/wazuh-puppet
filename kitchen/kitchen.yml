@@ -4,6 +4,8 @@ driver:
   use_sudo: false
   use_internal_docker_network: true
   remove_images: true
+  publish_all: true
+  run_options: --ip=172.17.0.2
 
 provisioner:
   name: puppet_apply
