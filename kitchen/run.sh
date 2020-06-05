@@ -11,9 +11,8 @@ cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
 
-kitchen converge
+kitchen converge ; cat ./kitchen/logs/*
 
-cat ./kitchen/logs/*
 
 #echo "Kitchen is creating the new instances"
 #kitchen create # creating new kitchen instances
