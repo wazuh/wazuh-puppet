@@ -2,6 +2,8 @@
 
 set -e
 
+echo `ls -lah`
+echo `pwd`
 mkdir -p kitchen/modules/wazuh
 
 cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
