@@ -4,11 +4,6 @@ driver:
   use_sudo: false
   use_internal_docker_network: true
   remove_images: true
-  privileged: true # because Docker and SystemD/Upstart
-  volumes: [
-    '/var/lib/docker', '/var/lib/docker-one', '/var/lib/docker-two'
-    ]
-
 
 provisioner:
   name: puppet_apply
@@ -16,92 +11,12 @@ provisioner:
   modules_path: modules
   hiera_data_path: hieradata
 
-
-verifier:
-  name: inspec
-
 platforms:
-- name: centos-7
-  driver:
-    image: dokken/centos-7
-    pid_one_command: /usr/lib/systemd/systemd
+
+  - name: bionic
+    driver:
+      image: jrei/systemd-ubuntu:18.04
 
 suites:
   - name: default
-    manifest: test.pp
-
-###############################
-# docker_installation resources
-###############################
-#- name: installation_script_main
-#  includes: [
-#    'ubuntu-16.04',
-#    'ubuntu-18.04'
-#   ]
-#  attributes:
-#    docker:
-#      repo: 'main'
-#  run_list:
-#  - recipe[docker_test::installation_script]
-#
-
-##################
-# resource testing
-##################
-
-#- name: resources
-#  attributes:
-#    docker:
-#      version: '19.03.8'
-#  run_list:
-#  - recipe[docker_test::default]
-#  - recipe[docker_test::image]
-#  - recipe[docker_test::container]
-#  - recipe[docker_test::exec]
-#  - recipe[docker_test::plugin]
-#
-#- name: network
-#  includes: [
-#    'ubuntu-18.04',
-#   ]
-#  attributes:
-#    docker:
-#      version: '19.03.8'
-#  run_list:
-#  - recipe[docker_test::default]
-#  - recipe[docker_test::network]
-#
-#- name: volume
-#  includes: [
-#    'ubuntu-18.04',
-#   ]
-#  attributes:
-#    docker:
-#      version: '19.03.8'
-#  run_list:
-#  - recipe[docker_test::default]
-#  - recipe[docker_test::volume]
-#
-#- name: registry
-#  includes: [
-#    'ubuntu-18.04',
-#   ]
-#  attributes:
-#    docker:
-#      version: '19.03.8'
-#  run_list:
-#  - recipe[docker_test::default]
-#  - recipe[docker_test::registry]
-#
-##############################
-## quick service smoke testing
-##############################
-#
-#- name: smoke
-#  includes: [
-#    'ubuntu-16.04',
-#    'ubuntu-18.04'
-#   ]
-#  run_list:
-#  - recipe[docker_test::smoke]
-#
+    manifest: manager.pp
