@@ -7,7 +7,7 @@ mkdir kitchen/modules
 mkdir kitchen/modules/wazuh
 echo `ls -lah ./`
 echo `ls -lah kitchen/modules`
-cp ./* kitchen/modules/wazuh/ -r
+cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
 
