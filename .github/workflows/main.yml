@@ -16,7 +16,7 @@ jobs:
     - name: Running converge
       run: |
         chmod +x ./kitchen/run.sh
-        ./kitchen/run.sh ; cat ./kitchen/logs*
+        ./kitchen/run.sh ; cat ./kitchen/logs/*
 
 
 #name: kitchen
