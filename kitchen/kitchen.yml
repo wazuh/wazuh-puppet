@@ -13,7 +13,7 @@ provisioner:
 
 platforms:
 
-  - name: bionic
+  - name: ubuntu-18.04
     driver:
       image: jrei/systemd-ubuntu:18.04
 
