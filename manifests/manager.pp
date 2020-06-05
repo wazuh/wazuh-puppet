@@ -533,6 +533,7 @@ class wazuh::manager (
       mode    => $wazuh::params_manager::keys_mode,
       content => $agent_auth_password,
       require => Package[$wazuh::params_manager::server_package],
+      notify  => Service[$wazuh::params_manager::server_service],
     }
   }
 
