@@ -5,15 +5,15 @@ on: [push]
 
 jobs:
   testing:
+    runs-on: ubuntu-latest
 
-    container:
-      image: jm404:wazuh-puppet
+    container: jm404:wazuh-puppet
 
     steps:
     - name: Check out code
       uses: actions/checkout@v2
     - name: Running converge
-      run: "kitchen converge"
+      run: "kitchen converge
 
 
 #name: kitchen
