@@ -18,8 +18,6 @@ platforms:
       privileged: true
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      provision_command:
-        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
   - name: default
