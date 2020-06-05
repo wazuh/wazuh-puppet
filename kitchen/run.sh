@@ -10,8 +10,10 @@ echo `ls -lah kitchen/modules`
 cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
-kitchen diagnose --all
-kitchen converge -l=debug
+kitchen list
+kitchen destroy
+#kitchen diagnose --all
+#kitchen converge -l=debug
 
 
 #echo "Kitchen is creating the new instances"
