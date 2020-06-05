@@ -4,20 +4,16 @@ name: kitchen
 on: [push]
 
 jobs:
-  dokken:
+  testing:
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: ['centos-7']
-        suite: ['default']
-      fail-fast: false
+    container:
+      image: jm404:wazuh-puppet
 
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Run local docker
-      uses: './.github/actions/test_manager_and_agent'
+    - name: Running converge
+      run: "kitchen converge"
 
 
 #name: kitchen

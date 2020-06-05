@@ -12,33 +12,11 @@ provisioner:
   hiera_data_path: hieradata
 
 platforms:
-  - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
-    driver_config:
-      image: <%= ENV['IMAGE'] %>
-      platform: <%= ENV['PLATFORM'] %>
-      hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>  
-      run_command: /sbin/init
-      privileged: true
-      volume:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      provision_command:
-        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
-  - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
-    driver_config:
-      image: <%= ENV['IMAGE'] %>
-      platform: <%= ENV['PLATFORM'] %>
-      hostname: agent_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
-      run_command: /sbin/init
-      privileged: true
-      volume:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      provision_command:
-        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+  - name: bionic
+    driver:
+      image: jrei/systemd-ubuntu:18.04
 
 suites:
   - name: default
-    manifest: site.pp
-    verifier:
-      name: shell
-      command: py.test -v test/base
+    manifest: manager.pp
