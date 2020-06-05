@@ -7,7 +7,10 @@ jobs:
   testing:
     runs-on: ubuntu-latest
 
-    container: jm404/wazuh-puppet:master
+    container:
+      image: jm404/wazuh-puppet:master
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
 
     steps:
     - name: Check out code
@@ -16,8 +19,6 @@ jobs:
       run: |
         chmod +x ./kitchen/run.sh
         ./kitchen/run.sh
-    - name: Debug
-      run: cat ./kitchen/logs/*
 
 
 #name: kitchen

@@ -13,6 +13,8 @@ cd kitchen # Access kitchen folder
 
 kitchen converge
 
+cat ./kitchen/logs/*
+
 #echo "Kitchen is creating the new instances"
 #kitchen create # creating new kitchen instances
 #
