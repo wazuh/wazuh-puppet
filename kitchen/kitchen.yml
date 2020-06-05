@@ -15,10 +15,10 @@ provisioner:
 
 platforms:
 
-  - name: ubuntu-18.04
+  - name: centos-7
     driver_config:
-      image: jrei/systemd-ubuntu:18.04
-      platform: ubuntu
+      image: centos/systemd:latest
+      platform: centos
       run_command: /sbin/init
       privileged: true
       volume:
