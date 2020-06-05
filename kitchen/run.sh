@@ -11,7 +11,6 @@ cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
 kitchen diagnose --all
-kitchen create -l=debug
 kitchen converge -l=debug
 
 
