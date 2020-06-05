@@ -3,8 +3,7 @@
 set -e
 
 mkdir -p modules/wazuh
-cd ..
-echo `ls -lah`
+
 cp ./* kitchen/modules/wazuh -r
 echo `ls -lah kitchen/modules/wazuh`
 cd kitchen # Access kitchen folder
