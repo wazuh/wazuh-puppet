@@ -1,3 +1,3 @@
-node 'default-centos-7' {
+node 'default' {
   class { "wazuh::manager":}
 }
