@@ -17,3 +17,5 @@ cd kitchen # Access kitchen folder
 
 echo "Kitchen is creating the new instances"
 kitchen create # creating new kitchen instances
+kitchen converge
+kitchen destroy
