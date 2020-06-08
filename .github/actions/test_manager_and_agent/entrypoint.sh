@@ -1,6 +1,12 @@
 #! /usr/bin/env bash
 set -e
 
+
+echo `ls -lah`
+echo `git status`
+echo `git branch`
+
+
 mkdir -p modules/wazuh
 
 cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
