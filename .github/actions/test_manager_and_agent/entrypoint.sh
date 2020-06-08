@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 set -e
 
-
+echo `systemctl status`
 echo `ls -lah`
 echo `git status`
 echo `git branch`
