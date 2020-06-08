@@ -1,4 +1,4 @@
-FROM jm404:wazuh-puppet
+FROM jm404/wazuh-puppet:master
 
 LABEL "com.github.actions.name"="puppet-tests"
 LABEL "com.github.actions.description"="Launch Puppet tests"
