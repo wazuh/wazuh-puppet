@@ -7,16 +7,11 @@ jobs:
   testing:
     runs-on: ubuntu-latest
 
-    container:
-      image: jm404/wazuh-puppet:master
-
     steps:
     - name: Check out code
       uses: actions/checkout@v2
     - name: Running converge
-      run: |
-        chmod +x ./kitchen/run.sh
-        ./kitchen/run.sh
+      uses: './.github/actions/test_manager_and_agent'
 
 
 #name: kitchen

@@ -1,3 +1,12 @@
 #! /usr/bin/env bash
-kitchen create
-kitchen converge
+set -e
+
+mkdir -p modules/wazuh
+
+cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
+
+cd kitchen # Access kitchen folder
+
+
+echo "Kitchen is creating the new instances"
+kitchen create # creating new kitchen instances
