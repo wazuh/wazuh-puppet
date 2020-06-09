@@ -18,8 +18,7 @@ cd kitchen # Access kitchen folder
 
 bundle install
 
-
 echo "Kitchen is creating the new instances"
-kitchen create # creating new kitchen instances
-kitchen converge
-kitchen destroy
+bundle exec kitchen create # creating new kitchen instances
+bundle exec kitchen converge
+bundle exec kitchen destroy
