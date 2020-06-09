@@ -11,7 +11,14 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
     - name: Running converge
-      uses: './.github/actions/test_manager_and_agent'
+      run: |
+        cd kitchen
+        mkdir -p modules/wazuh
+        cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
+        cd kitchen
+        kitchen create
+        kitchen converge
+        kitchen destroy
 
 
 #name: kitchen
