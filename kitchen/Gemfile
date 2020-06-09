@@ -8,3 +8,4 @@ gem "kitchen-vagrant"
 gem 'kitchen-docker', '~> 2.3'
 gem "puppet"
 gem "librarian-puppet"
+gem "kitchen-inspec"
