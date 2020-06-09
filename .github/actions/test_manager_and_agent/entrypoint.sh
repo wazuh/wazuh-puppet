@@ -6,6 +6,8 @@ echo `ls -lah`
 echo `git status`
 echo `git branch`
 
+
+
 cd kitchen
 
 mkdir -p modules/wazuh
@@ -13,6 +15,8 @@ mkdir -p modules/wazuh
 cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 
 cd kitchen # Access kitchen folder
+
+bundle install
 
 
 echo "Kitchen is creating the new instances"
