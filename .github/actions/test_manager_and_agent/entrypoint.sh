@@ -16,9 +16,5 @@ cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 
 cd kitchen # Access kitchen folder
 
-bundle install
-
 echo "Kitchen is creating the new instances"
-bundle exec kitchen create # creating new kitchen instances
-bundle exec kitchen converge
-bundle exec kitchen destroy
+kitchen test
