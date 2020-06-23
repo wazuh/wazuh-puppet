@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.12.3-1'
+  $agent_package_version = '3.13.0-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -453,6 +453,7 @@ class wazuh::params_agent {
       $wodle_syscollector_packages = 'yes'
       $wodle_syscollector_ports = 'yes'
       $wodle_syscollector_processes = 'yes'
+      $wodle_syscollector_hotfixes = 'yes'
 
       ## cis-cat
       $wodle_ciscat_disabled = 'yes'

@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.13.0_7.7.1
+
+### Added
+
+- Update to Wazuh version 3.13.0_7.7.1
+- Add syscollector related config in Wazuh Agent manifest ([@rshad](https://github.com/rshad)) [PR#241](https://github.com/wazuh/wazuh-puppet/pull/241)
+
 ## Wazuh Puppet v3.12.3_7.6.2
 
 ### Added
