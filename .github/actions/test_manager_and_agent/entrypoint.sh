@@ -18,3 +18,6 @@ cd kitchen # Access kitchen folder
 
 echo "Kitchen is creating the new instances"
 kitchen test
+echo `cat .kitchen/logs/kitchen.log`
+kitchen diagnose --all
+ruby -v
