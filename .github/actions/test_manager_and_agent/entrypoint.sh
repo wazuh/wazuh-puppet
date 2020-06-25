@@ -6,7 +6,6 @@ echo `ls -lah`
 echo `git status`
 echo `git branch`
 chef -v
-ruby -v
 
 
 cd kitchen
@@ -18,5 +17,8 @@ cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 cd kitchen # Access kitchen folder
 
 echo "Kitchen is creating the new instances"
-kitchen test
-echo `cat .kitchen/logs/kitchen.log`
+echo "Executing bundle"
+bundle exec kitchen list
+
+# kitchen test
+
