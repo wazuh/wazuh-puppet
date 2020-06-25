@@ -3,29 +3,29 @@ describe package('wazuh-manager') do
   its('version') { should eq '3.0.3' }
 end
 
-describe service('wazuh-managerj') do
+describe service('wazuh-manager') do
   it { should be_installed }
   it { should be_enabled }
   it { should be_running }
 end
 
-# Verifying daemons
+# # Verifying daemons
 
-wazuh_daemons = {
-                  "ossec-authd" => "root"),
-                  "ossec-execd" => "root"),
-                  "ossec-analysisd" => "ossec"),
-                  "ossec-syscheckd" => "root"),
-                  "ossec-remoted" => "ossecr"),
-                  "ossec-logcollector" => "root"),
-                  "ossec-monitord" => "ossec"),
-                  "wazuh-db" => "ossec"),
-                  "wazuh-modulesd" => "root"),
-                }
-wazuh_daemons.each do |key, value|
+# wazuh_daemons = {
+#                   "ossec-authd" => "root"),
+#                   "ossec-execd" => "root"),
+#                   "ossec-analysisd" => "ossec"),
+#                   "ossec-syscheckd" => "root"),
+#                   "ossec-remoted" => "ossecr"),
+#                   "ossec-logcollector" => "root"),
+#                   "ossec-monitord" => "ossec"),
+#                   "wazuh-db" => "ossec"),
+#                   "wazuh-modulesd" => "root")
+#                 }
+# wazuh_daemons.each do |key, value|
 
-  describe processes(key) do
-    its('USER') { should eq [value] }
-  end
+#   describe processes(key) do
+#     its('USER') { should eq [value] }
+#   end
 
-end
+# end
