@@ -25,7 +25,7 @@ wazuh_daemons = {
 wazuh_daemons.each do |key, value|
 
   describe processes(key) do
-    its('USER') { should eq [value] }
+    its('users') { should eq [value] }
   end
 
 end
