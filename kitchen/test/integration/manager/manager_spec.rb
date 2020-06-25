@@ -1,11 +1,11 @@
 describe package('wazuh-manager') do
   it { should be_installed }
-  its('version') { should eq '3.12.3' }
+  its('version') { should eq '3.0.3' }
 end
 
 describe service('wazuh-managerj') do
   it { should be_installed }
-  it { should be_enabled }
+  it { should be_disabled }
   it { should be_running }
 end
 
