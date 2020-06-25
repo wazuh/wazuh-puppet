@@ -5,6 +5,7 @@ echo `systemctl status`
 echo `ls -lah`
 echo `git status`
 echo `git branch`
+chef -v
 ruby -v
 
 
