@@ -5,7 +5,6 @@ echo `systemctl status`
 echo `ls -lah`
 echo `git status`
 echo `git branch`
-chef -v
 
 
 cd kitchen
@@ -21,5 +20,3 @@ echo "Executing bundle"
 
 bundle install
 bundle exec kitchen test
-# kitchen test
-
