@@ -41,7 +41,7 @@ def test_wazuh_services_are_running(host):
     manager = host.service("wazuh-manager")
     with host.sudo():
         assert manager.is_running
-        assert manager.is_enabled
+        assert manager.is_disabled
 
 @pytest.mark.filterwarnings('ignore')
 @pytest.mark.skipif('agent' in os.environ.get('KITCHEN_INSTANCE'), reason='Skip on wazuh agent instances')
@@ -60,5 +60,5 @@ def test_wazuh_services_are_running(host):
         ("wazuh-modulesd", "root"),
     ),
 )
-def test_wazuh_manager_processes_running(host, wazuh_service, wazuh_owner):        
+def test_wazuh_manager_processes_running(host, wazuh_service, wazuh_owner):
     host.process.get(user=wazuh_owner, comm=wazuh_service)
