@@ -16,10 +16,6 @@ cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 cd kitchen # Access kitchen folder
 
 echo "Kitchen is creating the new instances"
-echo "Executing bundle"
-
 bundle install
+bundle exec kitchen list
 bundle exec kitchen test
-
-echo 'cat ~/.kitchen/logs/default-ubuntu-18.log'
-echo 'cat ~/.kitchen/logs/default-centos-7.log'
