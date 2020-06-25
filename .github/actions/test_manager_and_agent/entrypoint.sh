@@ -17,7 +17,7 @@ cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 cd kitchen # Access kitchen folder
 
 echo "Kitchen is creating the new instances"
-kitchen test
+# kitchen test
 echo `cat .kitchen/logs/kitchen.log`
 kitchen diagnose --all
 ruby -v
