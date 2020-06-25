@@ -12,7 +12,7 @@ end
 # Verifying daemons
 
 wazuh_daemons = {
-                  "ossec-authd" => "root",
+                  "ossec-authd" => "ossec",
                   "ossec-execd" => "root",
                   "ossec-analysisd" => "ossec",
                   "ossec-syscheckd" => "root",
