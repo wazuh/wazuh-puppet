@@ -18,7 +18,8 @@ cd kitchen # Access kitchen folder
 
 echo "Kitchen is creating the new instances"
 echo "Executing bundle"
-bundle exec kitchen list
 
+bundle install
+bundle exec kitchen test
 # kitchen test
 
