@@ -20,3 +20,6 @@ echo "Executing bundle"
 
 bundle install
 bundle exec kitchen test
+
+echo 'cat ~/.kitchen/logs/default-ubuntu-18.log'
+echo 'cat ~/.kitchen/logs/default-centos-7.log'
