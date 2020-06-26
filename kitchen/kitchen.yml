@@ -17,7 +17,7 @@ platforms:
     driver_config:
       image: jrei/systemd-ubuntu:18.04
       platform: ubuntu
-      hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
+      hostname: manager_0
       run_command: /sbin/init
       privileged: true
       volume:
@@ -29,7 +29,7 @@ platforms:
     driver_config:
       image: centos/systemd:latest
       platform: centos
-      hostname: agent_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
+      hostname: agent_0
       run_command: /usr/sbin/init
       privileged: true
       volume:
@@ -38,33 +38,11 @@ platforms:
         - sudo yum install openssl -y
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
-  # - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
-  #   driver_config:
-  #     image: <%= ENV['IMAGE'] %>
-  #     platform: <%= ENV['PLATFORM'] %>
-  #     hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
-  #     run_command: /sbin/init
-  #     privileged: true
-  #     volume:
-  #       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #     provision_command:
-  #       - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
-
-  # - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
-  #   driver_config:
-  #     image: <%= ENV['IMAGE'] %>
-  #     platform: <%= ENV['PLATFORM'] %>
-  #     hostname: agent_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
-  #     run_command: /sbin/init
-  #     privileged: true
-  #     volume:
-  #       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #     provision_command:
-  #       - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
-
-
 suites:
-  - name: manager
+  - name: default
     manifest: env.pp
     verifier:
       name: inspec
+      inspec_tests:
+        - tests/integration/manager
+        - tests/integration/agent
