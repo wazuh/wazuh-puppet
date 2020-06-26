@@ -24,8 +24,8 @@ bundle exec kitchen create
 # echo "Getting Wazuh managers IPs to the agents"
 # manager_ip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' `docker ps | awk '{print $NF}' | grep $PLATFORM | grep $RELEASE | grep manager`)"
 
-# echo "getting a copy of ./manifests/site.pp.template"
-# cp ./manifests/site.pp.template ./manifests/site.pp
+echo "getting a copy of ./manifests/site.pp.template"
+cp ./manifests/site.pp.template ./manifests/site.pp
 
 # echo "wazuh-manager IP"
 # echo $manager_ip

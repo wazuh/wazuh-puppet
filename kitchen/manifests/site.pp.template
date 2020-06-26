@@ -1,0 +1,5 @@
+node 'manager' {
+  class { "wazuh::manager":}
+}
+
+
