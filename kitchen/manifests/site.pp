@@ -1,3 +1,3 @@
-node 'default' {
+node 'manager_0' {
   class { "wazuh::manager":}
 }
