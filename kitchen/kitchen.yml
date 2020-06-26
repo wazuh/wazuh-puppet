@@ -29,7 +29,7 @@ platforms:
     driver_config:
       image: centos/systemd:latest
       platform: centos
-      hostname: manager_0
+      hostname: manager_01
       run_command: /usr/sbin/init
       privileged: true
       volume:
