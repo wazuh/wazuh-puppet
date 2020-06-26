@@ -2,6 +2,10 @@ node 'manager' {
   class { "wazuh::manager":}
 }
 
+node 'agent' {
+  class { "wazuh::manager":}
+}
+
 node default {
   notify { 'This node did not match any of the listed definitions': }
 }
