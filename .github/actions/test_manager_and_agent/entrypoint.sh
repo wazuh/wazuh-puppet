@@ -7,7 +7,6 @@ echo `git status`
 echo `git branch`
 
 
-
 cd kitchen
 
 mkdir -p modules/wazuh

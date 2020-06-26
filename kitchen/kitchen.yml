@@ -29,7 +29,7 @@ platforms:
     driver_config:
       image: centos/systemd:latest
       platform: centos
-      hostname: agent_0
+      hostname: manager_0
       run_command: /usr/sbin/init
       privileged: true
       volume:
@@ -39,7 +39,7 @@ platforms:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
-  - name: manager
-    manifest: env.pp
+  - name: wazuh
+    manifest: site.pp
     verifier:
       name: inspec
