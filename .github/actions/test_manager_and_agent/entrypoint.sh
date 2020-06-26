@@ -46,10 +46,10 @@ bundle exec kitchen create
 # fi
 
 echo "Kitchen is converging ..."
-bundle kitchen converge
+bundle exec kitchen converge
 
 echo "Kitchen is testing ..."
-bundle kitchen verify
+bundle exec kitchen verify
 
 echo "Kitchen is destroying"
-bundle kitchen destroy
+bundle exec kitchen destroy
