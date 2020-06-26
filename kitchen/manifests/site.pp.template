@@ -3,6 +3,6 @@ node 'manager' {
 }
 
 node default {
-  notify { 'This node did not match any of the listed definitions' }
+  notify { 'This node did not match any of the listed definitions': }
 }
 
