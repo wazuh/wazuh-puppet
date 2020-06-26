@@ -39,10 +39,7 @@ platforms:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
-  - name: default
+  - name: manager
     manifest: env.pp
     verifier:
       name: inspec
-      inspec_tests:
-        - tests/integration/manager
-        - tests/integration/agent
