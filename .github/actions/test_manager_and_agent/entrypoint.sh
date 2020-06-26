@@ -14,6 +14,7 @@ mkdir -p modules/wazuh
 
 cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 
+cd kitchen
 
 echo "Installing dependencies"
 bundle install
