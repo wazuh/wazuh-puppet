@@ -5,6 +5,12 @@ echo `systemctl status`
 echo `ls -lah`
 echo `git status`
 echo `git branch`
+echo "Env vars value: IMAGE "
+echo $IMAGE
+echo "Env vars value: PLATFORM "
+echo $PLATFORM
+echo "Env vars value: RELEASE"
+echo $RELEASE
 
 
 cd kitchen
