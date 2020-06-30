@@ -21,6 +21,9 @@ bundle install
 echo "Kitchen is creating the new instances"
 bundle exec kitchen create
 
+echo "Current containers"
+echo `docker ps`
+
 echo "Getting Wazuh managers IPs to the agents"
 echo `manager_ip="docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' manager"`
 
