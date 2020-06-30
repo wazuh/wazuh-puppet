@@ -51,4 +51,4 @@ suites:
     verifier:
       name: inspec
     excludes:
-      - centos-7
+      - ubuntu-18
