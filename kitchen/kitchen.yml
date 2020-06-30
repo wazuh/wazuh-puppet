@@ -43,7 +43,3 @@ suites:
     manifest: site.pp
     verifier:
       name: inspec
-    excludes:
-      - ubuntu-18
-
-
