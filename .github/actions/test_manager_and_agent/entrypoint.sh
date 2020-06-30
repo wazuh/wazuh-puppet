@@ -50,7 +50,7 @@ sed -i 's/release/'$RELEASE'/g' ./manifests/site.pp
 
 if [[ $PLATFORM == *"centos"* ]] || [[ $PLATFORM == *"amazon"* ]]; then
    echo "suite is a Centos one and requires OpenSSL to be installed. .. Installing .."
-   kitchen exec $PLATFORM -c "sudo yum install -y openssl"
+   bundle exec kitchen exec $PLATFORM -c "sudo yum install -y openssl"
 fi
 
 echo "Kitchen is converging ..."
