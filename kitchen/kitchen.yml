@@ -38,7 +38,7 @@ platforms:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
-  - name: manager
+  - name: default
     manifest: site.pp
     verifier:
       name: inspec
