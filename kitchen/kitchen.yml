@@ -39,16 +39,10 @@ platforms:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
-  - name: manager
-    manifest: site.pp
-    verifier:
-      name: inspec
-    excludes:
-      - centos-7
-
   - name: agent
     manifest: site.pp
     verifier:
       name: inspec
     excludes:
       - ubuntu-18
+
