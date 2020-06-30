@@ -3,7 +3,10 @@ node 'manager' {
 }
 
 node 'agent' {
-  class { "wazuh::manager":}
+  class { "wazuh::agent":
+        wazuh_register_endpoint => "manager_ip",
+        wazuh_reporting_endpoint => "manager_ip",
+  }
 }
 
 node default {
