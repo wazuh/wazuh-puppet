@@ -24,17 +24,16 @@ platforms:
       provision_command:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
-  - name: centos-7_agent_kitchen_puppet
+  - name: ubuntu-18_agent_kitchen_puppet
     driver_config:
-      image: centos/systemd:latest
-      platform: centos
+      image: jrei/systemd-ubuntu:18.04
+      platform: ubuntu
       hostname: agent_wazuh
-      run_command: /usr/sbin/init
+      run_command: /sbin/init
       privileged: true
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       provision_command:
-        - sudo yum install openssl -y
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
