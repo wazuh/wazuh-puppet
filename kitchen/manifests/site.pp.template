@@ -1,8 +1,8 @@
-node 'manager' {
+node 'ubuntu-18_manager_kitchen_puppet' {
   class { "wazuh::manager":}
 }
 
-node 'agent' {
+node 'centos-7_agent_kitchen_puppet' {
   class { "wazuh::agent":
         wazuh_register_endpoint => "manager_ip",
         wazuh_reporting_endpoint => "manager_ip",
