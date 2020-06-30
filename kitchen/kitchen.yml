@@ -38,7 +38,14 @@ platforms:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
-  - name: default
+  - name: mngr
+    manifest: site.pp
+    verifier:
+      name: inspec
+    includes:
+      - ubuntu-18_manager_kitchen_puppet
+
+  - name: agent
     manifest: site.pp
     verifier:
       name: inspec
