@@ -10,12 +10,18 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Ubuntu tests (Manager + Agent)
+    - name: Ubuntu 18.04 - (Manager + Agent)
       uses: './.github/actions/test_manager_and_agent'
       env:
         IMAGE: jrei/systemd-ubuntu:18.04
         PLATFORM: ubuntu
         RELEASE: 18
+    - name: CentOS 7 - (Manager + Agent)
+      uses: './.github/actions/test_manager_and_agent'
+      env:
+        IMAGE: centos/systemd:latest
+        PLATFORM: centos
+        RELEASE: 7
 
 
 #name: kitchen
