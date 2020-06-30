@@ -50,4 +50,4 @@ suites:
     verifier:
       name: inspec
     includes:
-      - ubuntu-18_manager_kitchen_puppet
+      - centos-7_agent_kitchen_puppet
