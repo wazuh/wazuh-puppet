@@ -16,7 +16,7 @@ platforms:
     driver_config:
       image: jrei/systemd-ubuntu:18.04
       platform: ubuntu
-      hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
+      hostname: manager_wazuh
       run_command: /sbin/init
       privileged: true
       volume:
@@ -28,7 +28,7 @@ platforms:
     driver_config:
       image: centos/systemd:latest
       platform: centos
-      hostname: agent_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
+      hostname: agent_wazuh
       run_command: /usr/sbin/init
       privileged: true
       volume:
