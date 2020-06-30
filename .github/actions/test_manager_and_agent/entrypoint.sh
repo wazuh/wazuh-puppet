@@ -22,16 +22,16 @@ echo "Kitchen is creating the new instances"
 bundle exec kitchen create
 
 echo "Getting Wazuh managers IPs to the agents"
-manager_ip="docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' manager"
+echo `manager_ip="docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' manager"`
 
 echo "getting a copy of ./manifests/site.pp.template"
 cp ./manifests/site.pp.template ./manifests/site.pp
 
 echo "wazuh-manager IP"
-echo $manager_ip
+echo `echo $manager_ip`
 
 echo "Assigning Wazuh managers IPs to the corresponding agents."
-sed -i 's/manager_ip/'${manager_ip}'/g' ./manifests/site.pp
+echo `sed -i 's/manager_ip/'${manager_ip}'/g' ./manifests/site.pp`
 
 
 echo "Kitchen is converging ..."
