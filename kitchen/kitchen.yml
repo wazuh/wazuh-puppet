@@ -12,8 +12,7 @@ provisioner:
   hiera_data_path: hieradata
 
 platforms:
-
-  - name: ubuntu-18
+  - name: ubuntu-18_manager_kitchen_puppet
     driver_config:
       image: jrei/systemd-ubuntu:18.04
       platform: ubuntu
@@ -25,7 +24,7 @@ platforms:
       provision_command:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
-  - name: centos-7
+  - name: centos-7_agent_kitchen_puppet
     driver_config:
       image: centos/systemd:latest
       platform: centos
@@ -39,7 +38,7 @@ platforms:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 suites:
-  - name: agent
+  - name: manager
     manifest: site.pp
     verifier:
       name: inspec
