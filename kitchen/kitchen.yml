@@ -42,3 +42,5 @@ suites:
     manifest: site.pp
     verifier:
       name: inspec
+    includes:
+      - ubuntu-18_manager_kitchen_puppet
