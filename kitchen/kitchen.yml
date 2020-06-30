@@ -46,5 +46,9 @@ suites:
     excludes:
       - centos-7
 
-
-
+  - name: agent
+    manifest: site.pp
+    verifier:
+      name: inspec
+    excludes:
+      - centos-7
