@@ -12,11 +12,35 @@ provisioner:
   hiera_data_path: hieradata
 
 platforms:
-  - name: ubuntu-18_manager_kitchen_puppet
+  # - name: ubuntu-18_manager_kitchen_puppet
+  #   driver_config:
+  #     image: jrei/systemd-ubuntu:18.04
+  #     platform: ubuntu
+  #     hostname: manager_wazuh
+  #     run_command: /sbin/init
+  #     privileged: true
+  #     volume:
+  #       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #     provision_command:
+  #       - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+
+  # - name: ubuntu-18_agent_kitchen_puppet
+  #   driver_config:
+  #     image: jrei/systemd-ubuntu:18.04
+  #     platform: ubuntu
+  #     hostname: agent_wazuh
+  #     run_command: /sbin/init
+  #     privileged: true
+  #     volume:
+  #       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #     provision_command:
+  #       - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+
+  - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
     driver_config:
-      image: jrei/systemd-ubuntu:18.04
-      platform: ubuntu
-      hostname: manager_wazuh
+      image: <%= ENV['IMAGE'] %>
+      platform: <%= ENV['PLATFORM'] %>
+      hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
       run_command: /sbin/init
       privileged: true
       volume:
@@ -24,29 +48,28 @@ platforms:
       provision_command:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
-  - name: ubuntu-18_agent_kitchen_puppet
+  - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
     driver_config:
-      image: jrei/systemd-ubuntu:18.04
-      platform: ubuntu
-      hostname: agent_wazuh
+      image: <%= ENV['IMAGE'] %>
+      platform: <%= ENV['PLATFORM'] %>
+      hostname: agent_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
       run_command: /sbin/init
       privileged: true
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       provision_command:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
-
 suites:
   - name: mngr
     manifest: site.pp
     verifier:
       name: inspec
     includes:
-      - ubuntu-18_manager_kitchen_puppet
+      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
 
   - name: agent
     manifest: site.pp
     verifier:
       name: inspec
     includes:
-      - ubuntu-18_agent_kitchen_puppet
+      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet

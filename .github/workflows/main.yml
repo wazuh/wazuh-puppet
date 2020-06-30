@@ -10,9 +10,12 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Running converge
+    - name: Ubuntu tests (Manager + Agent)
       uses: './.github/actions/test_manager_and_agent'
-
+      env:
+        IMAGE: jrei/systemd-ubuntu:18.04
+        PLATFORM: ubuntu
+        RELEASE: 18
 
 
 #name: kitchen
