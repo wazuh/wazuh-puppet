@@ -24,14 +24,15 @@ bundle exec kitchen create
 echo "Current containers"
 echo `docker ps`
 
+
 echo "Getting Wazuh managers IPs to the agents"
-echo `manager_ip="docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' manager"`
+manager_ip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' `docker ps | awk '{print $NF}' | grep manager`)"
 
 echo "getting a copy of ./manifests/site.pp.template"
 cp ./manifests/site.pp.template ./manifests/site.pp
 
 echo "wazuh-manager IP"
-echo `echo $manager_ip`
+echo $manager_ip
 
 echo "Assigning Wazuh managers IPs to the corresponding agents."
 echo `sed -i 's/manager_ip/'${manager_ip}'/g' ./manifests/site.pp`
