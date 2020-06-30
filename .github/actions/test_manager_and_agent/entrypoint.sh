@@ -36,6 +36,11 @@ echo $manager_ip
 echo "Assigning Wazuh managers IPs to the corresponding agents."
 echo `sed -i 's/manager_ip/'${manager_ip}'/g' ./manifests/site.pp`
 
+echo "Setting the platform in the components names."
+sed -i 's/platform/'$PLATFORM'/g' ./manifests/site.pp
+
+echo "Setting the rlease in the components names."
+sed -i 's/release/'$RELEASE'/g' ./manifests/site.pp
 
 echo "Kitchen is converging ..."
 bundle exec kitchen converge
