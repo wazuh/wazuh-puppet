@@ -43,3 +43,8 @@ suites:
     manifest: site.pp
     verifier:
       name: inspec
+    excludes:
+      - centos-7
+
+
+
