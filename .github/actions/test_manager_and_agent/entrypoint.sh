@@ -48,7 +48,7 @@ sed -i 's/platform/'$PLATFORM'/g' ./manifests/site.pp
 echo "Setting the rlease in the components names."
 sed -i 's/release/'$RELEASE'/g' ./manifests/site.pp
 
-echo `cat /manifests/site.pp`
+echo `cat ./manifests/site.pp`
 
 if [[ $PLATFORM == *"centos"* ]] || [[ $PLATFORM == *"amazon"* ]]; then
    echo "suite is a Centos one and requires OpenSSL to be installed. .. Installing .."
