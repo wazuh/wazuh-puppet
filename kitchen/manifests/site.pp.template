@@ -1,7 +1,7 @@
-node /^manager/' {
+node /^manager/ {
   class { "wazuh::manager":}
 }
-node /^agent/' {
+node /^agent/ {
   class { "wazuh::agent":
         wazuh_register_endpoint => "manager_ip",
         wazuh_reporting_endpoint => "manager_ip",
