@@ -17,7 +17,7 @@ platforms:
       image: <%= ENV['IMAGE'] %>
       platform: <%= ENV['PLATFORM'] %>
       hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
-      run_command: /usr/sbin/init
+      run_command: <%= ENV['RUN_COMMAND'] %>
       privileged: true
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -29,7 +29,7 @@ platforms:
       image: <%= ENV['IMAGE'] %>
       platform: <%= ENV['PLATFORM'] %>
       hostname: agent_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
-      run_command: /usr/sbin/init
+      run_command: <%= ENV['RUN_COMMAND'] %>
       privileged: true
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
