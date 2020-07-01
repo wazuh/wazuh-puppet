@@ -12,8 +12,6 @@ echo $PLATFORM
 echo "Env vars value: RELEASE"
 echo $RELEASE
 
-sudo dockerd
-
 cd kitchen
 
 mkdir -p modules/wazuh
