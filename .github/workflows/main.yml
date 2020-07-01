@@ -10,30 +10,30 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Ubuntu 18.04 - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: jrei/systemd-ubuntu:18.04
-        PLATFORM: ubuntu
-        RELEASE: 18
-    - name: Ubuntu 16.04 - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: jrei/systemd-ubuntu:16.04
-        PLATFORM: ubuntu
-        RELEASE: 16
-    - name: CentOS 7 - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: centos/systemd:latest
-        PLATFORM: centos
-        RELEASE: 7
-    # - name: Amazon linux - (Manager + Agent)
+    # - name: Ubuntu 18.04 - (Manager + Agent)
     #   uses: './.github/actions/test_manager_and_agent'
     #   env:
-    #     IMAGE: amazonlinux:latest
-    #     PLATFORM: amazon
-    #     RELEASE: latest
+    #     IMAGE: jrei/systemd-ubuntu:18.04
+    #     PLATFORM: ubuntu
+    #     RELEASE: 18
+    # - name: Ubuntu 16.04 - (Manager + Agent)
+    #   uses: './.github/actions/test_manager_and_agent'
+    #   env:
+    #     IMAGE: jrei/systemd-ubuntu:16.04
+    #     PLATFORM: ubuntu
+    #     RELEASE: 16
+    # - name: CentOS 7 - (Manager + Agent)
+    #   uses: './.github/actions/test_manager_and_agent'
+    #   env:
+    #     IMAGE: centos/systemd:latest
+    #     PLATFORM: centos
+    #     RELEASE: 7
+    - name: Amazon linux - (Manager + Agent)
+      uses: './.github/actions/test_manager_and_agent'
+      env:
+        IMAGE: amazonlinux:2
+        PLATFORM: amazon
+        RELEASE: 2
 
 
 
