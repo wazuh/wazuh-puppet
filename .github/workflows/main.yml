@@ -22,18 +22,18 @@ jobs:
     #     IMAGE: jrei/systemd-ubuntu:16.04
     #     PLATFORM: ubuntu
     #     RELEASE: 16
-    - name: Amazon linux - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: amazonlinux:latest
-        PLATFORM: amazon
-        RELEASE: latest
-    # - name: CentOS 7 - (Manager + Agent)
+    # - name: Amazon linux - (Manager + Agent)
     #   uses: './.github/actions/test_manager_and_agent'
     #   env:
-    #     IMAGE: centos:7
-    #     PLATFORM: centos
-    #     RELEASE: 7
+    #     IMAGE: amazonlinux:latest
+    #     PLATFORM: amazon
+    #     RELEASE: latest
+    - name: CentOS 7 - (Manager + Agent)
+      uses: './.github/actions/test_manager_and_agent'
+      env:
+        IMAGE: centos/systemd:latest
+        PLATFORM: centos
+        RELEASE: 7
 
 
 #name: kitchen
