@@ -10,6 +10,12 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
+    - name: Amazon linux - (Manager + Agent)
+      uses: './.github/actions/test_manager_and_agent'
+      env:
+        IMAGE: amazonlinux:latest
+        PLATFORM: amazon
+        RELEASE: latest
     # - name: Ubuntu 18.04 - (Manager + Agent)
     #   uses: './.github/actions/test_manager_and_agent'
     #   env:
@@ -28,12 +34,6 @@ jobs:
     #     IMAGE: centos/systemd:latest
     #     PLATFORM: centos
     #     RELEASE: 7
-    - name: Amazon linux - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: amazonlinux:2
-        PLATFORM: amazon
-        RELEASE: 2
 
 
 
