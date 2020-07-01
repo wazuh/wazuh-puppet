@@ -13,7 +13,7 @@ jobs:
     - name: Amazon linux - (Manager + Agent)
       uses: './.github/actions/test_manager_and_agent'
       env:
-        IMAGE: amazonlinux:latest
+        IMAGE: amazonlinux
         PLATFORM: amazon
         RELEASE: latest
     # - name: Ubuntu 18.04 - (Manager + Agent)
