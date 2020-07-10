@@ -1,4 +1,4 @@
-describe manager_tests do
+describe do
   describe package('wazuh-manager') do
     it { is_expected.to be_installed }
     its('version') { is_expected.to eq '3.13.0-1' }
