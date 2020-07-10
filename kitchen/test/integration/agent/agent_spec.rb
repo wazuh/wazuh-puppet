@@ -22,5 +22,4 @@ wazuh_daemons.each do |key, value|
   describe processes(key) do
     its('users') { is_expected.to eq [value] }
   end
-
 end
