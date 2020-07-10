@@ -12,10 +12,10 @@ end
 # Verifying daemons
 
 wazuh_daemons = {
-                  'ossec-agentd' => 'ossec',
-                  'ossec-execd' => 'root',
-                  'ossec-syscheckd' => 'root',
-                  'wazuh-modulesd' => 'root',
+  'ossec-agentd' => 'ossec',
+  'ossec-execd' => 'root',
+  'ossec-syscheckd' => 'root',
+  'wazuh-modulesd' => 'root',
                 }
 
 wazuh_daemons.each do |key, value|
