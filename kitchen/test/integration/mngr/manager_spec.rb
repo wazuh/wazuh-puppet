@@ -20,8 +20,9 @@ wazuh_daemons = {
   'ossec-logcollector' => 'root',
   'ossec-monitord' => 'ossec',
   'wazuh-db' => 'ossec',
-  'wazuh-modulesd' => 'root'
+  'wazuh-modulesd' => 'root',
   }
+
 wazuh_daemons.each do |key, value|
   describe processes(key) do
     its('users') { is_expected.to eq [value] }

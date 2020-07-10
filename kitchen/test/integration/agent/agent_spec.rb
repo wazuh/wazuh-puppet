@@ -17,8 +17,8 @@ wazuh_daemons = {
                   'ossec-syscheckd' => 'root',
                   'wazuh-modulesd' => 'root',
                 }
-wazuh_daemons.each do |key, value|
 
+wazuh_daemons.each do |key, value|
   describe processes(key) do
     its('users') { is_expected.to eq [value] }
   end
