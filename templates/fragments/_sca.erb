@@ -66,6 +66,7 @@
   <% @sca_else_policies.each do |policy| -%>
       <policy><%= policy %></policy>
   <%- end -%>
+  </policies>
   <policies>
   <%- if @debian_additional_templates == 'yes' -%>
     <policy>cis_debianlinux7-8_L1_rcl.yml</policy>
