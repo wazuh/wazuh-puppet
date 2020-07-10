@@ -12,10 +12,6 @@ jobs:
       uses: actions/checkout@v2
     - name: Build and launch Linting test
       uses: './.github/actions/validate_module'
-    # - name: puppet-lint
-    #   uses: scottbrenner/puppet-lint-action@master
-    #   with:
-    #     args: './manifests'
     # - name: Amazon linux - (Manager + Agent)
     #   uses: './.github/actions/test_manager_and_agent'
     #   env:
@@ -37,13 +33,13 @@ jobs:
     #     PLATFORM: ubuntu
     #     RELEASE: 16
     #     RUN_COMMAND: /sbin/init
-    # - name: Ubuntu 18.04 - (Manager + Agent)
-    #   uses: './.github/actions/test_manager_and_agent'
-    #   env:
-    #     IMAGE: jrei/systemd-ubuntu:18.04
-    #     PLATFORM: ubuntu
-    #     RELEASE: 18
-    #     RUN_COMMAND: /sbin/init
+    - name: Ubuntu 18.04 - (Manager + Agent)
+      uses: './.github/actions/test_manager_and_agent'
+      env:
+        IMAGE: jrei/systemd-ubuntu:18.04
+        PLATFORM: ubuntu
+        RELEASE: 18
+        RUN_COMMAND: /sbin/init
 
 
 

@@ -1,12 +1,12 @@
 describe package('wazuh-agent') do
-  it { should be_installed }
-  its('version') { should eq '3.13.0-1' }
+  it { is_expected.to be_installed }
+  its('version') { is_expected.to eq '3.13.0-1' }
 end
 
 describe service('wazuh-agent') do
-  it { should be_installed }
-  it { should be_enabled }
-  it { should be_running }
+  it { is_expected.to be_installed }
+  it { is_expected.to be_enabled }
+  it { is_expected.to be_running }
 end
 
 # Verifying daemons
@@ -20,7 +20,7 @@ wazuh_daemons = {
 wazuh_daemons.each do |key, value|
 
   describe processes(key) do
-    its('users') { should eq [value] }
+    its('users') { is_expected.to eq [value] }
   end
 
 end
