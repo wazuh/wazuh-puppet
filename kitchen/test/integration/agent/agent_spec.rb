@@ -1,4 +1,4 @@
-describe
+describe agent_tests
   describe package('wazuh-agent') do
     it { is_expected.to be_installed }
     its('version') { is_expected.to eq '3.13.0-1' }
@@ -24,4 +24,5 @@ describe
       its('users') { is_expected.to eq [value] }
     end
   end
+
 end
