@@ -60,6 +60,8 @@ class wazuh::agent (
   $wazuh_reporting_endpoint          = $wazuh::params_agent::wazuh_reporting_endpoint,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
+  $wazuh_max_retries                 = $wazuh::params_agent::wazuh_max_retries,
+  $wazuh_retry_interval              = $wazuh::params_agent::wazuh_retry_interval,
   $ossec_config_ubuntu_profiles      = $wazuh::params_agent::ossec_config_ubuntu_profiles,
   $ossec_config_centos_profiles      = $wazuh::params_agent::ossec_config_centos_profiles,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
