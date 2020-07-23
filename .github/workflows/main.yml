@@ -8,5 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check out code
+      uses: actions/checkout@v2
     - name: Build and launch Linting test
       uses: './.github/actions/validate_module'
