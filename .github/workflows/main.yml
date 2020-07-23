@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check out code
+      uses: actions/checkout@v2
     - name: Ubuntu 18.04 - (Manager + Agent)
       uses: './.github/actions/test_manager_and_agent'
       env:
