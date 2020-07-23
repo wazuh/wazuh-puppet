@@ -8,35 +8,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code
-      uses: actions/checkout@v2
     - name: Build and launch Linting test
       uses: './.github/actions/validate_module'
-    - name: Amazon linux - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: diodonfrost/amazonlinux-2-puppet
-        PLATFORM: rhel
-        RELEASE: latest
-        RUN_COMMAND: /usr/sbin/init
-    - name: CentOS 7 - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: centos/systemd:latest
-        PLATFORM: centos
-        RELEASE: 7
-        RUN_COMMAND: /sbin/init
-    - name: Ubuntu 16.04 - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: jrei/systemd-ubuntu:16.04
-        PLATFORM: ubuntu
-        RELEASE: 16
-        RUN_COMMAND: /sbin/init
-    - name: Ubuntu 18.04 - (Manager + Agent)
-      uses: './.github/actions/test_manager_and_agent'
-      env:
-        IMAGE: jrei/systemd-ubuntu:18.04
-        PLATFORM: ubuntu
-        RELEASE: 18
-        RUN_COMMAND: /sbin/init
