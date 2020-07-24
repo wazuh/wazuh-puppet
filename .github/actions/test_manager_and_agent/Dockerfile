@@ -1,4 +1,4 @@
-FROM zenid/wazuh-puppet:latest
+FROM wazuh/wazuh-puppet-kitchen:latest
 
 LABEL "com.github.actions.name"="puppet-tests"
 LABEL "com.github.actions.description"="Launch Puppet tests"
