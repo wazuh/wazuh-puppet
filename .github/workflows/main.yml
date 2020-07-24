@@ -1,12 +1,14 @@
 
-name: kitchen
+name: Kitchen tests
 
-on: [push]
+on:
+  pull_request:
+    types: [opened]
 
 jobs:
   testing:
+    if: contains(github.event.label.name, 'wazuhci/runtests' )
     runs-on: ubuntu-latest
-
     steps:
     - name: Check out code
       uses: actions/checkout@v2
