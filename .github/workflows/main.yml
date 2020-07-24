@@ -1,13 +1,11 @@
 
 name: Kitchen tests
 
-on:
-  pull_request:
-    types: [opened]
+on: [push]
 
 jobs:
   testing:
-    if: contains(github.event.label.name, 'wazuhci/runtests' )
+    if:  contains(github.event.pull_request.labels.*.name, 'wazuhci/runtests' )
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
