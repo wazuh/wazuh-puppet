@@ -3,6 +3,7 @@
 class wazuh::params_agent {
   $agent_package_version = '3.13.1-1'
   $agent_service_ensure = 'running'
+  $agent_msi_download_location = 'http://packages.wazuh.com/3.x/windows'
 
   $agent_name = undef
   $agent_group = undef
