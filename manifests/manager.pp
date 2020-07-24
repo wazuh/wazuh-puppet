@@ -61,6 +61,7 @@ class wazuh::manager (
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
+      $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template
 
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
@@ -178,7 +179,7 @@ class wazuh::manager (
 
 
       # syslog
-      $syslog_output                        = $::wazuh::params_manager::syslog_output,
+      $syslog_output                        = $wazuh::params_manager::syslog_output,
       $syslog_output_level                  = $wazuh::params_manager::syslog_output_level,
       $syslog_output_port                   = $wazuh::params_manager::syslog_output_port,
       $syslog_output_server                 = $wazuh::params_manager::syslog_output_server,
