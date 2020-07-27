@@ -62,6 +62,7 @@ class wazuh::params_manager {
       $ossec_auth_template                             = 'wazuh/fragments/_auth.erb'
       $ossec_cluster_template                          = 'wazuh/fragments/_cluster.erb'
       $ossec_active_response_template                  = 'wazuh/fragments/_default_activeresponse.erb'
+      $ossec_syslog_output_template                    = 'wazuh/fragments/_syslog_output.erb'
 
       ## Rootcheck
 
