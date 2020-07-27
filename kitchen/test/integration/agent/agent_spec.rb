@@ -1,7 +1,7 @@
 describe do
   describe package('wazuh-agent') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '3.13.0-1' }
+    its('version') { is_expected.to eq '3.13.1-1' }
   end
 
   describe service('wazuh-agent') do
