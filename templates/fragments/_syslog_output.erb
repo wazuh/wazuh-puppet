@@ -1,4 +1,4 @@
-<%- if @syslog_output !='false' -%>
+<%- if @syslog_output == 'true' -%>
 <email_alerts>
   <% if @syslog_output_server -%>
   <server><%= @syslog_output_server %></server>

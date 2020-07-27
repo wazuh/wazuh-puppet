@@ -61,7 +61,7 @@ class wazuh::manager (
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
-      $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template
+      $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
 
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
@@ -596,6 +596,15 @@ class wazuh::manager (
       command => '/sbin/auditctl -l',
       unless  => '/sbin/auditctl -l | grep wazuh_fim',
       tries   => 2
+    }
+  }
+
+  if ($syslog_output == true){
+    concat::fragment {
+      'ossec.conf_syslog_output':
+        order   => 9,
+        target  => 'ossec.conf',
+        content => template($ossec_syslog_output_template);
     }
   }
 
