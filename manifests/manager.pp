@@ -404,7 +404,7 @@ class wazuh::manager (
   if ($syslog_output == true){
     concat::fragment {
       'ossec.conf_syslog_output':
-        order   => 95,
+        order   => 8,
         target  => 'ossec.conf',
         content => template($ossec_syslog_output_template);
     }
