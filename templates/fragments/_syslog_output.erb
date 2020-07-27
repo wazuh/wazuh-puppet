@@ -1,4 +1,3 @@
-<%- if @syslog_output == 'true' -%>
 <email_alerts>
   <% if @syslog_output_server -%>
   <server><%= @syslog_output_server %></server>
@@ -13,4 +12,3 @@
   <format><%= @syslog_output_format %></format>
   <%- end -%>
 </email_alerts>
-<%- end -%>
