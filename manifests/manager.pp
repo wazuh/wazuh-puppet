@@ -400,6 +400,16 @@ class wazuh::manager (
       order   => 01,
       content => template($ossec_manager_template);
   }
+
+  if ($syslog_output == true){
+    concat::fragment {
+      'ossec.conf_syslog_output':
+        order   => 95,
+        target  => 'ossec.conf',
+        content => template($ossec_syslog_output_template);
+    }
+  }
+
   if($configure_rootcheck == true){
     concat::fragment {
         'ossec.conf_rootcheck':
@@ -596,15 +606,6 @@ class wazuh::manager (
       command => '/sbin/auditctl -l',
       unless  => '/sbin/auditctl -l | grep wazuh_fim',
       tries   => 2
-    }
-  }
-
-  if ($syslog_output == true){
-    concat::fragment {
-      'ossec.conf_syslog_output':
-        order   => 9,
-        target  => 'ossec.conf',
-        content => template($ossec_syslog_output_template);
     }
   }
 
