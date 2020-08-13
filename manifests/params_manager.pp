@@ -343,8 +343,6 @@ class wazuh::params_manager {
             'xenial': {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-ubuntu-1604-ds.xml' => {
                   'type' => 'xccdf',
@@ -357,8 +355,6 @@ class wazuh::params_manager {
             'jessie': {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-debian-8-ds.xml' => {
                   'type' => 'xccdf',
@@ -372,8 +368,6 @@ class wazuh::params_manager {
             /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = undef
             }
         default: {
@@ -388,8 +382,6 @@ class wazuh::params_manager {
           $agent_package  = 'wazuh-agent'
           $server_service = 'wazuh-manager'
           $server_package = 'wazuh-manager'
-          $api_service = 'wazuh-api'
-          $api_package = 'wazuh-api'
           $service_has_status  = true
 
           $default_local_files =[
