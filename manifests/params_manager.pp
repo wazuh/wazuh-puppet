@@ -25,7 +25,7 @@ class wazuh::params_manager {
       $ossec_email_alert_level                         = 12
       $ossec_remote_connection                         = 'secure'
       $ossec_remote_port                               = 1514
-      $ossec_remote_protocol                           = 'udp'
+      $ossec_remote_protocol                           = 'tcp'
       $ossec_remote_local_ip                           = undef
       $ossec_remote_queue_size                         = 131072
 
