@@ -27,6 +27,8 @@ class wazuh::opendistro (
 
 ){
 
+  class {'wazuh::repo_opendistro':}
+
   # install package
   package { 'opendistro':
     ensure => $opendistro_version,
