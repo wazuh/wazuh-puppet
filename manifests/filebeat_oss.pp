@@ -5,7 +5,7 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elasticsearch_port = '9200',
   $elasticsearch_server_ip = "\"${filebeat_oss_elasticsearch_ip}:${filebeat_oss_elasticsearch_port}\"",
 
-  $filebeat_oss_package = 'filebeat-oss',
+  $filebeat_oss_package = 'filebeat',
   $filebeat_oss_service = 'filebeat',
   $filebeat_oss_version = '7.8.0',
   $wazuh_app_version = '3.13.1_7.8.0',
