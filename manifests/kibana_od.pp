@@ -21,8 +21,7 @@ class wazuh::kibana_od (
                                   ]
 ) {
 
-  class {'wazuh::repo_opendistro':}
-  
+
   # install package
   package { 'Installing OD Kibana...':
     ensure => $kibana_od_version,
