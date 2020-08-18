@@ -17,7 +17,7 @@ class wazuh::repo_elastic_oss (
         case $::lsbdistcodename {
           /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
 
-            apt::source { 'wazuh_elastic':
+            apt::source { 'wazuh_elastic_oss':
               ensure   => present,
               comment  => 'This is the OSS Elastic repository',
               location => 'https://artifacts.elastic.co/packages/oss-7.x/apt',
