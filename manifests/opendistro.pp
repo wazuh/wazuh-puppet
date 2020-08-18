@@ -29,6 +29,13 @@ class wazuh::opendistro (
 
   class {'wazuh::repo_opendistro':}
 
+
+  if $::osfamily == 'Debian' {
+    Class['wazuh::repo_opendistro'] -> Class['apt::update'] -> Package['filebeat']
+  } else {
+    Class['wazuh::repo_opendistro'] -> Package['filebeat']
+  }
+
   # install package
   package { 'opendistroforelasticsearch':
     ensure => $opendistro_version,
