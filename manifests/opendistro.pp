@@ -10,8 +10,8 @@ class wazuh::opendistro (
   $opendistro_node_ingest = true,
   $opendistro_node_max_local_storage_nodes = '1',
   $opendistro_service = 'elasticsearch',
-  $opendistro_package = 'opendistroforelasticsearch',
-  $opendistro_version = '7.8.0',
+  $opendistro_package = 'opendistroforelasticsearch-1.9.0',
+  $opendistro_version = '1.9.0',
 
   $opendistro_path_data = '/var/lib/elasticsearch',
   $opendistro_path_logs = '/var/log/elasticsearch',
@@ -30,7 +30,7 @@ class wazuh::opendistro (
   class {'wazuh::repo_opendistro':}
 
   # install package
-  package { 'opendistro':
+  package { 'opendistroforelasticsearch':
     ensure => $opendistro_version,
     name   => $opendistro_package,
   }
