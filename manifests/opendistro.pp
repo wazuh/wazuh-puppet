@@ -10,7 +10,7 @@ class wazuh::opendistro (
   $opendistro_node_ingest = true,
   $opendistro_node_max_local_storage_nodes = '1',
   $opendistro_service = 'elasticsearch',
-  $opendistro_package = 'opendistroforelasticsearch-1.9.0',
+  $opendistro_package = 'opendistroforelasticsearch',
   $opendistro_version = '1.9.0',
 
   $opendistro_path_data = '/var/lib/elasticsearch',
@@ -31,9 +31,9 @@ class wazuh::opendistro (
 
 
   if $::osfamily == 'Debian' {
-    Class['wazuh::repo_opendistro'] -> Class['apt::update'] -> Package['filebeat']
+    Class['wazuh::repo_opendistro'] -> Class['apt::update'] -> Package['opendistroforelasticsearch']
   } else {
-    Class['wazuh::repo_opendistro'] -> Package['filebeat']
+    Class['wazuh::repo_opendistro'] -> Package['opendistroforelasticsearch']
   }
 
   # install package
