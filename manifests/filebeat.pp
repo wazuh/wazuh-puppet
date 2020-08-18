@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 # Setup for Filebeat
 class wazuh::filebeat (
   $filebeat_elasticsearch_ip = 'localhost',
