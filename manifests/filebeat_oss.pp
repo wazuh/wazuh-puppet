@@ -1,6 +1,6 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
-# Setup for Filebeat-oss
-class wazuh::filebeat-oss (
+# Setup for Filebeat_oss
+class wazuh::filebeat_oss (
   $filebeat_oss_elasticsearch_ip = 'localhost',
   $filebeat_oss_elasticsearch_port = '9200',
   $elasticsearch_server_ip = "\"${filebeat_oss_elasticsearch_ip}:${filebeat_oss_elasticsearch_port}\"",

@@ -28,7 +28,7 @@ class wazuh::opendistro (
 ){
 
   # install package
-  package { 'elasticsearch':
+  package { 'opendistro':
     ensure => $opendistro_version,
     name   => $opendistro_package,
   }

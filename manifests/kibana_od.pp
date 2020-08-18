@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
-# Setup for Kibana-od
-class wazuh::kibana-od (
-  $kibana_od_package = 'kibana',
+# Setup for Kibana_od
+class wazuh::kibana_od (
+  $kibana_od_package = 'opendistroforelasticsearch-kibana',
   $kibana_od_service = 'kibana',
   $kibana_od_version = '7.8.0',
   $kibana_od_app_version = '3.13.1_7.8.0',
@@ -22,7 +22,7 @@ class wazuh::kibana-od (
 ) {
 
   # install package
-  package { 'Installing Kibana...':
+  package { 'Installing OD Kibana...':
     ensure => $kibana_od_version,
     name   => $kibana_od_package,
   }
