@@ -12,7 +12,7 @@ class wazuh::kibana_od (
 
   $kibana_od_server_port = '5601',
   $kibana_od_server_host = '0.0.0.0',
-  $kibana_od_elasticsearch_server_hosts ="http://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}",
+  $kibana_od_elasticsearch_server_hosts ="https://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}",
   $kibana_wazuh_api_credentials = [ {
                                       'id'       => 'default',
                                       'url'      => 'http://localhost',
