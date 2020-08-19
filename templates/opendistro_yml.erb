@@ -53,7 +53,6 @@ path.logs: <%= @opendistro_path_logs %>
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
 network.host: <%= @opendistro_ip %>
-opendistro_security.disabled: true
 #
 # Set a custom port for HTTP:
 #
@@ -88,3 +87,26 @@ http.port: <%= @opendistro_port %>
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
+
+######## Start OpenDistro for Elasticsearch Security Demo Configuration ########
+# WARNING: revise all the lines below before you go into production
+opendistro_security.ssl.transport.pemcert_filepath: esnode.pem
+opendistro_security.ssl.transport.pemkey_filepath: esnode-key.pem
+opendistro_security.ssl.transport.pemtrustedcas_filepath: root-ca.pem
+opendistro_security.ssl.transport.enforce_hostname_verification: false
+opendistro_security.ssl.http.enabled: true
+opendistro_security.ssl.http.pemcert_filepath: esnode.pem
+opendistro_security.ssl.http.pemkey_filepath: esnode-key.pem
+opendistro_security.ssl.http.pemtrustedcas_filepath: root-ca.pem
+opendistro_security.allow_unsafe_democertificates: true
+opendistro_security.allow_default_init_securityindex: true
+opendistro_security.authcz.admin_dn:
+  - CN=kirk,OU=client,O=client,L=test, C=de
+
+opendistro_security.audit.type: internal_elasticsearch
+opendistro_security.enable_snapshot_restore_privilege: true
+opendistro_security.check_snapshot_restore_write_privileges: true
+opendistro_security.restapi.roles_enabled: ["all_access", "security_rest_api_access"]
+cluster.routing.allocation.disk.threshold_enabled: false
+node.max_local_storage_nodes: 3
+######## End OpenDistro for Elasticsearch Security Demo Configuration ########
