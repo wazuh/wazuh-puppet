@@ -16,8 +16,8 @@
 
 elasticsearch.hosts: ["<%= @kibana_od_elasticsearch_server_hosts %>"]
 elasticsearch.ssl.verificationMode: none
-elasticsearch.username: kibanaserver
-elasticsearch.password: kibanaserver
+elasticsearch.username: @kibana_od_user
+elasticsearch.password: @kibana_od_password
 elasticsearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
 
 server.port: <%= @kibana_od_server_port %>
