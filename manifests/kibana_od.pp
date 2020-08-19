@@ -4,7 +4,7 @@ class wazuh::kibana_od (
   $kibana_od_package = 'opendistroforelasticsearch-kibana',
   $kibana_od_service = 'kibana',
   $kibana_od_version = '1.9.0',
-  $kibana_od_user = 'kibanaserver',  
+  $kibana_od_user = 'kibanaserver',
   $kibana_od_password = 'kibanaserver', 
   $kibana_od_app_version = '3.13.1_7.8.0',
   $kibana_od_elasticsearch_ip = 'localhost',
@@ -47,7 +47,7 @@ class wazuh::kibana_od (
 
   exec {'Waiting for opendistro elasticsearch...':
     path      => '/usr/bin',
-    command   => "curl -u $kibana_od_user:$kibana_od_password -s -XGET http://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}",
+    command   => "curl -u $kibana_od_user:$kibana_od_password -k -s -XGET https://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}",
     tries     => 100,
     try_sleep => 3,
   }
@@ -70,7 +70,7 @@ class wazuh::kibana_od (
 
   exec {'Removing .wazuh index...':
     path    => '/usr/bin',
-    command => "curl -u $kibana_od_user:$kibana_od_password -s -XDELETE -sL -I 'http://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}/.wazuh' -o /dev/null",
+    command => "curl -u $kibana_od_user:$kibana_od_password -k -s -XDELETE -sL -I 'https://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}/.wazuh' -o /dev/null",
     notify  => Service[$kibana_od_service],
   }
 
