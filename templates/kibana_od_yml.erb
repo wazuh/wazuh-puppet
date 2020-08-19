@@ -13,6 +13,8 @@
 
 # Description:
 # Default Kibana configuration for Open Distro.
+server.port: <%= @kibana_od_server_port %>
+server.host: <%= @kibana_od_server_host %>
 
 elasticsearch.hosts: ["<%= @kibana_od_elasticsearch_server_hosts %>"]
 elasticsearch.ssl.verificationMode: none
@@ -20,10 +22,7 @@ elasticsearch.username: <%= @kibana_od_user %>
 elasticsearch.password: <%= @kibana_od_password %>
 elasticsearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
 
-server.port: <%= @kibana_od_server_port %>
-server.host: <%= @kibana_od_server_host %>
 
-
-opendistro_security.multitenancy.enabled: true
+opendistro_security.multitenancy.enabled: false
 opendistro_security.multitenancy.tenants.preferred: ["Private", "Global"]
 opendistro_security.readonly_mode.roles: ["kibana_read_only"]

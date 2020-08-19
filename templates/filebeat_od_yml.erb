@@ -12,5 +12,12 @@ setup.template.json.name: "wazuh"
 setup.template.overwrite: true
 
 # Send events directly to Elasticsearch
-output.elasticsearch.hosts: [<%= @elasticsearch_server_ip %>]
+output.elasticsearch:
+  hosts: ["https://localhost:9200"]
+  username: "admin"
+  password: "admin"
+  ssl.verification_mode: none
+
+setup.ilm.enabled: false
+
 
