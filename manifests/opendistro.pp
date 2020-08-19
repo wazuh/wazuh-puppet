@@ -42,15 +42,15 @@ class wazuh::opendistro (
     name   => $opendistro_package,
   }
 
-  file { 'Configure elasticsearch.yml':
-    owner   => 'elasticsearch',
-    path    => '/etc/elasticsearch/elasticsearch.yml',
-    group   => 'elasticsearch',
-    mode    => '0644',
-    notify  => Service[$elasticsearch_service], ## Restarts the service
-    content => template('wazuh/opendistro_yml.erb'),
-    require => Package[$opendistro_package],
-  }
+  # file { 'Configure elasticsearch.yml':
+  #   owner   => 'elasticsearch',
+  #   path    => '/etc/elasticsearch/elasticsearch.yml',
+  #   group   => 'elasticsearch',
+  #   mode    => '0644',
+  #   notify  => Service[$elasticsearch_service], ## Restarts the service
+  #   content => template('wazuh/opendistro_yml.erb'),
+  #   require => Package[$opendistro_package],
+  # }
 
   file { 'Configure jvm.options':
     owner   => 'elasticsearch',
