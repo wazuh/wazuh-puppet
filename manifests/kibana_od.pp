@@ -45,7 +45,7 @@ class wazuh::kibana_od (
 
   exec {'Waiting for opendistro elasticsearch...':
     path      => '/usr/bin',
-    command   => "curl -s -XGET http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+    command   => "curl -s -XGET http://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}",
     tries     => 100,
     try_sleep => 3,
   }
@@ -61,14 +61,14 @@ class wazuh::kibana_od (
 
   exec {'Installing Wazuh App...':
     path    => '/usr/bin',
-    command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_app_version}.zip",
+    command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_od_app_version}.zip",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$kibana_od_service],
   }
 
   exec {'Removing .wazuh index...':
     path    => '/usr/bin',
-    command => "curl -s -XDELETE -sL -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
+    command => "curl -s -XDELETE -sL -I 'http://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}/.wazuh' -o /dev/null",
     notify  => Service[$kibana_od_service],
   }
 
