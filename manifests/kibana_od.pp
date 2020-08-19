@@ -3,7 +3,7 @@
 class wazuh::kibana_od (
   $kibana_od_package = 'opendistroforelasticsearch-kibana',
   $kibana_od_service = 'kibana',
-  $kibana_od_version = '7.8.0',
+  $kibana_od_version = '1.9.0',
   $kibana_od_app_version = '3.13.1_7.8.0',
   $kibana_od_elasticsearch_ip = 'localhost',
   $kibana_od_elasticsearch_port = '9200',
