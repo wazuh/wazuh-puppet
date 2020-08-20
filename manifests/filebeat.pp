@@ -32,7 +32,7 @@ class wazuh::filebeat (
     group   => 'root',
     mode    => '0644',
     notify  => Service[$filebeat_service], ## Restarts the service
-    content => template('wazuh/filebeat_od_yml.erb'),
+    content => template('wazuh/filebeat_yml.erb'),
     require => Package['filebeat']
   }
 
