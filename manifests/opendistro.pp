@@ -20,7 +20,7 @@ class wazuh::opendistro (
   $opendistro_ip = 'localhost',
   $opendistro_port = '9200',
   $opendistro_discovery_option = 'discovery.type: single-node',
-  $opendistro_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']",
+  $opendistro_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['node-01']",
 
 # JVM options
   $jvm_options_memmory = '1g',

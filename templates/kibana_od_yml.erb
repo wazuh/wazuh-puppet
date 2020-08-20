@@ -18,8 +18,8 @@ server.host: <%= @kibana_od_server_host %>
 
 elasticsearch.hosts: ["<%= @kibana_od_elasticsearch_server_hosts %>"]
 elasticsearch.ssl.verificationMode: none
-elasticsearch.username: <%= @kibana_od_user %>
-elasticsearch.password: <%= @kibana_od_password %>
+elasticsearch.username: <%= @kibana_od_elastic_user %>
+elasticsearch.password: <%= @kibana_od_elastic_password %>
 elasticsearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
 
 

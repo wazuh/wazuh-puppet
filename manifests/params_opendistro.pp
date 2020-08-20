@@ -8,7 +8,7 @@ class wazuh::params_opendistro {
   $config_mode = '0640'
 
   $opendistro_cluster_name = 'es-wazuh'
-  $opendistro_node_name = 'es-node-01'
+  $opendistro_node_name = 'node-01'
   $opendistro_node_master = true
   $opendistro_node_data = true
   $opendistro_node_ingest = true
