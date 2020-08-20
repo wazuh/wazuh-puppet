@@ -47,7 +47,7 @@ class wazuh::opendistro (
     path    => '/etc/elasticsearch/elasticsearch.yml',
     group   => 'elasticsearch',
     mode    => '0644',
-    notify  => Service[$elasticsearch_service], ## Restarts the service
+    notify  => Service[$opendistro_service], ## Restarts the service
     content => template('wazuh/opendistro_yml.erb'),
     require => Package[$opendistro_package],
   }
@@ -57,7 +57,7 @@ class wazuh::opendistro (
     path    => '/etc/elasticsearch/jvm.options',
     group   => 'elasticsearch',
     mode    => '0660',
-    notify  => Service[$elasticsearch_service], ## Restarts the service
+    notify  => Service[$opendistro_service], ## Restarts the service
     content => template('wazuh/jvm_options.erb'),
     require => Package[$opendistro_package],
   }

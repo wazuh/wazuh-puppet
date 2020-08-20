@@ -8,7 +8,7 @@ class wazuh::filebeat_oss (
   $filebeat_oss_package = 'filebeat',
   $filebeat_oss_service = 'filebeat',
   $filebeat_oss_elastic_user = 'admin',
-  $filebeat_oss_elastic_password = 'admin', 
+  $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.8.0',
   $wazuh_app_version = '3.13.1_7.8.0',
   $wazuh_extensions_version = 'v3.13.1',
@@ -33,7 +33,7 @@ class wazuh::filebeat_oss (
     path    => '/etc/filebeat/filebeat.yml',
     group   => 'root',
     mode    => '0644',
-    notify  => Service[$filebeat_service], ## Restarts the service
+    notify  => Service[$filebeat_oss_service], ## Restarts the service
     content => template('wazuh/filebeat_oss_yml.erb'),
     require => Package[$filebeat_oss_package]
   }
