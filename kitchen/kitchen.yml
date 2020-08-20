@@ -43,9 +43,17 @@ suites:
     includes:
       - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
 
+  - name: elastic
+    manifest: site.pp
+    verifier:
+      name: inspec
+    includes:
+      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
+
   - name: agent
     manifest: site.pp
     verifier:
       name: inspec
     includes:
       - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
+

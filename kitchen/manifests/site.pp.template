@@ -1,6 +1,16 @@
 node /^manager/ {
-  class { 'wazuh::manager':}
+  class { 'wazuh::manager':
+        } ->
+  class { 'wazuh::wazuh_api':
+        } ->
+  class { 'wazuh::filebeat':
+        } ->
+  class { 'wazuh::elasticsearch':
+        } ->
+  class { 'wazuh::kibana':
+        }
 }
+
 node /^agent/ {
   class { 'wazuh::agent':
         wazuh_register_endpoint => 'manager_ip',
