@@ -13,7 +13,7 @@ setup.template.overwrite: true
 
 # Send events directly to Elasticsearch
 output.elasticsearch:
-  hosts: ["https://<%= filebeat_oss_elasticsearch_ip %>:<%= filebeat_oss_elasticsearch_port %>"]
+  hosts: ["https://<%= @filebeat_oss_elasticsearch_ip %>:<%= @filebeat_oss_elasticsearch_port %>"]
   username: <%= @filebeat_oss_elastic_user %>
   password: <%= @filebeat_oss_elastic_password %>
   ssl.verification_mode: none
