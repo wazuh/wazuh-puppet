@@ -7,8 +7,8 @@ class wazuh::filebeat (
 
   $filebeat_package = 'filebeat',
   $filebeat_service = 'filebeat',
-  $filebeat_version = '7.8.1',
-  $wazuh_app_version = '3.13.1_7.8.1',
+  $filebeat_version = '7.8.0',
+  $wazuh_app_version = '3.13.1_7.8.0',
   $wazuh_extensions_version = 'v3.13.1',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
 ){
@@ -32,7 +32,7 @@ class wazuh::filebeat (
     group   => 'root',
     mode    => '0644',
     notify  => Service[$filebeat_service], ## Restarts the service
-    content => template('wazuh/filebeat_yml.erb'),
+    content => template('wazuh/filebeat_od_yml.erb'),
     require => Package['filebeat']
   }
 
