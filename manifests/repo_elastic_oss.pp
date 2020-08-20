@@ -1,6 +1,6 @@
 # Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 # Installation of Elastic repository
-class wazuh::repo_elastic (
+class wazuh::repo_elastic_oss (
 
 ) {
     case $::osfamily {
@@ -17,10 +17,10 @@ class wazuh::repo_elastic (
         case $::lsbdistcodename {
           /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
 
-            apt::source { 'wazuh_elastic':
+            apt::source { 'wazuh_elastic_oss':
               ensure   => present,
-              comment  => 'This is the Elastic repository',
-              location => 'https://artifacts.elastic.co/packages/7.x/apt',
+              comment  => 'This is the OSS Elastic repository',
+              location => 'https://artifacts.elastic.co/packages/oss-7.x/apt',
               release  => 'stable',
               repos    => 'main',
               include  => {
@@ -36,10 +36,10 @@ class wazuh::repo_elastic (
           case $::os[name] {
             /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
               if ( $::operatingsystemrelease =~ /^5.*/ ) {
-                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/yum'
+                $baseurl  = 'https://artifacts.elastic.co/packages/oss-7.x/yum'
                 $gpgkey   = 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
               } else {
-                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/yum'
+                $baseurl  = 'https://artifacts.elastic.co/packages/oss-7.x/yum'
                 $gpgkey   = 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
               }
             }
