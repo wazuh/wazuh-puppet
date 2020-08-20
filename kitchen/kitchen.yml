@@ -48,7 +48,7 @@ suites:
     verifier:
       name: inspec
     includes:
-      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
+      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
 
   - name: agent
     manifest: site.pp
