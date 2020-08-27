@@ -18,7 +18,6 @@ jobs:
         PLATFORM: rhel
         RELEASE: latest
         RUN_COMMAND: /usr/sbin/init
-        ELASTIC_INSTALL_TYPE: elastic_licensed
     - name: CentOS 7 - (Manager + Agent)
       uses: './.github/actions/test_manager_and_agent'
       env:
@@ -26,7 +25,6 @@ jobs:
         PLATFORM: centos
         RELEASE: 7
         RUN_COMMAND: /sbin/init
-        ELASTIC_INSTALL_TYPE: elastic_licensed
     - name: Ubuntu 16.04 - (Manager + Agent)
       uses: './.github/actions/test_manager_and_agent'
       env:
@@ -34,7 +32,6 @@ jobs:
         PLATFORM: ubuntu
         RELEASE: 16
         RUN_COMMAND: /sbin/init
-        ELASTIC_INSTALL_TYPE: elastic_licensed
     - name: Ubuntu 18.04 - (Manager + Agent)
       uses: './.github/actions/test_manager_and_agent'
       env:
@@ -42,4 +39,3 @@ jobs:
         PLATFORM: ubuntu
         RELEASE: 18
         RUN_COMMAND: /sbin/init
-        ELASTIC_INSTALL_TYPE: elastic_licensed
