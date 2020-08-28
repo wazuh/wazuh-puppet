@@ -78,3 +78,7 @@ elsif os.family == 'redhat'
     its('version') { is_expected.to eq '7.8.1-1' }
   end
 end
+
+describe http('http://localhost:9200') do
+  its('status') { should cmp 200 }
+end
