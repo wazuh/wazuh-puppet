@@ -28,3 +28,57 @@ wazuh_daemons.each do |key, value|
     its('users') { is_expected.to eq [value] }
   end
 end
+
+describe service('filebeat') do
+  it { is_expected.to be_installed }
+  it { is_expected.to be_enabled }
+  it { is_expected.to be_running }
+end
+
+describe service('elasticsearch') do
+  it { is_expected.to be_installed }
+  it { is_expected.to be_enabled }
+  it { is_expected.to be_running }
+end
+
+describe service('kibana') do
+  it { is_expected.to be_installed }
+  it { is_expected.to be_enabled }
+  it { is_expected.to be_running }
+end
+
+if os.family == 'debian'
+  describe package('filebeat') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '7.8.1' }
+  end
+  
+  describe package('elasticsearch') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '7.8.1' }
+  end
+  
+  describe package('kibana') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '7.8.1' }
+  end
+elsif os.family == 'redhat'
+  describe package('filebeat') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '7.8.1-1' }
+  end
+  
+  describe package('elasticsearch') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '7.8.1-1' }
+  end
+  
+  describe package('kibana') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '7.8.1-1' }
+  end
+end
+
+describe http('http://localhost:9200') do
+  its('status') { should cmp 200 }
+end
