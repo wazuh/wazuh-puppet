@@ -19,7 +19,7 @@ class wazuh::wazuh_api (
     }
   } else {
     package { $wazuh_api_package:
-      ensure   => $wazuh_api_version[0...-2],
+      ensure   => $wazuh_api_version,
       provider => 'yum',
     }
   }
