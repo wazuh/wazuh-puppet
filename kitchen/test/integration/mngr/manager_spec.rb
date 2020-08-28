@@ -9,12 +9,6 @@ describe service('wazuh-manager') do
   it { is_expected.to be_running }
 end
 
-describe service('wazuh-api') do
-  it { is_expected.to be_installed }
-  it { is_expected.to be_enabled }
-  it { is_expected.to be_running }
-end
-
 # Verifying daemons
 
 wazuh_daemons = {
