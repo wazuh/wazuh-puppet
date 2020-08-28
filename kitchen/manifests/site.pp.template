@@ -1,4 +1,4 @@
-node /^manager/ {
+node /^manager_elastic_licensed/ {
   class { 'wazuh::manager':
         } ->
   class { 'wazuh::filebeat':

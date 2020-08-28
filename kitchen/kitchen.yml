@@ -16,7 +16,7 @@ platforms:
     driver_config:
       image: <%= ENV['IMAGE'] %>
       platform: <%= ENV['PLATFORM'] %>
-      hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
+      hostname: manager_<%= ENV['ELASTIC_INSTALL_TYPE'] %>_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
       run_command: <%= ENV['RUN_COMMAND'] %>
       privileged: true
       volume:
