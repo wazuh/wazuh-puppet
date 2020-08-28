@@ -35,13 +35,13 @@ describe service('filebeat') do
   it { is_expected.to be_running }
 end
 
-describe service('opendistroforelasticsearch') do
+describe service('elasticsearch') do
   it { is_expected.to be_installed }
   it { is_expected.to be_enabled }
   it { is_expected.to be_running }
 end
 
-describe service('opendistroforelasticsearch-kibana') do
+describe service('kibana') do
   it { is_expected.to be_installed }
   it { is_expected.to be_enabled }
   it { is_expected.to be_running }
@@ -55,12 +55,12 @@ if os.family == 'debian'
   
   describe package('opendistroforelasticsearch') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '7.8.0' }
+    its('version') { is_expected.to eq '1.9.0' }
   end
   
   describe package('opendistroforelasticsearch-kibana') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '7.8.0' }
+    its('version') { is_expected.to eq '1.9.0' }
   end
 elsif os.family == 'redhat'
   describe package('filebeat') do
@@ -70,12 +70,12 @@ elsif os.family == 'redhat'
   
   describe package('opendistroforelasticsearch') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '7.8.0-1' }
+    its('version') { is_expected.to eq '1.9.0-1' }
   end
   
   describe package('opendistroforelasticsearch-kibana') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '7.8.0-1' }
+    its('version') { is_expected.to eq '1.9.0-1' }
   end
 end
 
