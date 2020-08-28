@@ -9,6 +9,17 @@ node /^manager_elastic_licensed/ {
         }
 }
 
+node /^manager_opendistro/ {
+  class { 'wazuh::manager':
+        } ->
+  class { 'wazuh::filebeat_oss':
+        } ->
+  class { 'wazuh::opendistro':
+        } ->
+  class { 'wazuh::kibana_od':
+        }
+}
+
 node /^agent/ {
   class { 'wazuh::agent':
         wazuh_register_endpoint => 'manager_ip',

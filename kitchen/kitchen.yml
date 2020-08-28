@@ -36,7 +36,7 @@ platforms:
       provision_command:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 suites:
-  - name: mngr
+  - name: mngr_<%= ENV['ELASTIC_INSTALL_TYPE'] %>
     manifest: site.pp
     verifier:
       name: inspec
