@@ -14,7 +14,6 @@ class wazuh::wazuh_api (
 
   if $::osfamily == 'Debian' {
     package { $wazuh_api_package:
-      ensure   => $wazuh_api_version,
       provider => 'apt',
     }
   } else {
