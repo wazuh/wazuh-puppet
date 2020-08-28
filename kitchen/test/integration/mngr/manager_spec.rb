@@ -65,7 +65,7 @@ if os.family == 'debian'
 elsif os.family == 'redhat'
   describe package('filebeat') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '7.8.1' }
+    its('version') { is_expected.to eq '7.8.1-1' }
   end
   
   describe package('elasticsearch') do
