@@ -55,7 +55,7 @@ if os.family == 'debian'
   
   describe package('opendistroforelasticsearch') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '1.9.0' }
+    its('version') { is_expected.to eq '1.9.0-1' }
   end
   
   describe package('opendistroforelasticsearch-kibana') do
