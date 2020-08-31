@@ -32,7 +32,7 @@ class wazuh::opendistro (
 
   if $::osfamily == 'Debian' {
     file { 'elasticsearch-oss':
-        path     => '/var/tmp/elasticsearch-oss.deb'
+        path     => '/var/tmp/elasticsearch-oss.deb',
         ensure   => present,
         mode     => '0644',
         owner    => 'root',
