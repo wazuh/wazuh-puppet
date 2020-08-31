@@ -9,8 +9,8 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Build and launch Linting test
-      uses: './.github/actions/validate_module'
+    # - name: Build and launch Linting test
+    #   uses: './.github/actions/validate_module'
     - name: Amazon linux - (Manager + Agent + ES)
       uses: './.github/actions/test_manager_and_agent'
       env:
