@@ -31,21 +31,22 @@ class wazuh::opendistro (
 
 
   if $::osfamily == 'Debian' {
-    package { "elasticsearch-oss":
-      provider => dpkg,
-      ensure   => installed,
-      source   => "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.8.0-amd64.deb"
+    file { 'elasticsearch-oss':
+        path     => '/var/tmp/elasticsearch-oss.deb'
+        ensure   => present,
+        mode     => '0644',
+        owner    => 'root',
+        group    => 'root',
+        source   => 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.8.0-amd64.deb',
     }
 
-
-
-  package { 'package':
-    provider         => 'rpm',
-    ensure      => installed,
-    source => "${remoterpm::src}"
-  }
-
-
+    package { 'elasticsearch-oss-install':
+        name     => 'elasticsearch-oss',
+        ensure   => latest,
+        provider => dpkg,                  
+        source   => File['elasticsearch-oss']['path'],
+        require  => File['elasticsearch-oss'],
+    }
     Class['wazuh::repo_opendistro'] -> Class['apt::update'] -> Package['opendistroforelasticsearch']
   } else {
     Class['wazuh::repo_opendistro'] -> Package['opendistroforelasticsearch']
