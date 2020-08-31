@@ -84,5 +84,5 @@ describe http('https://localhost:9200', auth: {user: 'admin', pass: 'admin'}, ss
 end
 
 describe http('http://localhost:5601/login') do
-  its('status') { should cmp 200 }
+  its('status', retry: 20, retry_wait: 5) { should cmp 200 }
 end
