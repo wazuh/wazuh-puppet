@@ -8,11 +8,9 @@ class wazuh::repo_opendistro (
         if ! defined(Package['apt-transport-https']) {
           ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
         }
-        # apt-key added by issue #34
         apt::key { 'opendistro':
           id     => '51209CCB28FBC2DC8CCD9A6C472CFDFCE370325E',
           source => 'https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch',
-          server => 'pgp.mit.edu'
         }
         case $::lsbdistcodename {
           /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
