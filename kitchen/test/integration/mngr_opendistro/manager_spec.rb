@@ -83,10 +83,6 @@ describe http('https://localhost:9200', auth: {user: 'admin', pass: 'admin'}, ss
   its('status') { should cmp 200 }
 end
 
-# describe http('https://localhost:9200', auth: {username: 'admin', password: 'admin'}, ssl_verify: false) do
-#   its('status') { should cmp 200 }
-# end
-
-# describe http('https://localhost:9200', auth: {user: 'admin', password: 'admin'}, ssl_verify: false) do
-#   its('status') { should cmp 200 }
-# end
+describe http('http://localhost:5601/login') do
+  its('status') { should cmp 200 }
+end
