@@ -79,6 +79,6 @@ elsif os.family == 'redhat'
   end
 end
 
-# describe http('http://localhost:9200') do
-#   its('status') { should cmp 200 }
-# end
+describe http('https://localhost:9200', auth: {user: 'admin', pass: 'admin'}) do
+  its('status') { should cmp 200 }
+end
