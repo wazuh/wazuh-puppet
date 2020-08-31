@@ -38,7 +38,7 @@ class wazuh::opendistro (
 
   # install package
   package { 'opendistroforelasticsearch':
-    ensure => $opendistro_version,
+  #  ensure => $opendistro_version,
     name   => $opendistro_package,
   }
 
