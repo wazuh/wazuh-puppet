@@ -1,8 +1,6 @@
 node /^manager_elastic_licensed/ {
   class { 'wazuh::manager':
         } ->
-  class { 'wazuh::wazuh_api':
-        } ->
   class { 'wazuh::filebeat':
         } ->
   class { 'wazuh::elasticsearch':
@@ -13,8 +11,6 @@ node /^manager_elastic_licensed/ {
 
 node /^manager_opendistro/ {
   class { 'wazuh::manager':
-        } ->
-  class { 'wazuh::wazuh_api':
         } ->
   class { 'wazuh::filebeat_oss':
         } ->
