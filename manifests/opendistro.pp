@@ -31,6 +31,11 @@ class wazuh::opendistro (
 
 
   if $::osfamily == 'Debian' {
+    package { "elasticsearch-oss":
+      provider => dpkg,
+      ensure   => latest,
+      source   => "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.8.0-amd64.deb"
+  }
     Class['wazuh::repo_opendistro'] -> Class['apt::update'] -> Package['opendistroforelasticsearch']
   } else {
     Class['wazuh::repo_opendistro'] -> Package['opendistroforelasticsearch']
