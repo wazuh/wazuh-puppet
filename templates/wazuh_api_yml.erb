@@ -5,7 +5,7 @@
 host: <%= @wazuh_api_host %>
 port: <%= @wazuh_api_port %>
 # Set this option to "yes" in case the API is running behind a proxy server. Values: yes, no
-behind_proxy_server: <%= wazuh_api_behind_proxy_server %>
+behind_proxy_server: <%= @wazuh_api_behind_proxy_server %>
 # Advanced configuration
 https:
   enabled: <%= @wazuh_api_https_enabled %>
