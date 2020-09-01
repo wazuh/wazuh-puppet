@@ -27,6 +27,50 @@
   <%- if @ossec_auto_restart then -%>
     <auto_restart><%= @ossec_auto_restart %></auto_restart>
   <%- end -%>
+  <%- if @wazuh_enrollment_enabled == 'yes' then -%>
+  <enrollment>
+    <enabled><%= @wazuh_enrollment_enabled %></enabled>
+    <%- if @wazuh_enrollment_manager_address then -%>
+    <manager_address><%= @wazuh_enrollment_manager_address %></manager_address>
+    <%- end -%>
+    <%- if @wazuh_enrollment_port then -%>
+    <port><%= @wazuh_enrollment_port %></port>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_name then -%>
+    <agent_name><%= @wazuh_enrollment_agent_name %></agent_name>
+    <%- end -%>
+    <%- if @wazuh_enrollment_groups then -%>
+    <groups><%= @wazuh_enrollment_groups %></groups>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_address then -%>
+    <agent_address><%= @wazuh_enrollment_agent_address %></agent_address>
+    <%- end -%>
+    <%- if @wazuh_enrollment_ssl_cipher then -%>
+    <ssl_cipher><%= @wazuh_enrollment_ssl_cipher %></ssl_cipher>
+    <%- end -%>
+    <%- if @wazuh_enrollment_server_ca_path then -%>
+    <server_ca_path><%= @wazuh_enrollment_server_ca_path %></server_ca_path>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_cert_path then -%>
+    <agent_certificate_path><%= @wazuh_enrollment_agent_cert_path %></agent_certificate_path>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_key_path then -%>
+    <agent_key_path><%= @wazuh_enrollment_agent_key_path %></agent_key_path>
+    <%- end -%>
+    <%- if @wazuh_enrollment_auth_pass then -%>
+    <authorization_pass><%= @wazuh_enrollment_auth_pass %></authorization_pass>
+    <%- end -%>
+    <%- if @wazuh_enrollment_auto_method then -%>
+    <auto_method><%= @wazuh_enrollment_auto_method %></auto_method>
+    <%- end -%>
+    <%- if @wazuh_delay_after_enrollment then -%>
+    <delay_after_enrollment><%= @wazuh_delay_after_enrollment %></delay_after_enrollment>
+    <%- end -%>
+    <%- if @wazuh_enrollment_use_source_ip then -%>
+    <use_source_ip><%= @wazuh_enrollment_use_source_ip %></use_source_ip>
+    <%- end -%>
+  </enrollment>
+  <%- end -%>
   </client>
 
   <logging>

@@ -71,6 +71,24 @@ class wazuh::agent (
   $client_buffer_queue_size          = $wazuh::params_agent::client_buffer_queue_size,
   $client_buffer_events_per_second   = $wazuh::params_agent::client_buffer_events_per_second,
 
+  # Auto enrollment configuration
+
+  $wazuh_enrollment_enabled          = $wazuh::params_agent::wazuh_enrollment_enabled,
+  $wazuh_enrollment_manager_address  = $wazuh::params_agent::wazuh_enrollment_manager_address,
+  $wazuh_enrollment_port             = $wazuh::params_agent::wazuh_enrollment_port,
+  $wazuh_enrollment_agent_name       = $wazuh::params_agent::wazuh_enrollment_agent_name,
+  $wazuh_enrollment_groups           = $wazuh::params_agent::wazuh_enrollment_groups,
+  $wazuh_enrollment_agent_address    = $wazuh::params_agent::wazuh_enrollment_agent_address,
+  $wazuh_enrollment_ssl_cipher       = $wazuh::params_agent::wazuh_enrollment_ssl_cipher,
+  $wazuh_enrollment_server_ca_path   = $wazuh::params_agent::wazuh_enrollment_server_ca_path,
+  $wazuh_enrollment_agent_cert_path  = $wazuh::params_agent::wazuh_enrollment_agent_cert_path,
+  $wazuh_enrollment_agent_key_path   = $wazuh::params_agent::wazuh_enrollment_agent_key_path,
+  $wazuh_enrollment_auth_pass        = $wazuh::params_agent::wazuh_enrollment_auth_pass,
+  $wazuh_enrollment_auto_method      = $wazuh::params_agent::wazuh_enrollment_auto_method,
+  $wazuh_delay_after_enrollment      = $wazuh::params_agent::wazuh_delay_after_enrollment,
+  $wazuh_enrollment_use_source_ip    = $wazuh::params_agent::client_buffer_events_per_second,
+
+
   # Rootcheck
   $ossec_rootcheck_disabled          = $wazuh::params_agent::ossec_rootcheck_disabled,
   $ossec_rootcheck_check_files       = $wazuh::params_agent::ossec_rootcheck_check_files,
