@@ -370,7 +370,7 @@ class wazuh::manager (
   package { 'wazuh-custom-package-install':
       name     => 'wazuh-manager',
       ensure   => latest,
-      provider => dpkg,                  
+      provider => yum,                  
       source   => File['wazuh-custom-package']['path'],
       require  => File['wazuh-custom-package'],
   }
