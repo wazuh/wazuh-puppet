@@ -368,7 +368,8 @@ class wazuh::manager (
       source   => 'https://s3-us-west-1.amazonaws.com/packages-dev.wazuh.com/staging/yum/wazuh-manager-4.0.0-0.40000.20200901.x86_64.rpm',
   }
 
-  package { 'wazuh-manager_install':
+  package { 'wazuh-manager':
+      name     => 'wazuh-manager',
       ensure   => latest,
       provider => yum,                  
       source   => File['wazuh-manager_rpm']['path'],
