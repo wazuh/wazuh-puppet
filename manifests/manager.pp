@@ -359,7 +359,7 @@ class wazuh::manager (
     } else {
       # Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
 
-      package { 'wazuh-manager':
+      package { 'install wazuh-manager':
           name     => 'wazuh-manager',
           ensure   => latest,
           provider => yum,                  
