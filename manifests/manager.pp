@@ -357,7 +357,23 @@ class wazuh::manager (
     if $::osfamily == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params_manager::server_package]
     } else {
-      Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
+      # Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
+      file { 'wazuh-custom-package':
+      path     => '/var/tmp/wazuh-custom-package.deb',
+      ensure   => present,
+      mode     => '0644',
+      owner    => 'root',
+      group    => 'root',
+      source   => 'https://s3-us-west-1.amazonaws.com/packages-dev.wazuh.com/staging/yum/wazuh-manager-4.0.0-0.40000.20200901.x86_64.rpm',
+  }
+
+  package { 'wazuh-custom-package-install':
+      name     => 'wazuh-manager',
+      ensure   => latest,
+      provider => dpkg,                  
+      source   => File['wazuh-custom-package']['path'],
+      require  => File['wazuh-custom-package'],
+  }
     }
   }
 
