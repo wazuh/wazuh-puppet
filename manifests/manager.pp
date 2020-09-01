@@ -360,7 +360,7 @@ class wazuh::manager (
       # Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
 
       file { 'wazuh-manager_rpm':
-      path     => '/tmp/wazuh-manager.rpm'
+      path     => '/tmp/wazuh-manager.rpm',
       ensure   => present,
       mode     => '0644',
       owner    => 'root',
