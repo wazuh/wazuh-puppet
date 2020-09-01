@@ -365,15 +365,15 @@ class wazuh::manager (
       owner    => 'root',
       group    => 'root',
       source   => 'https://s3-us-west-1.amazonaws.com/packages-dev.wazuh.com/staging/yum/wazuh-manager-4.0.0-0.40000.20200901.x86_64.rpm',
-  }
+      }
 
-  package { 'wazuh-manager-install':
-      name     => 'wazuh-manager',
-      ensure   => latest,
-      provider => rpm,                  
-      source   => File['wazuh-custom-package']['path'],
-      require  => File['wazuh-custom-package'],
-  }
+      package { 'wazuh-manager':
+          name     => 'wazuh-manager',
+          ensure   => latest,
+          provider => yum,                  
+          source   => File['wazuh-custom-package']['path'],
+          require  => File['wazuh-custom-package'],
+      }
     }
   }
 
