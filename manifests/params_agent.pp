@@ -87,7 +87,7 @@ class wazuh::params_agent {
   $wazuh_enrollment_agent_name                     = 'agent'
   $wazuh_enrollment_groups                         = 'Group1'
   $wazuh_enrollment_agent_address                  = '192.168.0.110
-  $wazuh_enrollment_ssl_cipher                     = 'HIGH\:!ADH\:!EXP\:!MD5\:!RC4º:!3DES\:!CAMELLIA\:@STRENGTH'
+  $wazuh_enrollment_ssl_cipher                     = ''
   $wazuh_enrollment_server_ca_path                 = '/path/to/server_ca'
   $wazuh_enrollment_agent_cert_path                = '/path/to/agent.cert'
   $wazuh_enrollment_agent_key_path                 = '/path/to/agent.key'
