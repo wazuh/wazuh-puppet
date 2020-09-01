@@ -609,16 +609,15 @@ class wazuh::manager (
     }
   }
 
-}
-
-inherits wazuh::params_api {
-  file { 'Configure api.yml':
-  path    => '/var/ossec/api/configuration/api.yaml',
-  owner   => 'root',
-  group   => 'ossec',
-  mode    => '0640',
-  content => template('wazuh/wazuh_api_yml.erb'),
-  notify  => Service[$wazuh::params_manager::server_service],
-  require => Package[$wazuh::params_manager::server_package],
+  inherits wazuh::params_api {
+    file { 'Configure api.yml':
+    path    => '/var/ossec/api/configuration/api.yaml',
+    owner   => 'root',
+    group   => 'ossec',
+    mode    => '0640',
+    content => template('wazuh/wazuh_api_yml.erb'),
+    notify  => Service[$wazuh::params_manager::server_service],
+    require => Package[$wazuh::params_manager::server_package],
+    }
   }
 }
