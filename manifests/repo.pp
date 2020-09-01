@@ -39,7 +39,7 @@ class wazuh::repo (
               $baseurl  = 'https://packages.wazuh.com/3.x/yum/5/'
               $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
             } else {
-              $baseurl  = 'https://s3-us-west-1.amazonaws.com/packages-dev.wazuh.com/staging/yum'
+              $baseurl  = 'https://packages.wazuh.com/3.x/yum/'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }
