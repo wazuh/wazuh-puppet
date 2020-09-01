@@ -359,14 +359,22 @@ class wazuh::manager (
     } else {
       # Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
 
-      package { 'install wazuh-manager':
-          name     => 'wazuh-manager',
-          ensure   => latest,
-          provider => yum,                  
-          source   => '/home/vagrant/wazuh-manager-4.0.0-0.40000.20200901.x86_64.rpm',
-          require  => 'wazuh-manager',
-      }
-    }
+      file { 'wazuh-manager_rpm':
+      path     => '/tmp/wazuh-manager.rpm'
+      ensure   => present,
+      mode     => '0644',
+      owner    => 'root',
+      group    => 'root',
+      source   => 'https://s3-us-west-1.amazonaws.com/packages-dev.wazuh.com/staging/yum/wazuh-manager-4.0.0-0.40000.20200901.x86_64.rpm',
+  }
+
+  package { 'wazuh-manager_install':
+      name     => 'wazuh-manager',
+      ensure   => latest,
+      provider => yum,                  
+      source   => File['wazuh-manager_rpm']['path'],
+      require  => File['wazuh-manager_rpm'],
+  }
   }
 
   # Install and configure Wazuh-manager package
