@@ -325,8 +325,8 @@ class wazuh::params_manager {
 
       #API
 
-      $wazuh_api_host = 0.0.0.0
-      $wazuh_api_port = 55000
+      $wazuh_api_host = '0.0.0.0'
+      $wazuh_api_port = '55000'
 
       $wazuh_api_file =  undef
 
