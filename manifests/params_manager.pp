@@ -348,9 +348,9 @@ class wazuh::params_manager {
 
       # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
       $wazuh_api_cors_enabled = 'no'
-      $wazuh_api_cors_source_route = '*'
-      $wazuh_api_cors_expose_headers = '*'
-      $wazuh_api_cors_allow_headers = '*'
+      $wazuh_api_cors_source_route = '\"*\"'
+      $wazuh_api_cors_expose_headers = '\"*\"'
+      $wazuh_api_cors_allow_headers = '\"*\"'
       $wazuh_api_cors_allow_credentials = 'no'
 
       # Cache (time in seconds)
