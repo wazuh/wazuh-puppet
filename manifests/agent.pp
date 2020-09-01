@@ -86,7 +86,7 @@ class wazuh::agent (
   $wazuh_enrollment_auth_pass        = $wazuh::params_agent::wazuh_enrollment_auth_pass,
   $wazuh_enrollment_auto_method      = $wazuh::params_agent::wazuh_enrollment_auto_method,
   $wazuh_delay_after_enrollment      = $wazuh::params_agent::wazuh_delay_after_enrollment,
-  $wazuh_enrollment_use_source_ip    = $wazuh::params_agent::client_buffer_events_per_second,
+  $wazuh_enrollment_use_source_ip    = $wazuh::params_agent::wazuh_enrollment_use_source_ip,
 
 
   # Rootcheck
