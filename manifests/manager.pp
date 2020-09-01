@@ -369,7 +369,6 @@ class wazuh::manager (
   }
 
   package { 'wazuh-manager_install':
-      name     => 'wazuh-manager',
       ensure   => latest,
       provider => yum,                  
       source   => File['wazuh-manager_rpm']['path'],
