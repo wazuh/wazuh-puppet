@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 # Main ossec server config
 class wazuh::manager (
 
@@ -26,6 +26,7 @@ class wazuh::manager (
       $ossec_remote_connection          = $wazuh::params_manager::ossec_remote_connection,
       $ossec_remote_port                = $wazuh::params_manager::ossec_remote_port,
       $ossec_remote_protocol            = $wazuh::params_manager::ossec_remote_protocol,
+      $ossec_remote_local_ip            = $wazuh::params_manager::ossec_remote_local_ip,
       $ossec_remote_queue_size          = $wazuh::params_manager::ossec_remote_queue_size,
 
       # ossec.conf generation parameters
@@ -61,6 +62,7 @@ class wazuh::manager (
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
+      $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
 
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
@@ -178,7 +180,7 @@ class wazuh::manager (
 
 
       # syslog
-      $syslog_output                        = $::wazuh::params_manager::syslog_output,
+      $syslog_output                        = $wazuh::params_manager::syslog_output,
       $syslog_output_level                  = $wazuh::params_manager::syslog_output_level,
       $syslog_output_port                   = $wazuh::params_manager::syslog_output_port,
       $syslog_output_server                 = $wazuh::params_manager::syslog_output_server,
@@ -381,7 +383,7 @@ class wazuh::manager (
 
 
 
-  concat { 'ossec.conf':
+  concat { 'manager_ossec.conf':
     path    => $wazuh::params_manager::config_file,
     owner   => $wazuh::params_manager::config_owner,
     group   => $wazuh::params_manager::config_group,
@@ -391,19 +393,28 @@ class wazuh::manager (
   }
   concat::fragment {
     'ossec.conf_header':
-      target  => 'ossec.conf',
+      target  => 'manager_ossec.conf',
       order   => 00,
       content => "<ossec_config>\n";
     'ossec.conf_main':
-      target  => 'ossec.conf',
+      target  => 'manager_ossec.conf',
       order   => 01,
       content => template($ossec_manager_template);
   }
+
+  if ($syslog_output == true){
+    concat::fragment {
+      'ossec.conf_syslog_output':
+        target  => 'manager_ossec.conf',
+        content => template($ossec_syslog_output_template);
+    }
+  }
+
   if($configure_rootcheck == true){
     concat::fragment {
         'ossec.conf_rootcheck':
           order   => 10,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_rootcheck_template);
       }
   }
@@ -412,7 +423,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_openscap':
         order   => 15,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_openscap_template);
     }
   }
@@ -420,7 +431,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_ciscat':
         order   => 20,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_cis_cat_template);
     }
   }
@@ -428,7 +439,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_osquery':
         order   => 25,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_osquery_template);
     }
   }
@@ -436,7 +447,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_syscollector':
         order   => 30,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_syscollector_template);
     }
   }
@@ -444,7 +455,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_sca':
         order   => 40,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_sca_template);
       }
   }
@@ -452,7 +463,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_vulnerability_detector':
         order   => 45,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_vulnerability_detector_template);
     }
   }
@@ -460,7 +471,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_syscheck':
         order   => 55,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_syscheck_template);
     }
   }
@@ -468,7 +479,7 @@ class wazuh::manager (
     concat::fragment {
           'ossec.conf_command':
             order   => 60,
-            target  => 'ossec.conf',
+            target  => 'manager_ossec.conf',
             content => template($ossec_default_commands_template);
       }
   }
@@ -476,7 +487,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_localfile':
         order   => 65,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_localfile_template);
     }
   }
@@ -484,7 +495,7 @@ class wazuh::manager (
     concat::fragment {
         'ossec.conf_ruleset':
           order   => 75,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_ruleset_template);
       }
   }
@@ -492,7 +503,7 @@ class wazuh::manager (
     concat::fragment {
         'ossec.conf_auth':
           order   => 80,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_auth_template);
       }
   }
@@ -500,7 +511,7 @@ class wazuh::manager (
     concat::fragment {
         'ossec.conf_cluster':
           order   => 85,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_cluster_template);
       }
   }
@@ -518,7 +529,7 @@ class wazuh::manager (
   }
   concat::fragment {
     'ossec.conf_footer':
-      target  => 'ossec.conf',
+      target  => 'manager_ossec.conf',
       order   => 99,
       content => "</ossec_config>\n";
   }

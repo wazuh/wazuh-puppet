@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 # Elastic configuration parameters
 class wazuh::params_elastic {
   $elasticsearch_service = 'elasticsearch'

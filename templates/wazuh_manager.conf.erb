@@ -33,6 +33,9 @@
     <connection><%= @ossec_remote_connection %></connection>
     <port><%= @ossec_remote_port %></port>
     <protocol><%= @ossec_remote_protocol %></protocol>
+  <%- if @ossec_remote_local_ip -%>
+    <local_ip><%= @ossec_remote_local_ip %></local_ip>
+  <%- end -%>
     <queue_size><%= @ossec_remote_queue_size %></queue_size>
   </remote>
 

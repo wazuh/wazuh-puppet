@@ -1,6 +1,6 @@
 # Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
-# Installation of Elastic repository
-class wazuh::repo_elastic (
+# Installation of Open Distro for Elasticsearch repository
+class wazuh::repo_opendistro (
 
 ) {
     case $::osfamily {
@@ -9,18 +9,18 @@ class wazuh::repo_elastic (
           ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
         }
         # apt-key added by issue #34
-        apt::key { 'elastic':
-          id     => '46095ACC8548582C1A2699A9D27D666CD88E42B4',
-          source => 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+        apt::key { 'opendistro':
+          id     => '51209CCB28FBC2DC8CCD9A6C472CFDFCE370325E',
+          source => 'https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch',
           server => 'pgp.mit.edu'
         }
         case $::lsbdistcodename {
           /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
 
-            apt::source { 'wazuh_elastic':
+            apt::source { 'wazuh_elastic_od':
               ensure   => present,
-              comment  => 'This is the Elastic repository',
-              location => 'https://artifacts.elastic.co/packages/7.x/apt',
+              comment  => 'This is the Open Distro for Elastic repository',
+              location => 'ttps://d3g5vo6xdbdb9a.cloudfront.net/apt',
               release  => 'stable',
               repos    => 'main',
               include  => {
@@ -36,33 +36,33 @@ class wazuh::repo_elastic (
           case $::os[name] {
             /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
               if ( $::operatingsystemrelease =~ /^5.*/ ) {
-                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/yum'
-                $gpgkey   = 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
+                $baseurl  = 'https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/'
+                $gpgkey   = 'https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch'
               } else {
-                $baseurl  = 'https://artifacts.elastic.co/packages/7.x/yum'
-                $gpgkey   = 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
+                $baseurl  = 'https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/'
+                $gpgkey   = 'https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch'
               }
             }
             default: { fail('This ossec module has not been tested on your distribution.') }
           }
-        ## Set up Elasticsearch repo
+        ## Set up Open Distro for Elasticsearch repo
 
         # Import GPG key
 
-        exec { 'Install Elasticsearch GPG key':
+        exec { 'Install Open Distro for Elasticsearch GPG key':
           path    => '/usr/bin',
-          command => 'rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch',
+          command => 'rpm --import https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch',
         }
 
         # Adding repo by Puppet yumrepo resource
 
-        yumrepo { 'elasticsearch':
+        yumrepo { 'opendistro':
           ensure   => 'present',
           enabled  => 1,
           gpgcheck => 1,
           gpgkey   => $gpgkey,
           baseurl  => $baseurl,
-          name     => 'elasticsearch',
+          name     => 'opendistro',
         }
       }
       default: { fail('This ossec module has not been tested on your distribution') }
