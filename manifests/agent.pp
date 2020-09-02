@@ -540,7 +540,7 @@ class wazuh::agent (
         exec { 'agent-auth-linux':
           command => $agent_auth_command,
           unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
-          require => Concat['ossec.conf'],
+          require => Concat['agent_ossec.conf'],
           before  => Service[$agent_service_name],
         }
 
@@ -567,7 +567,7 @@ class wazuh::agent (
           command  => $agent_auth_command,
           provider => 'powershell',
           onlyif   => "if ((Get-Item '${$::wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
-          require  => Concat['ossec.conf'],
+          require  => Concat['agent_ossec.conf'],
           before   => Service[$agent_service_name],
         }
 
