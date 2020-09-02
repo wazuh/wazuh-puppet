@@ -656,7 +656,7 @@ class wazuh::agent (
       owner   => 'root',
       group   => 'ossec',
       mode    => '0640',
-      content => $wazuh_enrollment_auth_pass,
+      content => $wazuh::params_agent::wazuh_enrollment_auth_pass,
       require => Package[$wazuh::params_agent::agent_package_name],
     }
   }
