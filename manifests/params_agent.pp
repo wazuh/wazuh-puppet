@@ -82,19 +82,20 @@ class wazuh::params_agent {
 
   # agent autoenrollment
   $wazuh_enrollment_enabled                        = undef
-  $wazuh_enrollment_manager_address                = '192.168.1.100'
-  $wazuh_enrollment_port                           = '1515'
-  $wazuh_enrollment_agent_name                     = 'agent'
-  $wazuh_enrollment_groups                         = 'Group1'
-  $wazuh_enrollment_agent_address                  = '192.168.0.110'
-  $wazuh_enrollment_ssl_cipher                     = 'HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH'
-  $wazuh_enrollment_server_ca_path                 = '/path/to/server_ca'
-  $wazuh_enrollment_agent_cert_path                = '/path/to/agent.cert'
-  $wazuh_enrollment_agent_key_path                 = '/path/to/agent.key'
-  $wazuh_enrollment_auth_pass                      = 'TopSecret'
-  $wazuh_enrollment_auto_method                    = 'no'
-  $wazuh_delay_after_enrollment                    = '20'
-  $wazuh_enrollment_use_source_ip                  = 'no'
+  $wazuh_enrollment_manager_address                = undef
+  $wazuh_enrollment_port                           = undef
+  $wazuh_enrollment_agent_name                     = undef
+  $wazuh_enrollment_groups                         = undef
+  $wazuh_enrollment_agent_address                  = undef
+  $wazuh_enrollment_ssl_cipher                     = undef
+  $wazuh_enrollment_server_ca_path                 = undef
+  $wazuh_enrollment_agent_cert_path                = undef
+  $wazuh_enrollment_agent_key_path                 = undef
+  $wazuh_enrollment_auth_pass                      = undef
+  $wazuh_enrollment_auth_pass_path                 = $authd_pass_file
+  $wazuh_enrollment_auto_method                    = undef
+  $wazuh_delay_after_enrollment                    = undef
+  $wazuh_enrollment_use_source_ip                  = undef
 
   # OS specific configurations
   case $::kernel {
