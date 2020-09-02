@@ -83,6 +83,7 @@ class wazuh::agent (
   $wazuh_enrollment_server_ca_path   = $wazuh::params_agent::wazuh_enrollment_server_ca_path,
   $wazuh_enrollment_agent_cert_path  = $wazuh::params_agent::wazuh_enrollment_agent_cert_path,
   $wazuh_enrollment_agent_key_path   = $wazuh::params_agent::wazuh_enrollment_agent_key_path,
+  $wazuh_enrollment_auth_pass        = $wazuh::params_agent::wazuh_enrollment_auth_pass,
   $wazuh_enrollment_auth_pass_path   = $wazuh::params_agent::wazuh_enrollment_auth_pass_path,
   $wazuh_enrollment_auto_method      = $wazuh::params_agent::wazuh_enrollment_auto_method,
   $wazuh_delay_after_enrollment      = $wazuh::params_agent::wazuh_delay_after_enrollment,
