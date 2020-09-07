@@ -1,6 +1,6 @@
 describe package('wazuh-manager') do
   it { is_expected.to be_installed }
-  its('version') { is_expected.to eq '4.0.0-1' }
+  its('version') { is_expected.to eq '4.0.0-0.40000.20200901' }
 end
 
 describe service('wazuh-manager') do
