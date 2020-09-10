@@ -264,9 +264,10 @@ class wazuh::params_agent {
 
       case $::osfamily {
         'Debian': {
-          $service_has_status = false
-          $ossec_service_provider = undef
-
+          $agent_service  = 'wazuh-agent'
+          $agent_package  = 'wazuh-agent'
+          $api_service_provider = undef
+          
           $default_local_files = [
             { 'location' => '/var/log/syslog', 'log_format' => 'syslog' },
             { 'location' => '/var/log/kern.log', 'log_format' => 'syslog' },
@@ -276,6 +277,12 @@ class wazuh::params_agent {
           ]
           case $::lsbdistcodename {
             'xenial': {
+              $service_has_status  = true
+              $ossec_service_provider = systemd
+              $server_service = 'wazuh-manager'
+              $server_package = 'wazuh-manager'
+              $api_service = 'wazuh-api'
+              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-ubuntu-1604-ds.xml'        => {
                   'type'   => 'xccdf',
@@ -286,6 +293,12 @@ class wazuh::params_agent {
               }
             }
             'jessie': {
+              $service_has_status  = true
+              $ossec_service_provider = systemd
+              $server_service = 'wazuh-manager'
+              $server_package = 'wazuh-manager'
+              $api_service = 'wazuh-api'
+              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-debian-8-ds.xml'   => {
                   'type'   => 'xccdf',
@@ -296,7 +309,18 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            /^(wheezy|precise|trusty|vivid|wily)$/: {
+              $service_has_status  = false
+              $ossec_service_provider = undef
+              $server_service = 'wazuh-manager'
+              $server_package = 'wazuh-manager'
+              $api_service = 'wazuh-api'
+              $api_package = 'wazuh-api'
+              $wodle_openscap_content = undef
+            }
+            /^(stretch|buster|sid|bionic)$/: {
+              $service_has_status  = true
+              $ossec_service_provider = systemd
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $api_service = 'wazuh-api'
