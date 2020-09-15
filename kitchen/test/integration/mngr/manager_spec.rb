@@ -28,3 +28,4 @@ wazuh_daemons.each do |key, value|
     its('users') { is_expected.to eq [value] }
   end
 end
+
