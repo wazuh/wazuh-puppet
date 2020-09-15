@@ -7,6 +7,8 @@
     <protocol><%= @ossec_protocol %></protocol>
   <%- end -%>
     <port><%= @ossec_port %></port>
+    <max_retries><%= @wazuh_max_retries %></max_retries>
+    <retry_interval><%= @wazuh_retry_interval %></retry_interval>
   </server>
   <%- if @operatingsystem == 'Ubuntu' or @operatingsystem == 'ubuntu' -%>
     <config-profile><%= @ossec_config_ubuntu_profiles %></config-profile>
@@ -26,7 +28,7 @@
     <auto_restart><%= @ossec_auto_restart %></auto_restart>
   <%- end -%>
   </client>
-  
+
   <logging>
     <log_format><%= @logging_log_format %></log_format>
   </logging>

@@ -1,7 +1,7 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '3.13.0-1'
+  $agent_package_version = '3.13.1-1'
   $agent_service_ensure = 'running'
 
   $agent_name = undef
@@ -54,6 +54,8 @@ class wazuh::params_agent {
   $wazuh_reporting_endpoint = undef
   $ossec_port = '1514'
   $ossec_protocol = 'udp'
+  $wazuh_max_retries = '5'
+  $wazuh_retry_interval = '5'
   $ossec_config_ubuntu_profiles = 'ubuntu, ubuntu18, ubuntu18.04'
   $ossec_config_centos_profiles = 'centos, centos7, centos7.6'
   $ossec_notify_time = 10
