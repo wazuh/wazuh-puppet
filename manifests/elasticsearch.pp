@@ -11,7 +11,7 @@ class wazuh::elasticsearch (
   $elasticsearch_node_max_local_storage_nodes = '1',
   $elasticsearch_service = 'elasticsearch',
   $elasticsearch_package = 'elasticsearch',
-  $elasticsearch_version = '7.8.1',
+  $elasticsearch_version = '7.9.1',
 
   $elasticsearch_path_data = '/var/lib/elasticsearch',
   $elasticsearch_path_logs = '/var/log/elasticsearch',
