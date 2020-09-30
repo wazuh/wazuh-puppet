@@ -9,6 +9,7 @@ class wazuh::agent (
   $agent_package_name                = $wazuh::params_agent::agent_package_name,
   $agent_service_name                = $wazuh::params_agent::agent_service_name,
   $agent_service_ensure              = $wazuh::params_agent::agent_service_ensure,
+  $agent_msi_download_location       = $wazuh::params_agent::agent_msi_download_location,
 
   # Manage repository
 
@@ -274,7 +275,7 @@ class wazuh::agent (
         owner              => 'Administrator',
         group              => 'Administrators',
         mode               => '0774',
-        source             => "http://packages.wazuh.com/3.x/windows/wazuh-agent-${agent_package_version}.msi",
+        source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}.msi",
         source_permissions => ignore
       }
 
