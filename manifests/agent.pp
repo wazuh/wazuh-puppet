@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 
 # Puppet class that installs and manages the Wazuh agent
 class wazuh::agent (
@@ -60,6 +60,8 @@ class wazuh::agent (
   $wazuh_reporting_endpoint          = $wazuh::params_agent::wazuh_reporting_endpoint,
   $ossec_port                        = $wazuh::params_agent::ossec_port,
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
+  $wazuh_max_retries                 = $wazuh::params_agent::wazuh_max_retries,
+  $wazuh_retry_interval              = $wazuh::params_agent::wazuh_retry_interval,
   $ossec_config_ubuntu_profiles      = $wazuh::params_agent::ossec_config_ubuntu_profiles,
   $ossec_config_centos_profiles      = $wazuh::params_agent::ossec_config_centos_profiles,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
@@ -325,7 +327,7 @@ class wazuh::agent (
   }
 
 
-  concat { 'ossec.conf':
+  concat { 'agent_ossec.conf':
     path    => $wazuh::params_agent::config_file,
     owner   => $wazuh::params_agent::config_owner,
     group   => $wazuh::params_agent::config_group,
@@ -337,12 +339,12 @@ class wazuh::agent (
 
   concat::fragment {
     'ossec.conf_header':
-      target  => 'ossec.conf',
+      target  => 'agent_ossec.conf',
       order   => 00,
       before  => Service[$agent_service_name],
       content => "<ossec_config>\n";
     'ossec.conf_agent':
-      target  => 'ossec.conf',
+      target  => 'agent_ossec.conf',
       order   => 10,
       before  => Service[$agent_service_name],
       content => template($ossec_conf_template);
@@ -351,7 +353,7 @@ class wazuh::agent (
   if ($configure_rootcheck == true) {
     concat::fragment {
       'ossec.conf_rootcheck':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 15,
         before  => Service[$agent_service_name],
         content => template($ossec_rootcheck_template);
@@ -360,7 +362,7 @@ class wazuh::agent (
   if ($configure_wodle_openscap == true) {
     concat::fragment {
       'ossec.conf_openscap':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 16,
         before  => Service[$agent_service_name],
         content => template($ossec_wodle_openscap_template);
@@ -369,7 +371,7 @@ class wazuh::agent (
   if ($configure_wodle_cis_cat == true) {
     concat::fragment {
       'ossec.conf_cis_cat':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 17,
         before  => Service[$agent_service_name],
         content => template($ossec_wodle_cis_cat_template);
@@ -378,7 +380,7 @@ class wazuh::agent (
   if ($configure_wodle_osquery == true) {
     concat::fragment {
       'ossec.conf_osquery':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 18,
         before  => Service[$agent_service_name],
         content => template($ossec_wodle_osquery_template);
@@ -387,7 +389,7 @@ class wazuh::agent (
   if ($configure_wodle_syscollector == true) {
     concat::fragment {
       'ossec.conf_syscollector':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 19,
         before  => Service[$agent_service_name],
         content => template($ossec_wodle_syscollector_template);
@@ -396,7 +398,7 @@ class wazuh::agent (
   if ($configure_sca == true) {
     concat::fragment {
       'ossec.conf_sca':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 25,
         before  => Service[$agent_service_name],
         content => template($ossec_sca_template);
@@ -405,7 +407,7 @@ class wazuh::agent (
   if ($configure_syscheck == true) {
     concat::fragment {
       'ossec.conf_syscheck':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 30,
         before  => Service[$agent_service_name],
         content => template($ossec_syscheck_template);
@@ -414,7 +416,7 @@ class wazuh::agent (
   if ($configure_localfile == true) {
     concat::fragment {
       'ossec.conf_localfile':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 35,
         before  => Service[$agent_service_name],
         content => template($ossec_localfile_template);
@@ -440,7 +442,7 @@ class wazuh::agent (
   if ($configure_labels == true){
     concat::fragment {
         'ossec.conf_labels':
-        target  => 'ossec.conf',
+        target  => 'agent_ossec.conf',
         order   => 45,
         before  => Service[$agent_service_name],
         content => template($ossec_labels_template);
@@ -449,7 +451,7 @@ class wazuh::agent (
 
   concat::fragment {
     'ossec.conf_footer':
-      target  => 'ossec.conf',
+      target  => 'agent_ossec.conf',
       order   => 99,
       before  => Service[$agent_service_name],
       content => '</ossec_config>';
@@ -538,7 +540,7 @@ class wazuh::agent (
         exec { 'agent-auth-linux':
           command => $agent_auth_command,
           unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
-          require => Concat['ossec.conf'],
+          require => Concat['agent_ossec.conf'],
           before  => Service[$agent_service_name],
         }
 
@@ -565,7 +567,7 @@ class wazuh::agent (
           command  => $agent_auth_command,
           provider => 'powershell',
           onlyif   => "if ((Get-Item '${$::wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
-          require  => Concat['ossec.conf'],
+          require  => Concat['agent_ossec.conf'],
           before   => Service[$agent_service_name],
         }
 

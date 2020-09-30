@@ -1,11 +1,11 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 # Paramas file
 class wazuh::params_manager {
   case $::kernel {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.12.3-1'
+      $server_package_version                          = '3.13.2-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -26,6 +26,7 @@ class wazuh::params_manager {
       $ossec_remote_connection                         = 'secure'
       $ossec_remote_port                               = 1514
       $ossec_remote_protocol                           = 'udp'
+      $ossec_remote_local_ip                           = undef
       $ossec_remote_queue_size                         = 131072
 
     # ossec.conf generation parameters
@@ -62,6 +63,7 @@ class wazuh::params_manager {
       $ossec_auth_template                             = 'wazuh/fragments/_auth.erb'
       $ossec_cluster_template                          = 'wazuh/fragments/_cluster.erb'
       $ossec_active_response_template                  = 'wazuh/fragments/_default_activeresponse.erb'
+      $ossec_syslog_output_template                    = 'wazuh/fragments/_syslog_output.erb'
 
       ## Rootcheck
 
@@ -489,7 +491,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.12.3'
+      $agent_package  = 'Wazuh Agent 3.13.2'
       $server_service = ''
       $server_package = ''
       $api_service = ''

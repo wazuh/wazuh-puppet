@@ -1,6 +1,37 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.13.2
+
+### Added
+
+- Update to Wazuh version 3.13.2
+
+- wazuh-puppet tests on GitHub Actions ([@Zenidd](https://github.com/Zenidd)) [PR#274](https://github.com/wazuh/wazuh-puppet/pull/274)
+
+- Support Open Distro for Elasticsearch deployments ([@Zenidd](https://github.com/Zenidd)) [PR#285](https://github.com/wazuh/wazuh-puppet/pull/285)
+
+### Fixed
+
+- ossec.conf concat resources rename ([@Zenidd](https://github.com/Zenidd)) [PR#293](https://github.com/wazuh/wazuh-puppet/pull/293)
+
+- Adding syslog_output support on wazuh-puppet ([@Zenidd](https://github.com/Zenidd)) [PR#276](https://github.com/wazuh/wazuh-puppet/pull/276)
+
+
+## Wazuh Puppet v3.13.1_7.8.0
+
+### Added
+
+- Update to Wazuh version 3.13.1_7.8.0
+
+
+## Wazuh Puppet v3.13.0_7.7.1
+
+### Added
+
+- Update to Wazuh version 3.13.0_7.7.1
+- Add syscollector related config in Wazuh Agent manifest ([@rshad](https://github.com/rshad)) [PR#241](https://github.com/wazuh/wazuh-puppet/pull/241)
+
 ## Wazuh Puppet v3.12.3_7.6.2
 
 ### Added
