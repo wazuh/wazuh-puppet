@@ -539,6 +539,7 @@ class wazuh::agent (
           unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
           require => Concat['ossec.conf'],
           before  => Service[$agent_service_name],
+          notify  => Service[$agent_service_name],
         }
 
         service { $agent_service_name:
@@ -566,6 +567,7 @@ class wazuh::agent (
           onlyif   => "if ((Get-Item '${$::wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
           require  => Concat['ossec.conf'],
           before   => Service[$agent_service_name],
+          notify   => Service[$agent_service_name],
         }
 
         service { $agent_service_name:
