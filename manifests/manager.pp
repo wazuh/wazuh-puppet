@@ -357,31 +357,14 @@ class wazuh::manager (
     if $::osfamily == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params_manager::server_package]
     } else {
-      # Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
-
-      file { 'wazuh-manager_rpm':
-      path     => '/tmp/wazuh-manager.rpm',
-      ensure   => present,
-      mode     => '0644',
-      owner    => 'root',
-      group    => 'root',
-      source   => 'https://s3-us-west-1.amazonaws.com/packages-dev.wazuh.com/staging/yum/wazuh-manager-4.0.0-0.40000.20200901.x86_64.rpm',
-      }
-
-      package { 'wazuh-manager':
-          name     => 'wazuh-manager',
-          ensure   => latest,
-          provider => rpm,                  
-          source   => File['wazuh-manager_rpm']['path'],
-          require  => File['wazuh-manager_rpm'],
-      }
+      Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
     }
   }
-  # # Install and configure Wazuh-manager package
+  # Install and configure Wazuh-manager package
 
-  # package { $wazuh::params_manager::server_package:
-  #   ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
-  # }
+  package { $wazuh::params_manager::server_package:
+    ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
+  }
 
   file {
     default:

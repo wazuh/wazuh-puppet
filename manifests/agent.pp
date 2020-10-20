@@ -276,28 +276,12 @@ class wazuh::agent (
         if $::osfamily == 'Debian' {
           Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
         } else {
-          # Class['wazuh::repo'] -> Package[$agent_package_name]
-          file { 'wazuh-agent_rpm':
-          path     => '/tmp/wazuh-agent.rpm',
-          ensure   => present,
-          mode     => '0644',
-          owner    => 'root',
-          group    => 'root',
-          source   => 'https://s3-us-west-1.amazonaws.com/packages-dev.wazuh.com/staging/yum/wazuh-agent-4.0.0-0.40000.20200901.x86_64.rpm',
-          }
-    
-          package { 'wazuh-agent':
-              name     => 'wazuh-agent',
-              ensure   => latest,
-              provider => rpm,                  
-              source   => File['wazuh-agent_rpm']['path'],
-              require  => File['wazuh-agent_rpm'],
-          }
+          Class['wazuh::repo'] -> Package[$agent_package_name]
         }
       }
-      # package { $agent_package_name:
-      #   ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
-      # }
+      package { $agent_package_name:
+        ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
+      }
     }
     'windows': {
       file { $download_path:
