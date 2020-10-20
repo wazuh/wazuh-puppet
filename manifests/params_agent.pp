@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.0.0-1'
+  $agent_package_version = '3.13.2-1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'http://packages.wazuh.com/3.x/windows'
 
@@ -54,7 +54,7 @@ class wazuh::params_agent {
   $wazuh_register_endpoint = undef
   $wazuh_reporting_endpoint = undef
   $ossec_port = '1514'
-  $ossec_protocol = 'tcp'
+  $ossec_protocol = 'udp'
   $wazuh_max_retries = '5'
   $wazuh_retry_interval = '5'
   $ossec_config_ubuntu_profiles = 'ubuntu, ubuntu18, ubuntu18.04'
@@ -81,22 +81,6 @@ class wazuh::params_agent {
   $active_response_timeout                         = undef
   $active_response_repeated_offenders              = []
 
-  # agent autoenrollment
-  $wazuh_enrollment_enabled                        = undef
-  $wazuh_enrollment_manager_address                = undef
-  $wazuh_enrollment_port                           = undef
-  $wazuh_enrollment_agent_name                     = undef
-  $wazuh_enrollment_groups                         = undef
-  $wazuh_enrollment_agent_address                  = undef
-  $wazuh_enrollment_ssl_cipher                     = undef
-  $wazuh_enrollment_server_ca_path                 = undef
-  $wazuh_enrollment_agent_cert_path                = undef
-  $wazuh_enrollment_agent_key_path                 = undef
-  $wazuh_enrollment_auth_pass                      = undef
-  $wazuh_enrollment_auth_pass_path                 = $authd_pass_file
-  $wazuh_enrollment_auto_method                    = undef
-  $wazuh_delay_after_enrollment                    = undef
-  $wazuh_enrollment_use_source_ip                  = undef
 
   # OS specific configurations
   case $::kernel {
@@ -137,7 +121,7 @@ class wazuh::params_agent {
       $ossec_rootcheck_check_pids = 'yes'
       $ossec_rootcheck_check_ports = 'yes'
       $ossec_rootcheck_check_if = 'yes'
-      $ossec_rootcheck_frequency = 36000
+      $ossec_rootcheck_frequency = 43200
       $ossec_rootcheck_ignore_list = []
       $ossec_rootcheck_rootkit_files = '/var/ossec/etc/shared/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
@@ -316,6 +300,8 @@ class wazuh::params_agent {
             /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
+              $api_service = 'wazuh-api'
+              $api_package = 'wazuh-api'
               $wodle_openscap_content = undef
             }
             default: {
@@ -454,6 +440,9 @@ class wazuh::params_agent {
       $sca_windows_skip_nfs = 'yes'
       $sca_windows_policies = []
 
+      # Syscheck
+      $ossec_syscheck_disabled = 'no'
+      $ossec_syscheck_frequency = '43200'
 
       # Wodles
 

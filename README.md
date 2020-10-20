@@ -3,8 +3,7 @@
 [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://wazuh.com/community/join-us-on-slack/)
 [![Email](https://img.shields.io/badge/email-join-blue.svg)](https://groups.google.com/forum/#!forum/wazuh)
 [![Documentation](https://img.shields.io/badge/docs-view-green.svg)](https://documentation.wazuh.com)
-[![Web](https://img.shields.io/badge/web-view-green.svg)](https://wazuh.com)
-![Kitchen tests](https://github.com/wazuh/wazuh-puppet/workflows/Kitchen%20tests/badge.svg)
+[![Documentation](https://img.shields.io/badge/web-view-green.svg)](https://wazuh.com)
 
 This module installs and configure Wazuh agent and manager.
 
@@ -19,117 +18,87 @@ This module installs and configure Wazuh agent and manager.
     wazuh-puppet/
     ├── CHANGELOG.md
     ├── checksums.json
-    ├── data
-    │   └── common.yaml
     ├── files
-    │   └── ossec-logrotate.te
+    │   └── ossec-logrotate.te
     ├── Gemfile
-    ├── kitchen
-    │   ├── chefignore
-    │   ├── clean.sh
-    │   ├── Gemfile
-    │   ├── hieradata
-    │   │   ├── common.yaml
-    │   │   └── roles
-    │   │       └── default.yaml
-    │   ├── kitchen.yml
-    │   ├── manifests
-    │   │   └── site.pp.template
-    │   ├── Puppetfile
-    │   ├── README.md
-    │   ├── run.sh
-    │   └── test
-    │       └── integration
-    │           ├── agent
-    │           │   └── agent_spec.rb
-    │           └── mngr
-    │               └── manager_spec.rb
     ├── LICENSE.txt
     ├── manifests
-    │   ├── activeresponse.pp
-    │   ├── addlog.pp
-    │   ├── agent.pp
-    │   ├── audit.pp
-    │   ├── command.pp
-    │   ├── elasticsearch.pp
-    │   ├── email_alert.pp
-    │   ├── filebeat_oss.pp
-    │   ├── filebeat.pp
-    │   ├── init.pp
-    │   ├── integration.pp
-    │   ├── kibana_od.pp
-    │   ├── kibana.pp
-    │   ├── manager.pp
-    │   ├── opendistro.pp
-    │   ├── params_agent.pp
-    │   ├── params_elastic.pp
-    │   ├── params_manager.pp
-    │   ├── params_opendistro.pp
-    │   ├── repo_elastic_oss.pp
-    │   ├── repo_elastic.pp
-    │   ├── repo_elasticsearch-oss.pp
-    │   ├── repo_opendistro.pp
-    │   ├── repo.pp
-    │   ├── reports.pp
-    │   └── tests.pp
+    │   ├── activeresponse.pp
+    │   ├── addlog.pp
+    │   ├── agent.pp
+    │   ├── command.pp
+    │   ├── elasticsearch.pp
+    │   ├── email_alert.pp
+    │   ├── filebeat.pp
+    │   ├── init.pp
+    │   ├── integration.pp
+    │   ├── kibana.pp
+    │   ├── manager.pp
+    │   ├── params_agent.pp
+    │   ├── params_elastic.pp
+    │   ├── params_manager.pp
+    │   ├── repo_elastic.pp
+    │   ├── repo.pp
+    │   ├── reports.pp
+    │   └── wazuh_api.pp
     ├── metadata.json
     ├── Rakefile
     ├── README.md
     ├── spec
-    │   ├── classes
-    │   │   ├── client_spec.rb
-    │   │   ├── init_spec.rb
-    │   │   └── server_spec.rb
-    │   └── spec_helper.rb
+    │   ├── classes
+    │   │   ├── client_spec.rb
+    │   │   ├── init_spec.rb
+    │   │   └── server_spec.rb
+    │   └── spec_helper.rb
     ├── templates
-    │   ├── default_commands.erb
-    │   ├── elasticsearch_yml.erb
-    │   ├── filebeat_oss_yml.erb
-    │   ├── filebeat_yml.erb
-    │   ├── fragments
-    │   │   ├── _activeresponse.erb
-    │   │   ├── _auth.erb
-    │   │   ├── _cluster.erb
-    │   │   ├── _command.erb
-    │   │   ├── _default_activeresponse.erb
+    │   ├── api
+    │   │   └── config.js.erb
+    │   ├── default_commands.erb
+    │   ├── elasticsearch_yml.erb
+    │   ├── filebeat_yml.erb
+    │   ├── fragments
+    │   │   ├── _activeresponse.erb
+    │   │   ├── _auth.erb
+    │   │   ├── _cluster.erb
+    │   │   ├── _command.erb
+    │   │   ├── _default_activeresponse.erb
     │   │   ├── _email_alert.erb
-    │   │   ├── _integration.erb
-    │   │   ├── _labels.erb
-    │   │   ├── _localfile.erb
-    │   │   ├── _localfile_generation.erb
-    │   │   ├── _reports.erb
-    │   │   ├── _rootcheck.erb
-    │   │   ├── _ruleset.erb
-    │   │   ├── _sca.erb
-    │   │   ├── _syscheck.erb
-    │   │   ├── _syslog_output.erb
-    │   │   ├── _vulnerability_detector.erb
-    │   │   ├── _wodle_cis_cat.erb
-    │   │   ├── _wodle_openscap.erb
-    │   │   ├── _wodle_osquery.erb
-    │   │   └── _wodle_syscollector.erb
-    │   ├── jvm_options.erb
-    │   ├── kibana_od_yml.erb
-    │   ├── kibana_yml.erb
-    │   ├── local_decoder.xml.erb
-    │   ├── local_rules.xml.erb
-    │   ├── opendistro_yml.erb
-    │   ├── ossec_shared_agent.conf.erb
-    │   ├── process_list.erb
-    │   ├── wazuh_agent.conf.erb
-    │   ├── wazuh_api_yml.erb
-    │   ├── wazuh_manager.conf.erb
-    │   └── wazuh_yml.erb
+    │   │   ├── _integration.erb
+    │   │   ├── _localfile.erb
+    │   │   ├── _localfile_generation.erb
+    │   │   ├── _reports.erb
+    │   │   ├── _rootcheck.erb
+    │   │   ├── _ruleset.erb
+    │   │   ├── _sca.erb
+    │   │   ├── _syscheck.erb
+    │   │   ├── _wodle_cis_cat.erb
+    │   │   ├── _wodle_openscap.erb
+    │   │   ├── _wodle_osquery.erb
+    │   │   ├── _wodle_syscollector.erb
+    │   │   └── _wodle_vulnerability_detector.erb
+    │   ├── jvm_options.erb
+    │   ├── kibana_yml.erb
+    │   ├── local_decoder.xml.erb
+    │   ├── local_rules.xml.erb
+    │   ├── ossec_shared_agent.conf.erb
+    │   ├── process_list.erb
+    │   ├── wazuh_agent.conf.erb
+    │   └── wazuh_manager.conf.erb
+    ├── tests
+    │   └── init.pp
     └── VERSION
 
 ## Branches
 
-* `4.0` branch on correspond to the last Wazuh-Puppet stable version.
+* `stable` branch on correspond to the last Wazuh-Puppet stable version.
 * `master` branch contains the latest code, be aware of possible bugs on this branch.
 
 ## Contribute
 
-If you want to contribute to our project please don't hesitate to send a pull request. You can also join our users [mailing list](https://groups.google.com/d/forum/wazuh) or the [Wazuh Slack community channel](https://wazuh.com/community/join-us-on-slack/) to ask questions and participate in discussions.
+If you would like to contribute to our repository, please fork our Github repository and submit a pull request.
+
+If you are not familiar with Github, you can also share them through [our users mailing list](https://groups.google.com/d/forum/wazuh), to which you can subscribe by sending an email to `wazuh+subscribe@googlegroups.com`. 
+
 
 ## Credits and thank you
 
@@ -139,6 +108,10 @@ This Puppet module has been authored by Nicolas Zin, and updated by Jonathan Gaz
 
 WAZUH
 Copyright (C) 2020 Wazuh Inc.  (License GPLv2)
+
+Based on OSSEC
+Copyright (C) 2015 Trend Micro Inc.
+
 
 ## Web References
 
