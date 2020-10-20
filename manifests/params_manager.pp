@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.13.2-1'
+      $server_package_version                          = '4.0.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -25,7 +25,7 @@ class wazuh::params_manager {
       $ossec_email_alert_level                         = 12
       $ossec_remote_connection                         = 'secure'
       $ossec_remote_port                               = 1514
-      $ossec_remote_protocol                           = 'udp'
+      $ossec_remote_protocol                           = 'tcp'
       $ossec_remote_local_ip                           = undef
       $ossec_remote_queue_size                         = 131072
 
@@ -323,6 +323,57 @@ class wazuh::params_manager {
       $processlist_owner = 'root'
       $processlist_group = 'ossec'
 
+      #API
+
+      $wazuh_api_host = '0.0.0.0'
+      $wazuh_api_port = '55000'
+
+      $wazuh_api_file =  undef
+
+      # Set this option to "yes" in case the API is running behind a proxy server. Values: yes, no
+      $wazuh_api_behind_proxy_server = 'no'
+
+      # Advanced configuration
+      $wazuh_api_https_enabled = 'yes'
+      $wazuh_api_https_key = 'api/configuration/ssl/server.key'
+      $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
+      $wazuh_api_https_use_ca = 'False'
+      $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
+
+
+      # Logging configuration
+      # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
+      $wazuh_api_logs_level = 'info'
+      $wazuh_api_logs_path = 'logs/api.log'
+
+      # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
+      $wazuh_api_cors_enabled = 'no'
+      $wazuh_api_cors_source_route = '"*"'
+      $wazuh_api_cors_expose_headers = '"*"'
+      $wazuh_api_cors_allow_headers = '"*"'
+      $wazuh_api_cors_allow_credentials = 'no'
+
+      # Cache (time in seconds)
+      $wazuh_api_cache_enabled = 'yes'
+      $wazuh_api_cache_time = '0.750'
+
+      # Access parameters
+      $wazuh_api_access_max_login_attempts = 5
+      $wazuh_api_access_block_time = 300
+      $wazuh_api_access_max_request_per_minute = 300
+
+      # Force the use of authd when adding and removing agents. Values: yes, no
+      $wazuh_api_use_only_authd = 'no'
+
+      # Drop privileges (Run as ossec user)
+      $wazuh_api_drop_privileges = 'yes'
+
+      # Enable features under development
+      $wazuh_api_experimental_features = 'no'
+
+      # Wazuh API template path
+      $wazuh_api_template = 'wazuh/wazuh_api.erb'
+
 
       case $::osfamily {
         'Debian': {
@@ -343,8 +394,6 @@ class wazuh::params_manager {
             'xenial': {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-ubuntu-1604-ds.xml' => {
                   'type' => 'xccdf',
@@ -357,8 +406,6 @@ class wazuh::params_manager {
             'jessie': {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-debian-8-ds.xml' => {
                   'type' => 'xccdf',
@@ -372,8 +419,6 @@ class wazuh::params_manager {
             /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = undef
             }
         default: {
@@ -388,8 +433,6 @@ class wazuh::params_manager {
           $agent_package  = 'wazuh-agent'
           $server_service = 'wazuh-manager'
           $server_package = 'wazuh-manager'
-          $api_service = 'wazuh-api'
-          $api_package = 'wazuh-api'
           $service_has_status  = true
 
           $default_local_files =[
@@ -491,7 +534,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.13.2'
+      $agent_package  = 'Wazuh Agent 4.0.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
