@@ -260,6 +260,46 @@ class wazuh::manager (
       $wazuh_manager_server_key             = $wazuh::params_manager::wazuh_manager_server_key,
 
       $ossec_local_files                    = $::wazuh::params_manager::default_local_files,
+
+      # API
+
+
+      $wazuh_api_host                           = $wazuh::params_manager::wazuh_api_host,
+    
+      $wazuh_api_port                           = $wazuh::params_manager::wazuh_api_port,
+      $wazuh_api_file                           = $wazuh::params_manager::wazuh_api_file,
+
+      $wazuh_api_behind_proxy_server            = $wazuh::params_manager::wazuh_api_behind_proxy_server,
+      $wazuh_api_https_enabled                  = $wazuh::params_manager::wazuh_api_https_enabled,
+      $wazuh_api_https_key                      = $wazuh::params_manager::wazuh_api_https_key,
+
+      $wazuh_api_https_cert                     = $wazuh::params_manager::wazuh_api_https_cert,
+      $wazuh_api_https_use_ca                   = $wazuh::params_manager::wazuh_api_https_use_ca,
+      $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
+      $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
+      $wazuh_api_logs_path                      = $wazuh::params_manager::wazuh_api_logs_path,
+
+      $wazuh_api_cors_enabled                   = $wazuh::params_manager::wazuh_api_cors_enabled,
+      $wazuh_api_cors_source_route              = $wazuh::params_manager::wazuh_api_cors_source_route,
+      $wazuh_api_cors_expose_headers            = $wazuh::params_manager::wazuh_api_cors_expose_headers,
+
+
+      $wazuh_api_cors_allow_credentials         = $::wazuh::params_manager::wazuh_api_cors_allow_credentials,
+      $wazuh_api_cache_enabled                  = $::wazuh::params_manager::wazuh_api_cache_enabled,
+
+      $wazuh_api_cache_time                     = $::wazuh::params_manager::wazuh_api_cache_time,
+
+      $wazuh_api_access_max_login_attempts      = $::wazuh::params_manager::wazuh_api_access_max_login_attempts,
+      $wazuh_api_access_block_time              = $::wazuh::params_manager::wazuh_api_access_block_time,
+      $wazuh_api_access_max_request_per_minute  = $::wazuh::params_manager::wazuh_api_access_max_request_per_minute,
+      $wazuh_api_use_only_authd                 = $::wazuh::params_manager::wazuh_api_use_only_authd,
+      $wazuh_api_drop_privileges                = $::wazuh::params_manager::wazuh_api_drop_privileges,
+      $wazuh_api_experimental_features          = $::wazuh::params_manager::wazuh_api_experimental_features,
+      $wazuh_api_template                       = $::wazuh::params_manager::wazuh_api_template,
+
+
+
+
 ) inherits wazuh::params_manager {
   validate_bool(
     $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
@@ -320,7 +360,6 @@ class wazuh::manager (
       Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
     }
   }
-
   # Install and configure Wazuh-manager package
 
   package { $wazuh::params_manager::server_package:
@@ -607,6 +646,14 @@ class wazuh::manager (
       unless  => '/sbin/auditctl -l | grep wazuh_fim',
       tries   => 2
     }
+  }
+
+  file { '/var/ossec/api/configuration/api.yaml':
+    owner   => 'root',
+    group   => 'ossec',
+    mode    => '0640',
+    content => template('wazuh/wazuh_api_yml.erb'),
+    notify  => Service[$wazuh::params_manager::server_service]
   }
 
 }
