@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Update to Wazuh version 4.0.1
+- Update to Wazuh version 4.0.1 
+- Support for Wazuh v4 new features ([@Zenidd](https://github.com/Zenidd)) [PR#300](https://github.com/wazuh/wazuh-puppet/pull/300): 
+  - Agent autoenrollment
+  - API RBAC
 
 
 ## Wazuh Puppet v3.13.2

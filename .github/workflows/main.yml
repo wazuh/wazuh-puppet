@@ -1,5 +1,5 @@
 
-name: Kitchen tests
+name: Kitchen tests for Wazuh Puppet
 
 on: [push]
 
