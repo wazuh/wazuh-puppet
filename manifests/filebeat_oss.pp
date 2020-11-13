@@ -9,9 +9,9 @@ class wazuh::filebeat_oss (
   $filebeat_oss_service = 'filebeat',
   $filebeat_oss_elastic_user = 'admin',
   $filebeat_oss_elastic_password = 'admin',
-  $filebeat_oss_version = '7.8.0',
-  $wazuh_app_version = '4.0.0_7.9.1',
-  $wazuh_extensions_version = 'v4.0.0',
+  $filebeat_oss_version = '7.9.1',
+  $wazuh_app_version = '4.0.1_7.9.1',
+  $wazuh_extensions_version = 'v4.0.1',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
 ){
 
@@ -47,7 +47,7 @@ class wazuh::filebeat_oss (
 
   exec { 'Installing filebeat module ... Downloading package':
     path    => '/usr/bin',
-    command => "curl -o /root/${$wazuh_filebeat_module} https://packages.wazuh.com/3.x/filebeat/${$wazuh_filebeat_module}",
+    command => "curl -o /root/${$wazuh_filebeat_module} https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
   }
 
   exec { 'Unpackaging ...':
