@@ -12,9 +12,9 @@ end
 # Verifying daemons
 
 wazuh_daemons = {
-  'ossec-agentd' => 'ossec',
+  # 'ossec-agentd' => 'ossec',
   'ossec-execd' => 'root',
-  'ossec-syscheckd' => 'root',
+  # 'ossec-syscheckd' => 'root',
 #  'wazuh-modulesd' => 'root',
 }
 
