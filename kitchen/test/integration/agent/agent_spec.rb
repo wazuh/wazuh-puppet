@@ -1,6 +1,6 @@
 describe package('wazuh-agent') do
   it { is_expected.to be_installed }
-  its('version') { is_expected.to eq '4.0.0-1' }
+  its('version') { is_expected.to eq '4.0.1-1' }
 end
 
 describe service('wazuh-agent') do
@@ -12,9 +12,9 @@ end
 # Verifying daemons
 
 wazuh_daemons = {
-  'ossec-agentd' => 'ossec',
+  # 'ossec-agentd' => 'ossec',
   'ossec-execd' => 'root',
-  'ossec-syscheckd' => 'root',
+  # 'ossec-syscheckd' => 'root',
 #  'wazuh-modulesd' => 'root',
 }
 

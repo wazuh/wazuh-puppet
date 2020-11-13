@@ -510,7 +510,7 @@ class wazuh::agent (
         $agent_auth_executable = '/var/ossec/bin/agent-auth'
         $agent_auth_base_command = "${agent_auth_executable} -m ${wazuh_register_endpoint}"
 
-        # https://documentation.wazuh.com/3.11/user-manual/registering/manager-verification/manager-verification-registration.html
+        # https://documentation.wazuh.com/4.0/user-manual/registering/manager-verification/manager-verification-registration.html
         if $wazuh_manager_root_ca_pem != undef {
           validate_string($wazuh_manager_root_ca_pem)
           file { '/var/ossec/etc/rootCA.pem':
@@ -528,7 +528,7 @@ class wazuh::agent (
           $agent_auth_option_manager = ''  # Avoid errors when compounding final command
         }
 
-        # https://documentation.wazuh.com/3.11/user-manual/registering/manager-verification/agent-verification-registration.html
+        # https://documentation.wazuh.com/4.0/user-manual/registering/manager-verification/agent-verification-registration.html
         if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
           validate_string($wazuh_agent_cert)
           validate_string($wazuh_agent_key)

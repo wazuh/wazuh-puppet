@@ -3,8 +3,8 @@
 class wazuh::kibana (
   $kibana_package = 'kibana',
   $kibana_service = 'kibana',
-  $kibana_version = '7.9.2',
-  $kibana_app_version = '4.0.0_7.9.2',
+  $kibana_version = '7.9.3',
+  $kibana_app_version = '4.0.1_7.9.3',
   $kibana_elasticsearch_ip = 'localhost',
   $kibana_elasticsearch_port = '9200',
 
@@ -15,8 +15,8 @@ class wazuh::kibana (
                                       'id'       => 'default',
                                       'url'      => 'http://localhost',
                                       'port'     => '55000',
-                                      'user'     => 'foo',
-                                      'password' => 'bar',
+                                      'username'     => 'wazuh',
+                                      'password' => 'wazuh',
                                     },
                                   ]
 ) {
