@@ -44,6 +44,9 @@ fi
 echo "Kitchen is converging ..."
 bundle exec kitchen converge
 
+echo "Sleeping while the agent is starting"
+sleep 15
+
 echo "Kitchen is testing ..."
 bundle exec kitchen verify
 
