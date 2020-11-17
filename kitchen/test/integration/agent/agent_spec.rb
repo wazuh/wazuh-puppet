@@ -21,6 +21,6 @@ wazuh_daemons = {
 
 wazuh_daemons.each do |key, value|
   describe processes(key) do
-    its('users') { is_expected.to eq [value] }
+    it { should exist }
   end
 end
