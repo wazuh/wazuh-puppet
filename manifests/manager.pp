@@ -653,6 +653,7 @@ class wazuh::manager (
     group   => 'ossec',
     mode    => '0640',
     content => template('wazuh/wazuh_api_yml.erb'),
+    require => Package[$wazuh::params_manager::server_package],
     notify  => Service[$wazuh::params_manager::server_service]
   }
 
