@@ -394,6 +394,7 @@ class wazuh::manager (
   }
 
   file { '/var/ossec/api/configuration/api.yaml':
+    ensure  => present,
     owner   => 'root',
     group   => 'ossec',
     mode    => '0640',
