@@ -215,7 +215,7 @@ class wazuh::manager (
       $ossec_syscheck_realtime_directories_2           = $wazuh::params_manager::ossec_syscheck_realtime_directories_2,
       $ossec_syscheck_ignore_list           = $wazuh::params_manager::ossec_syscheck_ignore_list,
 
-      $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1, ,,  ,,,,,,,, ,
+      $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
       $ossec_syscheck_ignore_type_2         = $wazuh::params_manager::ossec_syscheck_ignore_type_2,
       $ossec_syscheck_process_priority             = $wazuh::params_manager::ossec_syscheck_process_priority,
       $ossec_syscheck_synchronization_enabled      = $wazuh::params_manager::ossec_syscheck_synchronization_enabled,
@@ -420,6 +420,15 @@ class wazuh::manager (
     default: { fail('This ossec module has not been tested on your distribution') }
   }
 
+
+  file { '/var/ossec/api/configuration/api.yaml':
+    owner   => 'root',
+    group   => 'ossec',
+    mode    => '0640',
+    content => template('wazuh/wazuh_api_yml.erb'),
+    # notify  => Service[$wazuh::params_manager::server_service]
+  }
+
   concat { 'manager_ossec.conf':
     path    => $wazuh::params_manager::config_file,
     owner   => $wazuh::params_manager::config_owner,
@@ -428,15 +437,6 @@ class wazuh::manager (
     require => Package[$wazuh::params_manager::server_package],
     notify  => Service[$wazuh::params_manager::server_service],
   }
-
-  file { '/var/ossec/api/configuration/api.yaml':
-    owner   => 'root',
-    group   => 'ossec',
-    mode    => '0640',
-    content => template('wazuh/wazuh_api_yml.erb'),
-    notify  => Service[$wazuh::params_manager::server_service]
-  }
-
   concat::fragment {
     'ossec.conf_header':
       target  => 'manager_ossec.conf',
