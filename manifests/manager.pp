@@ -647,12 +647,20 @@ class wazuh::manager (
     }
   }
 
+  file { '/var/ossec/api/configuration':
+    ensure => 'directory',
+    owner   => 'root',
+    group   => 'ossec',
+    mode    => '0770',
+  }
+
+
   file { 'Render API yaml config file':
     ensure  => present,
     owner   => 'root',
     path    => '/var/ossec/api/configuration/api.yaml',
     group   => 'ossec',
-    mode    => '0640',
+    mode    => '0660',
     content => template('wazuh/wazuh_api_yml.erb'),
     # notify  => Service[$wazuh::params_manager::server_service]
   }
