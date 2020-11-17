@@ -393,15 +393,6 @@ class wazuh::manager (
     require   => Package[$wazuh::params_manager::server_package],
   }
 
-  file { '/var/ossec/api/configuration/api.yaml':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'ossec',
-    mode    => '0640',
-    content => template('wazuh/wazuh_api_yml.erb'),
-    # notify  => Service[$wazuh::params_manager::server_service]
-  }
-
   ## Declaring variables for localfile and wodles generation
 
   case $::operatingsystem{
@@ -654,6 +645,15 @@ class wazuh::manager (
       unless  => '/sbin/auditctl -l | grep wazuh_fim',
       tries   => 2
     }
+  }
+
+  file { '/var/ossec/api/configuration/api.yaml':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'ossec',
+    mode    => '0640',
+    content => template('wazuh/wazuh_api_yml.erb'),
+    # notify  => Service[$wazuh::params_manager::server_service]
   }
 
 }
