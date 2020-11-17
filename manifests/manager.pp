@@ -398,7 +398,7 @@ class wazuh::manager (
     group   => 'ossec',
     mode    => '0640',
     content => template('wazuh/wazuh_api_yml.erb'),
-    notify  => Service[$wazuh::params_manager::server_service]
+    # notify  => Service[$wazuh::params_manager::server_service]
   }
 
   ## Declaring variables for localfile and wodles generation
