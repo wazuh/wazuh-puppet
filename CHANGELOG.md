@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v4.0.2
+
+### Added
+
+- Update to Wazuh version 4.0.2 
+
+### Fixed
+
+- Syscheck 'report_changes' option ([@oletos7j](https://github.com/oletos7j)) [PR#306](https://github.com/wazuh/wazuh-puppet/pull/306)
+
+
 ## Wazuh Puppet v4.0.1
 
 ### Added
