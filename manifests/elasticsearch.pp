@@ -13,16 +13,24 @@ class wazuh::elasticsearch (
   $elasticsearch_package = 'elasticsearch',
   $elasticsearch_version = '7.9.3',
 
-  $elasticsearch_path_data = '/var/lib/elasticsearch',
-  $elasticsearch_path_logs = '/var/log/elasticsearch',
-
+  # user/group elasticsearch processes run as
+  $elasticsearch_user = 'elasticsearch',
+  $elasticsearch_group = 'elasticsearch',
 
   $elasticsearch_ip = 'localhost',
   $elasticsearch_port = '9200',
   $elasticsearch_discovery_option = 'discovery.type: single-node',
   $elasticsearch_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']",
 
-# JVM options
+  # elasticsearch paths
+  $elasticsearch_path_config = '/etc/elasticsearch',
+  $elasticsearch_path_eshome = '/usr/share/elasticsearch',
+  $elasticsearch_path_data = '/var/lib/elasticsearch',
+  $elasticsearch_path_logs = '/var/log/elasticsearch',
+
+  $elasticsearch_limits_file = '/etc/security/limits.conf',
+
+  # JVM options
   $jvm_options_memmory = '1g',
 
 ){
