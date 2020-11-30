@@ -1,31 +1,33 @@
-describe package('wazuh-manager') do
-  it { is_expected.to be_installed }
-  its('version') { is_expected.to eq '4.0.2-1' }
-end
 
-describe service('wazuh-manager') do
-  it { is_expected.to be_installed }
-  it { is_expected.to be_enabled }
-  it { is_expected.to be_running }
-end
+describe manager_spec do
+  describe package('wazuh-manager') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '4.0.2-1' }
+  end
 
-# Verifying daemons
+  describe service('wazuh-manager') do
+    it { is_expected.to be_installed }
+    it { is_expected.to be_enabled }
+    it { is_expected.to be_running }
+  end
 
-wazuh_daemons = {
-  'ossec-authd' => 'root',
-  'ossec-execd' => 'root',
-  'ossec-analysisd' => 'ossec',
-  'ossec-syscheckd' => 'root',
-  'ossec-remoted' => 'ossecr',
-  'ossec-logcollector' => 'root',
-  'ossec-monitord' => 'ossec',
-  'wazuh-db' => 'ossec',
-  'wazuh-modulesd' => 'root',
-}
+  # Verifying daemons
 
-wazuh_daemons.each do |key, value|
-  describe processes(key) do
-    its('users') { is_expected.to eq [value] }
+  wazuh_daemons = {
+    'ossec-authd' => 'root',
+    'ossec-execd' => 'root',
+    'ossec-analysisd' => 'ossec',
+    'ossec-syscheckd' => 'root',
+    'ossec-remoted' => 'ossecr',
+    'ossec-logcollector' => 'root',
+    'ossec-monitord' => 'ossec',
+    'wazuh-db' => 'ossec',
+    'wazuh-modulesd' => 'root',
+  }
+
+  wazuh_daemons.each do |key, value|
+    describe processes(key) do
+      its('users') { is_expected.to eq [value] }
+    end
   end
 end
-
