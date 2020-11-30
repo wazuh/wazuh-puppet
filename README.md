@@ -67,7 +67,6 @@ This module installs and configure Wazuh agent and manager.
     │   ├── params_opendistro.pp
     │   ├── repo_elastic_oss.pp
     │   ├── repo_elastic.pp
-    │   ├── repo_elasticsearch-oss.pp
     │   ├── repo_opendistro.pp
     │   ├── repo.pp
     │   ├── reports.pp
