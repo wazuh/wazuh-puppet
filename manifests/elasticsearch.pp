@@ -43,7 +43,7 @@ class wazuh::elasticsearch (
 
   file { 'Configure elasticsearch.yml':
     owner   => 'elasticsearch',
-    path    => '/etc/elasticsearch/elasticsearch.yml',
+    path    => "${$elasticsearch_path_config}/elasticsearch.yml",
     group   => 'elasticsearch',
     mode    => '0644',
     notify  => Service[$elasticsearch_service], ## Restarts the service
@@ -53,7 +53,7 @@ class wazuh::elasticsearch (
 
   file { 'Configure jvm.options':
     owner   => 'elasticsearch',
-    path    => '/etc/elasticsearch/jvm.options',
+    path    => "${$elasticsearch_path_config}/jvm.options",
     group   => 'elasticsearch',
     mode    => '0660',
     notify  => Service[$elasticsearch_service], ## Restarts the service
