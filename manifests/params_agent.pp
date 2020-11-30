@@ -22,6 +22,7 @@ class wazuh::params_agent {
   $agent_auth_password = undef
   $wazuh_manager_root_ca_pem = undef
   $wazuh_manager_root_ca_pem_path = undef
+  $authd_pass_file = '/var/ossec/etc/authd.pass'
 
   # ossec.conf generation variables
   $configure_rootcheck = true
@@ -116,8 +117,6 @@ class wazuh::params_agent {
       $keys_mode = '0640'
       $keys_owner = 'root'
       $keys_group = 'ossec'
-
-      $authd_pass_file = '/var/ossec/etc/authd.pass'
 
       $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
 
