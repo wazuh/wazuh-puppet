@@ -1,5 +1,4 @@
 control 'manager' do
-
   title 'Wazuh manager tests'
   describe 'Checks Wazuh manager correct version, services and daemon ownership'
 
@@ -34,5 +33,4 @@ control 'manager' do
       its('users') { is_expected.to eq [value] }
     end
   end
-
 end

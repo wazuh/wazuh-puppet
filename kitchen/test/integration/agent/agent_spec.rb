@@ -1,5 +1,4 @@
 control 'agent' do
-
   title 'Wazuh agent tests'
   describe 'Checks Wazuh agent correct version, services and daemon ownership'
 
@@ -20,7 +19,7 @@ control 'agent' do
     # 'ossec-agentd' => 'ossec',
     'ossec-execd' => 'root',
     # 'ossec-syscheckd' => 'root',
-  #  'wazuh-modulesd' => 'root',
+    # 'wazuh-modulesd' => 'root',
   }
 
   wazuh_daemons.each do |key, value|
@@ -28,5 +27,4 @@ control 'agent' do
       its('users') { is_expected.to eq [value] }
     end
   end
-
 end
