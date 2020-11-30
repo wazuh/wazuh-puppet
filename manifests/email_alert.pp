@@ -2,7 +2,14 @@
 # Define an email alert
 define wazuh::email_alert(
   $alert_email,
-  $alert_group = false
+  $level = false,
+  $alert_group = false,
+  $event_location = false,
+  $format = false,
+  $rule_id = false,
+  $do_not_delay = false,
+  $do_not_group = false,
+  $email_log_source = false
 ) {
   require wazuh::params_manager
 
