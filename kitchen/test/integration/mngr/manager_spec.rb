@@ -1,9 +1,15 @@
-shared_examples_for "test" do
+control "manager" do
+
+  title "Wazuh manager tests"
+  describe "Checks Wazuh manager correct version, services and daemon ownership"
+
+  # Verifying right package and version
   describe package('wazuh-manager') do
     it { is_expected.to be_installed }
     its('version') { is_expected.to eq '4.0.2-1' }
   end
 
+  # Verifying service
   describe service('wazuh-manager') do
     it { is_expected.to be_installed }
     it { is_expected.to be_enabled }
@@ -11,7 +17,6 @@ shared_examples_for "test" do
   end
 
   # Verifying daemons
-
   wazuh_daemons = {
     'ossec-authd' => 'root',
     'ossec-execd' => 'root',
@@ -29,8 +34,5 @@ shared_examples_for "test" do
       its('users') { is_expected.to eq [value] }
     end
   end
-end
 
-describe "naked" do
-  it_behaves_like "test"
 end
