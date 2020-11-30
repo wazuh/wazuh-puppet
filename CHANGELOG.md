@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Templates: update jvm.options template with version information  ([@neonmei](https://github.com/neonmei)) [PR#310](https://github.com/wazuh/wazuh-puppet/pull/310)
 - Restart manager service after modifying agent_auth_password  ([@Fabian1976](https://github.com/Fabian1976)) [PR#307](https://github.com/wazuh/wazuh-puppet/pull/307)
 
 
