@@ -1,7 +1,7 @@
-control "agent" do
+control 'agent' do
 
-  title "Wazuh agent tests"
-  describe "Checks Wazuh agent correct version, services and daemon ownership"
+  title 'Wazuh agent tests'
+  describe 'Checks Wazuh agent correct version, services and daemon ownership'
 
   describe package('wazuh-agent') do
     it { is_expected.to be_installed }

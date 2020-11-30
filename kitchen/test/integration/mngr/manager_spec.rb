@@ -1,7 +1,7 @@
-control "manager" do
+control 'manager' do
 
-  title "Wazuh manager tests"
-  describe "Checks Wazuh manager correct version, services and daemon ownership"
+  title 'Wazuh manager tests'
+  describe 'Checks Wazuh manager correct version, services and daemon ownership'
 
   # Verifying right package and version
   describe package('wazuh-manager') do
