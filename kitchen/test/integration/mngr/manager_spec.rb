@@ -1,5 +1,4 @@
-
-describe do
+shared_examples_for "test" do
   describe package('wazuh-manager') do
     it { is_expected.to be_installed }
     its('version') { is_expected.to eq '4.0.2-1' }
@@ -30,4 +29,8 @@ describe do
       its('users') { is_expected.to eq [value] }
     end
   end
+end
+
+describe "naked" do
+  it_behaves_like "test"
 end
