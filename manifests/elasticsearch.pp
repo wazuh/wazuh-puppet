@@ -78,11 +78,17 @@ class wazuh::elasticsearch (
     require => Package[$elasticsearch_package],
   }
 
+  file { [$elasticsearch_path_config, $elasticsearch_path_eshome, $elasticsearch_path_data]:
+  recurse => true,
+  owner   => $elasticsearch_user,
+  group   => $elasticsearch_group,
+  require => Package[$elasticsearch_package],
+  }
+
   service { 'elasticsearch':
     ensure  => running,
     enable  => true,
     require => Package[$elasticsearch_package],
   }
-
 
 }
