@@ -61,26 +61,27 @@ class wazuh::elasticsearch (
     require => Package[$elasticsearch_package],
   }
 
+  file { 'Ensure limits file exists':
+    ensure => present,
+    path   => $elasticsearch_limits_file,
+  }
+
+  file_line { 'Ensure nofile limits':
+    path    => $elasticsearch_limits_file,
+    line    => 'elasticsearch - nofile  65535',
+    require => Package[$elasticsearch_package],
+  }
+
+  file_line { 'Ensure memlock limits':
+    path    => $elasticsearch_limits_file,
+    line    => 'elasticsearch - memlock unlimited',
+    require => Package[$elasticsearch_package],
+  }
+
   service { 'elasticsearch':
     ensure  => running,
     enable  => true,
     require => Package[$elasticsearch_package],
-  }
-
-  exec { 'Insert line limits':
-    path    => '/usr/bin:/bin/',
-    command => "echo 'elasticsearch - nofile  65535\nelasticsearch - memlock unlimited' >> /etc/security/limits.conf",
-    require => Package[$elasticsearch_package],
-
-  }
-
-  exec { 'Verify Elasticsearch folders owner':
-    path    => '/usr/bin:/bin',
-    command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch\
-             && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch\
-             && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
-    require => Package[$elasticsearch_package],
-
   }
 
 
