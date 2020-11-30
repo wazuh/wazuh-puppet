@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v4.0.3
+
+### Added
+
+- Update to Wazuh version 4.0.3
+
+### Fixed
+
+- Restart manager service after modifying agent_auth_password  ([@Fabian1976](https://github.com/Fabian1976)) [PR#307](https://github.com/wazuh/wazuh-puppet/pull/307)
+
+
 ## Wazuh Puppet v4.0.2
 
 ### Added
