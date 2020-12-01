@@ -2,10 +2,9 @@ control 'manager' do
   title 'Wazuh manager tests'
   describe 'Checks Wazuh manager correct version, services and daemon ownership'
 
-  # Verifying right package and version
   describe package('wazuh-manager') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '4.0.2-1' }
+    its('version') { is_expected.to eq '4.0.3-1' }
   end
 
   # Verifying service
