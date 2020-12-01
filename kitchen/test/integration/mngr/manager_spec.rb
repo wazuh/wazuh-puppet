@@ -1,4 +1,4 @@
-control 'manager' do
+control 'wazuh-manager' do
   title 'Wazuh manager tests'
   describe 'Checks Wazuh manager correct version, services and daemon ownership'
 

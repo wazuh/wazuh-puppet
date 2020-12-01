@@ -1,4 +1,4 @@
-control 'agent' do
+control 'wazuh-agent' do
   title 'Wazuh agent tests'
   describe 'Checks Wazuh agent correct version, services and daemon ownership'
 
