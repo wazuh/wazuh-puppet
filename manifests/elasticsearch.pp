@@ -13,16 +13,24 @@ class wazuh::elasticsearch (
   $elasticsearch_package = 'elasticsearch',
   $elasticsearch_version = '7.9.3',
 
-  $elasticsearch_path_data = '/var/lib/elasticsearch',
-  $elasticsearch_path_logs = '/var/log/elasticsearch',
-
+  # user/group elasticsearch processes run as
+  $elasticsearch_user = 'elasticsearch',
+  $elasticsearch_group = 'elasticsearch',
 
   $elasticsearch_ip = 'localhost',
   $elasticsearch_port = '9200',
   $elasticsearch_discovery_option = 'discovery.type: single-node',
   $elasticsearch_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['es-node-01']",
 
-# JVM options
+  # elasticsearch paths
+  $elasticsearch_path_config = '/etc/elasticsearch',
+  $elasticsearch_path_eshome = '/usr/share/elasticsearch',
+  $elasticsearch_path_data = '/var/lib/elasticsearch',
+  $elasticsearch_path_logs = '/var/log/elasticsearch',
+
+  $elasticsearch_limits_file = '/etc/security/limits.conf',
+
+  # JVM options
   $jvm_options_memmory = '1g',
 
 ){
@@ -35,7 +43,7 @@ class wazuh::elasticsearch (
 
   file { 'Configure elasticsearch.yml':
     owner   => 'elasticsearch',
-    path    => '/etc/elasticsearch/elasticsearch.yml',
+    path    => "${$elasticsearch_path_config}/elasticsearch.yml",
     group   => 'elasticsearch',
     mode    => '0644',
     notify  => Service[$elasticsearch_service], ## Restarts the service
@@ -45,7 +53,7 @@ class wazuh::elasticsearch (
 
   file { 'Configure jvm.options':
     owner   => 'elasticsearch',
-    path    => '/etc/elasticsearch/jvm.options',
+    path    => "${$elasticsearch_path_config}/jvm.options",
     group   => 'elasticsearch',
     mode    => '0660',
     notify  => Service[$elasticsearch_service], ## Restarts the service
@@ -53,27 +61,34 @@ class wazuh::elasticsearch (
     require => Package[$elasticsearch_package],
   }
 
+  file { 'Ensure limits file exists':
+    ensure => present,
+    path   => $elasticsearch_limits_file,
+  }
+
+  file_line { 'Ensure nofile limits':
+    path    => $elasticsearch_limits_file,
+    line    => 'elasticsearch - nofile  65535',
+    require => Package[$elasticsearch_package],
+  }
+
+  file_line { 'Ensure memlock limits':
+    path    => $elasticsearch_limits_file,
+    line    => 'elasticsearch - memlock unlimited',
+    require => Package[$elasticsearch_package],
+  }
+
+  file { [$elasticsearch_path_config, $elasticsearch_path_eshome, $elasticsearch_path_data]:
+  recurse => true,
+  owner   => $elasticsearch_user,
+  group   => $elasticsearch_group,
+  require => Package[$elasticsearch_package],
+  }
+
   service { 'elasticsearch':
     ensure  => running,
     enable  => true,
     require => Package[$elasticsearch_package],
   }
-
-  exec { 'Insert line limits':
-    path    => '/usr/bin:/bin/',
-    command => "echo 'elasticsearch - nofile  65535\nelasticsearch - memlock unlimited' >> /etc/security/limits.conf",
-    require => Package[$elasticsearch_package],
-
-  }
-
-  exec { 'Verify Elasticsearch folders owner':
-    path    => '/usr/bin:/bin',
-    command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch\
-             && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch\
-             && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
-    require => Package[$elasticsearch_package],
-
-  }
-
 
 }
