@@ -11,6 +11,8 @@ class wazuh::kibana (
   $kibana_server_port = '5601',
   $kibana_server_host = '0.0.0.0',
   $kibana_elasticsearch_server_hosts ="http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+  $kibana_app_url = "https://packages.wazuh.com/4.x/ui/kibana/wazuh_kibana-${kibana_app_version}-1.zip",
+
   $kibana_wazuh_api_credentials = [ {
                                       'id'       => 'default',
                                       'url'      => 'http://localhost',
@@ -60,7 +62,7 @@ class wazuh::kibana (
 
   exec {'Installing Wazuh App...':
     path    => '/usr/bin',
-    command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_app_version}.zip",
+    command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install ${kibana_app_url}",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$kibana_service],
   }
