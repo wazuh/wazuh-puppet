@@ -4,14 +4,18 @@ class wazuh::kibana (
   $kibana_package = 'kibana',
   $kibana_service = 'kibana',
   $kibana_version = '7.9.3',
-  $kibana_app_version = '4.0.3_7.9.3',
+  $kibana_wazuh_version = '4.0.3',
   $kibana_elasticsearch_ip = 'localhost',
   $kibana_elasticsearch_port = '9200',
 
   $kibana_server_port = '5601',
   $kibana_server_host = '0.0.0.0',
   $kibana_elasticsearch_server_hosts ="http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+
+  # app variables
   $kibana_app_url = "https://packages.wazuh.com/4.x/ui/kibana/wazuh_kibana-${kibana_app_version}-1.zip",
+  $kibana_app_version = "${kibana_wazuh_version}_${$kibana_version}",
+  $kibana_app_reinstall = false,
 
   # user/group kibana processes run as
   $kibana_user = 'kibana',
