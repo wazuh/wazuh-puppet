@@ -64,15 +64,6 @@ class wazuh::kibana (
     try_sleep => 3,
   }
 
-  file {'Removing old Wazuh Kibana Plugin...':
-    ensure  => absent,
-    path    => "${kibana_path_home}/plugins/wazuh",
-    recurse => true,
-    purge   => true,
-    force   => true,
-    notify  => Service[$kibana_service]
-  }
-
   exec {'kibana-plugin install':
     path    => '/usr/bin',
     command => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install ${kibana_app_url}",
@@ -99,6 +90,20 @@ class wazuh::kibana (
   owner   => $kibana_user,
   group   => $kibana_group,
   require => Package[$kibana_package],
+  }
+
+  if ($facts['kibana_plugin_wazuh'] != undef and
+      $facts['kibana_plugin_wazuh']['version'] != $kibana_wazuh_version) or ($kibana_app_reinstall == true) {
+
+    file {'Removing old Wazuh Kibana Plugin...':
+      ensure  => absent,
+      path    => "${kibana_path_home}/plugins/wazuh",
+      recurse => true,
+      purge   => true,
+      force   => true,
+      notify  => Service[$kibana_service],
+      before  => Exec['kibana-plugin install'],
+    }
   }
 
 }
