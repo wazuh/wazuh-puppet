@@ -13,6 +13,10 @@ class wazuh::kibana (
   $kibana_elasticsearch_server_hosts ="http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
   $kibana_app_url = "https://packages.wazuh.com/4.x/ui/kibana/wazuh_kibana-${kibana_app_version}-1.zip",
 
+  # user/group kibana processes run as
+  $kibana_user = 'kibana',
+  $kibana_group = 'kibana',
+
   $kibana_wazuh_api_credentials = [ {
                                       'id'       => 'default',
                                       'url'      => 'http://localhost',
@@ -20,7 +24,11 @@ class wazuh::kibana (
                                       'user'     => 'wazuh',
                                       'password' => 'wazuh',
                                     },
-                                  ]
+                                  ],
+
+  # kibana paths
+  $kibana_path_home = '/usr/share/kibana',
+
 ) {
 
   # install package
@@ -80,11 +88,12 @@ class wazuh::kibana (
     content => template('wazuh/wazuh_yml.erb'),
     notify  => Service[$kibana_service]
   }
-  exec { 'Verify Kibana folders owner':
-    path    => '/usr/bin:/bin',
-    command => "chown -R kibana:kibana /usr/share/kibana/optimize\
-             && chown -R kibana:kibana /usr/share/kibana/plugins",
 
+  file { ["${kibana_path_home}/optimize", "${kibana_path_home}/plugins"]:
+  recurse => true,
+  owner   => $kibana_user,
+  group   => $kibana_group,
+  require => Package[$kibana_package],
   }
 
 }
