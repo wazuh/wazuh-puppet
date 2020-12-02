@@ -15,7 +15,7 @@ class wazuh::kibana (
                                       'id'       => 'default',
                                       'url'      => 'http://localhost',
                                       'port'     => '55000',
-                                      'username'     => 'wazuh',
+                                      'user'     => 'wazuh',
                                       'password' => 'wazuh',
                                     },
                                   ]
