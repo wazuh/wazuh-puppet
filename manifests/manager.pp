@@ -265,7 +265,7 @@ class wazuh::manager (
 
 
       $wazuh_api_host                           = $wazuh::params_manager::wazuh_api_host,
-    
+
       $wazuh_api_port                           = $wazuh::params_manager::wazuh_api_port,
       $wazuh_api_file                           = $wazuh::params_manager::wazuh_api_file,
 

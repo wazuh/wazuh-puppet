@@ -1,5 +1,5 @@
 # Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
-# Installation of Elastic repository
+# Installation of Elastic-oss repository
 class wazuh::repo_elastic_oss (
 
 ) {

@@ -5,7 +5,8 @@ class wazuh::repo (
 
   case $::osfamily {
     'Debian' : {
-      if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi)/ and ! defined(Package['apt-transport-https']) {
+      if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi)/
+      and ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
       # apt-key added by issue #34
