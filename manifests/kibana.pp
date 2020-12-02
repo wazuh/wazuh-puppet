@@ -83,6 +83,7 @@ class wazuh::kibana (
   exec {'Removing .wazuh index...':
     path    => '/usr/bin',
     command => "curl -s -XDELETE -sL -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
+    onlyif  => "curl -s -XGET -sLf -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
     notify  => Service[$kibana_service],
   }
 
