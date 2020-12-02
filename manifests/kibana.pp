@@ -69,7 +69,7 @@ class wazuh::kibana (
     notify  => Service[$kibana_service]
   }
 
-  exec {'Installing Wazuh App...':
+  exec {'kibana-plugin install':
     path    => '/usr/bin',
     command => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install ${kibana_app_url}",
     creates => "${kibana_path_home}/plugins/wazuh/package.json",
