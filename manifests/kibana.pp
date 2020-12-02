@@ -16,6 +16,7 @@ class wazuh::kibana (
   $kibana_app_url = "https://packages.wazuh.com/4.x/ui/kibana/wazuh_kibana-${kibana_app_version}-1.zip",
   $kibana_app_version = "${kibana_wazuh_version}_${$kibana_version}",
   $kibana_app_reinstall = false,
+  $kibana_app_node_options = '--no-warnings --max-old-space-size=2048 --max-http-header-size=65536',
 
   # user/group kibana processes run as
   $kibana_user = 'kibana',
