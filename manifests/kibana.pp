@@ -33,21 +33,21 @@ class wazuh::kibana (
 ) {
 
   # install package
-  package { 'Installing Kibana...':
+  package { $kibana_package:
     ensure => $kibana_version,
     name   => $kibana_package,
   }
 
   file { 'Configure kibana.yml':
-    owner   => 'kibana',
-    path    => '/etc/kibana/kibana.yml',
-    group   => 'kibana',
+    path    => "${kibana_path_config}/kibana.yml",
+    owner   => $kibana_user,
+    group   => $kibana_group,
     mode    => '0644',
     notify  => Service[$kibana_service],
     content => template('wazuh/kibana_yml.erb'),
   }
 
-  service { 'kibana':
+  service { $kibana_service:
     ensure     => running,
     enable     => true,
     hasrestart => true,
@@ -62,7 +62,7 @@ class wazuh::kibana (
 
   file {'Removing old Wazuh Kibana Plugin...':
     ensure  => absent,
-    path    => '/usr/share/kibana/plugins/wazuh',
+    path    => "${kibana_path_home}/plugins/wazuh",
     recurse => true,
     purge   => true,
     force   => true,
@@ -71,8 +71,8 @@ class wazuh::kibana (
 
   exec {'Installing Wazuh App...':
     path    => '/usr/bin',
-    command => "sudo -u kibana /usr/share/kibana/bin/kibana-plugin install ${kibana_app_url}",
-    creates => '/usr/share/kibana/plugins/wazuh/package.json',
+    command => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install ${kibana_app_url}",
+    creates => "${kibana_path_home}/plugins/wazuh/package.json",
     notify  => Service[$kibana_service],
   }
 
@@ -82,9 +82,9 @@ class wazuh::kibana (
     notify  => Service[$kibana_service],
   }
 
-  file { '/usr/share/kibana/plugins/wazuh/wazuh.yml':
-    owner   => 'kibana',
-    group   => 'kibana',
+  file { "${kibana_path_home}/plugins/wazuh/wazuh.yml":
+    owner   => $kibana_user,
+    group   => $kibana_group,
     mode    => '0644',
     content => template('wazuh/wazuh_yml.erb'),
     notify  => Service[$kibana_service]
