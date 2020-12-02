@@ -34,13 +34,19 @@ class wazuh::kibana (
   # kibana paths
   $kibana_path_home = '/usr/share/kibana',
   $kibana_path_config = '/etc/kibana',
-
 ) {
 
   # install package
   package { $kibana_package:
     ensure => $kibana_version,
     name   => $kibana_package,
+  }
+
+  file { ["${kibana_path_home}/optimize", "${kibana_path_home}/plugins"]:
+    recurse => true,
+    owner   => $kibana_user,
+    group   => $kibana_group,
+    require => Package[$kibana_package],
   }
 
   file { 'Configure kibana.yml':
@@ -66,10 +72,12 @@ class wazuh::kibana (
   }
 
   exec {'kibana-plugin install':
-    path    => '/usr/bin',
-    command => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install ${kibana_app_url}",
-    creates => "${kibana_path_home}/plugins/wazuh/package.json",
-    notify  => Service[$kibana_service],
+    path        => '/usr/bin',
+    command     => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install \"${kibana_app_url}\"",
+    environment => ["NODE_OPTIONS=\"${kibana_app_node_options}\""],
+    creates     => "${kibana_path_home}/plugins/wazuh/package.json",
+    notify      => Service[$kibana_service],
+    require     => File["${kibana_path_home}/optimize"],
   }
 
   exec {'Removing .wazuh index...':
@@ -83,15 +91,10 @@ class wazuh::kibana (
     group   => $kibana_group,
     mode    => '0644',
     content => template('wazuh/wazuh_yml.erb'),
-    notify  => Service[$kibana_service]
+    notify  => Service[$kibana_service],
+    require => Exec['kibana-plugin install'],
   }
 
-  file { ["${kibana_path_home}/optimize", "${kibana_path_home}/plugins"]:
-  recurse => true,
-  owner   => $kibana_user,
-  group   => $kibana_group,
-  require => Package[$kibana_package],
-  }
 
   if ($facts['kibana_plugin_wazuh'] != undef and
       $facts['kibana_plugin_wazuh']['version'] != $kibana_wazuh_version) or ($kibana_app_reinstall == true) {
