@@ -11,6 +11,8 @@ wazuh::manager::server_service: wazuh-manager
 
 wazuh::manager::manage_repos: true
 wazuh::manager::manage_firewall: false
+wazuh::manager::service_has_status: true
+wazuh::manager::ossec_service_provider: null
 
 ### Ossec.conf blocks
 wazuh::manager::ossec_emailnotification: false
