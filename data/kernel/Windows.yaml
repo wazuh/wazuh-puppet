@@ -1,6 +1,100 @@
 ---
 
 ##############################################
+# Wazuh Agent
+
+wazuh::agent::config_file: 'c:/Program Files (x86)/ossec-agent/ossec.conf'
+wazuh::agent::shared_agent_config_file: c:/Program Files (x86)/ossec-agent/shared/agent.conf
+
+
+wazuh::agent::config_owner: Administrator
+wazuh::agent::config_group: Administrators
+wazuh::agent::manage_firewall: false
+
+wazuh::agent::download_path: 'C:/Temp'
+
+wazuh::agent::keys_file: c:/Program Files (x86)/ossec-agent/client.keys
+wazuh::agent::keys_mode: '0440'
+wazuh::agent::keys_owner: Administrator
+wazuh::agent::keys_group: Administrators
+
+wazuh::agent::agent_service: Administrators
+wazuh::agent::agent_package: Wazuh Agent 4.0.3
+wazuh::agent::server_service: ''
+wazuh::agent::server_package: ''
+wazuh::agent::api_service: ''
+wazuh::agent::api_package: ''
+wazuh::agent::service_has_status: true
+wazuh::agent::ossec_service_provider: null
+
+# Rootcheck Windows
+wazuh::agent::ossec_rootcheck_windows_disabled: 'no'
+wazuh::agent::ossec_rootcheck_windows_windows_apps: './shared/win_applications_rcl.txt'
+wazuh::agent::ossec_rootcheck_windows_windows_malware: './shared/win_malware_rcl.txt'
+wazuh::agent::ossec_rootcheck_system_audit: []
+
+# sca
+wazuh::agent::sca_windows_enabled: 'yes'
+wazuh::agent::sca_windows_scan_on_start: 'yes'
+wazuh::agent::sca_windows_interval: '12h'
+wazuh::agent::sca_windows_skip_nfs: 'yes'
+wazuh::agent::sca_windows_policies: []
+
+# Wodles
+
+## syscollector
+wazuh::agent::wodle_syscollector_disabled: 'no'
+wazuh::agent::wodle_syscollector_interval: '1h'
+wazuh::agent::wodle_syscollector_scan_on_start: 'yes'
+wazuh::agent::wodle_syscollector_hardware: 'yes'
+wazuh::agent::wodle_syscollector_os: 'yes'
+wazuh::agent::wodle_syscollector_network: 'yes'
+wazuh::agent::wodle_syscollector_packages: 'yes'
+wazuh::agent::wodle_syscollector_ports: 'yes'
+wazuh::agent::wodle_syscollector_processes: 'yes'
+wazuh::agent::wodle_syscollector_hotfixes: 'yes'
+
+## cis-cat
+wazuh::agent::wodle_ciscat_disabled: 'yes'
+wazuh::agent::wodle_ciscat_timeout: '1800'
+wazuh::agent::wodle_ciscat_interval: '1d'
+wazuh::agent::wodle_ciscat_scan_on_start: 'yes'
+wazuh::agent::wodle_ciscat_java_path: '\\server\jre\bin\java.exe'
+wazuh::agent::wodle_ciscat_ciscat_path: 'C:\cis-cat'
+
+## osquery
+wazuh::agent::wodle_osquery_disabled: 'yes'
+wazuh::agent::wodle_osquery_run_daemon: 'yes'
+wazuh::agent::wodle_osquery_bin_path: 'C:\Program Files\osquery\osqueryd'
+wazuh::agent::wodle_osquery_log_path: 'C:\Program Files\osquery\log\osqueryd.results.log'
+wazuh::agent::wodle_osquery_config_path: 'C:\Program Files\osquery\osquery.conf'
+wazuh::agent::wodle_osquery_add_labels: 'yes'
+
+# active-response
+wazuh::agent::active_response_windows_ca_store: 'wpk_root.pem'
+
+# TODO
+wazuh::agent::validate_cmd_conf: null
+
+wazuh::agent::default_local_files:
+  - log_format: eventchannel
+    location: Application
+  - log_format: eventchannel
+    location: Security
+    query: >-
+      Event/System[EventID != 5145 and EventID != 5156 and
+                   EventID != 5447 and EventID != 4656 and EventID != 4658 and
+                   EventID != 4663 and EventID != 4660 and EventID != 4670 and
+                   EventID != 4690 and EventID!= 4703 and EventID != 4907 and
+                   EventID != 5152 and EventID != 5157]
+  - log_format: eventchannel
+    location: System
+  - log_format: syslog
+    location: active-response\active-responses.log
+
+wazuh::agent::windows_audit_interval: 300
+
+##############################################
 # Wazuh Manager
 
 wazuh::manager::config_file: 'c:/Program Files (x86)/ossec-agent/ossec.conf'
