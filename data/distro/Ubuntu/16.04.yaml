@@ -1,5 +1,18 @@
 ---
 
+########################################
+# Agent
+
+wazuh::agent::wodle_openscap_content:
+  ssg-ubuntu-1604-ds.xml:
+    type: xccdf
+    profiles: ['xccdf_org.ssgproject.content_profile_common']
+  cve-ubuntu-xenial-oval.xml:
+    type: oval
+
+########################################
+# Manager
+
 wazuh::manager::wodle_openscap_content:
   ssg-ubuntu-1604-ds.xml:
     type: xccdf
