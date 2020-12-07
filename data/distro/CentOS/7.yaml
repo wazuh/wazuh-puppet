@@ -8,7 +8,9 @@ wazuh::agent::api_service_provider: systemd
 wazuh::agent::wodle_openscap_content:
   ssg-centos-7-ds.xml:
     type: xccdf
-    profiles: ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common']
+    profiles:
+      - xccdf_org.ssgproject.content_profile_pci-dss
+      - xccdf_org.ssgproject.content_profile_common
 
 ########################################
 # Manager
@@ -18,4 +20,6 @@ wazuh::manager::api_service_provider: systemd
 wazuh::manager::wodle_openscap_content:
   ssg-centos-7-ds.xml:
     type: xccdf
-    profiles: ['xccdf_org.ssgproject.content_profile_pci-dss', 'xccdf_org.ssgproject.content_profile_common']
+    profiles:
+      - xccdf_org.ssgproject.content_profile_pci-dss
+      - xccdf_org.ssgproject.content_profile_common

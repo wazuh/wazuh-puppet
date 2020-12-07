@@ -5,4 +5,6 @@ wazuh::manager::api_service_provider: redhat
 wazuh::manager::wodle_openscap_content:
   ssg-fedora-ds.xml:
     type: xccdf
-    profiles: ['xccdf_org.ssgproject.content_profile_standard', 'xccdf_org.ssgproject.content_profile_common']
+    profiles:
+      - xccdf_org.ssgproject.content_profile_standard
+      - xccdf_org.ssgproject.content_profile_common

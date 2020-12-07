@@ -29,8 +29,8 @@ wazuh::agent::ossec_service_provider: null
 
 # Rootcheck Windows
 wazuh::agent::ossec_rootcheck_windows_disabled: 'no'
-wazuh::agent::ossec_rootcheck_windows_windows_apps: './shared/win_applications_rcl.txt'
-wazuh::agent::ossec_rootcheck_windows_windows_malware: './shared/win_malware_rcl.txt'
+wazuh::agent::ossec_rootcheck_windows_windows_apps: ./shared/win_applications_rcl.txt
+wazuh::agent::ossec_rootcheck_windows_windows_malware: ./shared/win_malware_rcl.txt
 wazuh::agent::ossec_rootcheck_system_audit: []
 
 # sca
