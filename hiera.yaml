@@ -1,0 +1,27 @@
+version: 5
+
+# Used for any hierarchy level that omits these keys.
+defaults:
+  datadir: 'data'
+  data_hash: 'yaml_data'
+
+# From the most specific to least specific
+hierarchy:
+  # For example: distro/CentOS/7.yaml | Windows/10.yaml
+  - name: 'Distribution by major release'
+    path: 'distro/%{facts.os.name}/%{facts.os.release.major}.yaml'
+  # For example: family/RedHat/7.yaml
+  - name: 'Family by major release'
+    path: 'family/%{facts.os.family}/%{facts.os.release.major}.yaml'
+  # For example: distro/CentOS/common.yaml
+  - name: 'Common by distribution'
+    path: 'distro/%{facts.os.name}/common.yaml'
+  # For example: family/RedHat/common.yaml
+  - name: 'Common by family'
+    path: 'family/%{facts.os.family}/common.yaml'
+  # For example: Linux/common.yaml | Windows/common.yaml
+  - name: 'Common by Kernel'
+    path: 'kernel/%{facts.kernel}.yaml'
+  # For example: common.yaml
+  - name: 'Common for all'
+    path: 'common.yaml'
