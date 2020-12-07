@@ -1,0 +1,16 @@
+---
+wazuh::manager::service_has_status: false
+wazuh::manager::ossec_service_provider: null
+wazuh::manager::api_service_provider: null
+
+wazuh::manager::ossec_local_files:
+  - log_format: syslog
+    location: /var/log/syslog
+  - log_format: syslog
+    location: /var/log/dpkg.log
+  - log_format: syslog
+    location: /var/log/kern.log
+  - log_format: syslog
+    location: /var/log/auth.log
+  - log_format: syslog
+    location: /var/ossec/logs/active-responses.log
