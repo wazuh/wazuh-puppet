@@ -1,0 +1,13 @@
+---
+
+wazuh::manager::ossec_local_files:
+  - log_format: audit
+    location: /var/log/audit/audit.log
+  - log_format: syslog
+    location: /var/ossec/logs/active-responses.log
+  - log_format: syslog
+    location: /var/log/messages
+  - log_format: syslog
+    location: /var/log/secure
+  - log_format: syslog
+    location: /var/log/maillog
