@@ -1,0 +1,4 @@
+---
+wazuh::manager::ossec_service_provider: systemd
+wazuh::manager::api_service_provider: systemd
+wazuh::manager::wodle_openscap_content: null
