@@ -1,3 +1,4 @@
 ---
 
 wazuh::manager::wodle_openscap_content: null
+wazuh::agent::wodle_openscap_content: null

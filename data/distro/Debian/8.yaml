@@ -1,4 +1,16 @@
 ---
+########################################
+# Agent
+
+wazuh::agent::wodle_openscap_content:
+  ssg-debian-8-ds.xml:
+    type: xccdf
+    profiles: ['xccdf_org.ssgproject.content_profile_common']
+  cve-debian-8-oval.xml:
+    type: oval
+
+########################################
+# Manager
 
 wazuh::manager::wodle_openscap_content:
   ssg-debian-8-ds.xml:
