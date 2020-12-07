@@ -1,4 +1,22 @@
 ---
+
+########################################
+# Agent
+
+wazuh::agent::ossec_service_provider: systemd
+wazuh::agent::api_service_provider: systemd
+
+# TODO: Verify the comment imported from params class
+
+# Amazon is based on Centos-6 with some improvements
+# taken from RHEL-7 but uses SysV-Init, not Systemd.
+# Probably best to leave this undef until we can
+# write/find a release-specific file.
+wazuh::agent::wodle_openscap_content: null
+
+########################################
+# Manager
+
 wazuh::manager::ossec_service_provider: systemd
 wazuh::manager::api_service_provider: systemd
 wazuh::manager::wodle_openscap_content: null
