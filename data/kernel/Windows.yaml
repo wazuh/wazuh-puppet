@@ -1,0 +1,39 @@
+---
+
+##############################################
+# Wazuh Manager
+
+wazuh::manager::config_file: 'c:/Program Files (x86)/ossec-agent/ossec.conf'
+wazuh::manager::shared_agent_config_file: c:/Program Files (x86)/ossec-agent/shared/agent.conf
+
+
+wazuh::manager::config_owner: Administrator
+wazuh::manager::config_group: Administrators
+wazuh::manager::manage_firewall: false
+
+wazuh::manager::keys_file: c:/Program Files (x86)/ossec-agent/client.keys
+wazuh::manager::keys_mode: '0440'
+wazuh::manager::keys_owner: Administrator
+wazuh::manager::keys_group: Administrators
+
+wazuh::manager::agent_service: Administrators
+wazuh::manager::agent_package: Wazuh Agent 4.0.3
+wazuh::manager::server_service: ''
+wazuh::manager::server_package: ''
+wazuh::manager::api_service: ''
+wazuh::manager::api_package: ''
+wazuh::manager::service_has_status: true
+wazuh::manager::validate_cmd_conf: null
+
+wazuh::manager::default_local_files:
+  - log_format: eventchannel
+    location: Security
+    query: >-
+      Event/System[EventID != 5145 and EventID != 5156 and
+                   EventID != 5447 and EventID != 4656 and EventID != 4658 and
+                   EventID != 4663 and EventID != 4660 and EventID != 4670 and
+                   EventID != 4690 and EventID!= 4703 and EventID != 4907]
+  - log_format: eventlog
+    location: System
+  - log_format: syslog
+    location: active-response\active-responses.log
