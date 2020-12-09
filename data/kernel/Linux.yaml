@@ -48,6 +48,8 @@ wazuh::agent::download_path: null
 wazuh::agent::manage_firewall: false
 wazuh::agent::manage_repo: true
 wazuh::agent::selinux: false
+wazuh::agent::service_has_status: true
+wazuh::agent::ossec_service_provider: null
 
 wazuh::agent::configure_rootcheck: true
 wazuh::agent::configure_wodle_openscap: true
