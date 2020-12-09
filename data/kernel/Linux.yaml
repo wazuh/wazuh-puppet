@@ -140,6 +140,8 @@ wazuh::agent::ossec_rootcheck_rootkit_trojans: '/var/ossec/etc/shared/rootkit_tr
 wazuh::agent::ossec_rootcheck_skip_nfs: 'yes'
 wazuh::agent::ossec_rootcheck_system_audit: []
 wazuh::agent::ossec_rootcheck_windows_disabled: 'yes'
+wazuh::agent::ossec_rootcheck_windows_windows_apps: null
+wazuh::agent::ossec_rootcheck_windows_windows_malware: null
 
 ## SCA
 
@@ -347,6 +349,9 @@ wazuh::manager::ossec_auth_template: wazuh/fragments/_auth.erb
 wazuh::manager::ossec_cluster_template: wazuh/fragments/_cluster.erb
 wazuh::manager::ossec_active_response_template: wazuh/fragments/_default_activeresponse.erb
 wazuh::manager::ossec_syslog_output_template: wazuh/fragments/_syslog_output.erb
+wazuh::manager::ossec_rootcheck_windows_disabled: 'yes'
+wazuh::manager::ossec_rootcheck_windows_windows_apps: null
+wazuh::manager::ossec_rootcheck_windows_windows_malware: null
 
 ## Rootcheck
 
