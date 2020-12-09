@@ -2,7 +2,6 @@ require 'json'
 require 'puppet'
 require 'puppet/util/execution'
 
-
 Facter.add('kibana_plugin_wazuh') do
   setcode do
     # move this to hiera
