@@ -16,10 +16,16 @@ class wazuh::agent (
   $agent_service_ensure,
   $agent_msi_download_location,
 
+  $config_file,
+  $config_owner,
+  $config_mode,
+  $config_group,
+
   # Manage repository
   $manage_repo,
 
   # Authd registration options
+  $authd_pass_file,
   $manage_client_keys,
   $agent_name,
   $agent_group,
@@ -30,6 +36,10 @@ class wazuh::agent (
   $agent_auth_password,
   $wazuh_manager_root_ca_pem,
   $wazuh_manager_root_ca_pem_path,
+  $keys_file,
+  $keys_owner,
+  $keys_mode,
+  $keys_group,
 
   ## ossec.conf generation parameters
   # Generation variables
@@ -74,6 +84,8 @@ class wazuh::agent (
   $ossec_crypto_method,
   $client_buffer_queue_size,
   $client_buffer_events_per_second,
+  $service_has_status,
+  $ossec_service_provider,
 
   # Auto enrollment configuration
   $wazuh_enrollment_enabled,
@@ -91,7 +103,6 @@ class wazuh::agent (
   $wazuh_enrollment_auto_method,
   $wazuh_delay_after_enrollment,
   $wazuh_enrollment_use_source_ip,
-
 
   # Rootcheck
   $ossec_rootcheck_disabled,
@@ -346,10 +357,10 @@ class wazuh::agent (
 
 
   concat { 'agent_ossec.conf':
-    path    => $wazuh::params_agent::config_file,
-    owner   => $wazuh::params_agent::config_owner,
-    group   => $wazuh::params_agent::config_group,
-    mode    => $wazuh::params_agent::config_mode,
+    path    => $config_file,
+    owner   => $config_owner,
+    group   => $config_group,
+    mode    => $config_mode,
     before  => Service[$agent_service_name],
     require => Package[$agent_package_name],
     notify  => Service[$agent_service_name],
@@ -499,10 +510,10 @@ class wazuh::agent (
 
     case $::kernel {
       'Linux': {
-        file { $::wazuh::params_agent::keys_file:
-          owner => $wazuh::params_agent::keys_owner,
-          group => $wazuh::params_agent::keys_group,
-          mode  => $wazuh::params_agent::keys_mode,
+        file { $keys_file:
+          owner => $keys_owner,
+          group => $keys_group,
+          mode  => $keys_mode,
         }
 
         $agent_auth_executable = '/var/ossec/bin/agent-auth'
@@ -512,9 +523,9 @@ class wazuh::agent (
         if $wazuh_manager_root_ca_pem != undef {
           validate_string($wazuh_manager_root_ca_pem)
           file { '/var/ossec/etc/rootCA.pem':
-            owner   => $wazuh::params_agent::keys_owner,
-            group   => $wazuh::params_agent::keys_group,
-            mode    => $wazuh::params_agent::keys_mode,
+            owner   => $keys_owner,
+            group   => $keys_group,
+            mode    => $keys_mode,
             content => $wazuh_manager_root_ca_pem,
             require => Package[$agent_package_name],
           }
@@ -531,16 +542,16 @@ class wazuh::agent (
           validate_string($wazuh_agent_cert)
           validate_string($wazuh_agent_key)
           file { '/var/ossec/etc/sslagent.cert':
-            owner   => $wazuh::params_agent::keys_owner,
-            group   => $wazuh::params_agent::keys_group,
-            mode    => $wazuh::params_agent::keys_mode,
+            owner   => $keys_owner,
+            group   => $keys_group,
+            mode    => $keys_mode,
             content => $wazuh_agent_cert,
             require => Package[$agent_package_name],
           }
           file { '/var/ossec/etc/sslagent.key':
-            owner   => $wazuh::params_agent::keys_owner,
-            group   => $wazuh::params_agent::keys_group,
-            mode    => $wazuh::params_agent::keys_mode,
+            owner   => $keys_owner,
+            group   => $keys_group,
+            mode    => $keys_mode,
             content => $wazuh_agent_key,
             require => Package[$agent_package_name],
           }
@@ -557,7 +568,7 @@ class wazuh::agent (
 
         exec { 'agent-auth-linux':
           command => $agent_auth_command,
-          unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
+          unless  => "/bin/egrep -q '.' ${keys_file}",
           require => Concat['agent_ossec.conf'],
           before  => Service[$agent_service_name],
           notify  => Service[$agent_service_name],
@@ -566,9 +577,9 @@ class wazuh::agent (
         service { $agent_service_name:
           ensure    => $agent_service_ensure,
           enable    => true,
-          hasstatus => $wazuh::params_agent::service_has_status,
-          pattern   => $wazuh::params_agent::agent_service_name,
-          provider  => $wazuh::params_agent::ossec_service_provider,
+          hasstatus => $service_has_status,
+          pattern   => $agent_service_name,
+          provider  => $ossec_service_provider,
           require   => Package[$agent_package_name],
         }
       }
@@ -585,7 +596,7 @@ class wazuh::agent (
         exec { 'agent-auth-windows':
           command  => $agent_auth_command,
           provider => 'powershell',
-          onlyif   => "if ((Get-Item '${$::wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
+          onlyif   => "if ((Get-Item '${$keys_file}').length -gt 0kb) {exit 1}",
           require  => Concat['agent_ossec.conf'],
           before   => Service[$agent_service_name],
           notify   => Service[$agent_service_name],
@@ -594,9 +605,9 @@ class wazuh::agent (
         service { $agent_service_name:
           ensure    => $agent_service_ensure,
           enable    => true,
-          hasstatus => $wazuh::params_agent::service_has_status,
-          pattern   => $wazuh::params_agent::agent_service_name,
-          provider  => $wazuh::params_agent::ossec_service_provider,
+          hasstatus => $service_has_status,
+          pattern   => $agent_service_name,
+          provider  => $ossec_service_provider,
           require   => Package[$agent_package_name],
         }
       }
@@ -606,9 +617,9 @@ class wazuh::agent (
     service { $agent_service_name:
       ensure    => stopped,
       enable    => false,
-      hasstatus => $wazuh::params_agent::service_has_status,
+      hasstatus => $service_has_status,
       pattern   => $agent_service_name,
-      provider  => $wazuh::params_agent::ossec_service_provider,
+      provider  => $ossec_service_provider,
       require   => Package[$agent_package_name],
     }
   }
@@ -638,12 +649,12 @@ class wazuh::agent (
   }
 
   if ( $wazuh_enrollment_auth_pass ) {
-    file { $wazuh::params_agent::authd_pass_file:
+    file { $authd_pass_file:
       owner   => 'root',
       group   => 'ossec',
       mode    => '0640',
-      content => $wazuh::params_agent::wazuh_enrollment_auth_pass,
-      require => Package[$wazuh::params_agent::agent_package_name],
+      content => $wazuh_enrollment_auth_pass,
+      require => Package[$agent_package_name],
     }
   }
 
