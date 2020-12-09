@@ -312,7 +312,7 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef

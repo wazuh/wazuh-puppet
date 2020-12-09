@@ -5,7 +5,7 @@ class wazuh::repo (
 
   case $::osfamily {
     'Debian' : {
-      if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi)/
+      if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|focal)/
       and ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
@@ -16,7 +16,7 @@ class wazuh::repo (
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
+        /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
