@@ -69,9 +69,6 @@ class wazuh::params_agent {
   $client_buffer_queue_size = 5000
   $client_buffer_events_per_second = 500
 
-  ## localfile
-  $ossec_local_files = $::wazuh::params_agent::default_local_files
-
   # active response
   $active_response_disabled                        = 'no'
   $active_response_ca_verification                 = 'yes'
