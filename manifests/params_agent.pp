@@ -145,7 +145,21 @@ class wazuh::params_agent {
       # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
       $ossec_rootcheck_system_audit = []
 
+      # Rootcheck Windows
+      $ossec_rootcheck_windows_disabled = undef
+      $ossec_rootcheck_windows_windows_apps = undef
+      $ossec_rootcheck_windows_windows_malware = undef
+
       # SCA
+
+      ## Windows
+      $sca_windows_enabled = undef
+      $sca_windows_scan_on_start = undef
+      $sca_windows_interval = undef
+      $sca_windows_skip_nfs = undef
+      $sca_windows_policies = []
+
+      $windows_audit_interval = undef
 
       ## Amazon
       $sca_amazon_enabled = 'yes'
@@ -201,6 +215,7 @@ class wazuh::params_agent {
       $wodle_syscollector_packages = 'yes'
       $wodle_syscollector_ports = 'yes'
       $wodle_syscollector_processes = 'yes'
+      $wodle_syscollector_hotfixes = undef
 
       ## syscheck
       $ossec_syscheck_disabled = 'no'
