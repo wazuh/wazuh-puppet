@@ -552,6 +552,8 @@ class wazuh::agent (
           validate_string($wazuh_agent_cert_path)
           validate_string($wazuh_agent_key_path)
           $agent_auth_option_agent = "-x ${wazuh_agent_cert_path} -k ${wazuh_agent_key_path}"
+        } else {
+          $agent_auth_option_agent = ''
         }
 
         $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_name} ${agent_auth_option_group} \
