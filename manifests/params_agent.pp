@@ -81,6 +81,7 @@ class wazuh::params_agent {
   $active_response_rules_id                        = []
   $active_response_timeout                         = undef
   $active_response_repeated_offenders              = []
+  $active_response_command                         = undef
 
   # agent autoenrollment
   $wazuh_enrollment_enabled                        = undef
@@ -104,6 +105,8 @@ class wazuh::params_agent {
     'Linux': {
       $agent_package_name = 'wazuh-agent'
       $agent_service_name = 'wazuh-agent'
+
+      $download_path = '/tmp'
 
       # Wazuh config folders and modes
       $config_file = '/var/ossec/etc/ossec.conf'
@@ -204,6 +207,7 @@ class wazuh::params_agent {
       $wodle_osquery_log_path = '/var/log/osquery/osqueryd.results.log'
       $wodle_osquery_config_path = '/etc/osquery/osquery.conf'
       $wodle_osquery_add_labels = 'yes'
+      $wodle_osquery_bin_path = '/usr/bin/osqueryd'
 
       ## syscollector
       $wodle_syscollector_disabled = 'no'
