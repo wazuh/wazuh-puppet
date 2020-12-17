@@ -215,7 +215,7 @@ collecting ... collected 8 items
 test/base/test_wazuh_agent.py::test_wazuh_agent_package SKIPPED          [ 12%]
 test/base/test_wazuh_agent.py::test_wazuh_processes_running[wazuh-agentd-ossec] SKIPPED [ 25%]
 test/base/test_wazuh_agent.py::test_wazuh_processes_running[wazuh-execd-root] SKIPPED [ 37%]
-test/base/test_wazuh_agent.py::test_wazuh_processes_running[ossec-syscheckd-root] SKIPPED [ 50%]
+test/base/test_wazuh_agent.py::test_wazuh_processes_running[wazuh-syscheckd-root] SKIPPED [ 50%]
 test/base/test_wazuh_agent.py::test_wazuh_processes_running[wazuh-modulesd-root] SKIPPED [ 62%]
 test/base/test_wazuh_manager.py::test_wazuh_agent_package PASSED         [ 75%]
 test/base/test_wazuh_manager.py::test_wazuh_packages_are_installed PASSED [ 87%]
