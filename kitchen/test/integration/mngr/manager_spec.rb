@@ -16,13 +16,13 @@ control 'wazuh-manager' do
 
   # Verifying daemons
   wazuh_daemons = {
-    'ossec-authd' => 'root',
-    'ossec-execd' => 'root',
-    'ossec-analysisd' => 'ossec',
-    'ossec-syscheckd' => 'root',
-    'ossec-remoted' => 'ossecr',
-    'ossec-logcollector' => 'root',
-    'ossec-monitord' => 'ossec',
+    'wazuh-authd' => 'root',
+    'wazuh-execd' => 'root',
+    'wazuh-analysisd' => 'ossec',
+    'wazuh-syscheckd' => 'root',
+    'wazuh-remoted' => 'ossecr',
+    'wazuh-logcollector' => 'root',
+    'wazuh-monitord' => 'ossec',
     'wazuh-db' => 'ossec',
     'wazuh-modulesd' => 'root',
   }

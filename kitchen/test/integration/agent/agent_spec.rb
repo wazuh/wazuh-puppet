@@ -15,9 +15,9 @@ control 'wazuh-agent' do
 
   # Verifying daemons
   wazuh_daemons = {
-    # 'ossec-agentd' => 'ossec',
-    'ossec-execd' => 'root',
-    # 'ossec-syscheckd' => 'root',
+    # 'wazuh-agentd' => 'ossec',
+    'wazuh-execd' => 'root',
+    # 'wazuh-syscheckd' => 'root',
     # 'wazuh-modulesd' => 'root',
   }
 
