@@ -17,7 +17,7 @@ control 'wazuh-manager' do
   # Verifying daemons
   wazuh_daemons = {
     'ossec-authd' => 'root',
-    'ossec-execd' => 'root',
+    'wazuh-execd' => 'root',
     'wazuh-analysisd' => 'ossec',
     'ossec-syscheckd' => 'root',
     'ossec-remoted' => 'ossecr',
