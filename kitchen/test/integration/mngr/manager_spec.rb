@@ -22,7 +22,7 @@ control 'wazuh-manager' do
     'ossec-syscheckd' => 'root',
     'ossec-remoted' => 'ossecr',
     'wazuh-logcollector' => 'root',
-    'ossec-monitord' => 'ossec',
+    'wazuh-monitord' => 'ossec',
     'wazuh-db' => 'ossec',
     'wazuh-modulesd' => 'root',
   }
