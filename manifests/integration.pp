@@ -14,7 +14,7 @@ define wazuh::integration(
   require wazuh::params_manager
 
   concat::fragment { $name:
-    target  => 'ossec.conf',
+    target  => 'manager_ossec.conf',
     order   => 60,
     content => template('wazuh/fragments/_integration.erb')
   }
