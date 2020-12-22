@@ -9,14 +9,14 @@ define wazuh::reports(
   Optional[String] $r_srcip               = undef,
   Optional[String] $r_user                = undef,
   String $r_title                         = '',
-  String $r_email_to                      = '',
+  $r_email_to                             = '',
   Optional[Enum['yes', 'no']] $r_showlogs = undef,
 ) {
 
   require wazuh::params_manager
 
   concat::fragment { $name:
-    target  => 'ossec.conf',
+    target  => 'manager_ossec.conf',
     order   => 70,
     content => template('wazuh/fragments/_reports.erb')
   }

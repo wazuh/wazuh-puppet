@@ -23,7 +23,11 @@
   <user><%= @r_user %></user>
   <%- end -%>
   <title><%= @r_title %></title>
-  <email_to><%= @r_email_to %></email_to>
+  <% if @r_email_to != '' -%>
+  <% @r_email_to.each do |gr| -%>
+  <email_to><%= gr %></email_to>
+  <% end %>
+  <% end %>
   <%- if defined?(@r_showlogs) -%>
   <showlogs><%= @r_showlogs %></showlogs>
   <%- end -%>
