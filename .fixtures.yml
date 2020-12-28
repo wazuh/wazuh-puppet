@@ -1,0 +1,6 @@
+---
+fixtures:
+  forge_modules:
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "4.13.0"
