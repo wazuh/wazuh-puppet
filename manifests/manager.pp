@@ -301,11 +301,11 @@ class wazuh::manager (
 
 
 ) inherits wazuh::params_manager {
-  validate_bool(
-    $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
+  validate_legacy(
+    Boolean, 'validate_bool', $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
   )
-  validate_array(
-    $decoder_exclude, $rule_exclude
+  validate_legacy(
+    Array, 'validate_array', $decoder_exclude, $rule_exclude
   )
 
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
@@ -335,14 +335,14 @@ class wazuh::manager (
 
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  validate_bool($ossec_emailnotification)
+  validate_legacy(Boolean, 'validate_bool', $ossec_emailnotification)
   if ($ossec_emailnotification) {
     if $ossec_smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
-    validate_string($ossec_smtp_server)
-    validate_string($ossec_emailfrom)
-    validate_array($ossec_emailto)
+    validate_legacy(String, 'validate_string', $ossec_smtp_server)
+    validate_legacy(String, 'validate_string', $ossec_emailfrom)
+    validate_legacy(Array, 'validate_array', $ossec_emailto)
   }
 
   if $::osfamily == 'windows' {
@@ -591,8 +591,8 @@ class wazuh::manager (
   if $wazuh_manager_verify_manager_ssl {
 
     if ($wazuh_manager_server_crt != undef) and ($wazuh_manager_server_key != undef) {
-      validate_string(
-        $wazuh_manager_server_crt, $wazuh_manager_server_key
+      validate_legacy(
+        String, 'validate_string', $wazuh_manager_server_crt, $wazuh_manager_server_key
       )
 
       file { '/var/ossec/etc/sslmanager.key':
