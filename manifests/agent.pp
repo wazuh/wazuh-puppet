@@ -243,8 +243,8 @@ class wazuh::agent (
   # )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  validate_string($agent_package_name)
-  validate_string($agent_service_name)
+  validate_legacy(String, 'validate_string', $agent_package_name)
+  validate_legacy(String, 'validate_string', $agent_service_name)
 
   if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
     class { 'wazuh::audit':
@@ -468,14 +468,14 @@ class wazuh::agent (
   # Agent registration and service setup
   if ($manage_client_keys == 'yes') {
     if $agent_name {
-      validate_string($agent_name)
+      validate_legacy(String, 'validate_string', $agent_name)
       $agent_auth_option_name = "-A \"${agent_name}\""
     } else {
       $agent_auth_option_name = ''
     }
 
     if $agent_group {
-      validate_string($agent_group)
+      validate_legacy(String, 'validate_string', $agent_group)
       $agent_auth_option_group = "-G \"${agent_group}\""
     } else {
       $agent_auth_option_group = ''
@@ -500,7 +500,7 @@ class wazuh::agent (
 
         # https://documentation.wazuh.com/4.0/user-manual/registering/manager-verification/manager-verification-registration.html
         if $wazuh_manager_root_ca_pem != undef {
-          validate_string($wazuh_manager_root_ca_pem)
+          validate_legacy(String, 'validate_string', $wazuh_manager_root_ca_pem)
           file { '/var/ossec/etc/rootCA.pem':
             owner   => $wazuh::params_agent::keys_owner,
             group   => $wazuh::params_agent::keys_group,
@@ -510,7 +510,7 @@ class wazuh::agent (
           }
           $agent_auth_option_manager = '-v /var/ossec/etc/rootCA.pem'
         } elsif $wazuh_manager_root_ca_pem_path != undef {
-          validate_string($wazuh_manager_root_ca_pem)
+          validate_legacy(String, 'validate_string', $wazuh_manager_root_ca_pem)
           $agent_auth_option_manager = "-v ${wazuh_manager_root_ca_pem_path}"
         } else {
           $agent_auth_option_manager = ''  # Avoid errors when compounding final command
@@ -518,8 +518,8 @@ class wazuh::agent (
 
         # https://documentation.wazuh.com/4.0/user-manual/registering/manager-verification/agent-verification-registration.html
         if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
-          validate_string($wazuh_agent_cert)
-          validate_string($wazuh_agent_key)
+          validate_legacy(String, 'validate_string', $wazuh_agent_cert)
+          validate_legacy(String, 'validate_string', $wazuh_agent_key)
           file { '/var/ossec/etc/sslagent.cert':
             owner   => $wazuh::params_agent::keys_owner,
             group   => $wazuh::params_agent::keys_group,
@@ -537,8 +537,8 @@ class wazuh::agent (
 
           $agent_auth_option_agent = '-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key'
         } elsif ($wazuh_agent_cert_path != undef) and ($wazuh_agent_key_path != undef) {
-          validate_string($wazuh_agent_cert_path)
-          validate_string($wazuh_agent_key_path)
+          validate_legacy(String, 'validate_string', $wazuh_agent_cert_path)
+          validate_legacy(String, 'validate_string', $wazuh_agent_key_path)
           $agent_auth_option_agent = "-x ${wazuh_agent_cert_path} -k ${wazuh_agent_key_path}"
         } else {
           $agent_auth_option_agent = ''
