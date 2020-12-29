@@ -72,13 +72,7 @@ class wazuh::params_agent {
   # active response
   $active_response_disabled                        = 'no'
   $active_response_ca_verification                 = 'yes'
-  $active_response_location                        = undef
-  $active_response_level                           = undef
-  $active_response_agent_id                        = undef
-  $active_response_rules_id                        = []
-  $active_response_timeout                         = undef
   $active_response_repeated_offenders              = []
-  $active_response_command                         = undef
 
   # agent autoenrollment
   $wazuh_enrollment_enabled                        = undef
