@@ -560,7 +560,7 @@ class wazuh::manager (
       active_response_agent_id           => $ossec_active_response_agent_id,
       active_response_rules_id           => $ossec_active_response_rules_id,
       active_response_timeout            => $ossec_active_response_timeout,
-      order_arg                          => 90
+      order_arg                          => 90,
       target_arg                         => 'manager_ossec.conf'
     }
   }
