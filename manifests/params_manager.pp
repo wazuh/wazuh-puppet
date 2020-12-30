@@ -149,7 +149,6 @@ class wazuh::params_manager {
       $active_response_agent_id                        = '001'
       $active_response_rules_id                        = [31153,31151]
       $active_response_timeout                         = 300
-      $active_response_repeated_offenders              = ['30,60,120']
 
       #vulnerability-detector
 
@@ -286,7 +285,6 @@ class wazuh::params_manager {
 
       $manage_client_keys                  = 'yes'
       $agent_auth_password                 = undef
-      $ar_repeated_offenders               = ''
 
       $local_decoder_template              = 'wazuh/local_decoder.xml.erb'
       $decoder_exclude                     = []

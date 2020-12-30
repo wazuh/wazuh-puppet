@@ -71,7 +71,6 @@ class wazuh::manager (
       $ossec_active_response_agent_id               =  $wazuh::params_manager::active_response_agent_id,
       $ossec_active_response_rules_id               =  $wazuh::params_manager::active_response_rules_id,
       $ossec_active_response_timeout                =  $wazuh::params_manager::active_response_timeout,
-      $ossec_active_response_repeated_offenders     =  $wazuh::params_manager::active_response_repeated_offenders,
 
 
       ## Rootcheck
@@ -247,7 +246,6 @@ class wazuh::manager (
 
       $manage_client_keys                   = $wazuh::params_manager::manage_client_keys,
       $agent_auth_password                  = $wazuh::params_manager::agent_auth_password,
-      $ar_repeated_offenders                = $wazuh::params_manager::ar_repeated_offenders,
 
       $local_decoder_template               = $wazuh::params_manager::local_decoder_template,
       $decoder_exclude                      = $wazuh::params_manager::decoder_exclude,
@@ -562,8 +560,8 @@ class wazuh::manager (
       active_response_agent_id           => $ossec_active_response_agent_id,
       active_response_rules_id           => $ossec_active_response_rules_id,
       active_response_timeout            => $ossec_active_response_timeout,
-      active_response_repeated_offenders => $ossec_active_response_repeated_offenders,
       order_arg                          => 90
+      target_arg                         => 'manager_ossec.conf'
     }
   }
   concat::fragment {
