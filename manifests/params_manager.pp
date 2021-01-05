@@ -20,6 +20,8 @@ class wazuh::params_manager {
       $ossec_email_maxperhour                          = 12
       $ossec_email_idsname                             = undef
       $ossec_email_log_source                          = 'alerts.log'
+      $ossec_agents_disconnection_time           = '20s'
+      $ossec_agents_disconnection_alert_time  = '100s'
       $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
       $ossec_alert_level                               = 3
       $ossec_email_alert_level                         = 12

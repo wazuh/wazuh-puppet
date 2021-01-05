@@ -19,6 +19,8 @@ class wazuh::manager (
       $ossec_emailfrom                  = $wazuh::params_manager::ossec_emailfrom,
       $ossec_email_maxperhour           = $wazuh::params_manager::ossec_email_maxperhour,
       $ossec_email_log_source           = $wazuh::params_manager::ossec_email_log_source,
+      $ossec_agents_disconnection_time           = $wazuh::params_manager::ossec_agents_disconnection_time,
+      $ossec_agents_disconnection_alert_time  = $wazuh::params_manager::ossec_agents_disconnection_alert_time,
       $ossec_email_idsname              = $wazuh::params_manager::ossec_email_idsname,
       $ossec_white_list                 = $wazuh::params_manager::ossec_white_list,
       $ossec_alert_level                = $wazuh::params_manager::ossec_alert_level,
