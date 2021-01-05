@@ -4,17 +4,27 @@ class wazuh::kibana (
   $kibana_package = 'kibana',
   $kibana_service = 'kibana',
   $kibana_version = '7.9.3',
-  $kibana_wazuh_version = '4.0.3',
-  $kibana_elasticsearch_ip = 'localhost',
-  $kibana_elasticsearch_port = '9200',
+
+  $kibana_elasticsearch_hosts = [
+    {
+      host  => 'localhost',
+      port  => 9200,
+      proto => 'http',
+    },
+  ],
+
+  # Node used for API queries
+  $kibana_elasticsearch_ip = $kibana_elasticsearch_hosts[0]['host'],
+  $kibana_elasticsearch_port = $kibana_elasticsearch_hosts[0]['port'],
+  $kibana_elasticsearch_proto = $kibana_elasticsearch_hosts[0]['proto'],
 
   $kibana_server_port = '5601',
   $kibana_server_host = '0.0.0.0',
-  $kibana_elasticsearch_server_hosts ="http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+  $kibana_wazuh_version = '4.0.3',
 
   # app variables
-  $kibana_app_url = "https://packages.wazuh.com/4.x/ui/kibana/wazuh_kibana-${kibana_app_version}-1.zip",
   $kibana_app_version = "${kibana_wazuh_version}_${$kibana_version}",
+  $kibana_app_url = "https://packages.wazuh.com/4.x/ui/kibana/wazuh_kibana-${kibana_app_version}-1.zip",
   $kibana_app_reinstall = false,
   $kibana_app_node_options = '--no-warnings --max-old-space-size=2048 --max-http-header-size=65536',
 
@@ -66,7 +76,7 @@ class wazuh::kibana (
 
   exec {'Waiting for elasticsearch...':
     path      => '/usr/bin',
-    command   => "curl -s -XGET http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+    command   => "curl -s -XGET ${kibana_elasticsearch_proto}://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
     tries     => 100,
     try_sleep => 3,
   }
