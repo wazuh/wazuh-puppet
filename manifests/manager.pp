@@ -198,7 +198,6 @@ class wazuh::manager (
       $ossec_auth_force_time                = $wazuh::params_manager::ossec_auth_force_time,
       $ossec_auth_purgue                    = $wazuh::params_manager::ossec_auth_purgue,
       $ossec_auth_use_password              = $wazuh::params_manager::ossec_auth_use_password,
-      $ossec_auth_limit_maxagents           = $wazuh::params_manager::ossec_auth_limit_maxagents,
       $ossec_auth_ciphers                   = $wazuh::params_manager::ossec_auth_ciphers,
       $ossec_auth_ssl_verify_host           = $wazuh::params_manager::ossec_auth_ssl_verify_host,
       $ossec_auth_ssl_manager_cert          = $wazuh::params_manager::ossec_auth_ssl_manager_cert,

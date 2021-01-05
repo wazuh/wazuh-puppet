@@ -207,7 +207,6 @@ class wazuh::params_manager {
       $ossec_auth_force_time                           = 0
       $ossec_auth_purgue                               = 'yes'
       $ossec_auth_use_password                         = 'no'
-      $ossec_auth_limit_maxagents                      = 'yes'
       $ossec_auth_ciphers                              = 'HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH'
       $ossec_auth_ssl_verify_host                      = 'no'
       $ossec_auth_ssl_manager_cert                     = '/var/ossec/etc/sslmanager.cert'
