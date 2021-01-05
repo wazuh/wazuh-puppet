@@ -47,6 +47,7 @@ class wazuh::params_manager {
       $configure_auth                                  = true
       $configure_cluster                               = true
       $configure_active_response                       = false
+      $configure_rule_test                       = true
 
 
     # ossec.conf templates paths
@@ -63,6 +64,7 @@ class wazuh::params_manager {
       $ossec_localfile_template                        = 'wazuh/fragments/_localfile.erb'
       $ossec_ruleset_template                          = 'wazuh/fragments/_ruleset.erb'
       $ossec_auth_template                             = 'wazuh/fragments/_auth.erb'
+      $ossec_rule_test_template                          = 'wazuh/fragments/_rule_test.erb'
       $ossec_cluster_template                          = 'wazuh/fragments/_cluster.erb'
       $ossec_active_response_template                  = 'wazuh/fragments/_default_activeresponse.erb'
       $ossec_syslog_output_template                    = 'wazuh/fragments/_syslog_output.erb'
@@ -264,6 +266,12 @@ class wazuh::params_manager {
 
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
+
+    # rule_test section
+    $ossec_rule_test_enabled   = 'yes'
+    $ossec_rule_test_threads   = 1
+    $ossec_rule_test_max_sessions   = 64
+    $ossec_rule_test_session_timeout   = '15m'
 
       # Cluster
 

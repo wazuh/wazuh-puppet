@@ -47,6 +47,7 @@ class wazuh::manager (
       $configure_auth                       = $wazuh::params_manager::configure_auth,
       $configure_cluster                    = $wazuh::params_manager::configure_cluster,
       $configure_active_response            = $wazuh::params_manager::configure_active_response,
+      $configure_rule_test                        = $wazuh::params_manager::configure_rule_test,
 
     # ossec.conf templates paths
       $ossec_manager_template                       = $wazuh::params_manager::ossec_manager_template,
@@ -62,6 +63,7 @@ class wazuh::manager (
       $ossec_localfile_template                     = $wazuh::params_manager::ossec_localfile_template,
       $ossec_ruleset_template                       = $wazuh::params_manager::ossec_ruleset_template,
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
+      $ossec_rule_test_template                       = $wazuh::params_manager::ossec_rule_test_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
       $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
@@ -227,6 +229,12 @@ class wazuh::manager (
 
       $ossec_syscheck_nodiff                = $wazuh::params_manager::ossec_syscheck_nodiff,
       $ossec_syscheck_skip_nfs              = $wazuh::params_manager::ossec_syscheck_skip_nfs,
+
+    # rule_test section
+    $ossec_rule_test_enabled   = $wazuh::params_manager::ossec_rule_test_enabled,
+    $ossec_rule_test_threads   = $wazuh::params_manager::ossec_rule_test_threads,
+    $ossec_rule_test_max_sessions   = $wazuh::params_manager::ossec_rule_test_max_sessions,
+    $ossec_rule_test_session_timeout   = $wazuh::params_manager::ossec_rule_test_session_timeout,
 
       # Cluster
 
@@ -554,6 +562,14 @@ class wazuh::manager (
           order   => 85,
           target  => 'manager_ossec.conf',
           content => template($ossec_cluster_template);
+      }
+  }
+  if ($configure_rule_test == true){
+    concat::fragment {
+        'ossec.conf_rule_test':
+          order   => 86,
+          target  => 'manager_ossec.conf',
+          content => template($ossec_rule_test_template);
       }
   }
   if ($configure_active_response == true){
