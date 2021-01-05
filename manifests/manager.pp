@@ -566,7 +566,7 @@ class wazuh::manager (
   if ($configure_rule_test == true){
     concat::fragment {
         'ossec.conf_rule_test':
-          order   => 86,
+          order   => 84,
           target  => 'manager_ossec.conf',
           content => template($ossec_rule_test_template);
       }

@@ -18,8 +18,8 @@
   <%- @ossec_white_list.each do |ipaddress| -%>
     <white_list><%= ipaddress %></white_list>
   <%- end -%>
-  <agents_disconnection_time><%= @ossec_agents_disconnection_time %></agents_disconnection_time>
-  <agents_disconnection_alert_time><%= @ossec_agents_disconnection_alert_time %></agents_disconnection_alert_time>
+    <agents_disconnection_time><%= @ossec_agents_disconnection_time %></agents_disconnection_time>
+    <agents_disconnection_alert_time><%= @ossec_agents_disconnection_alert_time %></agents_disconnection_alert_time>
   </global>
 
   <alerts>
