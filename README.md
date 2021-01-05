@@ -4,7 +4,7 @@
 [![Email](https://img.shields.io/badge/email-join-blue.svg)](https://groups.google.com/forum/#!forum/wazuh)
 [![Documentation](https://img.shields.io/badge/docs-view-green.svg)](https://documentation.wazuh.com)
 [![Web](https://img.shields.io/badge/web-view-green.svg)](https://wazuh.com)
-![Kitchen tests](https://github.com/wazuh/wazuh-puppet/workflows/Kitchen%20tests/badge.svg)
+![Kitchen tests for Wazuh Puppet](https://github.com/wazuh/wazuh-puppet/workflows/Kitchen%20tests%20for%20Wazuh%20Puppet/badge.svg)
 
 This module installs and configure Wazuh agent and manager.
 
