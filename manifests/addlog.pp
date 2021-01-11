@@ -10,7 +10,7 @@ define wazuh::addlog(
   require wazuh::params_manager
 
   concat::fragment { "ossec.conf_localfile-${logfile}":
-    target  => 'ossec.conf',
+    target  => 'manager_ossec.conf',
     content => template('wazuh/fragments/_localfile_generation.erb'),
     order   => 21,
   }
