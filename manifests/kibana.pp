@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Setup for Kibana
 class wazuh::kibana (
   $kibana_package = 'kibana',

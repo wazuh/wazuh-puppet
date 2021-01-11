@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Opendistro configuration parameters
 class wazuh::params_opendistro {
   $opendistro_service = 'elasticsearch'
