@@ -8,8 +8,8 @@ class wazuh::filebeat (
   $filebeat_package = 'filebeat',
   $filebeat_service = 'filebeat',
   $filebeat_version = '7.9.3',
-  $wazuh_app_version = '4.0.3_7.9.3',
-  $wazuh_extensions_version = 'v4.0.3',
+  $wazuh_app_version = '4.0.4_7.9.3',
+  $wazuh_extensions_version = 'v4.0.4',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
 ){
 
