@@ -435,7 +435,8 @@ class wazuh::agent (
       active_response_timeout            =>  $ossec_active_response_timeout,
       active_response_repeated_offenders =>  $ossec_active_response_repeated_offenders,
       order_arg                          => 40,
-      before_arg                         => Service[$agent_service_name]
+      before_arg                         => Service[$agent_service_name],
+      target_arg                         => 'agent_ossec.conf',
     }
   }
 
