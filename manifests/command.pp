@@ -3,7 +3,7 @@
 define wazuh::command(
   $command_name,
   $command_executable,
-  $command_expect = 'srcip',
+  $command_expect  = 'srcip',
   $timeout_allowed = true,
   $target_arg      = 'manager_ossec.conf',
 ) {
