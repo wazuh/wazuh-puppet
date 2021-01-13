@@ -7,7 +7,7 @@ define wazuh::email_alert(
   require wazuh::params_manager
 
   concat::fragment { $name:
-    target  => 'ossec.conf',
+    target  => 'manager_ossec.conf',
     order   => 66,
     content => template('wazuh/fragments/_email_alert.erb'),
   }

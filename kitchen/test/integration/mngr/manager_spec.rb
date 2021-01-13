@@ -27,9 +27,9 @@ control 'wazuh-manager' do
     'wazuh-modulesd' => 'root',
   }
 
-  wazuh_daemons.each do |key, value|
-    describe processes(key) do
-      its('users') { is_expected.to eq [value] }
-    end
+wazuh_daemons.each do |key, value|
+  describe processes(key) do
+    its('users') { is_expected.to eq [value] }
   end
 end
+
