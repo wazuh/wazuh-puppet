@@ -20,7 +20,7 @@ class wazuh::repo_opendistro (
             apt::source { 'wazuh_elastic_od':
               ensure   => present,
               comment  => 'This is the Open Distro for Elastic repository',
-              location => 'ttps://d3g5vo6xdbdb9a.cloudfront.net/apt',
+              location => 'https://d3g5vo6xdbdb9a.cloudfront.net/apt',
               release  => 'stable',
               repos    => 'main',
               include  => {
