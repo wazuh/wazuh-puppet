@@ -3,7 +3,14 @@
 define wazuh::email_alert(
   $alert_email,
   $alert_group = false,
-  $target_arg  = 'manager_ossec.conf'
+  $target_arg  = 'manager_ossec.conf',
+  $level = false,
+  $event_location = false,
+  $format = false,
+  $rule_id = false,
+  $do_not_delay = false,
+  $do_not_group = false,
+  $email_log_source = false
 ) {
   require wazuh::params_manager
 
