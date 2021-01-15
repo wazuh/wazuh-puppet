@@ -13,6 +13,7 @@ https:
   cert: <%= @wazuh_api_https_cert %>
   use_ca: <%= @wazuh_api_https_use_ca %>
   ca: <%= @wazuh_api_https_ca %>
+  ssl_cipher: <%= @wazuh_api_ssl_cipher %>
 # Logging configuration
 # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
 logs:
@@ -40,3 +41,11 @@ use_only_authd: <%= @wazuh_api_use_only_authd %>
 drop_privileges: <%= @wazuh_api_drop_privileges %>
 # Enable features under development
 experimental_features: <%= @wazuh_api_experimental_features %>
+# Enable remote commands
+remote_commands:
+  localfile:
+    enabled: <%= @remote_commands_localfile %>
+    exceptions: <%= @remote_commands_localfile_exceptions %>
+  wodle_command:
+    enabled: <%= @remote_commands_wodle %>
+    exceptions: <%= @remote_commands_wodle_exceptions %>
