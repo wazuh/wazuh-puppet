@@ -339,7 +339,7 @@ class wazuh::params_manager {
       $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
       $wazuh_api_https_use_ca = 'False'
       $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
-
+      $wazuh_api_ssl_cipher: 'TLSv1.2'
 
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
@@ -370,6 +370,12 @@ class wazuh::params_manager {
 
       # Enable features under development
       $wazuh_api_experimental_features = 'no'
+
+      # Enable remote commands
+      $remote_commands_localfile = 'yes'
+      $remote_commands_localfile_exceptions = []
+      $remote_commands_wodle = 'yes'
+      $remote_commands_wodle_exceptions = []
 
       # Wazuh API template path
       $wazuh_api_template = 'wazuh/wazuh_api.erb'
