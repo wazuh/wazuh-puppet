@@ -278,6 +278,7 @@ class wazuh::manager (
       $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
       $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
       $wazuh_api_logs_path                      = $wazuh::params_manager::wazuh_api_logs_path,
+      $wazuh_api_ssl_cipher                     = $wazuh::params_manager::wazuh_api_ssl_cipher,
 
       $wazuh_api_cors_enabled                   = $wazuh::params_manager::wazuh_api_cors_enabled,
       $wazuh_api_cors_source_route              = $wazuh::params_manager::wazuh_api_cors_source_route,
@@ -295,6 +296,12 @@ class wazuh::manager (
       $wazuh_api_use_only_authd                 = $::wazuh::params_manager::wazuh_api_use_only_authd,
       $wazuh_api_drop_privileges                = $::wazuh::params_manager::wazuh_api_drop_privileges,
       $wazuh_api_experimental_features          = $::wazuh::params_manager::wazuh_api_experimental_features,
+
+      $remote_commands_localfile                = $::wazuh::params_manager::remote_commands_localfile,
+      $remote_commands_localfile_exceptions     = $::wazuh::params_manager::remote_commands_localfile_exceptions,
+      $remote_commands_wodle                    = $::wazuh::params_manager::remote_commands_wodle,
+      $remote_commands_wodle_exceptions         = $::wazuh::params_manager::remote_commands_wodle_exceptions,
+
       $wazuh_api_template                       = $::wazuh::params_manager::wazuh_api_template,
 
 
