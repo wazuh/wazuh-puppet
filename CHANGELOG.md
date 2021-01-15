@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Update to Wazuh version 4.0.4
+- Update to Wazuh [v4.0.4](https://github.com/wazuh/wazuh-ansible/blob/v4.0.4/CHANGELOG.md)
 - Add support for Elasticsearch cluster in Kibana manifests  ([@neonmei](https://github.com/neonmei)) [PR#317](https://github.com/wazuh/wazuh-puppet/pull/317)
 - Add support for Ubuntu 20.04 (Focal Fossa)  ([@Zenidd](https://github.com/Zenidd), [@neonmei](https://github.com/neonmei)) [PR#321](https://github.com/wazuh/wazuh-puppet/pull/321)
 ### Fixed
@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 -  Use `manager_ossec.conf` as render target for Reports  ([@Zenidd](https://github.com/Zenidd)) [PR#328](https://github.com/wazuh/wazuh-puppet/pull/328)
 -  Remove manager-specific options for active response in agent manifest  ([@Zenidd](https://github.com/Zenidd)) [PR#332](https://github.com/wazuh/wazuh-puppet/pull/332)
 -  Fix stdlib deprecation warnings related to `validate_*` functions ([@Hexta](https://github.com/Hexta)) [PR#334](https://github.com/wazuh/wazuh-puppet/pull/334)
+-  Update target name in concat resources for `manager_ossec.conf`  ([@g3rhard](https://github.com/g3rhard )) [PR#341](https://github.com/wazuh/wazuh-puppet/pull/341)
 
 ## Wazuh Puppet v4.0.3
 
