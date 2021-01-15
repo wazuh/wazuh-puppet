@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Setup for Kibana_od
 class wazuh::kibana_od (
   $kibana_od_package = 'opendistroforelasticsearch-kibana',
@@ -6,7 +6,7 @@ class wazuh::kibana_od (
   $kibana_od_version = '1.11.0',
   $kibana_od_elastic_user = 'admin',
   $kibana_od_elastic_password = 'admin',
-  $kibana_od_app_version = '4.0.3_7.9.1',
+  $kibana_od_app_version = '4.0.4_7.9.1',
   $kibana_od_elasticsearch_ip = 'localhost',
   $kibana_od_elasticsearch_port = '9200',
 
@@ -47,7 +47,7 @@ class wazuh::kibana_od (
 
   exec {'Waiting for opendistro elasticsearch...':
     path      => '/usr/bin',
-    command   => "curl -u ${kibana_od_user}:${kibana_od_password} -k -s -XGET https://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}",
+    command   => "curl -u ${kibana_od_elastic_user}:${kibana_od_elastic_password} -k -s -XGET https://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}",
     tries     => 100,
     try_sleep => 3,
   }
@@ -63,14 +63,14 @@ class wazuh::kibana_od (
 
   exec {'Installing Wazuh App...':
     path    => '/usr/bin',
-    command => "sudo -u ${kibana_od_user}:${kibana_od_password} -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_od_app_version}.zip",
+    command => "sudo -u ${kibana_od_elastic_user}:${kibana_od_elastic_password} -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_od_app_version}.zip",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$kibana_od_service],
   }
 
   exec {'Removing .wazuh index...':
     path    => '/usr/bin',
-    command => "curl -u ${kibana_od_user}:${kibana_od_password} -k -s -XDELETE -sL -I 'https://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}/.wazuh' -o /dev/null",
+    command => "curl -u ${kibana_od_elastic_user}:${kibana_od_elastic_password} -k -s -XDELETE -sL -I 'https://${kibana_od_elasticsearch_ip}:${kibana_od_elasticsearch_port}/.wazuh' -o /dev/null",
     notify  => Service[$kibana_od_service],
   }
 

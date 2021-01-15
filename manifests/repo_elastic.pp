@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Installation of Elastic repository
 class wazuh::repo_elastic (
 
@@ -15,7 +15,7 @@ class wazuh::repo_elastic (
           server => 'pgp.mit.edu'
         }
         case $::lsbdistcodename {
-          /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
+          /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
 
             apt::source { 'wazuh_elastic':
               ensure   => present,
@@ -46,13 +46,6 @@ class wazuh::repo_elastic (
             default: { fail('This ossec module has not been tested on your distribution.') }
           }
         ## Set up Elasticsearch repo
-
-        # Import GPG key
-
-        exec { 'Install Elasticsearch GPG key':
-          path    => '/usr/bin',
-          command => 'rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch',
-        }
 
         # Adding repo by Puppet yumrepo resource
 

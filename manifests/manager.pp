@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Main ossec server config
 class wazuh::manager (
 
@@ -265,7 +265,7 @@ class wazuh::manager (
 
 
       $wazuh_api_host                           = $wazuh::params_manager::wazuh_api_host,
-    
+
       $wazuh_api_port                           = $wazuh::params_manager::wazuh_api_port,
       $wazuh_api_file                           = $wazuh::params_manager::wazuh_api_file,
 
@@ -278,6 +278,7 @@ class wazuh::manager (
       $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
       $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
       $wazuh_api_logs_path                      = $wazuh::params_manager::wazuh_api_logs_path,
+      $wazuh_api_ssl_cipher                     = $wazuh::params_manager::wazuh_api_ssl_cipher,
 
       $wazuh_api_cors_enabled                   = $wazuh::params_manager::wazuh_api_cors_enabled,
       $wazuh_api_cors_source_route              = $wazuh::params_manager::wazuh_api_cors_source_route,
@@ -295,17 +296,23 @@ class wazuh::manager (
       $wazuh_api_use_only_authd                 = $::wazuh::params_manager::wazuh_api_use_only_authd,
       $wazuh_api_drop_privileges                = $::wazuh::params_manager::wazuh_api_drop_privileges,
       $wazuh_api_experimental_features          = $::wazuh::params_manager::wazuh_api_experimental_features,
+
+      $remote_commands_localfile                = $::wazuh::params_manager::remote_commands_localfile,
+      $remote_commands_localfile_exceptions     = $::wazuh::params_manager::remote_commands_localfile_exceptions,
+      $remote_commands_wodle                    = $::wazuh::params_manager::remote_commands_wodle,
+      $remote_commands_wodle_exceptions         = $::wazuh::params_manager::remote_commands_wodle_exceptions,
+
       $wazuh_api_template                       = $::wazuh::params_manager::wazuh_api_template,
 
 
 
 
 ) inherits wazuh::params_manager {
-  validate_bool(
-    $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
+  validate_legacy(
+    Boolean, 'validate_bool', $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
   )
-  validate_array(
-    $decoder_exclude, $rule_exclude
+  validate_legacy(
+    Array, 'validate_array', $decoder_exclude, $rule_exclude
   )
 
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
@@ -335,14 +342,14 @@ class wazuh::manager (
 
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  validate_bool($ossec_emailnotification)
+  validate_legacy(Boolean, 'validate_bool', $ossec_emailnotification)
   if ($ossec_emailnotification) {
     if $ossec_smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
-    validate_string($ossec_smtp_server)
-    validate_string($ossec_emailfrom)
-    validate_array($ossec_emailto)
+    validate_legacy(String, 'validate_string', $ossec_smtp_server)
+    validate_legacy(String, 'validate_string', $ossec_emailfrom)
+    validate_legacy(Array, 'validate_array', $ossec_emailto)
   }
 
   if $::osfamily == 'windows' {
@@ -591,8 +598,8 @@ class wazuh::manager (
   if $wazuh_manager_verify_manager_ssl {
 
     if ($wazuh_manager_server_crt != undef) and ($wazuh_manager_server_key != undef) {
-      validate_string(
-        $wazuh_manager_server_crt, $wazuh_manager_server_key
+      validate_legacy(
+        String, 'validate_string', $wazuh_manager_server_crt, $wazuh_manager_server_key
       )
 
       file { '/var/ossec/etc/sslmanager.key':
