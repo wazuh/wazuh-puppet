@@ -251,6 +251,9 @@ class wazuh::params_agent {
       $ossec_syscheck_synchronization_max_eps = '10'
       $ossec_syscheck_synchronization_max_interval = '1h'
 
+      $ossec_syscheck_file_limit_enabled = undef
+      $ossec_syscheck_file_limit_entries = undef
+
       $ossec_ruleset_decoder_dir = 'ruleset/decoders'
       $ossec_ruleset_rule_dir = 'ruleset/rules'
       $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'

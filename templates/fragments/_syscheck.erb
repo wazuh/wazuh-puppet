@@ -12,6 +12,16 @@
   <%- if @ossec_syscheck_auto_ignore -%>
   <auto_ignore frequency="10" timeframe="3600"><%=@ossec_syscheck_auto_ignore%></auto_ignore>
   <%- end -%>
+  <%- if defined?(@ossec_syscheck_file_limit_enabled) || defined?(@ossec_syscheck_file_limit_entries) -%>
+  <file_limit>
+    <%- if defined?(@ossec_syscheck_file_limit_enabled) -%>
+    <enabled><%=@ossec_syscheck_file_limit_enabled%></enabled>
+    <%- end -%>
+    <%- if defined?(@ossec_syscheck_file_limit_entries) -%>
+    <entries><%=@ossec_syscheck_file_limit_entries%></entries>
+    <%- end -%>
+  </file_limit>
+  <%- end -%>
 
 <%- if @kernel == 'windows' -%>
 

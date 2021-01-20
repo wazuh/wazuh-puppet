@@ -63,6 +63,8 @@ class wazuh::manager (
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
       $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
+      $ossec_syscheck_file_limit_enabled            = $wazuh::params_manager::ossec_syscheck_file_limit_enabled,
+      $ossec_syscheck_file_limit_entries            = $wazuh::params_manager::ossec_syscheck_file_limit_entries,
 
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
