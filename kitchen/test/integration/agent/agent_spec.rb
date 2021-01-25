@@ -1,25 +1,29 @@
-describe package('wazuh-agent') do
-  it { is_expected.to be_installed }
-  its('version') { is_expected.to eq '4.0.2-1' }
-end
+control 'wazuh-agent' do
+  title 'Wazuh agent tests'
+  describe 'Checks Wazuh agent correct version, services and daemon ownership'
 
-describe service('wazuh-agent') do
-  it { is_expected.to be_installed }
-  it { is_expected.to be_enabled }
-  it { is_expected.to be_running }
-end
+  describe package('wazuh-agent') do
+    it { is_expected.to be_installed }
+    its('version') { is_expected.to eq '4.0.4-1' }
+  end
 
-# Verifying daemons
+  describe service('wazuh-agent') do
+    it { is_expected.to be_installed }
+    it { is_expected.to be_enabled }
+    it { is_expected.to be_running }
+  end
 
-wazuh_daemons = {
-  # 'ossec-agentd' => 'ossec',
-  'ossec-execd' => 'root',
-  # 'ossec-syscheckd' => 'root',
-#  'wazuh-modulesd' => 'root',
-}
+  # Verifying daemons
+  wazuh_daemons = {
+    # 'ossec-agentd' => 'ossec',
+    'ossec-execd' => 'root',
+    # 'ossec-syscheckd' => 'root',
+    # 'wazuh-modulesd' => 'root',
+  }
 
-wazuh_daemons.each do |key, value|
-  describe processes(key) do
-    its('users') { is_expected.to eq [value] }
+  wazuh_daemons.each do |key, value|
+    describe processes(key) do
+      its('users') { is_expected.to eq [value] }
+    end
   end
 end

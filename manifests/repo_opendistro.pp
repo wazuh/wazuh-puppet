@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Installation of Open Distro for Elasticsearch repository
 class wazuh::repo_opendistro (
 
@@ -15,12 +15,12 @@ class wazuh::repo_opendistro (
           server => 'pgp.mit.edu'
         }
         case $::lsbdistcodename {
-          /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
+          /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
 
             apt::source { 'wazuh_elastic_od':
               ensure   => present,
               comment  => 'This is the Open Distro for Elastic repository',
-              location => 'ttps://d3g5vo6xdbdb9a.cloudfront.net/apt',
+              location => 'https://d3g5vo6xdbdb9a.cloudfront.net/apt',
               release  => 'stable',
               repos    => 'main',
               include  => {

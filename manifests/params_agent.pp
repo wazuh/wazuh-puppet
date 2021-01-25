@@ -1,7 +1,7 @@
-# Wazuh App Copyright (C) 2020 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.0.2-1'
+  $agent_package_version = '4.0.4-1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
 
@@ -22,6 +22,7 @@ class wazuh::params_agent {
   $agent_auth_password = undef
   $wazuh_manager_root_ca_pem = undef
   $wazuh_manager_root_ca_pem_path = undef
+  $authd_pass_file = '/var/ossec/etc/authd.pass'
 
   # ossec.conf generation variables
   $configure_rootcheck = true
@@ -68,17 +69,9 @@ class wazuh::params_agent {
   $client_buffer_queue_size = 5000
   $client_buffer_events_per_second = 500
 
-  ## localfile
-  $ossec_local_files = $::wazuh::params_agent::default_local_files
-
   # active response
   $active_response_disabled                        = 'no'
   $active_response_ca_verification                 = 'yes'
-  $active_response_location                        = undef
-  $active_response_level                           = undef
-  $active_response_agent_id                        = undef
-  $active_response_rules_id                        = []
-  $active_response_timeout                         = undef
   $active_response_repeated_offenders              = []
 
   # agent autoenrollment
@@ -104,6 +97,8 @@ class wazuh::params_agent {
       $agent_package_name = 'wazuh-agent'
       $agent_service_name = 'wazuh-agent'
 
+      $download_path = '/tmp'
+
       # Wazuh config folders and modes
       $config_file = '/var/ossec/etc/ossec.conf'
       $shared_agent_config_file = '/var/ossec/etc/shared/agent.conf'
@@ -116,8 +111,6 @@ class wazuh::params_agent {
       $keys_mode = '0640'
       $keys_owner = 'root'
       $keys_group = 'ossec'
-
-      $authd_pass_file = '/var/ossec/etc/authd.pass'
 
       $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
 
@@ -146,7 +139,21 @@ class wazuh::params_agent {
       # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
       $ossec_rootcheck_system_audit = []
 
+      # Rootcheck Windows
+      $ossec_rootcheck_windows_disabled = undef
+      $ossec_rootcheck_windows_windows_apps = undef
+      $ossec_rootcheck_windows_windows_malware = undef
+
       # SCA
+
+      ## Windows
+      $sca_windows_enabled = undef
+      $sca_windows_scan_on_start = undef
+      $sca_windows_interval = undef
+      $sca_windows_skip_nfs = undef
+      $sca_windows_policies = []
+
+      $windows_audit_interval = undef
 
       ## Amazon
       $sca_amazon_enabled = 'yes'
@@ -191,6 +198,7 @@ class wazuh::params_agent {
       $wodle_osquery_log_path = '/var/log/osquery/osqueryd.results.log'
       $wodle_osquery_config_path = '/etc/osquery/osquery.conf'
       $wodle_osquery_add_labels = 'yes'
+      $wodle_osquery_bin_path = '/usr/bin/osqueryd'
 
       ## syscollector
       $wodle_syscollector_disabled = 'no'
@@ -202,6 +210,7 @@ class wazuh::params_agent {
       $wodle_syscollector_packages = 'yes'
       $wodle_syscollector_ports = 'yes'
       $wodle_syscollector_processes = 'yes'
+      $wodle_syscollector_hotfixes = undef
 
       ## syscheck
       $ossec_syscheck_disabled = 'no'
@@ -313,7 +322,7 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef

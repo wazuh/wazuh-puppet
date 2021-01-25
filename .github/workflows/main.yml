@@ -2,10 +2,17 @@ name: Kitchen tests for Wazuh Puppet
 
 on: [push, workflow_dispatch]
 
-# - name: Build and launch Linting test
-#   uses: './.github/actions/validate_module'
-
 jobs:
+
+  pdk-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Run PDK validation tests
+        uses: './.github/actions/validate_module'
+
   amazonlinux:
     runs-on: ubuntu-latest
     steps:
