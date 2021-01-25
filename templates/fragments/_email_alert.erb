@@ -4,7 +4,7 @@
     <level><%= @level %></level>
     <%- end -%>
     <%- if @alert_group -%>
-    <group><%= [@alert_group].flatten.compact.join(',') %></group>
+    <group><%= [@alert_group].flatten.compact.join('|') %></group>
     <%- end -%>
     <%- if @event_location -%>
     <event_location><%= [@event_location].flatten.compact.join('|') %></event_location>
