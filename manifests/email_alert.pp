@@ -9,7 +9,6 @@ define wazuh::email_alert(
   $rule_id = false,
   $do_not_delay = false,
   $do_not_group = false,
-  $email_log_source = false
 ) {
   require wazuh::params_manager
 
