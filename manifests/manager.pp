@@ -163,6 +163,8 @@ class wazuh::manager (
       $vulnerability_detector_provider_debian                    = $wazuh::params_manager::vulnerability_detector_provider_debian,
       $vulnerability_detector_provider_debian_enabled            = $wazuh::params_manager::vulnerability_detector_provider_debian_enabled,
       $vulnerability_detector_provider_debian_os                 = $wazuh::params_manager::vulnerability_detector_provider_debian_os,
+      $vulnerability_detector_provider_debian_path               = $wazuh::params_manager::vulnerability_detector_provider_debian_path,
+      $vulnerability_detector_provider_debian_url                = $wazuh::params_manager::vulnerability_detector_provider_debian_url,
       $vulnerability_detector_provider_debian_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_debian_update_interval,
 
       $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,
