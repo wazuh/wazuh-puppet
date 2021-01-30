@@ -187,6 +187,10 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_nvd_os                 = []
       $vulnerability_detector_provider_nvd_update_from_year   = '2010'
       $vulnerability_detector_provider_nvd_update_interval    = '1h'
+      $vulnerability_detector_provider_nvd_path               = undef
+      $vulnerability_detector_provider_nvd_url                = undef
+      $vulnerability_detector_provider_nvd_url_start          = undef
+      $vulnerability_detector_provider_nvd_url_end            = undef
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
