@@ -174,6 +174,8 @@ class wazuh::params_manager {
         'jessie',
         'buster'
       ]
+      $vulnerability_detector_provider_debian_path            = undef
+      $vulnerability_detector_provider_debian_url             = undef
       $vulnerability_detector_provider_debian_update_interval = '1h'
       $vulnerability_detector_provider_redhat                    = 'yes'
       $vulnerability_detector_provider_redhat_enabled            = 'no'
