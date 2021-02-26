@@ -34,6 +34,11 @@
   <ignore><%= ignore_element %></ignore>
     <%- end -%>
   <%- end -%>
+  <%- if @ossec_rootcheck_ignore_sregex_list -%>
+    <%- @ossec_rootcheck_ignore_sregex_list.each do |ignore_element| -%>
+  <ignore type="sregex"><%= ignore_element %></ignore>
+    <%- end -%>
+  <%- end -%>
   <% if @ossec_rootcheck_rootkit_files-%>
   <rootkit_files><%= @ossec_rootcheck_rootkit_files %></rootkit_files>
   <%- end -%>
