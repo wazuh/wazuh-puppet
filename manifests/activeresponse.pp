@@ -12,8 +12,7 @@ define wazuh::activeresponse(
   $active_response_rules_id           = [],
   $active_response_timeout            = undef,
   $active_response_repeated_offenders = [],
-
-  $target_arg                         = 'ossec.conf',
+  $target_arg                         = 'manager_ossec.conf',
   $order_arg                          = undef,
   $before_arg                         = undef,
   $content_arg                        = 'wazuh/fragments/_activeresponse.erb'
