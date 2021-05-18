@@ -1,6 +1,6 @@
 {
   "name": "wazuh-wazuh",
-  "version": "4.0.4",
+  "version": "5.0.0",
   "author": "WAZUH",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
