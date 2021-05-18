@@ -1,6 +1,6 @@
 describe package('wazuh-manager') do
   it { is_expected.to be_installed }
-  its('version') { is_expected.to eq '3.13.2-1' }
+  its('version') { is_expected.to eq '3.13.3-1' }
 end
 
 describe service('wazuh-manager') do
@@ -28,4 +28,3 @@ wazuh_daemons.each do |key, value|
     its('users') { is_expected.to eq [value] }
   end
 end
-

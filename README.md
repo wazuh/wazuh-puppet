@@ -90,14 +90,14 @@ This module installs and configure Wazuh agent and manager.
 
 ## Branches
 
-* `stable` branch on correspond to the last Wazuh-Puppet stable version.
 * `master` branch contains the latest code, be aware of possible bugs on this branch.
+* `stable` branch on correspond to the last Wazuh-Puppet stable version.
 
 ## Contribute
 
 If you would like to contribute to our repository, please fork our Github repository and submit a pull request.
 
-If you are not familiar with Github, you can also share them through [our users mailing list](https://groups.google.com/d/forum/wazuh), to which you can subscribe by sending an email to `wazuh+subscribe@googlegroups.com`. 
+If you are not familiar with Github, you can also share them through [our users mailing list](https://groups.google.com/d/forum/wazuh), to which you can subscribe by sending an email to `wazuh+subscribe@googlegroups.com`.
 
 
 ## Credits and thank you
