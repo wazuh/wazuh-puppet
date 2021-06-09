@@ -11,7 +11,7 @@ class wazuh::elasticsearch (
   $elasticsearch_node_max_local_storage_nodes = '1',
   $elasticsearch_service = 'elasticsearch',
   $elasticsearch_package = 'elasticsearch',
-  $elasticsearch_version = '7.9.3',
+  $elasticsearch_version = '7.10.0',
 
   # user/group elasticsearch processes run as
   $elasticsearch_user = 'elasticsearch',
