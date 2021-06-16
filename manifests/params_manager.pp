@@ -252,6 +252,9 @@ class wazuh::params_manager {
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'
 
+      $ossec_syscheck_file_limit_enabled               = undef
+      $ossec_syscheck_file_limit_entries               = undef
+
       $ossec_ruleset_decoder_dir = 'ruleset/decoders'
       $ossec_ruleset_rule_dir = 'ruleset/rules'
       $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'

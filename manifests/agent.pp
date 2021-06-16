@@ -209,6 +209,8 @@ class wazuh::agent (
   $ossec_syscheck_nodiff             = $wazuh::params_agent::ossec_syscheck_nodiff,
   $ossec_syscheck_skip_nfs           = $wazuh::params_agent::ossec_syscheck_skip_nfs,
   $ossec_syscheck_windows_audit_interval      = $wazuh::params_agent::windows_audit_interval,
+  $ossec_syscheck_file_limit_enabled = $wazuh::params_agent::ossec_syscheck_file_limit_enabled,
+  $ossec_syscheck_file_limit_entries = $wazuh::params_agent::ossec_syscheck_file_limit_entries,
 
   # Audit
   $audit_manage_rules                = $wazuh::params_agent::audit_manage_rules,
