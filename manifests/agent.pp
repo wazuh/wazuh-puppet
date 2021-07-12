@@ -69,6 +69,7 @@ class wazuh::agent (
   $ossec_time_reconnect              = $wazuh::params_agent::ossec_time_reconnect,
   $ossec_auto_restart                = $wazuh::params_agent::ossec_auto_restart,
   $ossec_crypto_method               = $wazuh::params_agent::ossec_crypto_method,
+  $client_buffer_disabled            = $wazuh::params_agent::client_buffer_disabled,
   $client_buffer_queue_size          = $wazuh::params_agent::client_buffer_queue_size,
   $client_buffer_events_per_second   = $wazuh::params_agent::client_buffer_events_per_second,
 
