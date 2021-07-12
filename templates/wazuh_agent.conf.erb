@@ -79,7 +79,7 @@
 
   <client_buffer>
     <!-- Agent buffer options -->
-    <disabled>no</disabled>
+    <disabled><%= @client_buffer_disabled %></disabled>
     <queue_size><%= @client_buffer_queue_size %></queue_size>
     <events_per_second><%= @client_buffer_events_per_second %></events_per_second>
   </client_buffer>

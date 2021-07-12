@@ -66,6 +66,7 @@ class wazuh::params_agent {
   $ossec_crypto_method = 'aes'
 
   ## Buffers
+  $client_buffer_disabled = 'no'
   $client_buffer_queue_size = 5000
   $client_buffer_events_per_second = 500
 
