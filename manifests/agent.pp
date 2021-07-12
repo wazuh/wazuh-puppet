@@ -34,6 +34,7 @@ class wazuh::agent (
   $configure_wodle_cis_cat           = $wazuh::params_agent::configure_wodle_cis_cat,
   $configure_wodle_osquery           = $wazuh::params_agent::configure_wodle_osquery,
   $configure_wodle_syscollector      = $wazuh::params_agent::configure_wodle_syscollector,
+  $configure_wodle_docker_listener   = $wazuh::params_agent::configure_wodle_docker_listener,
   $configure_sca                     = $wazuh::params_agent::configure_sca,
   $configure_syscheck                = $wazuh::params_agent::configure_syscheck,
   $configure_localfile               = $wazuh::params_agent::configure_localfile,
@@ -41,19 +42,20 @@ class wazuh::agent (
   $configure_labels                  = $wazuh::params_agent::configure_labels,
 
   # Templates paths
-  $ossec_conf_template               = $wazuh::params_agent::ossec_conf_template,
-  $ossec_rootcheck_template          = $wazuh::params_agent::ossec_rootcheck_template,
-  $ossec_wodle_openscap_template     = $wazuh::params_agent::ossec_wodle_openscap_template,
-  $ossec_wodle_cis_cat_template      = $wazuh::params_agent::ossec_wodle_cis_cat_template,
-  $ossec_wodle_osquery_template      = $wazuh::params_agent::ossec_wodle_osquery_template,
-  $ossec_wodle_syscollector_template = $wazuh::params_agent::ossec_wodle_syscollector_template,
-  $ossec_sca_template                = $wazuh::params_agent::ossec_sca_template,
-  $ossec_syscheck_template           = $wazuh::params_agent::ossec_syscheck_template,
-  $ossec_localfile_template          = $wazuh::params_agent::ossec_localfile_template,
-  $ossec_auth                        = $wazuh::params_agent::ossec_auth,
-  $ossec_cluster                     = $wazuh::params_agent::ossec_cluster,
-  $ossec_active_response_template    = $wazuh::params_agent::ossec_active_response_template,
-  $ossec_labels_template             = $wazuh::params_agent::ossec_labels_template,
+  $ossec_conf_template                  = $wazuh::params_agent::ossec_conf_template,
+  $ossec_rootcheck_template             = $wazuh::params_agent::ossec_rootcheck_template,
+  $ossec_wodle_openscap_template        = $wazuh::params_agent::ossec_wodle_openscap_template,
+  $ossec_wodle_cis_cat_template         = $wazuh::params_agent::ossec_wodle_cis_cat_template,
+  $ossec_wodle_osquery_template         = $wazuh::params_agent::ossec_wodle_osquery_template,
+  $ossec_wodle_syscollector_template    = $wazuh::params_agent::ossec_wodle_syscollector_template,
+  $ossec_wodle_docker_listener_template = $wazuh::params_agent::ossec_wodle_docker_listener_template,
+  $ossec_sca_template                   = $wazuh::params_agent::ossec_sca_template,
+  $ossec_syscheck_template              = $wazuh::params_agent::ossec_syscheck_template,
+  $ossec_localfile_template             = $wazuh::params_agent::ossec_localfile_template,
+  $ossec_auth                           = $wazuh::params_agent::ossec_auth,
+  $ossec_cluster                        = $wazuh::params_agent::ossec_cluster,
+  $ossec_active_response_template       = $wazuh::params_agent::ossec_active_response_template,
+  $ossec_labels_template                = $wazuh::params_agent::ossec_labels_template,
 
   # Server configuration
 
@@ -179,6 +181,9 @@ class wazuh::agent (
   $wodle_syscollector_ports          = $wazuh::params_agent::wodle_syscollector_ports,
   $wodle_syscollector_processes      = $wazuh::params_agent::wodle_syscollector_processes,
   $wodle_syscollector_hotfixes       = $wazuh::params_agent::wodle_syscollector_hotfixes,
+
+  # Docker-listener
+  $wodle_docker_listener_disabled    = $wazuh::params_agent::wodle_docker_listener_disabled,
 
   # Localfile
   $ossec_local_files                 = $wazuh::params_agent::default_local_files,
@@ -406,6 +411,15 @@ class wazuh::agent (
         order   => 19,
         before  => Service[$agent_service_name],
         content => template($ossec_wodle_syscollector_template);
+    }
+  }
+  if ($configure_wodle_docker_listener == true) {
+    concat::fragment {
+      'ossec.conf_docker_listener':
+        target  => 'agent_ossec.conf',
+        order   => 20,
+        before  => Service[$agent_service_name],
+        content => template($ossec_wodle_docker_listener_template);
     }
   }
   if ($configure_sca == true) {
