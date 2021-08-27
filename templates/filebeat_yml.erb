@@ -12,5 +12,24 @@ setup.template.json.name: "wazuh"
 setup.template.overwrite: true
 
 # Send events directly to Elasticsearch
-output.elasticsearch.hosts: [<%= @elasticsearch_server_ip %>]
+output.elasticsearch:
+  hosts: ["<%= @filebeat_elasticsearch_proto %>://<%= @filebeat_elasticsearch_ip %>:<%= @filebeat_elasticsearch_port %>"]
+<% if @filebeat_elastic_api_key -%>
+  api_key: <%= @filebeat_elastic_api_key %>
+<% else -%>
+<% if @filebeat_elastic_password -%>
+  username: <%= @filebeat_elastic_user %>
+  password: <%= @filebeat_elastic_password %>
+<% end -%>
+<% end -%>
+<% if @filebeat_ssl_verification -%>
+  ssl.verification_mode: <%= @filebeat_ssl_verification %>
+<% end -%>
+<% if @filebeat_elastic_worker > 1 -%>
+  worker: <%= @filebeat_elastic_worker %>
+<% end -%>
+
+<% if not @filebeat_setup_ilm_enabled.nil? %>
+setup.ilm.enabled: <%= @filebeat_setup_ilm_enabled %>
+<% end -%>
 
