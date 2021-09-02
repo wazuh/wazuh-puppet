@@ -330,9 +330,6 @@ class wazuh::params_manager {
 
       $wazuh_api_file =  undef
 
-      # Set this option to "yes" in case the API is running behind a proxy server. Values: yes, no
-      $wazuh_api_behind_proxy_server = 'no'
-
       # Advanced configuration
       $wazuh_api_https_enabled = 'yes'
       $wazuh_api_https_key = 'api/configuration/ssl/server.key'
