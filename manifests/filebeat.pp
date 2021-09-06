@@ -55,13 +55,13 @@ class wazuh::filebeat (
     path    => '/usr/bin',
     command => "curl -o /root/${wazuh_filebeat_module} https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
     creates => "/root/${wazuh_filebeat_module}",
-  }  ~>
+  }  ->
 
   exec { 'Unpackaging':
     command => '/bin/tar -xzvf /root/${wazuh_filebeat_module} -C /usr/share/filebeat/module',
     notify  => Service['filebeat'],
     require => Package['filebeat'],
-    refreshonly => true
+    creates => "/usr/share/filebeat/module/wazuh/module.yml"
   } 
 
   file { '/usr/share/filebeat/module/wazuh':

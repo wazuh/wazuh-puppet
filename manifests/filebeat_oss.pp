@@ -56,13 +56,13 @@ class wazuh::filebeat_oss (
     path    => '/usr/bin',
     command => "curl -o /root/${wazuh_filebeat_module} https://packages.wazuh.com/4.x/filebeat/${wazuh_filebeat_module}",
     creates => "/root/${wazuh_filebeat_module}",
-  } ~>
+  } ->
 
   exec { 'Unpackaging ...':
     command => '/bin/tar -xzvf /root/${wazuh_filebeat_module} -C /usr/share/filebeat/module',
     notify  => Service[$filebeat_oss_service],
-    require => Package[$filebeat_oss_package]
-    refreshonly => true
+    require => Package[$filebeat_oss_package],
+    creates => "/usr/share/filebeat/module/wazuh/module.yml"
   } 
 
   file { '/usr/share/filebeat/module/wazuh':
