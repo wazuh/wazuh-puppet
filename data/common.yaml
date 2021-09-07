@@ -1,1 +1,16 @@
---- {}
+--- 
+
+lookup_options:
+  wazuh::agent::ossec_config_centos_profiles:
+    merge:
+      strategy: deep
+      knockout_prefix: ABSENT
+  wazuh::agent::ossec_syscheck_ignore_list:
+    merge:
+      strategy: deep
+      knockout_prefix: ABSENT
+  wazuh::agent::ossec_local_files:
+    merge:
+      strategy: deep
+      knockout_prefix: ABSENT
+
