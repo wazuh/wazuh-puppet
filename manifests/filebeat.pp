@@ -18,6 +18,9 @@ class wazuh::filebeat (
   String $wazuh_app_version = '4.3.0_7.10.0',
   String $wazuh_extensions_version = 'v4.3.0',
   String $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
+  Optional[String] $filebeat_log_level = undef,
+  Integer $filebeat_log_keep = 7,
+  String $filebeat_log_interval = '1d',
 ){
 
   class {'wazuh::repo_elastic':}

@@ -33,3 +33,19 @@ output.elasticsearch:
 setup.ilm.enabled: <%= @filebeat_setup_ilm_enabled %>
 <% end -%>
 
+<% if @filebeat_log_level -%>
+logging.level: <%= @filebeat_log_level %>
+logging.selectors: [ "*" ]
+logging.to_stderr: false
+logging.to_syslog: false
+logging.metrics.enabled: true
+logging.metrics.period: 300s
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  rotateeverybytes: 10485760
+  keepfiles: <%= @filebeat_log_keep %>
+  permissions: 0644
+  interval: <%= @filebeat_log_interval %>
+<% end -%>
