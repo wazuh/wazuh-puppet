@@ -17,10 +17,18 @@ class wazuh::kibana (
   $kibana_elasticsearch_ip = $kibana_elasticsearch_hosts[0]['host'],
   $kibana_elasticsearch_port = $kibana_elasticsearch_hosts[0]['port'],
   $kibana_elasticsearch_proto = $kibana_elasticsearch_hosts[0]['proto'],
+  
+  $elasticsearch_username = undef,
+  $elasticsearch_password = undef,
+  $elasticsearch_ssl_verificationmode = undef,
 
   $kibana_server_port = '5601',
   $kibana_server_host = '0.0.0.0',
   $kibana_wazuh_version = '4.3.0',
+
+  $server_ssl = false,
+  $server_ssl_certificate = undef,
+  $server_ssl_key = undef,
 
   # app variables
   $kibana_app_version = "${kibana_wazuh_version}_${$kibana_version}",
