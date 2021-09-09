@@ -7,6 +7,7 @@ class wazuh::params_agent {
 
   $agent_name = undef
   $agent_group = undef
+  $agent_address = undef
 
   # Enable/Disable agent registration
   $manage_client_keys = 'yes'
