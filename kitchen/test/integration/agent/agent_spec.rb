@@ -18,6 +18,8 @@ control 'wazuh-agent' do
     'wazuh-agentd' => 'ossec',
     'wazuh-execd' => 'root',
     'wazuh-modulesd' => 'root',
+    'wazuh-syscheckd' => 'root',
+    'wazuh-logcollector' => 'root'
   }
 
   wazuh_daemons.each do |key, value|
