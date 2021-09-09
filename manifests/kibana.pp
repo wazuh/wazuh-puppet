@@ -80,13 +80,14 @@ class wazuh::kibana (
     ensure     => running,
     enable     => true,
     hasrestart => true,
-  }
+  } 
 
   exec {'Waiting for elasticsearch...':
-    path      => '/usr/bin',
-    command   => "curl -s -XGET ${kibana_elasticsearch_proto}://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
-    tries     => 100,
-    try_sleep => 3,
+    path        => '/usr/bin',
+    command     => "curl -s -XGET ${kibana_elasticsearch_proto}://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+    tries       => 100,
+    try_sleep   => 3,
+    refreshonly => true,
   }
 
   exec {'kibana-plugin install':
