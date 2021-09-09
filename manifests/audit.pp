@@ -1,6 +1,5 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Define an ossec command
-
 class wazuh::audit (
   $audit_manage_rules = false,
   $audit_buffer_bytes = '8192',
