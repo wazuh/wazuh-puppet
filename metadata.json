@@ -1,6 +1,6 @@
 {
   "name": "wazuh-wazuh",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "author": "WAZUH",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
@@ -106,7 +106,7 @@
   "tags": [
     "ossec",
     "hids",
-    "4.0",
+    "4.2",
     "wazuh"
   ],
   "pdk-version": "1.14.1",
