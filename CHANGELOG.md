@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 
 - Support to 4.2.2 Wazuh release.
 
+### Fixed
+
+- Fixed a bug in the agent.pp manifest that did not upgrade a new version of Wazuh Agent in Windows ([#374](https://github.com/wazuh/wazuh-puppet/issues/374))
+
 ## Wazuh Puppet v4.2.1
 
 ### Added
