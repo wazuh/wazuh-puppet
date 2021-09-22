@@ -293,7 +293,7 @@ class wazuh::agent (
 
       # We dont need to pin the package version on Windows since we install if from the right MSI.
       -> package { $agent_package_name:
-        ensure          => 'installed',
+        ensure          => "${agent_package_version}",
         provider        => 'windows',
         source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
         install_options => [
