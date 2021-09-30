@@ -1,12 +1,13 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.2.2-1'
+  $agent_package_version = '4.3.0-1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
 
   $agent_name = undef
   $agent_group = undef
+  $agent_address = undef
 
   # Enable/Disable agent registration
   $manage_client_keys = 'yes'
@@ -66,6 +67,7 @@ class wazuh::params_agent {
   $ossec_crypto_method = 'aes'
 
   ## Buffers
+  $client_buffer_disabled = 'no'
   $client_buffer_queue_size = 5000
   $client_buffer_events_per_second = 500
 
@@ -322,7 +324,7 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
+            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef

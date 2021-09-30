@@ -19,6 +19,7 @@ class wazuh::agent (
   $manage_client_keys                = $wazuh::params_agent::manage_client_keys,
   $agent_name                        = $wazuh::params_agent::agent_name,
   $agent_group                       = $wazuh::params_agent::agent_group,
+  $agent_address                     = $wazuh::params_agent::agent_address,
   $wazuh_agent_cert                  = $wazuh::params_agent::wazuh_agent_cert,
   $wazuh_agent_key                   = $wazuh::params_agent::wazuh_agent_key,
   $wazuh_agent_cert_path             = $wazuh::params_agent::wazuh_agent_cert_path,
@@ -69,6 +70,7 @@ class wazuh::agent (
   $ossec_time_reconnect              = $wazuh::params_agent::ossec_time_reconnect,
   $ossec_auto_restart                = $wazuh::params_agent::ossec_auto_restart,
   $ossec_crypto_method               = $wazuh::params_agent::ossec_crypto_method,
+  $client_buffer_disabled            = $wazuh::params_agent::client_buffer_disabled,
   $client_buffer_queue_size          = $wazuh::params_agent::client_buffer_queue_size,
   $client_buffer_events_per_second   = $wazuh::params_agent::client_buffer_events_per_second,
 
@@ -487,6 +489,12 @@ class wazuh::agent (
       $agent_auth_option_password = ''
     }
 
+    if $agent_address {
+      $agent_auth_option_address = "-I \"${agent_address}\""
+    } else {
+      $agent_auth_option_address = ''
+    }
+
     case $::kernel {
       'Linux': {
         file { $::wazuh::params_agent::keys_file:
@@ -545,7 +553,7 @@ class wazuh::agent (
         }
 
         $agent_auth_command = "${agent_auth_base_command} ${agent_auth_option_name} ${agent_auth_option_group} \
-          ${agent_auth_option_manager}  ${agent_auth_option_agent} ${agent_auth_option_password}"
+          ${agent_auth_option_manager}  ${agent_auth_option_agent} ${agent_auth_option_password} ${agent_auth_option_address}"
 
         exec { 'agent-auth-linux':
           command => $agent_auth_command,
