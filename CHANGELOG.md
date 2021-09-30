@@ -30,7 +30,6 @@ All notable changes to this project will be documented in this file.
 
 - Support to 4.1.5 Wazuh release.
 
-
 ## Wazuh Puppet v4.0.4
 
 ### Added
