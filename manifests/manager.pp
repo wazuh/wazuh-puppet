@@ -277,7 +277,8 @@ class wazuh::manager (
       $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
       $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
       $wazuh_api_logs_path                      = $wazuh::params_manager::wazuh_api_logs_path,
-      $wazuh_api_ssl_cipher                     = $wazuh::params_manager::wazuh_api_ssl_cipher,
+      $wazuh_api_ssl_ciphers                    = $wazuh::params_manager::wazuh_api_ssl_ciphers,
+      $wazuh_api_ssl_protocol                   = $wazuh::params_manager::wazuh_api_ssl_protocol,
 
       $wazuh_api_cors_enabled                   = $wazuh::params_manager::wazuh_api_cors_enabled,
       $wazuh_api_cors_source_route              = $wazuh::params_manager::wazuh_api_cors_source_route,
