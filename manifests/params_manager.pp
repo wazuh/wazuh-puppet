@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.1.5-1'
+      $server_package_version                          = '4.2.2-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -330,9 +330,6 @@ class wazuh::params_manager {
 
       $wazuh_api_file =  undef
 
-      # Set this option to "yes" in case the API is running behind a proxy server. Values: yes, no
-      $wazuh_api_behind_proxy_server = 'no'
-
       # Advanced configuration
       $wazuh_api_https_enabled = 'yes'
       $wazuh_api_https_key = 'api/configuration/ssl/server.key'
@@ -540,7 +537,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 4.1.5'
+      $agent_package  = 'Wazuh Agent 4.2.2'
       $server_service = ''
       $server_package = ''
       $api_service = ''

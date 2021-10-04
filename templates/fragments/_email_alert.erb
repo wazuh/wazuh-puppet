@@ -1,4 +1,24 @@
-<email_alerts>
-  <email_to><%= @alert_email %></email_to>
-  <% if @alert_group != false -%><group><% @alert_group.each do |gr| -%><%= gr %>,<% end %></group><% end %>
-</email_alerts>
+  <email_alerts>
+    <email_to><%= @alert_email %></email_to>
+    <%- if @level -%>
+    <level><%= @level %></level>
+    <%- end -%>
+    <%- if @alert_group -%>
+    <group><%= [@alert_group].flatten.compact.join('|') %></group>
+    <%- end -%>
+    <%- if @event_location -%>
+    <event_location><%= [@event_location].flatten.compact.join('|') %></event_location>
+    <%- end -%>
+    <%- if @format -%>
+    <format><%= @format %></format>
+    <%- end -%>
+    <%- if @rule_id -%>
+    <rule_id><%= [@rule_id].flatten.compact.join(',') %></rule_id>
+    <%- end -%>
+    <%- if @do_not_delay -%>
+    <do_not_delay />
+    <%- end -%>
+    <%- if @do_not_group -%>
+    <do_not_group />
+    <%- end -%>
+  </email_alerts>
