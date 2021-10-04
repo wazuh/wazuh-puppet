@@ -3,7 +3,7 @@
 class wazuh::kibana (
   $kibana_package = 'kibana',
   $kibana_service = 'kibana',
-  $kibana_version = '7.9.3',
+  $kibana_version = '7.10.2',
 
   $kibana_elasticsearch_hosts = [
     {

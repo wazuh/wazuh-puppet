@@ -74,4 +74,5 @@ gem "kitchen-puppet"
 gem "kitchen-vagrant"
 gem 'kitchen-docker', '~> 2.3'
 gem "librarian-puppet"
+gem "rubocop-i18n", require: false
 # vim: syntax=ruby

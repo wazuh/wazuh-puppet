@@ -269,7 +269,6 @@ class wazuh::manager (
       $wazuh_api_port                           = $wazuh::params_manager::wazuh_api_port,
       $wazuh_api_file                           = $wazuh::params_manager::wazuh_api_file,
 
-      $wazuh_api_behind_proxy_server            = $wazuh::params_manager::wazuh_api_behind_proxy_server,
       $wazuh_api_https_enabled                  = $wazuh::params_manager::wazuh_api_https_enabled,
       $wazuh_api_https_key                      = $wazuh::params_manager::wazuh_api_https_key,
 

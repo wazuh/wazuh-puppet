@@ -4,7 +4,7 @@ require:
 - rubocop-i18n
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: '2.1'
+  TargetRubyVersion: '2.5'
   Include:
   - "./**/*.rb"
   Exclude:
@@ -18,12 +18,12 @@ AllCops:
   - "**/Puppetfile"
   - "**/Vagrantfile"
   - "**/Guardfile"
-Metrics/LineLength:
+Layout/LineLength:
   Description: People have wide screens, use them.
   Max: 200
-GetText:
+I18n/GetText:
   Enabled: false
-GetText/DecorateString:
+I18n/GetText/DecorateString:
   Description: We don't want to decorate test output.
   Exclude:
   - spec/**/*
@@ -40,10 +40,6 @@ Style/BlockDelimiters:
   Description: Prefer braces for chaining. Mostly an aesthetical choice. Better to
     be consistent then.
   EnforcedStyle: braces_for_chaining
-Style/BracesAroundHashParameters:
-  Description: Braces are required by Ruby 2.7. Cop removed from RuboCop v0.80.0.
-    See https://github.com/rubocop-hq/rubocop/pull/7643
-  Enabled: true
 Style/ClassAndModuleChildren:
   Description: Compact style reduces the required amount of indentation.
   EnforcedStyle: compact
@@ -72,7 +68,7 @@ Style/TrailingCommaInArguments:
   Description: Prefer always trailing comma on multiline argument lists. This makes
     diffs, and re-ordering nicer.
   EnforcedStyleForMultiline: comma
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
   Description: Prefer always trailing comma on multiline literals. This makes diffs,
     and re-ordering nicer.
   EnforcedStyleForMultiline: comma
@@ -93,15 +89,15 @@ Style/MethodCalledOnDoEndBlock:
   Enabled: true
 Style/StringMethods:
   Enabled: true
-GetText/DecorateFunctionMessage:
+I18n/GetText/DecorateFunctionMessage:
   Enabled: false
-GetText/DecorateStringFormattingUsingInterpolation:
+I18n/GetText/DecorateStringFormattingUsingInterpolation:
   Enabled: false
-GetText/DecorateStringFormattingUsingPercent:
+I18n/GetText/DecorateStringFormattingUsingPercent:
   Enabled: false
 Layout/EndOfLine:
   Enabled: false
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
 Metrics/AbcSize:
   Enabled: false

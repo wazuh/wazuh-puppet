@@ -3,7 +3,7 @@
 class wazuh::kibana_od (
   $kibana_od_package = 'opendistroforelasticsearch-kibana',
   $kibana_od_service = 'kibana',
-  $kibana_od_version = '1.12.0',
+  $kibana_od_version = '1.13.2',
   $kibana_od_elastic_user = 'admin',
   $kibana_od_elastic_password = 'admin',
   $kibana_od_app_version = '4.3.0_7.10.0',

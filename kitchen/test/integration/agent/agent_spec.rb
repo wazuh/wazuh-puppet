@@ -15,10 +15,11 @@ control 'wazuh-agent' do
 
   # Verifying daemons
   wazuh_daemons = {
-    # 'ossec-agentd' => 'ossec',
-    'ossec-execd' => 'root',
-    # 'ossec-syscheckd' => 'root',
-    # 'wazuh-modulesd' => 'root',
+    'wazuh-agentd' => 'ossec',
+    'wazuh-execd' => 'root',
+    'wazuh-modulesd' => 'root',
+    'wazuh-syscheckd' => 'root',
+    'wazuh-logcollector' => 'root'
   }
 
   wazuh_daemons.each do |key, value|

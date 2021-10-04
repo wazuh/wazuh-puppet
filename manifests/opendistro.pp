@@ -11,7 +11,7 @@ class wazuh::opendistro (
   $opendistro_node_max_local_storage_nodes = '1',
   $opendistro_service = 'elasticsearch',
   $opendistro_package = 'opendistroforelasticsearch',
-  $opendistro_version = '1.11.0',
+  $opendistro_version = '1.13.2',
 
   $opendistro_path_data = '/var/lib/elasticsearch',
   $opendistro_path_logs = '/var/log/elasticsearch',
