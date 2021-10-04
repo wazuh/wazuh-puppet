@@ -9,14 +9,12 @@ class wazuh::repo (
       and ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
-      # apt-key added by issue #34
       apt::key { 'wazuh':
         id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
-        source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH',
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(jessie|wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
+        /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
@@ -24,6 +22,10 @@ class wazuh::repo (
             location => 'https://packages.wazuh.com/4.x/apt',
             release  => 'stable',
             repos    => 'main',
+            key      => {
+              'id'     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
+              'server' => 'pgp.mit.edu',
+            },
             include  => {
               'src' => false,
               'deb' => true,
