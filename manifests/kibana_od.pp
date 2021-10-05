@@ -6,7 +6,7 @@ class wazuh::kibana_od (
   $kibana_od_version = '1.13.2',
   $kibana_od_elastic_user = 'admin',
   $kibana_od_elastic_password = 'admin',
-  $kibana_od_app_version = '4.2.2_7.10.2',
+  $kibana_od_app_version = '4.2.3_7.10.2',
   $kibana_od_elasticsearch_ip = 'localhost',
   $kibana_od_elasticsearch_port = '9200',
 

@@ -20,7 +20,7 @@ class wazuh::kibana (
 
   $kibana_server_port = '5601',
   $kibana_server_host = '0.0.0.0',
-  $kibana_wazuh_version = '4.2.2',
+  $kibana_wazuh_version = '4.2.3',
 
   # app variables
   $kibana_app_version = "${kibana_wazuh_version}_${$kibana_version}",
