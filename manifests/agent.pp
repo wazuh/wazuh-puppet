@@ -314,7 +314,9 @@ class wazuh::agent (
     case $::operatingsystem {
       'RedHat', 'OracleLinux':{
         $apply_template_os = 'rhel'
-        if ( $::operatingsystemrelease     =~ /^7.*/ ){
+        if ( $::operatingsystemrelease =~ /^8.*/ ) {
+          $rhel_version = '8'
+        } elsif ( $::operatingsystemrelease     =~ /^7.*/ ){
           $rhel_version = '7'
         }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
           $rhel_version = '6'
