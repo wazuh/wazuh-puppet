@@ -31,6 +31,7 @@ class wazuh::params_agent {
   $configure_wodle_cis_cat = true
   $configure_wodle_osquery = true
   $configure_wodle_syscollector = true
+  $configure_wodle_docker_listener = false
   $configure_sca = true
   $configure_syscheck = true
   $configure_localfile = true
@@ -43,6 +44,7 @@ class wazuh::params_agent {
   $ossec_wodle_cis_cat_template = 'wazuh/fragments/_wodle_cis_cat.erb'
   $ossec_wodle_osquery_template = 'wazuh/fragments/_wodle_osquery.erb'
   $ossec_wodle_syscollector_template = 'wazuh/fragments/_wodle_syscollector.erb'
+  $ossec_wodle_docker_listener_template = 'wazuh/fragments/_wodle_docker_listener.erb'
   $ossec_sca_template = 'wazuh/fragments/_sca.erb'
   $ossec_syscheck_template = 'wazuh/fragments/_syscheck.erb'
   $ossec_localfile_template = 'wazuh/fragments/_localfile.erb'
@@ -179,6 +181,9 @@ class wazuh::params_agent {
       $sca_else_policies = []
 
       # Wodles
+
+      ## doker-listener
+      $wodle_doker_listener_disabled = 'yes'
 
       ## open-scap
       $wodle_openscap_disabled = 'yes'
