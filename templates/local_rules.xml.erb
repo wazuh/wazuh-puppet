@@ -35,6 +35,7 @@
 <% end -%>
 
   <!-- Locally defined rule overrides. -->
+<% if #local_rules -%>
 <% @local_rules.each do |rule| -%>
   <rule id="<%= rule['id'] %>" level="<%= rule['level'] %>">
 <% if rule['if_sid'] %>    <if_sid><%= rule['if_sid'] %></if_sid><% end -%>
@@ -43,6 +44,7 @@
 <% if rule['group'] %>    <group><%= rule['group'] %></group><% end -%>
 <% if rule['description'] %>    <description><%= rule['description'] %></description><% end -%>
   </rule>
+<% end -%>
 <% end -%>
 
 </group> 

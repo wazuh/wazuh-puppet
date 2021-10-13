@@ -25,12 +25,14 @@
 </decoder>
 -->
 
-<% @local_decoder.each do |decoder| -%>
+<% if @local_decoders -%>
+<% @local_decoders.each do |decoder| -%>
   <decoder name="<%= decoder['name'] %>">
 <% dkeys = ['parent','prematch','regexp','order','plugin_decoder','program_name'] -%>
 <% dkeys.each do |thiskey| -%>
 <% if decoder[thiskey] %>    <<%= thiskey %>><%= decoder[thiskey] %></<%= thiskey %>><% end -%>
 <% end -%>
   </decoder>
+<% end -%>
 <% end -%>
 
