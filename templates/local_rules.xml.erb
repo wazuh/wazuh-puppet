@@ -27,25 +27,29 @@
 
 
   <!-- Specify here a list of rules to ignore. -->
-<% if @rule_exclude %>
+<% if ! @rule_exclude.nil? and @rule_exlude.is_a(Array) and @rule_exclude.length() > 0 %>
   <rule id="100000" level="0">
-    <if_sid><%= @rule_exclude.join(",") %></if_sid>
+    <if_sid><%= @rule_exclude.join(", ") %></if_sid>
     <description>List of rules to be ignored.</description>
   </rule>
 <% end -%>
 
   <!-- Locally defined rule overrides. -->
-<% if #local_rules -%>
+<% if ! @local_rules.nil? and @local_rules.is_a?(Array) -%>
 <% @local_rules.each do |rule| -%>
   <rule id="<%= rule['id'] %>" level="<%= rule['level'] %>">
-<% if rule['if_sid'] %>    <if_sid><%= rule['if_sid'] %></if_sid><% end -%>
-<% if rule['srcip'] %>    <srcip><%= rule['srcip'] %></srcip><% end -%>
-<% if rule['user'] %>    <user><%= rule['user'] %></user><% end -%>
-<% if rule['group'] %>    <group><%= rule['group'] %></group><% end -%>
-<% if rule['description'] %>    <description><%= rule['description'] %></description><% end -%>
+<% if rule['if_sid'] %>    <if_sid><%= rule['if_sid'] %></if_sid>
+<% end -%>
+<% if rule['srcip'] %>    <srcip><%= rule['srcip'] %></srcip>
+<% end -%>
+<% if rule['user'] %>    <user><%= rule['user'] %></user>
+<% end -%>
+<% if rule['group'] %>    <group><%= rule['group'] %></group>
+<% end -%>
+<% if rule['description'] %>    <description><%= rule['description'] %></description>
+<% end -%>
   </rule>
-<% end -%>
-<% end -%>
+<% end -%><% end -%>
 
 </group> 
 
