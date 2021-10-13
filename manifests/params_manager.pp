@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.2.2-1'
+      $server_package_version                          = '4.2.3-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -336,7 +336,8 @@ class wazuh::params_manager {
       $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
       $wazuh_api_https_use_ca = 'False'
       $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
-      $wazuh_api_ssl_cipher = 'TLSv1.2'
+      $wazuh_api_ssl_protocol = 'TLSv1.2'
+      $wazuh_api_ssl_ciphers  = '""'
 
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
@@ -419,7 +420,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
+            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -537,7 +538,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 4.2.2'
+      $agent_package  = 'Wazuh Agent 4.2.3'
       $server_service = ''
       $server_package = ''
       $api_service = ''
