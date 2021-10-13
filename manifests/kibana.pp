@@ -72,7 +72,7 @@ class wazuh::kibana (
     owner   => $kibana_user,
     group   => $kibana_group,
     mode    => '0644',
-    notify  => Service[$kibana_service],
+    notify  => [ Service[$kibana_service], Exec['Waiting for elasticsearch...'] ],
     content => template('wazuh/kibana_yml.erb'),
   }
 
@@ -81,40 +81,6 @@ class wazuh::kibana (
     enable     => true,
     hasrestart => true,
   } 
-
-  exec {'Waiting for elasticsearch...':
-    path        => '/usr/bin',
-    command     => "curl -s -XGET ${kibana_elasticsearch_proto}://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
-    tries       => 100,
-    try_sleep   => 3,
-    refreshonly => true,
-  }
-
-  exec {'kibana-plugin install':
-    path        => '/usr/bin',
-    command     => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install \"${kibana_app_url}\"",
-    environment => ["NODE_OPTIONS=\"${kibana_app_node_options}\""],
-    creates     => "${kibana_path_home}/plugins/wazuh/package.json",
-    notify      => Service[$kibana_service],
-    require     => File["${kibana_path_home}/optimize"],
-  }
-
-  exec {'Removing .wazuh index...':
-    path    => '/usr/bin',
-    command => "curl -s -XDELETE -sL -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
-    onlyif  => "curl -s -XGET -sLf -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
-    notify  => Service[$kibana_service],
-  }
-
-  file { "${kibana_path_home}/plugins/wazuh/wazuh.yml":
-    owner   => $kibana_user,
-    group   => $kibana_group,
-    mode    => '0644',
-    content => template('wazuh/wazuh_yml.erb'),
-    notify  => Service[$kibana_service],
-    require => Exec['kibana-plugin install'],
-  }
-
 
   if ($facts['kibana_plugin_wazuh'] != undef and
       $facts['kibana_plugin_wazuh']['version'] != $kibana_wazuh_version) or ($kibana_app_reinstall == true) {
@@ -129,5 +95,39 @@ class wazuh::kibana (
       before  => Exec['kibana-plugin install'],
     }
   }
+
+  exec {'kibana-plugin install':
+    path        => '/usr/bin',
+    command     => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install \"${kibana_app_url}\"",
+    environment => ["NODE_OPTIONS=\"${kibana_app_node_options}\""],
+    creates     => "${kibana_path_home}/plugins/wazuh/package.json",
+    notify      => Service[$kibana_service],
+    require     => File["${kibana_path_home}/optimize"],
+  } ->
+
+  file { "${kibana_path_home}/plugins/wazuh/wazuh.yml":
+    owner   => $kibana_user,
+    group   => $kibana_group,
+    mode    => '0644',
+    content => template('wazuh/wazuh_yml.erb'),
+    notify  => Service[$kibana_service],
+    require => Exec['kibana-plugin install'],
+  }
+
+  exec {'Waiting for elasticsearch...':
+    path        => '/usr/bin',
+    command     => "curl -s -XGET ${kibana_elasticsearch_proto}://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+    tries       => 100,
+    try_sleep   => 3,
+    refreshonly => true,
+  } ->
+
+  exec {'Removing .wazuh index...':
+    path    => '/usr/bin',
+    command => "curl -s -XDELETE -sL -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
+    onlyif  => "curl -s -XGET -sLf -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
+    notify  => Service[$kibana_service],
+  }
+
 
 }

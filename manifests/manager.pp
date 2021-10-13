@@ -64,6 +64,14 @@ class wazuh::manager (
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
       $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
 
+      # rulesets
+      $ossec_ruleset_decoder_dir                    = $wazuh::params_manager::ossec_ruleset_decoder_dir,
+      $ossec_ruleset_rule_dir                       = $wazuh::params_manager::ossec_ruleset_rule_dir,
+      $ossec_ruleset_rule_exclude                   = $wazuh::params_manager::ossec_ruleset_rule_exclude,
+      $ossec_ruleset_list                           = $wazuh::params_manager::ossec_ruleset_list,
+      $ossec_ruleset_user_defined_decoder_dir       = $wazuh::params_manager::ossec_ruleset_user_defined_decoder_dir ,
+      $ossec_ruleset_user_defined_rule_dir          =  $wazuh::params_manager::ossec_ruleset_user_defined_rule_dir,
+
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
       $ossec_active_response_location               =  $wazuh::params_manager::active_response_location,
@@ -251,8 +259,10 @@ class wazuh::manager (
 
       $local_decoder_template               = $wazuh::params_manager::local_decoder_template,
       $decoder_exclude                      = $wazuh::params_manager::decoder_exclude,
+      $local_decoders                       = $wazuh::params_manager::local_decoders,
       $local_rules_template                 = $wazuh::params_manager::local_rules_template,
       $rule_exclude                         = $wazuh::params_manager::rule_exclude,
+      $local_rules                          = $wazuh::params_manager::local_rules,
       $shared_agent_template                = $wazuh::params_manager::shared_agent_template,
 
       $wazuh_manager_verify_manager_ssl     = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,

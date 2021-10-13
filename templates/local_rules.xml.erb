@@ -1,18 +1,17 @@
-<!-- Modify it at your will. -->
+<!-- This file created by puppet
+     Update by adding local_rules and rule_exclude inthe hiera
+  -->
 
-<group name="local,syslog,sshd,">
+<group name="puppet-controlled">
 
-  <!-- Note that rule id 5711 is defined at the ssh_rules file
-    -  as a ssh failed login. This is just an example
-    -  since ip 1.1.1.1 shouldn't be used anywhere.
-    -  Level 0 means ignore.
-    -->
+  <!--
   <rule id="100001" level="5">
     <if_sid>5716</if_sid>
     <srcip>1.1.1.1</srcip>
     <description>sshd: authentication failed from IP 1.1.1.1.</description>
     <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
   </rule>
+  -->
 
 
   <!-- This example will ignore ssh failed logins for the user name XYZABC.
@@ -28,14 +27,24 @@
 
 
   <!-- Specify here a list of rules to ignore. -->
-  <!--
-  <rule id="100030" level="0">
-    <if_sid>12345, 23456, xyz, abc</if_sid>
+<% if @rule_exclude %>
+  <rule id="100000" level="0">
+    <if_sid><%= @rule_exclude.join(",") %></if_sid>
     <description>List of rules to be ignored.</description>
   </rule>
-  -->
+<% end -%>
 
-</group> <!-- SYSLOG,LOCAL -->
+  <!-- Locally defined rule overrides. -->
+<% @local_rules.each do |rule| -%>
+  <rule id="<%= rule['id'] %>" level="<%= rule['level'] %>">
+<% if rule['if_sid'] %>    <if_sid><%= rule['if_sid'] %></if_sid><% end -%>
+<% if rule['srcip'] %>    <srcip><%= rule['srcip'] %></srcip><% end -%>
+<% if rule['user'] %>    <user><%= rule['user'] %></user><% end -%>
+<% if rule['group'] %>    <group><%= rule['group'] %></group><% end -%>
+<% if rule['description'] %>    <description><%= rule['description'] %></description><% end -%>
+  </rule>
+<% end -%>
 
+</group> 
 
 <!-- EOF -->
