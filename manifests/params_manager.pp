@@ -542,7 +542,7 @@ class wazuh::params_manager {
       $keys_owner = 'Administrator'
       $keys_group = 'Administrators'
 
-      $agent_service  = 'OssecSvc'
+      $agent_service  = 'WazuhSvc'
       $agent_package  = 'Wazuh Agent 4.3.0'
       $server_service = ''
       $server_package = ''
