@@ -446,7 +446,7 @@ class wazuh::params_agent {
       $keys_file = 'C:\\Program Files (x86)\\ossec-agent\\client.keys'
 
       $agent_package_name = 'Wazuh Agent'
-      $agent_service_name = 'OssecSvc'
+      $agent_service_name = 'WazuhSvc'
       $service_has_status = true
       $ossec_service_provider = undef
 
