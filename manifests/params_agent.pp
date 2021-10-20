@@ -1,12 +1,13 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.2.4-1'
+  $agent_package_version = '4.3.0-1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
 
   $agent_name = undef
   $agent_group = undef
+  $agent_address = undef
 
   # Enable/Disable agent registration
   $manage_client_keys = 'yes'
@@ -30,6 +31,7 @@ class wazuh::params_agent {
   $configure_wodle_cis_cat = true
   $configure_wodle_osquery = true
   $configure_wodle_syscollector = true
+  $configure_wodle_docker_listener = false
   $configure_sca = true
   $configure_syscheck = true
   $configure_localfile = true
@@ -42,6 +44,7 @@ class wazuh::params_agent {
   $ossec_wodle_cis_cat_template = 'wazuh/fragments/_wodle_cis_cat.erb'
   $ossec_wodle_osquery_template = 'wazuh/fragments/_wodle_osquery.erb'
   $ossec_wodle_syscollector_template = 'wazuh/fragments/_wodle_syscollector.erb'
+  $ossec_wodle_docker_listener_template = 'wazuh/fragments/_wodle_docker_listener.erb'
   $ossec_sca_template = 'wazuh/fragments/_sca.erb'
   $ossec_syscheck_template = 'wazuh/fragments/_syscheck.erb'
   $ossec_localfile_template = 'wazuh/fragments/_localfile.erb'
@@ -66,6 +69,7 @@ class wazuh::params_agent {
   $ossec_crypto_method = 'aes'
 
   ## Buffers
+  $client_buffer_disabled = 'no'
   $client_buffer_queue_size = 5000
   $client_buffer_events_per_second = 500
 
@@ -132,6 +136,7 @@ class wazuh::params_agent {
       $ossec_rootcheck_check_if = 'yes'
       $ossec_rootcheck_frequency = 36000
       $ossec_rootcheck_ignore_list = []
+      $ossec_rootcheck_ignore_sregex_list = []
       $ossec_rootcheck_rootkit_files = '/var/ossec/etc/shared/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs = 'yes'
@@ -177,6 +182,9 @@ class wazuh::params_agent {
       $sca_else_policies = []
 
       # Wodles
+
+      ## doker-listener
+      $wodle_doker_listener_disabled = 'yes'
 
       ## open-scap
       $wodle_openscap_disabled = 'yes'

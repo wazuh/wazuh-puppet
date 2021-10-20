@@ -1,40 +1,39 @@
 
-<active-response>
-<% if @active_response_disabled -%>
-  <disabled><%= @active_response_disabled %></disabled>
-<%- end -%>
-<%- if @kernel == 'windows' -%>
-<% if @active_response_windows_ca_store -%>
-  <ca_store><%= @active_response_windows_ca_store %></ca_store>
-<%- end -%>
-<%- elsif @kernel == 'Linux' -%>
-<% if @active_response_linux_ca_store -%>
-  <ca_store><%= @active_response_linux_ca_store %></ca_store>
-<%- end -%>
-<%- end -%>
-<% if @active_response_ca_verification -%>
-  <ca_verification><%= @active_response_ca_verification %></ca_verification>
-<%- end -%>
-<% if @active_response_command -%>
-  <command><%= @active_response_command %></command>
-<%- end -%>
-<% if @active_response_location -%>
-  <location><%= @active_response_location %></location>
-<%- end -%> 
-<% if @active_response_level -%>
-  <level><%= @active_response_level %></level>
-<%- end -%> 
-<% if @active_response_agent_id -%>
-  <agent_id><%= @active_response_agent_id %></agent_id>
-<%- end -%> 
-<% if !@active_response_rules_id.empty? -%>
-  <rules_id><%= @active_response_rules_id.join(',') %></rules_id>
-<%- end -%>
-<% if @active_response_timeout -%>
-  <timeout><%= @active_response_timeout %></timeout>
-<%- end -%>
-<% if !@active_response_repeated_offenders.empty? -%>
-  <repeated_offenders><%= @active_response_repeated_offenders.join(',') %></repeated_offenders>
-<%- end -%> 
-</active-response>
-
+  <active-response>
+    <%- if @active_response_disabled -%>
+    <disabled><%= @active_response_disabled %></disabled>
+    <%- end -%>
+    <%- if @kernel == 'windows' -%>
+    <%- if @active_response_windows_ca_store -%>
+    <ca_store><%= @active_response_windows_ca_store %></ca_store>
+    <%- end -%>
+    <%- elsif @kernel == 'Linux' -%>
+    <%- if @active_response_linux_ca_store -%>
+    <ca_store><%= @active_response_linux_ca_store %></ca_store>
+    <%- end -%>
+    <%- end -%>
+    <%- if @active_response_ca_verification -%>
+    <ca_verification><%= @active_response_ca_verification %></ca_verification>
+    <%- end -%>
+    <%- if @active_response_command -%>
+    <command><%= @active_response_command %></command>
+    <%- end -%>
+    <%- if @active_response_location -%>
+    <location><%= @active_response_location %></location>
+    <%- end -%>
+    <%- if @active_response_level -%>
+    <level><%= @active_response_level %></level>
+    <%- end -%>
+    <%- if @active_response_agent_id -%>
+    <agent_id><%= @active_response_agent_id %></agent_id>
+    <%- end -%>
+    <%- if !@active_response_rules_id.empty? -%>
+    <rules_id><%= @active_response_rules_id.join(',') %></rules_id>
+    <%- end -%>
+    <%- if @active_response_timeout -%>
+    <timeout><%= @active_response_timeout %></timeout>
+    <%- end -%>
+    <%- if !@active_response_repeated_offenders.empty? -%>
+    <repeated_offenders><%= @active_response_repeated_offenders.join(',') %></repeated_offenders>
+    <%- end -%>
+  </active-response>
