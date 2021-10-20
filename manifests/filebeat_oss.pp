@@ -15,7 +15,7 @@ class wazuh::filebeat_oss (
   Integer $filebeat_oss_elastic_worker = 1,
   Optional[Boolean] $filebeat_oss_setup_ilm_enabled = false,
 
-  String $filebeat_oss_version = '7.10.0',
+  String $filebeat_oss_version = '7.10.2',
   String $wazuh_app_version = '4.3.0_7.10.0',
   String $wazuh_extensions_version = 'v4.3.0',
   String $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
