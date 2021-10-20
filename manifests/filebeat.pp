@@ -8,7 +8,7 @@ class wazuh::filebeat (
 
   String $filebeat_package = 'filebeat',
   String $filebeat_service = 'filebeat',
-  String $filebeat_version = '7.10.0',
+  String $filebeat_version = '7.10.2',
   Optional[String] $filebeat_elastic_user = undef,
   Optional[String] $filebeat_elastic_password = undef,
   Optional[String] $filebeat_elastic_api_key = undef,
