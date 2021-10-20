@@ -52,6 +52,9 @@ class wazuh::kibana (
   # kibana paths
   $kibana_path_home = '/usr/share/kibana',
   $kibana_path_config = '/etc/kibana',
+
+  $kibana_settings = {},
+  $saml_realm = undef,
 ) {
 
   # install package

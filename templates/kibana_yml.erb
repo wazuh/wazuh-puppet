@@ -138,3 +138,16 @@ elasticsearch.ssl.verificationMode: <%= @elasticsearch_ssl_verificationmode %>
 # Specifies locale to be used for all localizable strings, dates and number formats.
 #i18n.locale: "en"
 
+# Custom settings
+<%- @kibana_settings.each do |k_key,k_value| -%>
+<%= k_key %>: <%= k_value %>
+<%- end -%>
+
+<%- if @saml_realm -%>
+# SAML
+xpack.security.authc.providers:
+  saml.<%= @saml_realm %>:
+    order: 0
+    realm: "<%= @saml_realm %>"
+<%- end -%>
+

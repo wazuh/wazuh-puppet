@@ -30,7 +30,8 @@
   <decoder name="<%= decoder['name'] %>">
 <% dkeys = ['parent','prematch','regexp','order','plugin_decoder','program_name'] -%>
 <% dkeys.each do |thiskey| -%>
-<% if decoder[thiskey] %>    <<%= thiskey %>><%= decoder[thiskey] %></<%= thiskey %>><% end -%>
+<% if decoder[thiskey] %>    <<%= thiskey %>><%= decoder[thiskey] %></<%= thiskey %>>
+<% end -%>
 <% end -%>
   </decoder>
 <% end -%><% end -%>
