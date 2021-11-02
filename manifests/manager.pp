@@ -133,6 +133,8 @@ class wazuh::manager (
       $wodle_ciscat_scan_on_start           = $wazuh::params_manager::wodle_ciscat_scan_on_start,
       $wodle_ciscat_java_path               = $wazuh::params_manager::wodle_ciscat_java_path,
       $wodle_ciscat_ciscat_path             = $wazuh::params_manager::wodle_ciscat_ciscat_path,
+      $wodle_ciscat_content                 = $wazuh::params_manager::wodle_ciscat_content,
+
 
       #osquery
       $wodle_osquery_disabled               = $wazuh::params_manager::wodle_osquery_disabled,
