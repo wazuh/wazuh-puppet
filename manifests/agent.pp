@@ -162,7 +162,7 @@ class wazuh::agent (
   $wodle_ciscat_scan_on_start        = $wazuh::params_agent::wodle_ciscat_scan_on_start,
   $wodle_ciscat_java_path            = $wazuh::params_agent::wodle_ciscat_java_path,
   $wodle_ciscat_ciscat_path          = $wazuh::params_agent::wodle_ciscat_ciscat_path,
-  wodle_ciscat_content               = $wazuh::params_agent::wodle_ciscat_content,
+  $wodle_ciscat_content              = $wazuh::params_agent::wodle_ciscat_content,
 
   #Osquery
 
