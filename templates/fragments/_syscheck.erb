@@ -13,6 +13,10 @@
   <auto_ignore frequency="10" timeframe="3600"><%=@ossec_syscheck_auto_ignore%></auto_ignore>
   <%- end -%>
 
+  <%- @ossec_syscheck_directories.each do |scanpath| -%>
+    <directories check_all="yes" report_changes="<%= scanpath["report_changes"] %>" realtime="<%= scanpath['realtime'] %>" whodata="<%= scanpath['whodata'] || 'no' %>"><%= scanpath['path']  %></directories>
+  <%- end -%>
+
 <%- if @kernel == 'windows' -%>
 
   <!-- Default files to be monitored. -->

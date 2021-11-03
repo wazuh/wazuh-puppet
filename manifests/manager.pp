@@ -133,6 +133,8 @@ class wazuh::manager (
       $wodle_ciscat_scan_on_start           = $wazuh::params_manager::wodle_ciscat_scan_on_start,
       $wodle_ciscat_java_path               = $wazuh::params_manager::wodle_ciscat_java_path,
       $wodle_ciscat_ciscat_path             = $wazuh::params_manager::wodle_ciscat_ciscat_path,
+      $wodle_ciscat_content                 = $wazuh::params_manager::wodle_ciscat_content,
+
 
       #osquery
       $wodle_osquery_disabled               = $wazuh::params_manager::wodle_osquery_disabled,
@@ -213,6 +215,7 @@ class wazuh::manager (
       $ossec_syscheck_frequency             = $wazuh::params_manager::ossec_syscheck_frequency,
       $ossec_syscheck_scan_on_start         = $wazuh::params_manager::ossec_syscheck_scan_on_start,
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
+      $ossec_syscheck_directories           = $wazuh::params_manager::ossec_syscheck_directories,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
       $ossec_syscheck_whodata_directories_1            = $wazuh::params_manager::ossec_syscheck_whodata_directories_1,
