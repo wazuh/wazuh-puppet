@@ -1,16 +1,26 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Setup for Filebeat
 class wazuh::filebeat (
-  $filebeat_elasticsearch_ip = 'localhost',
-  $filebeat_elasticsearch_port = '9200',
-  $elasticsearch_server_ip = "\"${filebeat_elasticsearch_ip}:${filebeat_elasticsearch_port}\"",
+  String $filebeat_elasticsearch_ip = 'localhost',
+  Variant[String,Integer] $filebeat_elasticsearch_port = 9200,
+  Optional[String] $filebeat_elasticsearch_proto = 'https',
+  String $elasticsearch_server_ip = "\"${filebeat_elasticsearch_ip}:${filebeat_elasticsearch_port}\"",
 
-  $filebeat_package = 'filebeat',
-  $filebeat_service = 'filebeat',
-  $filebeat_version = '7.10.2',
-  $wazuh_app_version = '4.2.4_7.10.2',
-  $wazuh_extensions_version = 'v4.2.4',
-  $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
+  String $filebeat_package = 'filebeat',
+  String $filebeat_service = 'filebeat',
+  String $filebeat_version = '7.10.2',
+  Optional[String] $filebeat_elastic_user = undef,
+  Optional[String] $filebeat_elastic_password = undef,
+  Optional[String] $filebeat_elastic_api_key = undef,
+  String $filebeat_ssl_verification = 'full',
+  Integer $filebeat_elastic_worker = 1,
+  Optional[Boolean] $filebeat_setup_ilm_enabled = undef,
+  String $wazuh_app_version = '4.2.4_7.10.2',
+  String $wazuh_extensions_version = 'v4.2.4',
+  String $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
+  Optional[String] $filebeat_log_level = undef,
+  Integer $filebeat_log_keep = 7,
+  String $filebeat_log_interval = '1d',
 ){
 
   class {'wazuh::repo_elastic':}
@@ -33,8 +43,9 @@ class wazuh::filebeat (
     mode    => '0644',
     notify  => Service[$filebeat_service], ## Restarts the service
     content => template('wazuh/filebeat_yml.erb'),
-    require => Package['filebeat']
-  }
+    require => Package['filebeat'],
+    creates => '/etc/filebeat/wazuh-template.json'
+  } 
 
   exec { 'Installing wazuh-template.json...':
     path    => '/usr/bin',
@@ -45,14 +56,15 @@ class wazuh::filebeat (
 
   exec { 'Installing filebeat module ... Downloading package':
     path    => '/usr/bin',
-    command => "curl -o /root/${$wazuh_filebeat_module} https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+    command => "curl -o /root/${wazuh_filebeat_module} https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+    creates => "/root/${wazuh_filebeat_module}",
   }
-
-  exec { 'Unpackaging ...':
-    command => '/bin/tar -xzvf /root/wazuh-filebeat-0.1.tar.gz -C /usr/share/filebeat/module',
+  exec { 'Unpackaging':
+    command => '/bin/tar -xzvf /root/${wazuh_filebeat_module} -C /usr/share/filebeat/module',
     notify  => Service['filebeat'],
-    require => Package['filebeat']
-  }
+    require => Package['filebeat'],
+    creates => "/usr/share/filebeat/module/wazuh/module.yml"
+  } 
 
   file { '/usr/share/filebeat/module/wazuh':
     ensure  => 'directory',

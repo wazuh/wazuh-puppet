@@ -18,9 +18,17 @@ class wazuh::kibana (
   $kibana_elasticsearch_port = $kibana_elasticsearch_hosts[0]['port'],
   $kibana_elasticsearch_proto = $kibana_elasticsearch_hosts[0]['proto'],
 
+  $elasticsearch_username = undef,
+  $elasticsearch_password = undef,
+  $elasticsearch_ssl_verificationmode = undef,
+
   $kibana_server_port = '5601',
   $kibana_server_host = '0.0.0.0',
   $kibana_wazuh_version = '4.2.4',
+
+  $server_ssl = false,
+  $server_ssl_certificate = undef,
+  $server_ssl_key = undef,
 
   # app variables
   $kibana_app_version = "${kibana_wazuh_version}_${$kibana_version}",
@@ -44,6 +52,9 @@ class wazuh::kibana (
   # kibana paths
   $kibana_path_home = '/usr/share/kibana',
   $kibana_path_config = '/etc/kibana',
+
+  $kibana_settings = {},
+  $saml_realm = undef,
 ) {
 
   # install package
@@ -64,7 +75,7 @@ class wazuh::kibana (
     owner   => $kibana_user,
     group   => $kibana_group,
     mode    => '0644',
-    notify  => Service[$kibana_service],
+    notify  => [ Service[$kibana_service], Exec['Waiting for elasticsearch...'] ],
     content => template('wazuh/kibana_yml.erb'),
   }
 
@@ -79,34 +90,6 @@ class wazuh::kibana (
     command   => "curl -s -XGET ${kibana_elasticsearch_proto}://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
     tries     => 100,
     try_sleep => 3,
-  }
-
-  exec {'kibana-plugin install':
-    path        => '/usr/bin',
-    command     => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install \"${kibana_app_url}\"",
-    environment => ["NODE_OPTIONS=\"${kibana_app_node_options}\""],
-    creates     => "${kibana_path_home}/plugins/wazuh/package.json",
-    notify      => Service[$kibana_service],
-    require     => File["${kibana_path_home}/optimize"],
-  }
-
-  exec {'Removing .wazuh index...':
-    path    => '/usr/bin',
-    command => "curl -s -XDELETE -sL -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
-    onlyif  => "curl -s -XGET -sLf -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
-    notify  => Service[$kibana_service],
-  }
-
-  file { "${kibana_path_home}/plugins/wazuh/wazuh.yml":
-    owner   => $kibana_user,
-    group   => $kibana_group,
-    mode    => '0644',
-    content => template('wazuh/wazuh_yml.erb'),
-    notify  => Service[$kibana_service],
-    require => Exec['kibana-plugin install'],
-  }
-
-
   if ($facts['kibana_plugin_wazuh'] != undef and
       $facts['kibana_plugin_wazuh']['version'] != $kibana_wazuh_version) or ($kibana_app_reinstall == true) {
 
@@ -119,6 +102,38 @@ class wazuh::kibana (
       notify  => Service[$kibana_service],
       before  => Exec['kibana-plugin install'],
     }
+  }
+
+  exec {'kibana-plugin install':
+    path        => '/usr/bin',
+    command     => "sudo -u ${kibana_user} ${kibana_path_home}/bin/kibana-plugin install \"${kibana_app_url}\"",
+    environment => ["NODE_OPTIONS=\"${kibana_app_node_options}\""],
+    creates     => "${kibana_path_home}/plugins/wazuh/package.json",
+    notify      => Service[$kibana_service],
+    require     => File["${kibana_path_home}/optimize"],
+  }
+
+  file { "${kibana_path_home}/plugins/wazuh/wazuh.yml":
+    owner   => $kibana_user,
+    group   => $kibana_group,
+    mode    => '0644',
+    content => template('wazuh/wazuh_yml.erb'),
+    notify  => Service[$kibana_service],
+    require => Exec['kibana-plugin install'],
+  }
+
+  exec {'Waiting for elasticsearch...':
+    path        => '/usr/bin',
+    command     => "curl -s -XGET ${kibana_elasticsearch_proto}://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}",
+    tries       => 100,
+    try_sleep   => 3,
+    refreshonly => true,
+  } 
+  exec {'Removing .wazuh index...':
+    path    => '/usr/bin',
+    command => "curl -s -XDELETE -sL -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
+    onlyif  => "curl -s -XGET -sLf -I 'http://${kibana_elasticsearch_ip}:${kibana_elasticsearch_port}/.wazuh' -o /dev/null",
+    notify  => Service[$kibana_service],
   }
 
 }

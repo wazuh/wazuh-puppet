@@ -13,11 +13,23 @@ setup.template.overwrite: true
 
 # Send events directly to Elasticsearch
 output.elasticsearch:
-  hosts: ["https://<%= @filebeat_oss_elasticsearch_ip %>:<%= @filebeat_oss_elasticsearch_port %>"]
+hosts: ["<%= @filebeat_oss_elasticsearch_proto %>://<%= @filebeat_oss_elasticsearch_ip %>:<%= @filebeat_oss_elasticsearch_port %>"]
+<% if @filebeat_oss_elastic_api_key -%>
+  api_key: <%= @filebeat_oss_elastic_api_key %>
+<% else -%>
+<% if @filebeat_elastic_oss_password -%>
   username: <%= @filebeat_oss_elastic_user %>
   password: <%= @filebeat_oss_elastic_password %>
-  ssl.verification_mode: none
-
-setup.ilm.enabled: false
+  <% end -%>
+  <% end -%>
+  <% if @filebeat_oss_ssl_verification -%>
+    ssl.verification_mode: <%= @filebeat_oss_ssl_verification %>
+  <% end -%>
+  <% if @filebeat_oss_elastic_worker > 1 -%>
+    worker: <%= @filebeat_oss_elastic_worker %>
+  <% end -%>
+  <% if not @filebeat_oss_setup_ilm_enabled.nil? %>
+  setup.ilm.enabled: <%= @filebeat_oss_setup_ilm_enabled %>
+  <% end -%>
 
 

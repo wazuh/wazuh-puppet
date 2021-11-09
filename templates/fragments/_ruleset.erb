@@ -4,10 +4,10 @@
 <ruleset>
   <!-- Default ruleset -->
   <% if @ossec_ruleset_decoder_dir -%>
-  <decoder_dir><%= @ossec_ruleset_decoder_dir %></decoder_dir>
+  <decoder_dir pattern=".xml$"><%= @ossec_ruleset_decoder_dir %></decoder_dir>
   <%- end -%>
   <% if @ossec_ruleset_rule_dir -%>
-  <rule_dir><%= @ossec_ruleset_rule_dir %></rule_dir>
+  <rule_dir pattern=".xml$"><%= @ossec_ruleset_rule_dir %></rule_dir>
   <%- end -%>
   <% if @ossec_ruleset_rule_exclude -%>
   <rule_exclude><%= @ossec_ruleset_rule_exclude %></rule_exclude>
@@ -18,10 +18,10 @@
   
   <!-- User-defined ruleset -->
   <% if @ossec_ruleset_user_defined_decoder_dir -%>
-  <decoder_dir><%= @ossec_ruleset_user_defined_decoder_dir %></decoder_dir>
+  <decoder_dir pattern=".xml$"><%= @ossec_ruleset_user_defined_decoder_dir %></decoder_dir>
   <%- end -%>
   <% if @ossec_ruleset_user_defined_rule_dir -%>
-  <rule_dir><%= @ossec_ruleset_user_defined_rule_dir %></rule_dir>
+  <rule_dir pattern=".xml$"><%= @ossec_ruleset_user_defined_rule_dir %></rule_dir>
   <%- end -%>
 </ruleset>
 
