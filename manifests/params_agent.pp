@@ -96,7 +96,7 @@ class wazuh::params_agent {
   $wazuh_enrollment_use_source_ip                  = undef
 
   # Other required to define variables
-  $manage_repo = no
+  $manage_repo = true
   $manage_firewall = false
   $selinux = false
   $configure_labels = false
@@ -300,8 +300,6 @@ class wazuh::params_agent {
 
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
-
-      $manage_repo = true
 
       case $::osfamily {
         'Debian': {
