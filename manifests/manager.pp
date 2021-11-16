@@ -36,6 +36,7 @@ class wazuh::manager (
       $configure_wodle_cis_cat              = $wazuh::params_manager::configure_wodle_cis_cat,
       $configure_wodle_osquery              = $wazuh::params_manager::configure_wodle_osquery,
       $configure_wodle_syscollector         = $wazuh::params_manager::configure_wodle_syscollector,
+      $configure_wodle_docker_listener      = $wazuh::params_manager::configure_wodle_docker_listener,
       $configure_vulnerability_detector     = $wazuh::params_manager::configure_vulnerability_detector,
       $configure_sca                        = $wazuh::params_manager::configure_sca,
       $configure_syscheck                   = $wazuh::params_manager::configure_syscheck,
@@ -53,7 +54,8 @@ class wazuh::manager (
       $ossec_wodle_cis_cat_template                 = $wazuh::params_manager::ossec_wodle_cis_cat_template,
       $ossec_wodle_osquery_template                 = $wazuh::params_manager::ossec_wodle_osquery_template,
       $ossec_wodle_syscollector_template            = $wazuh::params_manager::ossec_wodle_syscollector_template,
-      $ossec_vulnerability_detector_template  = $wazuh::params_manager::ossec_vulnerability_detector_template,
+      $ossec_wodle_docker_listener_template         = $wazuh::params_manager::ossec_wodle_docker_listener_template,
+      $ossec_vulnerability_detector_template        = $wazuh::params_manager::ossec_vulnerability_detector_template,
       $ossec_sca_template                           = $wazuh::params_manager::ossec_sca_template,
       $ossec_syscheck_template                      = $wazuh::params_manager::ossec_syscheck_template,
       $ossec_default_commands_template              = $wazuh::params_manager::ossec_default_commands_template,
@@ -86,6 +88,7 @@ class wazuh::manager (
       $ossec_rootcheck_check_if             = $wazuh::params_manager::ossec_rootcheck_check_if,
       $ossec_rootcheck_frequency            = $wazuh::params_manager::ossec_rootcheck_frequency,
       $ossec_rootcheck_ignore_list          = $wazuh::params_manager::ossec_rootcheck_ignore_list,
+      $ossec_rootcheck_ignore_sregex_list   = $wazuh::params_manager::ossec_rootcheck_ignore_sregex_list,
       $ossec_rootcheck_rootkit_files        = $wazuh::params_manager::ossec_rootcheck_rootkit_files,
       $ossec_rootcheck_rootkit_trojans      = $wazuh::params_manager::ossec_rootcheck_rootkit_trojans,
       $ossec_rootcheck_skip_nfs             = $wazuh::params_manager::ossec_rootcheck_skip_nfs,
@@ -148,6 +151,9 @@ class wazuh::manager (
       $wodle_syscollector_packages          = $wazuh::params_manager::wodle_syscollector_packages,
       $wodle_syscollector_ports             = $wazuh::params_manager::wodle_syscollector_ports,
       $wodle_syscollector_processes         = $wazuh::params_manager::wodle_syscollector_processes,
+
+      #docker-listener
+      $wodle_docker_listener_disabled       = $wazuh::params_manager::wodle_docker_listener_disabled,
 
       #vulnerability-detector
       $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
@@ -495,6 +501,14 @@ class wazuh::manager (
         order   => 30,
         target  => 'manager_ossec.conf',
         content => template($ossec_wodle_syscollector_template);
+    }
+  }
+  if ($configure_wodle_docker_listener == true){
+    concat::fragment {
+      'ossec.conf_wodle_docker_listener':
+        order   => 30,
+        target  => 'manager_ossec.conf',
+        content => template($ossec_wodle_docker_listener_template);
     }
   }
   if ($configure_sca == true){
