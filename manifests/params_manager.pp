@@ -204,8 +204,10 @@ class wazuh::params_manager {
       $ossec_auth_disabled                             = 'no'
       $ossec_auth_port                                 = 1515
       $ossec_auth_use_source_ip                        = 'yes'
-      $ossec_auth_force_insert                         = 'yes'
-      $ossec_auth_force_time                           = 0
+      $ossec_auth_force_enabled                        = 'yes'
+      $ossec_auth_force_key_mismatch                   = 'yes'
+      $ossec_auth_force_disc_time                      = '1h'
+      $ossec_auth_force_after_reg_time                 = '1h'
       $ossec_auth_purgue                               = 'yes'
       $ossec_auth_use_password                         = 'no'
       $ossec_auth_limit_maxagents                      = 'yes'
