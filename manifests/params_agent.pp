@@ -451,9 +451,9 @@ class wazuh::params_agent {
     'windows': {
       $config_file = 'C:\\Program Files (x86)\\ossec-agent\\ossec.conf'
       $shared_agent_config_file = 'C:\\Program Files (x86)\\ossec-agent\\shared\\agent.conf'
-      $config_owner = 'Administrator'
       $config_group = 'Administrators'
       $download_path = 'C:\\Temp'
+      $config_mode = '0664'
       $manage_firewall = false
 
       $keys_file = 'C:\\Program Files (x86)\\ossec-agent\\client.keys'
