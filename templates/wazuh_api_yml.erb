@@ -34,8 +34,6 @@ access:
   max_login_attempts: <%= @wazuh_api_access_max_login_attempts %>
   block_time: <%= @wazuh_api_access_block_time %>
   max_request_per_minute: <%= @wazuh_api_access_max_request_per_minute %>
-# Force the use of authd when adding and removing agents. Values: yes, no
-use_only_authd: <%= @wazuh_api_use_only_authd %>
 # Drop privileges (Run as ossec user)
 drop_privileges: <%= @wazuh_api_drop_privileges %>
 # Enable features under development
