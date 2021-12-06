@@ -160,7 +160,6 @@ class wazuh::params_manager {
 
       $vulnerability_detector_enabled                            = 'no'
       $vulnerability_detector_interval                           = '5m'
-      $vulnerability_detector_ignore_time                        = '6h'
       $vulnerability_detector_run_on_start                       = 'yes'
 
       $vulnerability_detector_provider_canonical                 = 'yes'
@@ -313,12 +312,12 @@ class wazuh::params_manager {
 
       $config_mode = '0640'
       $config_owner = 'root'
-      $config_group = 'ossec'
+      $config_group = 'wazuh'
 
       $keys_file = '/var/ossec/etc/client.keys'
       $keys_mode = '0640'
       $keys_owner = 'root'
-      $keys_group = 'ossec'
+      $keys_group = 'wazuh'
 
 
       $authd_pass_file = '/var/ossec/etc/authd.pass'
@@ -328,7 +327,7 @@ class wazuh::params_manager {
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0640'
       $processlist_owner = 'root'
-      $processlist_group = 'ossec'
+      $processlist_group = 'o'
 
       #API
 

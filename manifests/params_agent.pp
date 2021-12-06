@@ -3,7 +3,7 @@
 class wazuh::params_agent {
   $agent_package_version = '4.3.0-1'
   $agent_service_ensure = 'running'
-  $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
+  $agent_msi_download_location = 'http://packages-dev.wazuh.com/pre-release/windows'
 
   $agent_name = undef
   $agent_group = undef
@@ -241,19 +241,19 @@ class wazuh::params_agent {
 
       $config_mode = '0640'
       $config_owner = 'root'
-      $config_group = 'ossec'
+      $config_group = 'wazuh'
 
       $keys_file = '/var/ossec/etc/client.keys'
       $keys_mode = '0640'
       $keys_owner = 'root'
-      $keys_group = 'ossec'
+      $keys_group = 'wazuh'
 
       $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
 
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0640'
       $processlist_owner = 'root'
-      $processlist_group = 'ossec'
+      $processlist_group = 'wazuh'
 
       # ossec.conf blocks
 

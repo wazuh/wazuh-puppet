@@ -21,7 +21,7 @@ class wazuh::repo (
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/4.x/apt',
+            location => 'https://packages-dev.wazuh.com/pre-release/apt',
             release  => 'stable',
             repos    => 'main',
             include  => {
@@ -37,10 +37,10 @@ class wazuh::repo (
         case $::os[name] {
           /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
+              $baseurl  = 'https://packages-dev.wazuh.com/pre-release/yum/5/'
               $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
             } else {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/'
+              $baseurl  = 'https://packages-dev.wazuh.com/pre-release/yum/'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }
