@@ -18,12 +18,12 @@ control 'wazuh-manager' do
   wazuh_daemons = {
     'wazuh-authd' => 'root',
     'wazuh-execd' => 'root',
-    'wazuh-analysisd' => 'ossec',
+    'wazuh-analysisd' => 'wazuh',
     'wazuh-syscheckd' => 'root',
     'wazuh-remoted' => 'ossecr',
     'wazuh-logcollector' => 'root',
-    'wazuh-monitord' => 'ossec',
-    'wazuh-db' => 'ossec',
+    'wazuh-monitord' => 'wazuh',
+    'wazuh-db' => 'wazuh',
     'wazuh-modulesd' => 'root',
   }
 

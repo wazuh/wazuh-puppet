@@ -654,7 +654,7 @@ class wazuh::agent (
   if ( $wazuh_enrollment_auth_pass ) {
     file { $wazuh::params_agent::authd_pass_file:
       owner   => 'root',
-      group   => 'ossec',
+      group   => 'wazuh',
       mode    => '0640',
       content => $wazuh::params_agent::wazuh_enrollment_auth_pass,
       require => Package[$wazuh::params_agent::agent_package_name],
