@@ -327,7 +327,7 @@ class wazuh::params_manager {
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0640'
       $processlist_owner = 'root'
-      $processlist_group = 'o'
+      $processlist_group = 'wazuh'
 
       #API
 
