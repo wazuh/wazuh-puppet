@@ -300,7 +300,6 @@ class wazuh::manager (
       $wazuh_api_access_max_login_attempts      = $::wazuh::params_manager::wazuh_api_access_max_login_attempts,
       $wazuh_api_access_block_time              = $::wazuh::params_manager::wazuh_api_access_block_time,
       $wazuh_api_access_max_request_per_minute  = $::wazuh::params_manager::wazuh_api_access_max_request_per_minute,
-      $wazuh_api_use_only_authd                 = $::wazuh::params_manager::wazuh_api_use_only_authd,
       $wazuh_api_drop_privileges                = $::wazuh::params_manager::wazuh_api_drop_privileges,
       $wazuh_api_experimental_features          = $::wazuh::params_manager::wazuh_api_experimental_features,
 

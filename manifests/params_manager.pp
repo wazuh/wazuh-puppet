@@ -366,9 +366,6 @@ class wazuh::params_manager {
       $wazuh_api_access_block_time = 300
       $wazuh_api_access_max_request_per_minute = 300
 
-      # Force the use of authd when adding and removing agents. Values: yes, no
-      $wazuh_api_use_only_authd = 'no'
-
       # Drop privileges (Run as ossec user)
       $wazuh_api_drop_privileges = 'yes'
 
