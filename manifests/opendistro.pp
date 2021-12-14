@@ -43,12 +43,22 @@ class wazuh::opendistro (
   }
 
   file { 'Configure elasticsearch.yml':
-    owner   => 'elasticsearch',
+    owner   => 'root',
     path    => '/etc/elasticsearch/elasticsearch.yml',
     group   => 'elasticsearch',
     mode    => '0644',
     notify  => Service[$opendistro_service], ## Restarts the service
     content => template('wazuh/opendistro_yml.erb'),
+    require => Package[$opendistro_package],
+  }
+
+  file { 'Configure disabledlog4j.options':
+    owner   => 'elasticsearch',
+    path    => '/etc/elasticsearch/jvm.options.d/disabledlog4j.options',
+    group   => 'elasticsearch',
+    mode    => '2750',
+    notify  => Service[$opendistro_service], ## Restarts the service
+    content => template('wazuh/disabledlog4j_options.erb'),
     require => Package[$opendistro_package],
   }
 
