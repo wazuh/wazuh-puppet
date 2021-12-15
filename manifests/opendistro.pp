@@ -43,7 +43,7 @@ class wazuh::opendistro (
   }
 
   file { 'Configure elasticsearch.yml':
-    owner   => 'root',
+    owner   => 'elasticsearch',
     path    => '/etc/elasticsearch/elasticsearch.yml',
     group   => 'elasticsearch',
     mode    => '0644',
@@ -53,7 +53,7 @@ class wazuh::opendistro (
   }
 
   file { 'Configure disabledlog4j.options':
-    owner   => 'elasticsearch',
+    owner   => 'root',
     path    => '/etc/elasticsearch/jvm.options.d/disabledlog4j.options',
     group   => 'elasticsearch',
     mode    => '2750',
