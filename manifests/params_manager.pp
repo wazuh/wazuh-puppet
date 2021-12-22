@@ -212,8 +212,8 @@ class wazuh::params_manager {
       $ossec_auth_limit_maxagents                      = 'yes'
       $ossec_auth_ciphers                              = 'HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH'
       $ossec_auth_ssl_verify_host                      = 'no'
-      $ossec_auth_ssl_manager_cert                     = '/var/ossec/etc/sslmanager.cert'
-      $ossec_auth_ssl_manager_key                      = '/var/ossec/etc/sslmanager.key'
+      $ossec_auth_ssl_manager_cert                     = 'sslmanager.cert'
+      $ossec_auth_ssl_manager_key                      = 'sslmanager.key'
       $ossec_auth_ssl_auto_negotiate                   = 'no'
 
 
@@ -341,14 +341,13 @@ class wazuh::params_manager {
       $wazuh_api_https_key = 'api/configuration/ssl/server.key'
       $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
       $wazuh_api_https_use_ca = 'False'
-      $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
+      $wazuh_api_https_ca = 'ca.crt'
       $wazuh_api_ssl_protocol = 'TLSv1.2'
       $wazuh_api_ssl_ciphers  = '""'
 
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
       $wazuh_api_logs_level = 'info'
-      $wazuh_api_logs_path = 'logs/api.log'
 
       # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
       $wazuh_api_cors_enabled = 'no'
