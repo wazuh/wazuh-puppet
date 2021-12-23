@@ -338,17 +338,16 @@ class wazuh::params_manager {
 
       # Advanced configuration
       $wazuh_api_https_enabled = 'yes'
-      $wazuh_api_https_key = 'api/configuration/ssl/server.key'
-      $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
+      $wazuh_api_https_key = 'server.key'
+      $wazuh_api_https_cert = 'server.crt'
       $wazuh_api_https_use_ca = 'False'
-      $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
+      $wazuh_api_https_ca = 'ca.crt'
       $wazuh_api_ssl_protocol = 'TLSv1.2'
       $wazuh_api_ssl_ciphers  = '""'
 
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
       $wazuh_api_logs_level = 'info'
-      $wazuh_api_logs_path = 'logs/api.log'
 
       # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
       $wazuh_api_cors_enabled = 'no'
