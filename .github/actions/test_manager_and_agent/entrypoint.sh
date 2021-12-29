@@ -28,7 +28,9 @@ manager_ip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' `docker
 echo "getting a copy of ./manifests/site.pp.template"
 cp ./manifests/site.pp.template ./manifests/site.pp
 
+echo "Simbolic link for puppet executable"
 ln -s /opt/puppetlabs/bin/puppet /bin
+ls -ltr /opt/puppetlabs/bin/puppet
 
 echo "wazuh-manager IP"
 echo $manager_ip
