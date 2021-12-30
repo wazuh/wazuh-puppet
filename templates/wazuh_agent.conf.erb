@@ -7,6 +7,8 @@
     <protocol><%= @ossec_protocol %></protocol>
   <%- end -%>
     <port><%= @ossec_port %></port>
+    <max_retries><%= @wazuh_max_retries %></max_retries>
+    <retry_interval><%= @wazuh_retry_interval %></retry_interval>
   </server>
   <%- if @operatingsystem == 'Ubuntu' or @operatingsystem == 'ubuntu' -%>
     <config-profile><%= @ossec_config_ubuntu_profiles %></config-profile>
@@ -25,15 +27,59 @@
   <%- if @ossec_auto_restart then -%>
     <auto_restart><%= @ossec_auto_restart %></auto_restart>
   <%- end -%>
+  <%- if @wazuh_enrollment_enabled == 'yes' then -%>
+  <enrollment>
+    <enabled><%= @wazuh_enrollment_enabled %></enabled>
+    <%- if @wazuh_enrollment_manager_address then -%>
+    <manager_address><%= @wazuh_enrollment_manager_address %></manager_address>
+    <%- end -%>
+    <%- if @wazuh_enrollment_port then -%>
+    <port><%= @wazuh_enrollment_port %></port>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_name then -%>
+    <agent_name><%= @wazuh_enrollment_agent_name %></agent_name>
+    <%- end -%>
+    <%- if @wazuh_enrollment_groups then -%>
+    <groups><%= @wazuh_enrollment_groups %></groups>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_address then -%>
+    <agent_address><%= @wazuh_enrollment_agent_address %></agent_address>
+    <%- end -%>
+    <%- if @wazuh_enrollment_ssl_cipher then -%>
+    <ssl_cipher><%= @wazuh_enrollment_ssl_cipher %></ssl_cipher>
+    <%- end -%>
+    <%- if @wazuh_enrollment_server_ca_path then -%>
+    <server_ca_path><%= @wazuh_enrollment_server_ca_path %></server_ca_path>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_cert_path then -%>
+    <agent_certificate_path><%= @wazuh_enrollment_agent_cert_path %></agent_certificate_path>
+    <%- end -%>
+    <%- if @wazuh_enrollment_agent_key_path then -%>
+    <agent_key_path><%= @wazuh_enrollment_agent_key_path %></agent_key_path>
+    <%- end -%>
+    <%- if @wazuh_enrollment_auth_pass_path then -%>
+    <authorization_pass_path><%= @wazuh_enrollment_auth_pass_path %></authorization_pass_path>
+    <%- end -%>
+    <%- if @wazuh_enrollment_auto_method then -%>
+    <auto_method><%= @wazuh_enrollment_auto_method %></auto_method>
+    <%- end -%>
+    <%- if @wazuh_delay_after_enrollment then -%>
+    <delay_after_enrollment><%= @wazuh_delay_after_enrollment %></delay_after_enrollment>
+    <%- end -%>
+    <%- if @wazuh_enrollment_use_source_ip then -%>
+    <use_source_ip><%= @wazuh_enrollment_use_source_ip %></use_source_ip>
+    <%- end -%>
+  </enrollment>
+  <%- end -%>
   </client>
-  
+
   <logging>
     <log_format><%= @logging_log_format %></log_format>
   </logging>
 
   <client_buffer>
     <!-- Agent buffer options -->
-    <disabled>no</disabled>
+    <disabled><%= @client_buffer_disabled %></disabled>
     <queue_size><%= @client_buffer_queue_size %></queue_size>
     <events_per_second><%= @client_buffer_events_per_second %></events_per_second>
   </client_buffer>

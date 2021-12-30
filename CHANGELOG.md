@@ -1,6 +1,163 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+
+## Wazuh Puppet v4.4.0
+
+### Added
+
+- Support to 4.4.0 Wazuh release.
+
+## Wazuh Puppet v4.3.0
+
+### Added
+
+- Support to 4.3.0 Wazuh release.
+
+## Wazuh Puppet v4.2.5
+
+### Added
+
+- Support to 4.2.5 Wazuh release.
+
+## Wazuh Puppet v4.2.4
+
+### Added
+
+- Support to 4.2.4 Wazuh release.
+
+## Wazuh Puppet v4.2.3
+
+### Added
+
+- Support to 4.2.3 Wazuh release.
+
+## Wazuh Puppet v4.2.2
+
+### Added
+
+- Support to 4.2.2 Wazuh release.
+
+### Fixed
+
+- Fixed a bug in the agent.pp manifest that prevented the Wazuh Agent from upgrading in Windows ([#374](https://github.com/wazuh/wazuh-puppet/issues/374))
+
+## Wazuh Puppet v4.2.1
+
+### Added
+
+- Support to 4.2.1 Wazuh release.
+
+## Wazuh Puppet v4.2.0
+
+### Added
+
+- Support to 4.2.0 Wazuh release.
+
+## Wazuh Puppet v4.1.5
+
+### Added
+
+- Support to 4.1.5 Wazuh release.
+
+
+## Wazuh Puppet v4.0.4
+
+### Added
+
+- Update to Wazuh [v4.0.4](https://github.com/wazuh/wazuh-ansible/blob/v4.0.4/CHANGELOG.md)
+- Add support for Elasticsearch cluster in Kibana manifests  ([@neonmei](https://github.com/neonmei)) [PR#317](https://github.com/wazuh/wazuh-puppet/pull/317)
+- Add support for Ubuntu 20.04 (Focal Fossa)  ([@Zenidd](https://github.com/Zenidd), [@neonmei](https://github.com/neonmei)) [PR#321](https://github.com/wazuh/wazuh-puppet/pull/321)
+### Fixed
+
+- Idempotency improvements in Elasticsearch manifests  ([@neonmei](https://github.com/neonmei)) [PR#313](https://github.com/wazuh/wazuh-puppet/pull/313)
+- Linting improvements work for Puppet Forge publishing  ([@Zenidd](https://github.com/Zenidd)) [PR#314](https://github.com/wazuh/wazuh-puppet/pull/314)
+- Idempotency improvements in Kibana manifests  ([@neonmei](https://github.com/neonmei)) [PR#315](https://github.com/wazuh/wazuh-puppet/pull/315)
+- PDK validate improvements  ([@neonmei](https://github.com/neonmei)) [PR#319](https://github.com/wazuh/wazuh-puppet/pull/319)
+- Fix warnings due to undefined variables  ([@Hexta](https://github.com/Hexta)) [PR#331](https://github.com/wazuh/wazuh-puppet/pull/331)
+-  Use `manager_ossec.conf` as render target for Integrations  ([@Zenidd](https://github.com/Zenidd)) [PR#327](https://github.com/wazuh/wazuh-puppet/pull/327)
+-  Use `manager_ossec.conf` as render target for Reports  ([@Zenidd](https://github.com/Zenidd)) [PR#328](https://github.com/wazuh/wazuh-puppet/pull/328)
+-  Remove manager-specific options for active response in agent manifest  ([@Zenidd](https://github.com/Zenidd)) [PR#332](https://github.com/wazuh/wazuh-puppet/pull/332)
+-  Fix stdlib deprecation warnings related to `validate_*` functions ([@Hexta](https://github.com/Hexta)) [PR#334](https://github.com/wazuh/wazuh-puppet/pull/334)
+-  Update target name in concat resources for `manager_ossec.conf`  ([@g3rhard](https://github.com/g3rhard )) [PR#341](https://github.com/wazuh/wazuh-puppet/pull/341)
+
+## Wazuh Puppet v4.0.3
+
+### Added
+
+- Update to Wazuh version 4.0.3
+
+### Fixed
+
+- Templates: update jvm.options template with version information  ([@neonmei](https://github.com/neonmei)) [PR#310](https://github.com/wazuh/wazuh-puppet/pull/310)
+- Restart manager service after modifying agent_auth_password  ([@Fabian1976](https://github.com/Fabian1976)) [PR#307](https://github.com/wazuh/wazuh-puppet/pull/307)
+
+
+## Wazuh Puppet v4.0.2
+
+### Added
+
+- Update to Wazuh version 4.0.2
+
+### Fixed
+
+- Syscheck 'report_changes' option ([@oletos7j](https://github.com/oletos7j)) [PR#306](https://github.com/wazuh/wazuh-puppet/pull/306)
+
+
+## Wazuh Puppet v4.0.1
+
+### Added
+
+- Update to Wazuh version 4.0.1
+- Support for Wazuh v4 new features ([@Zenidd](https://github.com/Zenidd)) [PR#300](https://github.com/wazuh/wazuh-puppet/pull/300):
+  - Agent autoenrollment
+  - API RBAC
+
+
+## Wazuh Puppet v3.13.2
+
+### Added
+
+- Update to Wazuh version 3.13.2
+
+- wazuh-puppet tests on GitHub Actions ([@Zenidd](https://github.com/Zenidd)) [PR#274](https://github.com/wazuh/wazuh-puppet/pull/274)
+
+- Support Open Distro for Elasticsearch deployments ([@Zenidd](https://github.com/Zenidd)) [PR#285](https://github.com/wazuh/wazuh-puppet/pull/285)
+
+### Fixed
+
+- ossec.conf concat resources rename ([@Zenidd](https://github.com/Zenidd)) [PR#293](https://github.com/wazuh/wazuh-puppet/pull/293)
+
+- Adding syslog_output support on wazuh-puppet ([@Zenidd](https://github.com/Zenidd)) [PR#276](https://github.com/wazuh/wazuh-puppet/pull/276)
+
+
+## Wazuh Puppet v3.13.1_7.8.0
+
+### Added
+
+- Update to Wazuh version 3.13.1_7.8.0
+
+
+## Wazuh Puppet v3.13.0_7.7.1
+
+### Added
+
+- Update to Wazuh version 3.13.0_7.7.1
+- Add syscollector related config in Wazuh Agent manifest ([@rshad](https://github.com/rshad)) [PR#241](https://github.com/wazuh/wazuh-puppet/pull/241)
+
+## Wazuh Puppet v3.12.3_7.6.2
+
+### Added
+
+- Update to Wazuh version 3.12.3_7.6.2
+- Add option for report files changes in syscheck ([@Hexta](https://github.com/Hexta)) [PR#212](https://github.com/wazuh/wazuh-puppet/pull/212)
+
+## Wazuh Puppet v3.12.2_7.6.2
+
+### Added
+
+- Update to Wazuh version 3.12.2_7.6.2
+
 ## Wazuh Puppet v3.12.0_7.6.1
 
 ### Added

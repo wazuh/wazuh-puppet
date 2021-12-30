@@ -1,0 +1,51 @@
+---
+driver:
+  name: docker
+  use_sudo: false
+  use_internal_docker_network: true
+  remove_images: true
+
+provisioner:
+  name: puppet_apply
+  manifests_path: manifests
+  modules_path: modules
+  hiera_data_path: hieradata
+
+platforms:
+  - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
+    driver_config:
+      image: <%= ENV['IMAGE'] %>
+      platform: <%= ENV['PLATFORM'] %>
+      hostname: manager_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
+      run_command: <%= ENV['RUN_COMMAND'] %>
+      privileged: true
+      volume:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      provision_command:
+        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+
+  - name: <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
+    driver_config:
+      image: <%= ENV['IMAGE'] %>
+      platform: <%= ENV['PLATFORM'] %>
+      hostname: agent_<%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>
+      run_command: <%= ENV['RUN_COMMAND'] %>
+      privileged: true
+      volume:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      provision_command:
+        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+suites:
+  - name: mngr
+    manifest: site.pp
+    verifier:
+      name: inspec
+    includes:
+      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
+
+  - name: agent
+    manifest: site.pp
+    verifier:
+      name: inspec
+    includes:
+      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet

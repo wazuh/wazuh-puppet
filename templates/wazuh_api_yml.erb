@@ -1,0 +1,50 @@
+#
+# Wazuh API configuration file
+# Copyright (C) 2015-2021 Wazuh, Inc.
+#
+host: <%= @wazuh_api_host %>
+port: <%= @wazuh_api_port %>
+# Advanced configuration
+https:
+  enabled: <%= @wazuh_api_https_enabled %>
+  key: <%= @wazuh_api_https_key %>
+  cert: <%= @wazuh_api_https_cert %>
+  use_ca: <%= @wazuh_api_https_use_ca %>
+  ca: <%= @wazuh_api_https_ca %>
+  ssl_protocol: <%= @wazuh_api_ssl_protocol %>
+  ssl_ciphers: <%= @wazuh_api_ssl_ciphers %>
+# Logging configuration
+# Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
+logs:
+  level: <%= @wazuh_api_logs_level %>
+  path: <%= @wazuh_api_logs_path %>
+# Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
+cors:
+  enabled: <%= @wazuh_api_cors_enabled %>
+  source_route: <%= @wazuh_api_cors_source_route %>
+  expose_headers: <%= @wazuh_api_cors_expose_headers %>
+  allow_headers: <%= @wazuh_api_cors_allow_headers %>
+  allow_credentials: <%= @wazuh_api_cors_allow_credentials %>
+# Cache (time in seconds)
+cache:
+  enabled: <%= @wazuh_api_cache_enabled %>
+  time: <%= @wazuh_api_cache_time %>
+# Access parameters
+access:
+  max_login_attempts: <%= @wazuh_api_access_max_login_attempts %>
+  block_time: <%= @wazuh_api_access_block_time %>
+  max_request_per_minute: <%= @wazuh_api_access_max_request_per_minute %>
+# Force the use of authd when adding and removing agents. Values: yes, no
+use_only_authd: <%= @wazuh_api_use_only_authd %>
+# Drop privileges (Run as ossec user)
+drop_privileges: <%= @wazuh_api_drop_privileges %>
+# Enable features under development
+experimental_features: <%= @wazuh_api_experimental_features %>
+# Enable remote commands
+remote_commands:
+  localfile:
+    enabled: <%= @remote_commands_localfile %>
+    exceptions: <%= @remote_commands_localfile_exceptions %>
+  wodle_command:
+    enabled: <%= @remote_commands_wodle %>
+    exceptions: <%= @remote_commands_wodle_exceptions %>

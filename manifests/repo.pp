@@ -1,11 +1,12 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Wazuh repository installation
 class wazuh::repo (
 ) {
 
   case $::osfamily {
     'Debian' : {
-      if ! defined(Package['apt-transport-https']) {
+      if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|focal)/
+      and ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
       # apt-key added by issue #34
@@ -15,12 +16,12 @@ class wazuh::repo (
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic)/: {
+        /(jessie|wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/3.x/apt',
+            location => 'https://packages.wazuh.com/4.x/apt',
             release  => 'stable',
             repos    => 'main',
             include  => {
@@ -36,10 +37,10 @@ class wazuh::repo (
         case $::os[name] {
           /^(CentOS|RedHat|OracleLinux|Fedora|Amazon)$/: {
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $baseurl  = 'https://packages.wazuh.com/3.x/yum/5/'
+              $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
               $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH-5'
             } else {
-              $baseurl  = 'https://packages.wazuh.com/3.x/yum/'
+              $baseurl  = 'https://packages.wazuh.com/4.x/yum/'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }

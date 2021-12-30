@@ -1,0 +1,14 @@
+node /^manager/ {
+  class { 'wazuh::manager':}
+}
+node /^agent/ {
+  class { 'wazuh::agent':
+        wazuh_register_endpoint => 'manager_ip',
+        wazuh_reporting_endpoint => 'manager_ip',
+  }
+}
+
+node default {
+  notify { 'This node did not match any of the listed definitions': }
+}
+

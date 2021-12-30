@@ -1,11 +1,11 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Paramas file
 class wazuh::params_manager {
   case $::kernel {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '3.12.0-1'
+      $server_package_version                          = '4.4.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -25,7 +25,8 @@ class wazuh::params_manager {
       $ossec_email_alert_level                         = 12
       $ossec_remote_connection                         = 'secure'
       $ossec_remote_port                               = 1514
-      $ossec_remote_protocol                           = 'udp'
+      $ossec_remote_protocol                           = 'tcp'
+      $ossec_remote_local_ip                           = undef
       $ossec_remote_queue_size                         = 131072
 
     # ossec.conf generation parameters
@@ -35,6 +36,7 @@ class wazuh::params_manager {
       $configure_wodle_cis_cat                         = true
       $configure_wodle_osquery                         = true
       $configure_wodle_syscollector                    = true
+      $configure_wodle_docker_listener                 = false
       $configure_vulnerability_detector                = true
       $configure_sca                                   = true
       $configure_syscheck                              = true
@@ -53,6 +55,7 @@ class wazuh::params_manager {
       $ossec_wodle_cis_cat_template                    = 'wazuh/fragments/_wodle_cis_cat.erb'
       $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
       $ossec_wodle_syscollector_template               = 'wazuh/fragments/_wodle_syscollector.erb'
+      $ossec_wodle_docker_listener_template            = 'wazuh/fragments/_wodle_docker_listener.erb'
       $ossec_vulnerability_detector_template           = 'wazuh/fragments/_vulnerability_detector.erb'
       $ossec_sca_template                              = 'wazuh/fragments/_sca.erb'
       $ossec_syscheck_template                         = 'wazuh/fragments/_syscheck.erb'
@@ -62,6 +65,7 @@ class wazuh::params_manager {
       $ossec_auth_template                             = 'wazuh/fragments/_auth.erb'
       $ossec_cluster_template                          = 'wazuh/fragments/_cluster.erb'
       $ossec_active_response_template                  = 'wazuh/fragments/_default_activeresponse.erb'
+      $ossec_syslog_output_template                    = 'wazuh/fragments/_syslog_output.erb'
 
       ## Rootcheck
 
@@ -75,6 +79,7 @@ class wazuh::params_manager {
       $ossec_rootcheck_check_if                        = 'yes'
       $ossec_rootcheck_frequency                       = 43200
       $ossec_rootcheck_ignore_list                     = []
+      $ossec_rootcheck_ignore_sregex_list              = []
       $ossec_rootcheck_rootkit_files                   = '/var/ossec/etc/rootcheck/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
@@ -139,6 +144,8 @@ class wazuh::params_manager {
       $wodle_syscollector_ports                        = 'yes'
       $wodle_syscollector_processes                    = 'yes'
 
+      #docker-listener
+      $wodle_docker_listener_disabled                  = 'no'
 
       #active-response
       $active_response_command                         = 'firewall-drop'
@@ -158,8 +165,7 @@ class wazuh::params_manager {
 
       $vulnerability_detector_provider_canonical                 = 'yes'
       $vulnerability_detector_provider_canonical_enabled         = 'no'
-      $vulnerability_detector_provider_canonical_os              = ['precise',
-        'trusty',
+      $vulnerability_detector_provider_canonical_os              = ['trusty',
         'xenial',
         'bionic'
       ]
@@ -198,8 +204,10 @@ class wazuh::params_manager {
       $ossec_auth_disabled                             = 'no'
       $ossec_auth_port                                 = 1515
       $ossec_auth_use_source_ip                        = 'yes'
-      $ossec_auth_force_insert                         = 'yes'
-      $ossec_auth_force_time                           = 0
+      $ossec_auth_force_enabled                        = 'yes'
+      $ossec_auth_force_key_mismatch                   = 'yes'
+      $ossec_auth_force_disc_time                      = '1h'
+      $ossec_auth_force_after_reg_time                 = '1h'
       $ossec_auth_purgue                               = 'yes'
       $ossec_auth_use_password                         = 'no'
       $ossec_auth_limit_maxagents                      = 'yes'
@@ -215,7 +223,6 @@ class wazuh::params_manager {
       $ossec_syscheck_disabled                         = 'no'
       $ossec_syscheck_frequency                        = '43200'
       $ossec_syscheck_scan_on_start                    = 'yes'
-      $ossec_syscheck_alert_new_files                  = 'yes'
       $ossec_syscheck_auto_ignore                      = 'no'
       $ossec_syscheck_directories_1                    = '/etc,/usr/bin,/usr/sbin'
       $ossec_syscheck_directories_2                    = '/bin,/sbin,/boot'
@@ -242,6 +249,12 @@ class wazuh::params_manager {
       $ossec_syscheck_ignore_type_1                    = '^/proc'
       $ossec_syscheck_ignore_type_2                    = '.log$|.swp$'
 
+      $ossec_syscheck_max_eps = '100'
+      $ossec_syscheck_process_priority = '10'
+      $ossec_syscheck_synchronization_enabled = 'yes'
+      $ossec_syscheck_synchronization_interval = '5m'
+      $ossec_syscheck_synchronization_max_eps = '10'
+      $ossec_syscheck_synchronization_max_interval = '1h'
 
       $ossec_syscheck_nodiff                           = '/etc/ssl/private.key'
       $ossec_syscheck_skip_nfs                         = 'yes'
@@ -317,6 +330,61 @@ class wazuh::params_manager {
       $processlist_owner = 'root'
       $processlist_group = 'ossec'
 
+      #API
+
+      $wazuh_api_host = '0.0.0.0'
+      $wazuh_api_port = '55000'
+
+      $wazuh_api_file =  undef
+
+      # Advanced configuration
+      $wazuh_api_https_enabled = 'yes'
+      $wazuh_api_https_key = 'api/configuration/ssl/server.key'
+      $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
+      $wazuh_api_https_use_ca = 'False'
+      $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
+      $wazuh_api_ssl_protocol = 'TLSv1.2'
+      $wazuh_api_ssl_ciphers  = '""'
+
+      # Logging configuration
+      # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
+      $wazuh_api_logs_level = 'info'
+      $wazuh_api_logs_path = 'logs/api.log'
+
+      # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
+      $wazuh_api_cors_enabled = 'no'
+      $wazuh_api_cors_source_route = '"*"'
+      $wazuh_api_cors_expose_headers = '"*"'
+      $wazuh_api_cors_allow_headers = '"*"'
+      $wazuh_api_cors_allow_credentials = 'no'
+
+      # Cache (time in seconds)
+      $wazuh_api_cache_enabled = 'yes'
+      $wazuh_api_cache_time = '0.750'
+
+      # Access parameters
+      $wazuh_api_access_max_login_attempts = 5
+      $wazuh_api_access_block_time = 300
+      $wazuh_api_access_max_request_per_minute = 300
+
+      # Force the use of authd when adding and removing agents. Values: yes, no
+      $wazuh_api_use_only_authd = 'no'
+
+      # Drop privileges (Run as ossec user)
+      $wazuh_api_drop_privileges = 'yes'
+
+      # Enable features under development
+      $wazuh_api_experimental_features = 'no'
+
+      # Enable remote commands
+      $remote_commands_localfile = 'yes'
+      $remote_commands_localfile_exceptions = []
+      $remote_commands_wodle = 'yes'
+      $remote_commands_wodle_exceptions = []
+
+      # Wazuh API template path
+      $wazuh_api_template = 'wazuh/wazuh_api.erb'
+
 
       case $::osfamily {
         'Debian': {
@@ -337,8 +405,6 @@ class wazuh::params_manager {
             'xenial': {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-ubuntu-1604-ds.xml' => {
                   'type' => 'xccdf',
@@ -351,8 +417,6 @@ class wazuh::params_manager {
             'jessie': {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = {
                 'ssg-debian-8-ds.xml' => {
                   'type' => 'xccdf',
@@ -363,11 +427,9 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|bionic)$/: {
+            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
-              $api_service = 'wazuh-api'
-              $api_package = 'wazuh-api'
               $wodle_openscap_content = undef
             }
         default: {
@@ -382,8 +444,6 @@ class wazuh::params_manager {
           $agent_package  = 'wazuh-agent'
           $server_service = 'wazuh-manager'
           $server_package = 'wazuh-manager'
-          $api_service = 'wazuh-api'
-          $api_package = 'wazuh-api'
           $service_has_status  = true
 
           $default_local_files =[
@@ -484,8 +544,8 @@ class wazuh::params_manager {
       $keys_owner = 'Administrator'
       $keys_group = 'Administrators'
 
-      $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 3.12.0'
+      $agent_service  = 'WazuhSvc'
+      $agent_package  = 'Wazuh Agent 4.4.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''

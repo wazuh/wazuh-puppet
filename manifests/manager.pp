@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2019 Wazuh Inc. (License GPLv2)
+# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Main ossec server config
 class wazuh::manager (
 
@@ -26,6 +26,7 @@ class wazuh::manager (
       $ossec_remote_connection          = $wazuh::params_manager::ossec_remote_connection,
       $ossec_remote_port                = $wazuh::params_manager::ossec_remote_port,
       $ossec_remote_protocol            = $wazuh::params_manager::ossec_remote_protocol,
+      $ossec_remote_local_ip            = $wazuh::params_manager::ossec_remote_local_ip,
       $ossec_remote_queue_size          = $wazuh::params_manager::ossec_remote_queue_size,
 
       # ossec.conf generation parameters
@@ -35,6 +36,7 @@ class wazuh::manager (
       $configure_wodle_cis_cat              = $wazuh::params_manager::configure_wodle_cis_cat,
       $configure_wodle_osquery              = $wazuh::params_manager::configure_wodle_osquery,
       $configure_wodle_syscollector         = $wazuh::params_manager::configure_wodle_syscollector,
+      $configure_wodle_docker_listener      = $wazuh::params_manager::configure_wodle_docker_listener,
       $configure_vulnerability_detector     = $wazuh::params_manager::configure_vulnerability_detector,
       $configure_sca                        = $wazuh::params_manager::configure_sca,
       $configure_syscheck                   = $wazuh::params_manager::configure_syscheck,
@@ -52,7 +54,8 @@ class wazuh::manager (
       $ossec_wodle_cis_cat_template                 = $wazuh::params_manager::ossec_wodle_cis_cat_template,
       $ossec_wodle_osquery_template                 = $wazuh::params_manager::ossec_wodle_osquery_template,
       $ossec_wodle_syscollector_template            = $wazuh::params_manager::ossec_wodle_syscollector_template,
-      $ossec_vulnerability_detector_template  = $wazuh::params_manager::ossec_vulnerability_detector_template,
+      $ossec_wodle_docker_listener_template         = $wazuh::params_manager::ossec_wodle_docker_listener_template,
+      $ossec_vulnerability_detector_template        = $wazuh::params_manager::ossec_vulnerability_detector_template,
       $ossec_sca_template                           = $wazuh::params_manager::ossec_sca_template,
       $ossec_syscheck_template                      = $wazuh::params_manager::ossec_syscheck_template,
       $ossec_default_commands_template              = $wazuh::params_manager::ossec_default_commands_template,
@@ -61,6 +64,7 @@ class wazuh::manager (
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
+      $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
 
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
@@ -84,6 +88,7 @@ class wazuh::manager (
       $ossec_rootcheck_check_if             = $wazuh::params_manager::ossec_rootcheck_check_if,
       $ossec_rootcheck_frequency            = $wazuh::params_manager::ossec_rootcheck_frequency,
       $ossec_rootcheck_ignore_list          = $wazuh::params_manager::ossec_rootcheck_ignore_list,
+      $ossec_rootcheck_ignore_sregex_list   = $wazuh::params_manager::ossec_rootcheck_ignore_sregex_list,
       $ossec_rootcheck_rootkit_files        = $wazuh::params_manager::ossec_rootcheck_rootkit_files,
       $ossec_rootcheck_rootkit_trojans      = $wazuh::params_manager::ossec_rootcheck_rootkit_trojans,
       $ossec_rootcheck_skip_nfs             = $wazuh::params_manager::ossec_rootcheck_skip_nfs,
@@ -147,6 +152,9 @@ class wazuh::manager (
       $wodle_syscollector_ports             = $wazuh::params_manager::wodle_syscollector_ports,
       $wodle_syscollector_processes         = $wazuh::params_manager::wodle_syscollector_processes,
 
+      #docker-listener
+      $wodle_docker_listener_disabled       = $wazuh::params_manager::wodle_docker_listener_disabled,
+
       #vulnerability-detector
       $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
       $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
@@ -178,7 +186,7 @@ class wazuh::manager (
 
 
       # syslog
-      $syslog_output                        = $::wazuh::params_manager::syslog_output,
+      $syslog_output                        = $wazuh::params_manager::syslog_output,
       $syslog_output_level                  = $wazuh::params_manager::syslog_output_level,
       $syslog_output_port                   = $wazuh::params_manager::syslog_output_port,
       $syslog_output_server                 = $wazuh::params_manager::syslog_output_server,
@@ -188,8 +196,10 @@ class wazuh::manager (
       $ossec_auth_disabled                  = $wazuh::params_manager::ossec_auth_disabled,
       $ossec_auth_port                      = $wazuh::params_manager::ossec_auth_port,
       $ossec_auth_use_source_ip             = $wazuh::params_manager::ossec_auth_use_source_ip,
-      $ossec_auth_force_insert              = $wazuh::params_manager::ossec_auth_force_insert,
-      $ossec_auth_force_time                = $wazuh::params_manager::ossec_auth_force_time,
+      $ossec_auth_force_enabled             = $wazuh::params_manager::ossec_auth_force_enabled,
+      $ossec_auth_force_key_mismatch        = $wazuh::params_manager::ossec_auth_force_key_mismatch,
+      $ossec_auth_force_disc_time           = $wazuh::params_manager::ossec_auth_force_disc_time,
+      $ossec_auth_force_after_reg_time      = $wazuh::params_manager::ossec_auth_force_after_reg_time,
       $ossec_auth_purgue                    = $wazuh::params_manager::ossec_auth_purgue,
       $ossec_auth_use_password              = $wazuh::params_manager::ossec_auth_use_password,
       $ossec_auth_limit_maxagents           = $wazuh::params_manager::ossec_auth_limit_maxagents,
@@ -204,7 +214,6 @@ class wazuh::manager (
       $ossec_syscheck_disabled              = $wazuh::params_manager::ossec_syscheck_disabled,
       $ossec_syscheck_frequency             = $wazuh::params_manager::ossec_syscheck_frequency,
       $ossec_syscheck_scan_on_start         = $wazuh::params_manager::ossec_syscheck_scan_on_start,
-      $ossec_syscheck_alert_new_files       = $wazuh::params_manager::ossec_syscheck_alert_new_files,
       $ossec_syscheck_auto_ignore           = $wazuh::params_manager::ossec_syscheck_auto_ignore,
       $ossec_syscheck_directories_1         = $wazuh::params_manager::ossec_syscheck_directories_1,
       $ossec_syscheck_directories_2         = $wazuh::params_manager::ossec_syscheck_directories_2,
@@ -216,6 +225,11 @@ class wazuh::manager (
 
       $ossec_syscheck_ignore_type_1         = $wazuh::params_manager::ossec_syscheck_ignore_type_1,
       $ossec_syscheck_ignore_type_2         = $wazuh::params_manager::ossec_syscheck_ignore_type_2,
+      $ossec_syscheck_process_priority             = $wazuh::params_manager::ossec_syscheck_process_priority,
+      $ossec_syscheck_synchronization_enabled      = $wazuh::params_manager::ossec_syscheck_synchronization_enabled,
+      $ossec_syscheck_synchronization_interval     = $wazuh::params_manager::ossec_syscheck_synchronization_interval,
+      $ossec_syscheck_synchronization_max_eps      = $wazuh::params_manager::ossec_syscheck_synchronization_max_eps,
+      $ossec_syscheck_synchronization_max_interval = $wazuh::params_manager::ossec_syscheck_synchronization_max_interval,
 
       $ossec_syscheck_nodiff                = $wazuh::params_manager::ossec_syscheck_nodiff,
       $ossec_syscheck_skip_nfs              = $wazuh::params_manager::ossec_syscheck_skip_nfs,
@@ -254,12 +268,59 @@ class wazuh::manager (
       $wazuh_manager_server_key             = $wazuh::params_manager::wazuh_manager_server_key,
 
       $ossec_local_files                    = $::wazuh::params_manager::default_local_files,
+
+      # API
+
+
+      $wazuh_api_host                           = $wazuh::params_manager::wazuh_api_host,
+
+      $wazuh_api_port                           = $wazuh::params_manager::wazuh_api_port,
+      $wazuh_api_file                           = $wazuh::params_manager::wazuh_api_file,
+
+      $wazuh_api_https_enabled                  = $wazuh::params_manager::wazuh_api_https_enabled,
+      $wazuh_api_https_key                      = $wazuh::params_manager::wazuh_api_https_key,
+
+      $wazuh_api_https_cert                     = $wazuh::params_manager::wazuh_api_https_cert,
+      $wazuh_api_https_use_ca                   = $wazuh::params_manager::wazuh_api_https_use_ca,
+      $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
+      $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
+      $wazuh_api_logs_path                      = $wazuh::params_manager::wazuh_api_logs_path,
+      $wazuh_api_ssl_ciphers                    = $wazuh::params_manager::wazuh_api_ssl_ciphers,
+      $wazuh_api_ssl_protocol                   = $wazuh::params_manager::wazuh_api_ssl_protocol,
+
+      $wazuh_api_cors_enabled                   = $wazuh::params_manager::wazuh_api_cors_enabled,
+      $wazuh_api_cors_source_route              = $wazuh::params_manager::wazuh_api_cors_source_route,
+      $wazuh_api_cors_expose_headers            = $wazuh::params_manager::wazuh_api_cors_expose_headers,
+
+
+      $wazuh_api_cors_allow_credentials         = $::wazuh::params_manager::wazuh_api_cors_allow_credentials,
+      $wazuh_api_cache_enabled                  = $::wazuh::params_manager::wazuh_api_cache_enabled,
+
+      $wazuh_api_cache_time                     = $::wazuh::params_manager::wazuh_api_cache_time,
+
+      $wazuh_api_access_max_login_attempts      = $::wazuh::params_manager::wazuh_api_access_max_login_attempts,
+      $wazuh_api_access_block_time              = $::wazuh::params_manager::wazuh_api_access_block_time,
+      $wazuh_api_access_max_request_per_minute  = $::wazuh::params_manager::wazuh_api_access_max_request_per_minute,
+      $wazuh_api_use_only_authd                 = $::wazuh::params_manager::wazuh_api_use_only_authd,
+      $wazuh_api_drop_privileges                = $::wazuh::params_manager::wazuh_api_drop_privileges,
+      $wazuh_api_experimental_features          = $::wazuh::params_manager::wazuh_api_experimental_features,
+
+      $remote_commands_localfile                = $::wazuh::params_manager::remote_commands_localfile,
+      $remote_commands_localfile_exceptions     = $::wazuh::params_manager::remote_commands_localfile_exceptions,
+      $remote_commands_wodle                    = $::wazuh::params_manager::remote_commands_wodle,
+      $remote_commands_wodle_exceptions         = $::wazuh::params_manager::remote_commands_wodle_exceptions,
+
+      $wazuh_api_template                       = $::wazuh::params_manager::wazuh_api_template,
+
+
+
+
 ) inherits wazuh::params_manager {
-  validate_bool(
-    $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
+  validate_legacy(
+    Boolean, 'validate_bool', $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
   )
-  validate_array(
-    $decoder_exclude, $rule_exclude
+  validate_legacy(
+    Array, 'validate_array', $decoder_exclude, $rule_exclude
   )
 
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
@@ -289,14 +350,14 @@ class wazuh::manager (
 
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  validate_bool($ossec_emailnotification)
+  validate_legacy(Boolean, 'validate_bool', $ossec_emailnotification)
   if ($ossec_emailnotification) {
     if $ossec_smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
-    validate_string($ossec_smtp_server)
-    validate_string($ossec_emailfrom)
-    validate_array($ossec_emailto)
+    validate_legacy(String, 'validate_string', $ossec_smtp_server)
+    validate_legacy(String, 'validate_string', $ossec_emailfrom)
+    validate_legacy(Array, 'validate_array', $ossec_emailto)
   }
 
   if $::osfamily == 'windows' {
@@ -314,7 +375,6 @@ class wazuh::manager (
       Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
     }
   }
-
   # Install and configure Wazuh-manager package
 
   package { $wazuh::params_manager::server_package:
@@ -377,7 +437,7 @@ class wazuh::manager (
 
 
 
-  concat { 'ossec.conf':
+  concat { 'manager_ossec.conf':
     path    => $wazuh::params_manager::config_file,
     owner   => $wazuh::params_manager::config_owner,
     group   => $wazuh::params_manager::config_group,
@@ -387,19 +447,28 @@ class wazuh::manager (
   }
   concat::fragment {
     'ossec.conf_header':
-      target  => 'ossec.conf',
+      target  => 'manager_ossec.conf',
       order   => 00,
       content => "<ossec_config>\n";
     'ossec.conf_main':
-      target  => 'ossec.conf',
+      target  => 'manager_ossec.conf',
       order   => 01,
       content => template($ossec_manager_template);
   }
+
+  if ($syslog_output == true){
+    concat::fragment {
+      'ossec.conf_syslog_output':
+        target  => 'manager_ossec.conf',
+        content => template($ossec_syslog_output_template);
+    }
+  }
+
   if($configure_rootcheck == true){
     concat::fragment {
         'ossec.conf_rootcheck':
           order   => 10,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_rootcheck_template);
       }
   }
@@ -408,7 +477,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_openscap':
         order   => 15,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_openscap_template);
     }
   }
@@ -416,7 +485,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_ciscat':
         order   => 20,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_cis_cat_template);
     }
   }
@@ -424,7 +493,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_osquery':
         order   => 25,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_osquery_template);
     }
   }
@@ -432,15 +501,23 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_wodle_syscollector':
         order   => 30,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_wodle_syscollector_template);
+    }
+  }
+  if ($configure_wodle_docker_listener == true){
+    concat::fragment {
+      'ossec.conf_wodle_docker_listener':
+        order   => 30,
+        target  => 'manager_ossec.conf',
+        content => template($ossec_wodle_docker_listener_template);
     }
   }
   if ($configure_sca == true){
     concat::fragment {
       'ossec.conf_sca':
         order   => 40,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_sca_template);
       }
   }
@@ -448,7 +525,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_vulnerability_detector':
         order   => 45,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_vulnerability_detector_template);
     }
   }
@@ -456,7 +533,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_syscheck':
         order   => 55,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_syscheck_template);
     }
   }
@@ -464,7 +541,7 @@ class wazuh::manager (
     concat::fragment {
           'ossec.conf_command':
             order   => 60,
-            target  => 'ossec.conf',
+            target  => 'manager_ossec.conf',
             content => template($ossec_default_commands_template);
       }
   }
@@ -472,7 +549,7 @@ class wazuh::manager (
     concat::fragment {
       'ossec.conf_localfile':
         order   => 65,
-        target  => 'ossec.conf',
+        target  => 'manager_ossec.conf',
         content => template($ossec_localfile_template);
     }
   }
@@ -480,7 +557,7 @@ class wazuh::manager (
     concat::fragment {
         'ossec.conf_ruleset':
           order   => 75,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_ruleset_template);
       }
   }
@@ -488,7 +565,7 @@ class wazuh::manager (
     concat::fragment {
         'ossec.conf_auth':
           order   => 80,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_auth_template);
       }
   }
@@ -496,7 +573,7 @@ class wazuh::manager (
     concat::fragment {
         'ossec.conf_cluster':
           order   => 85,
-          target  => 'ossec.conf',
+          target  => 'manager_ossec.conf',
           content => template($ossec_cluster_template);
       }
   }
@@ -514,7 +591,7 @@ class wazuh::manager (
   }
   concat::fragment {
     'ossec.conf_footer':
-      target  => 'ossec.conf',
+      target  => 'manager_ossec.conf',
       order   => 99,
       content => "</ossec_config>\n";
   }
@@ -529,6 +606,7 @@ class wazuh::manager (
       mode    => $wazuh::params_manager::keys_mode,
       content => $agent_auth_password,
       require => Package[$wazuh::params_manager::server_package],
+      notify  => Service[$wazuh::params_manager::server_service],
     }
   }
 
@@ -536,8 +614,8 @@ class wazuh::manager (
   if $wazuh_manager_verify_manager_ssl {
 
     if ($wazuh_manager_server_crt != undef) and ($wazuh_manager_server_key != undef) {
-      validate_string(
-        $wazuh_manager_server_crt, $wazuh_manager_server_key
+      validate_legacy(
+        String, 'validate_string', $wazuh_manager_server_crt, $wazuh_manager_server_key
       )
 
       file { '/var/ossec/etc/sslmanager.key':
@@ -592,6 +670,15 @@ class wazuh::manager (
       unless  => '/sbin/auditctl -l | grep wazuh_fim',
       tries   => 2
     }
+  }
+
+  file { '/var/ossec/api/configuration/api.yaml':
+    owner   => 'root',
+    group   => 'ossec',
+    mode    => '0640',
+    content => template('wazuh/wazuh_api_yml.erb'),
+    require => Package[$wazuh::params_manager::server_package],
+    notify  => Service[$wazuh::params_manager::server_service]
   }
 
 }
