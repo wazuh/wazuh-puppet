@@ -7,5 +7,5 @@ gem "kitchen-puppet"
 #gem "kitchen-vagrant"
 gem 'kitchen-docker', '= 2.9.0'
 gem "puppet"
-#gem "librarian-puppet"
-gem "kitchen-inspec"
+gem "librarian-puppet"
+#gem "kitchen-inspec"

@@ -35,17 +35,17 @@ platforms:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       provision_command:
         - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
-suites:
-  - name: mngr
-    manifest: site.pp
-    verifier:
-      name: inspec
-    includes:
-      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
+#suites:
+#  - name: mngr
+#    manifest: site.pp
+#    verifier:
+#      name: inspec
+#    includes:
+#      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_manager_kitchen_puppet
 
-  - name: agent
-    manifest: site.pp
-    verifier:
-      name: inspec
-    includes:
-      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
+#  - name: agent
+#    manifest: site.pp
+#    verifier:
+#      name: inspec
+#    includes:
+#      - <%= ENV['PLATFORM'] %>_<%= ENV['RELEASE'] %>_agent-kitchen_puppet
