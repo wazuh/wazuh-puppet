@@ -1,8 +1,8 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Setup for wazuh_dashboard
 class wazuh::wazuh_dashboard (
-  $wazuh_dashboard_package = 'opendistroforelasticsearch-kibana',
-  $wazuh_dashboard_service = 'kibana',
+  $wazuh_dashboard_package = 'wazuh-dashboard',
+  $wazuh_dashboard_service = 'wazuh-dashboard',
   $wazuh_dashboard_version = '1.13.2',
   $wazuh_dashboard_elastic_user = 'admin',
   $wazuh_dashboard_elastic_password = 'admin',
@@ -30,9 +30,9 @@ class wazuh::wazuh_dashboard (
     name   => $wazuh_dashboard_package,
   }
 
-  file { 'Configure kibana.yml':
+  file { 'Configure opensearch_dashboards.ym':
     owner   => 'kibana',
-    path    => '/etc/kibana/kibana.yml',
+    path    => '/etc/wazuh-dashboard/opensearch_dashboards.ym',
     group   => 'kibana',
     mode    => '0644',
     notify  => Service[$wazuh_dashboard_service],
@@ -54,7 +54,7 @@ class wazuh::wazuh_dashboard (
 
   file {'Removing old Wazuh Kibana Plugin...':
     ensure  => absent,
-    path    => '/usr/share/kibana/plugins/wazuh',
+    path    => '/usr/share/wazuh-dashboard/plugins/wazuh',
     recurse => true,
     purge   => true,
     force   => true,
@@ -83,8 +83,8 @@ class wazuh::wazuh_dashboard (
   }
   exec { 'Verify Kibana folders owner':
     path    => '/usr/bin:/bin',
-    command => "chown -R kibana:kibana /usr/share/kibana/optimize\
-             && chown -R kibana:kibana /usr/share/kibana/plugins",
+    command => "chown -R kibana:kibana /usr/share/wazuh-dashboard/optimize\
+             && chown -R kibana:kibana /usr/share/wazuh-dashboard/plugins",
 
   }
 
