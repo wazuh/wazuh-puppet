@@ -1,10 +1,10 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Opendistro configuration parameters
 class wazuh::params_opendistro {
-  $wazuh-indexer_service = 'elasticsearch'
-  $wazuh-indexer_package = 'opendistroforelasticsearch'
-  $config_owner = 'elasticsearch'
-  $config_group = 'elasticsearch'
+  $wazuh-indexer_service = 'wazuh-indexer'
+  $wazuh-indexer_package = 'wazuh-indexer'
+  $config_owner = 'wazuh-indexer'
+  $config_group = 'wazuh-indexer'
   $config_mode = '0640'
 
   $wazuh-indexer_cluster_name = 'es-wazuh'
@@ -14,8 +14,8 @@ class wazuh::params_opendistro {
   $wazuh-indexer_node_ingest = true
   $wazuh-indexer_node_max_local_storage_nodes = '1'
 
-  $wazuh-indexer_path_data = '/var/lib/elasticsearch'
-  $wazuh-indexer_path_logs = '/var/log/elasticsearch'
+  $wazuh-indexer_path_data = '/var/lib/wazuh-indexer'
+  $wazuh-indexer_path_logs = '/var/log/wazuh-indexer'
 
 
   $wazuh-indexer_ip = 'localhost'

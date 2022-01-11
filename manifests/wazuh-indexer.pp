@@ -42,20 +42,20 @@ class wazuh::wazuh-indexer (
     name   => $wazuh-indexer_package,
   }
 
-  file { 'Configure elasticsearch.yml':
-    owner   => 'elasticsearch',
-    path    => '/etc/elasticsearch/elasticsearch.yml',
-    group   => 'elasticsearch',
+  file { 'Configure opensearch.yml':
+    owner   => 'wazuh-indexer',
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    group   => 'wazuh-indexer',
     mode    => '0644',
     notify  => Service[$wazuh-indexer_service], ## Restarts the service
-    content => template('wazuh/opendistro_yml.erb'),
+    content => template('wazuh/opensearch_yml.erb'),
     require => Package[$wazuh-indexer_package],
   }
 
   file { 'Configure disabledlog4j.options':
     owner   => 'root',
-    path    => '/etc/elasticsearch/jvm.options.d/disabledlog4j.options',
-    group   => 'elasticsearch',
+    path    => '/etc/wazuh-indexer/jvm.options.d/disabledlog4j.options',
+    group   => 'wazuh-indexer',
     mode    => '2750',
     notify  => Service[$wazuh-indexer_service], ## Restarts the service
     content => template('wazuh/disabledlog4j_options.erb'),
@@ -63,16 +63,16 @@ class wazuh::wazuh-indexer (
   }
 
   file { 'Configure jvm.options':
-    owner   => 'elasticsearch',
-    path    => '/etc/elasticsearch/jvm.options',
-    group   => 'elasticsearch',
+    owner   => 'wazuh-indexer',
+    path    => '/etc/wazuh-indexer/jvm.options',
+    group   => 'wazuh-indexer',
     mode    => '0660',
     notify  => Service[$wazuh-indexer_service], ## Restarts the service
     content => template('wazuh/jvm_options.erb'),
     require => Package[$wazuh-indexer_package],
   }
 
-  service { 'elasticsearch':
+  service { 'wazuh-indexer':
     ensure  => running,
     enable  => true,
     require => Package[$wazuh-indexer_package],
@@ -85,11 +85,11 @@ class wazuh::wazuh-indexer (
 
   }
 
-  exec { 'Verify Elasticsearch folders owner':
+  exec { 'Verify wazuh-indexer folders owner':
     path    => '/usr/bin:/bin',
-    command => "chown elasticsearch:elasticsearch -R /etc/elasticsearch\
-             && chown elasticsearch:elasticsearch -R /usr/share/elasticsearch\
-             && chown elasticsearch:elasticsearch -R /var/lib/elasticsearch",
+    command => "chown wazuh-indexer:wazuh-indexer -R /etc/wazuh-indexer\
+             && chown wazuh-indexer:wazuh-indexer -R /usr/share/wazuh-indexer\
+             && chown wazuh-indexer:wazuh-indexer -R /var/lib/wazuh-indexer",
     require => Package[$wazuh-indexer_package],
 
   }
