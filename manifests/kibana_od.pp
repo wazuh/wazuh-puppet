@@ -63,7 +63,7 @@ class wazuh::kibana_od (
 
   exec {'Installing Wazuh App...':
     path    => '/usr/bin',
-    command => "sudo -u ${kibana_od_elastic_user}:${kibana_od_elastic_password} -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_od_app_version}.zip",
+    command => "curl -u ${kibana_od_elastic_user}:${kibana_od_elastic_password} -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${kibana_od_app_version}.zip",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$kibana_od_service],
   }
@@ -83,8 +83,7 @@ class wazuh::kibana_od (
   }
   exec { 'Verify Kibana folders owner':
     path    => '/usr/bin:/bin',
-    command => "chown -R kibana:kibana /usr/share/kibana/optimize\
-             && chown -R kibana:kibana /usr/share/kibana/plugins",
+    command => "chown -R kibana:kibana /usr/share/kibana/plugins",
 
   }
 

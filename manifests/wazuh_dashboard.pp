@@ -63,7 +63,7 @@ class wazuh::wazuh_dashboard (
 
   exec {'Installing Wazuh App...':
     path    => '/usr/bin',
-    command => "sudo -u ${wazuh_dashboard_elastic_user}:${wazuh_dashboard_elastic_password} -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${wazuh_dashboard_app_version}.zip",
+    command => "curl -u ${wazuh_dashboard_elastic_user}:${wazuh_dashboard_elastic_password} -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-${wazuh_dashboard_app_version}.zip",
     creates => '/usr/share/kibana/plugins/wazuh/package.json',
     notify  => Service[$wazuh_dashboard_service],
   }
@@ -83,8 +83,7 @@ class wazuh::wazuh_dashboard (
   }
   exec { 'Verify Kibana folders owner':
     path    => '/usr/bin:/bin',
-    command => "chown -R kibana:kibana /usr/share/wazuh-dashboard/optimize\
-             && chown -R kibana:kibana /usr/share/wazuh-dashboard/plugins",
+    command => "chown -R kibana:kibana /usr/share/wazuh-dashboard/plugins",
 
   }
 
