@@ -11,7 +11,7 @@ class wazuh::wazuh-indexer (
   $wazuh-indexer_node_max_local_storage_nodes = '1',
   $wazuh-indexer_service = 'elasticsearch',
   $wazuh-indexer_package = 'wazuh-indexer',
-  $wazuh-indexer_version = '1.13.2',
+  $wazuh-indexer_version = '0.0.0',
 
   $wazuh-indexer_path_data = '/var/lib/elasticsearch',
   $wazuh-indexer_path_logs = '/var/log/elasticsearch',
