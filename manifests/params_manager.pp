@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.3.0-1'
+      $server_package_version                          = '4.4.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -36,6 +36,7 @@ class wazuh::params_manager {
       $configure_wodle_cis_cat                         = true
       $configure_wodle_osquery                         = true
       $configure_wodle_syscollector                    = true
+      $configure_wodle_docker_listener                 = false
       $configure_vulnerability_detector                = true
       $configure_sca                                   = true
       $configure_syscheck                              = true
@@ -54,6 +55,7 @@ class wazuh::params_manager {
       $ossec_wodle_cis_cat_template                    = 'wazuh/fragments/_wodle_cis_cat.erb'
       $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
       $ossec_wodle_syscollector_template               = 'wazuh/fragments/_wodle_syscollector.erb'
+      $ossec_wodle_docker_listener_template            = 'wazuh/fragments/_wodle_docker_listener.erb'
       $ossec_vulnerability_detector_template           = 'wazuh/fragments/_vulnerability_detector.erb'
       $ossec_sca_template                              = 'wazuh/fragments/_sca.erb'
       $ossec_syscheck_template                         = 'wazuh/fragments/_syscheck.erb'
@@ -77,6 +79,7 @@ class wazuh::params_manager {
       $ossec_rootcheck_check_if                        = 'yes'
       $ossec_rootcheck_frequency                       = 43200
       $ossec_rootcheck_ignore_list                     = []
+      $ossec_rootcheck_ignore_sregex_list              = []
       $ossec_rootcheck_rootkit_files                   = '/var/ossec/etc/rootcheck/rootkit_files.txt'
       $ossec_rootcheck_rootkit_trojans                 = '/var/ossec/etc/rootcheck/rootkit_trojans.txt'
       $ossec_rootcheck_skip_nfs                        = 'yes'
@@ -141,6 +144,8 @@ class wazuh::params_manager {
       $wodle_syscollector_ports                        = 'yes'
       $wodle_syscollector_processes                    = 'yes'
 
+      #docker-listener
+      $wodle_docker_listener_disabled                  = 'no'
 
       #active-response
       $active_response_command                         = 'firewall-drop'
@@ -199,8 +204,10 @@ class wazuh::params_manager {
       $ossec_auth_disabled                             = 'no'
       $ossec_auth_port                                 = 1515
       $ossec_auth_use_source_ip                        = 'yes'
-      $ossec_auth_force_insert                         = 'yes'
-      $ossec_auth_force_time                           = 0
+      $ossec_auth_force_enabled                        = 'yes'
+      $ossec_auth_force_key_mismatch                   = 'yes'
+      $ossec_auth_force_disc_time                      = '1h'
+      $ossec_auth_force_after_reg_time                 = '1h'
       $ossec_auth_purgue                               = 'yes'
       $ossec_auth_use_password                         = 'no'
       $ossec_auth_limit_maxagents                      = 'yes'
@@ -330,16 +337,14 @@ class wazuh::params_manager {
 
       $wazuh_api_file =  undef
 
-      # Set this option to "yes" in case the API is running behind a proxy server. Values: yes, no
-      $wazuh_api_behind_proxy_server = 'no'
-
       # Advanced configuration
       $wazuh_api_https_enabled = 'yes'
       $wazuh_api_https_key = 'api/configuration/ssl/server.key'
       $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
       $wazuh_api_https_use_ca = 'False'
       $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
-      $wazuh_api_ssl_cipher = 'TLSv1.2'
+      $wazuh_api_ssl_protocol = 'TLSv1.2'
+      $wazuh_api_ssl_ciphers  = '""'
 
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
@@ -539,8 +544,8 @@ class wazuh::params_manager {
       $keys_owner = 'Administrator'
       $keys_group = 'Administrators'
 
-      $agent_service  = 'OssecSvc'
-      $agent_package  = 'Wazuh Agent 4.3.0'
+      $agent_service  = 'WazuhSvc'
+      $agent_package  = 'Wazuh Agent 4.4.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''

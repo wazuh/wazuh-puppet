@@ -35,6 +35,7 @@ class wazuh::agent (
   $configure_wodle_cis_cat           = $wazuh::params_agent::configure_wodle_cis_cat,
   $configure_wodle_osquery           = $wazuh::params_agent::configure_wodle_osquery,
   $configure_wodle_syscollector      = $wazuh::params_agent::configure_wodle_syscollector,
+  $configure_wodle_docker_listener   = $wazuh::params_agent::configure_wodle_docker_listener,
   $configure_sca                     = $wazuh::params_agent::configure_sca,
   $configure_syscheck                = $wazuh::params_agent::configure_syscheck,
   $configure_localfile               = $wazuh::params_agent::configure_localfile,
@@ -42,19 +43,20 @@ class wazuh::agent (
   $configure_labels                  = $wazuh::params_agent::configure_labels,
 
   # Templates paths
-  $ossec_conf_template               = $wazuh::params_agent::ossec_conf_template,
-  $ossec_rootcheck_template          = $wazuh::params_agent::ossec_rootcheck_template,
-  $ossec_wodle_openscap_template     = $wazuh::params_agent::ossec_wodle_openscap_template,
-  $ossec_wodle_cis_cat_template      = $wazuh::params_agent::ossec_wodle_cis_cat_template,
-  $ossec_wodle_osquery_template      = $wazuh::params_agent::ossec_wodle_osquery_template,
-  $ossec_wodle_syscollector_template = $wazuh::params_agent::ossec_wodle_syscollector_template,
-  $ossec_sca_template                = $wazuh::params_agent::ossec_sca_template,
-  $ossec_syscheck_template           = $wazuh::params_agent::ossec_syscheck_template,
-  $ossec_localfile_template          = $wazuh::params_agent::ossec_localfile_template,
-  $ossec_auth                        = $wazuh::params_agent::ossec_auth,
-  $ossec_cluster                     = $wazuh::params_agent::ossec_cluster,
-  $ossec_active_response_template    = $wazuh::params_agent::ossec_active_response_template,
-  $ossec_labels_template             = $wazuh::params_agent::ossec_labels_template,
+  $ossec_conf_template                  = $wazuh::params_agent::ossec_conf_template,
+  $ossec_rootcheck_template             = $wazuh::params_agent::ossec_rootcheck_template,
+  $ossec_wodle_openscap_template        = $wazuh::params_agent::ossec_wodle_openscap_template,
+  $ossec_wodle_cis_cat_template         = $wazuh::params_agent::ossec_wodle_cis_cat_template,
+  $ossec_wodle_osquery_template         = $wazuh::params_agent::ossec_wodle_osquery_template,
+  $ossec_wodle_syscollector_template    = $wazuh::params_agent::ossec_wodle_syscollector_template,
+  $ossec_wodle_docker_listener_template = $wazuh::params_agent::ossec_wodle_docker_listener_template,
+  $ossec_sca_template                   = $wazuh::params_agent::ossec_sca_template,
+  $ossec_syscheck_template              = $wazuh::params_agent::ossec_syscheck_template,
+  $ossec_localfile_template             = $wazuh::params_agent::ossec_localfile_template,
+  $ossec_auth                           = $wazuh::params_agent::ossec_auth,
+  $ossec_cluster                        = $wazuh::params_agent::ossec_cluster,
+  $ossec_active_response_template       = $wazuh::params_agent::ossec_active_response_template,
+  $ossec_labels_template                = $wazuh::params_agent::ossec_labels_template,
 
   # Server configuration
 
@@ -94,19 +96,20 @@ class wazuh::agent (
 
 
   # Rootcheck
-  $ossec_rootcheck_disabled          = $wazuh::params_agent::ossec_rootcheck_disabled,
-  $ossec_rootcheck_check_files       = $wazuh::params_agent::ossec_rootcheck_check_files,
-  $ossec_rootcheck_check_trojans     = $wazuh::params_agent::ossec_rootcheck_check_trojans,
-  $ossec_rootcheck_check_dev         = $wazuh::params_agent::ossec_rootcheck_check_dev,
-  $ossec_rootcheck_check_sys         = $wazuh::params_agent::ossec_rootcheck_check_sys,
-  $ossec_rootcheck_check_pids        = $wazuh::params_agent::ossec_rootcheck_check_pids,
-  $ossec_rootcheck_check_ports       = $wazuh::params_agent::ossec_rootcheck_check_ports,
-  $ossec_rootcheck_check_if          = $wazuh::params_agent::ossec_rootcheck_check_if,
-  $ossec_rootcheck_frequency         = $wazuh::params_agent::ossec_rootcheck_frequency,
-  $ossec_rootcheck_ignore_list       = $wazuh::params_agent::ossec_rootcheck_ignore_list,
-  $ossec_rootcheck_rootkit_files     = $wazuh::params_agent::ossec_rootcheck_rootkit_files,
-  $ossec_rootcheck_rootkit_trojans   = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
-  $ossec_rootcheck_skip_nfs          = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
+  $ossec_rootcheck_disabled           = $wazuh::params_agent::ossec_rootcheck_disabled,
+  $ossec_rootcheck_check_files        = $wazuh::params_agent::ossec_rootcheck_check_files,
+  $ossec_rootcheck_check_trojans      = $wazuh::params_agent::ossec_rootcheck_check_trojans,
+  $ossec_rootcheck_check_dev          = $wazuh::params_agent::ossec_rootcheck_check_dev,
+  $ossec_rootcheck_check_sys          = $wazuh::params_agent::ossec_rootcheck_check_sys,
+  $ossec_rootcheck_check_pids         = $wazuh::params_agent::ossec_rootcheck_check_pids,
+  $ossec_rootcheck_check_ports        = $wazuh::params_agent::ossec_rootcheck_check_ports,
+  $ossec_rootcheck_check_if           = $wazuh::params_agent::ossec_rootcheck_check_if,
+  $ossec_rootcheck_frequency          = $wazuh::params_agent::ossec_rootcheck_frequency,
+  $ossec_rootcheck_ignore_list        = $wazuh::params_agent::ossec_rootcheck_ignore_list,
+  $ossec_rootcheck_ignore_sregex_list = $wazuh::params_agent::ossec_rootcheck_ignore_sregex_list,
+  $ossec_rootcheck_rootkit_files      = $wazuh::params_agent::ossec_rootcheck_rootkit_files,
+  $ossec_rootcheck_rootkit_trojans    = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
+  $ossec_rootcheck_skip_nfs           = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
   $ossec_rootcheck_system_audit      = $wazuh::params_agent::ossec_rootcheck_system_audit,
 
 
@@ -181,6 +184,9 @@ class wazuh::agent (
   $wodle_syscollector_ports          = $wazuh::params_agent::wodle_syscollector_ports,
   $wodle_syscollector_processes      = $wazuh::params_agent::wodle_syscollector_processes,
   $wodle_syscollector_hotfixes       = $wazuh::params_agent::wodle_syscollector_hotfixes,
+
+  # Docker-listener
+  $wodle_docker_listener_disabled    = $wazuh::params_agent::wodle_docker_listener_disabled,
 
   # Localfile
   $ossec_local_files                 = $wazuh::params_agent::default_local_files,
@@ -286,7 +292,6 @@ class wazuh::agent (
 
       -> file { 'wazuh-agent':
         path               => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
-        owner              => 'Administrator',
         group              => 'Administrators',
         mode               => '0774',
         source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}.msi",
@@ -295,7 +300,7 @@ class wazuh::agent (
 
       # We dont need to pin the package version on Windows since we install if from the right MSI.
       -> package { $agent_package_name:
-        ensure          => 'installed',
+        ensure          => "${agent_package_version}",
         provider        => 'windows',
         source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
         install_options => [
@@ -410,6 +415,15 @@ class wazuh::agent (
         order   => 19,
         before  => Service[$agent_service_name],
         content => template($ossec_wodle_syscollector_template);
+    }
+  }
+  if ($configure_wodle_docker_listener == true) {
+    concat::fragment {
+      'ossec.conf_docker_listener':
+        target  => 'agent_ossec.conf',
+        order   => 20,
+        before  => Service[$agent_service_name],
+        content => template($ossec_wodle_docker_listener_template);
     }
   }
   if ($configure_sca == true) {

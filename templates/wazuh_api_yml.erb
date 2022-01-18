@@ -4,8 +4,6 @@
 #
 host: <%= @wazuh_api_host %>
 port: <%= @wazuh_api_port %>
-# Set this option to "yes" in case the API is running behind a proxy server. Values: yes, no
-behind_proxy_server: <%= @wazuh_api_behind_proxy_server %>
 # Advanced configuration
 https:
   enabled: <%= @wazuh_api_https_enabled %>
@@ -13,7 +11,8 @@ https:
   cert: <%= @wazuh_api_https_cert %>
   use_ca: <%= @wazuh_api_https_use_ca %>
   ca: <%= @wazuh_api_https_ca %>
-  ssl_cipher: <%= @wazuh_api_ssl_cipher %>
+  ssl_protocol: <%= @wazuh_api_ssl_protocol %>
+  ssl_ciphers: <%= @wazuh_api_ssl_ciphers %>
 # Logging configuration
 # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
 logs:

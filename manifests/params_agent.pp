@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.3.0-1'
+  $agent_package_version = '4.4.0-1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
 
@@ -31,6 +31,7 @@ class wazuh::params_agent {
   $configure_wodle_cis_cat = true
   $configure_wodle_osquery = true
   $configure_wodle_syscollector = true
+  $configure_wodle_docker_listener = false
   $configure_sca = true
   $configure_syscheck = true
   $configure_localfile = true
@@ -43,6 +44,7 @@ class wazuh::params_agent {
   $ossec_wodle_cis_cat_template = 'wazuh/fragments/_wodle_cis_cat.erb'
   $ossec_wodle_osquery_template = 'wazuh/fragments/_wodle_osquery.erb'
   $ossec_wodle_syscollector_template = 'wazuh/fragments/_wodle_syscollector.erb'
+  $ossec_wodle_docker_listener_template = 'wazuh/fragments/_wodle_docker_listener.erb'
   $ossec_sca_template = 'wazuh/fragments/_sca.erb'
   $ossec_syscheck_template = 'wazuh/fragments/_syscheck.erb'
   $ossec_localfile_template = 'wazuh/fragments/_localfile.erb'
@@ -93,6 +95,138 @@ class wazuh::params_agent {
   $wazuh_delay_after_enrollment                    = undef
   $wazuh_enrollment_use_source_ip                  = undef
 
+  # Other required to define variables
+  $manage_repo = true
+  $manage_firewall = false
+  $selinux = false
+  $configure_labels = false
+  $ossec_labels_template = 'wazuh/fragments/_labels.erb'
+  $ossec_labels = []
+
+
+  ## Rootcheck
+  $ossec_rootcheck_disabled = 'no'
+  $ossec_rootcheck_check_files = 'yes'
+  $ossec_rootcheck_check_trojans = 'yes'
+  $ossec_rootcheck_check_dev = 'yes'
+  $ossec_rootcheck_check_sys = 'yes'
+  $ossec_rootcheck_check_pids = 'yes'
+  $ossec_rootcheck_check_ports = 'yes'
+  $ossec_rootcheck_check_if = 'yes'
+  $ossec_rootcheck_frequency = 36000
+  $ossec_rootcheck_ignore_list = []
+  $ossec_rootcheck_ignore_sregex_list = []
+  $ossec_rootcheck_rootkit_files = '/var/ossec/etc/shared/rootkit_files.txt'
+  $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
+  $ossec_rootcheck_skip_nfs = 'yes'
+
+  # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
+  $ossec_rootcheck_system_audit = []
+
+  # Rootcheck Windows
+  $ossec_rootcheck_windows_disabled = 'no'
+  $ossec_rootcheck_windows_windows_apps = './shared/win_applications_rcl.txt'
+  $ossec_rootcheck_windows_windows_malware = './shared/win_malware_rcl.txt'
+
+
+  # SCA
+
+  ## Windows
+  $sca_windows_enabled = undef
+  $sca_windows_scan_on_start = undef
+  $sca_windows_interval = undef
+  $sca_windows_skip_nfs = undef
+  $sca_windows_policies = []
+
+  $windows_audit_interval = undef
+
+  ## Amazon
+  $sca_amazon_enabled = 'yes'
+  $sca_amazon_scan_on_start = 'yes'
+  $sca_amazon_interval = '12h'
+  $sca_amazon_skip_nfs = 'yes'
+  $sca_amazon_policies = []
+
+  ## RHEL
+  $sca_rhel_enabled = 'yes'
+  $sca_rhel_scan_on_start = 'yes'
+  $sca_rhel_interval = '12h'
+  $sca_rhel_skip_nfs = 'yes'
+  $sca_rhel_policies = []
+
+  ## <else>
+  $sca_else_enabled = 'yes'
+  $sca_else_scan_on_start = 'yes'
+  $sca_else_interval = '12h'
+  $sca_else_skip_nfs = 'yes'
+  $sca_else_policies = []
+
+
+  ## open-scap
+  $wodle_openscap_disabled = 'yes'
+  $wodle_openscap_timeout = '1800'
+  $wodle_openscap_interval = '1d'
+  $wodle_openscap_scan_on_start = 'yes'
+
+
+  ## syscheck
+  $ossec_syscheck_disabled = 'no'
+  $ossec_syscheck_frequency = '43200'
+  $ossec_syscheck_scan_on_start = 'yes'
+  $ossec_syscheck_auto_ignore = undef
+  $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
+  $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
+  $ossec_syscheck_report_changes_directories_1 = 'no'
+  $ossec_syscheck_whodata_directories_1 = 'no'
+  $ossec_syscheck_realtime_directories_1 = 'no'
+  $ossec_syscheck_report_changes_directories_2 = 'no'
+  $ossec_syscheck_whodata_directories_2 = 'no'
+  $ossec_syscheck_realtime_directories_2 = 'no'
+  $ossec_syscheck_ignore_list = ['/etc/mtab',
+    '/etc/hosts.deny',
+    '/etc/mail/statistics',
+    '/etc/random-seed',
+    '/etc/random.seed',
+    '/etc/adjtime',
+    '/etc/httpd/logs',
+    '/etc/utmpx',
+    '/etc/wtmpx',
+    '/etc/cups/certs',
+    '/etc/dumpdates',
+    '/etc/svc/volatile',
+    '/sys/kernel/security',
+    '/sys/kernel/debug',
+    '/dev/core',
+  ]
+  $ossec_syscheck_ignore_type_1 = '^/proc'
+  $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
+
+  $ossec_syscheck_max_eps = '100'
+  $ossec_syscheck_process_priority = '10'
+  $ossec_syscheck_synchronization_enabled = 'yes'
+  $ossec_syscheck_synchronization_interval = '5m'
+  $ossec_syscheck_synchronization_max_eps = '10'
+  $ossec_syscheck_synchronization_max_interval = '1h'
+
+  $ossec_syscheck_nodiff = '/etc/ssl/private.key'
+  $ossec_syscheck_skip_nfs = 'yes'
+
+
+  # Audit
+  $audit_manage_rules                = false
+  $audit_buffer_bytes                = '8192'
+  $audit_backlog_wait_time           = '0'
+  $audit_rules                       = [
+    "-b ${audit_buffer_bytes}",
+    "--backlog_wait_time ${audit_backlog_wait_time}",
+    '-f 1'
+  ]
+
+
+  # active-response
+  $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
+
+
   # OS specific configurations
   case $::kernel {
     'Linux': {
@@ -123,68 +257,10 @@ class wazuh::params_agent {
 
       # ossec.conf blocks
 
-      ## Rootcheck
-      $ossec_rootcheck_disabled = 'no'
-      $ossec_rootcheck_check_files = 'yes'
-      $ossec_rootcheck_check_trojans = 'yes'
-      $ossec_rootcheck_check_dev = 'yes'
-      $ossec_rootcheck_check_sys = 'yes'
-      $ossec_rootcheck_check_pids = 'yes'
-      $ossec_rootcheck_check_ports = 'yes'
-      $ossec_rootcheck_check_if = 'yes'
-      $ossec_rootcheck_frequency = 36000
-      $ossec_rootcheck_ignore_list = []
-      $ossec_rootcheck_rootkit_files = '/var/ossec/etc/shared/rootkit_files.txt'
-      $ossec_rootcheck_rootkit_trojans = '/var/ossec/etc/shared/rootkit_trojans.txt'
-      $ossec_rootcheck_skip_nfs = 'yes'
-
-      # Example: ["/var/ossec/etc/shared/system_audit_rcl.txt"]
-      $ossec_rootcheck_system_audit = []
-
-      # Rootcheck Windows
-      $ossec_rootcheck_windows_disabled = undef
-      $ossec_rootcheck_windows_windows_apps = undef
-      $ossec_rootcheck_windows_windows_malware = undef
-
-      # SCA
-
-      ## Windows
-      $sca_windows_enabled = undef
-      $sca_windows_scan_on_start = undef
-      $sca_windows_interval = undef
-      $sca_windows_skip_nfs = undef
-      $sca_windows_policies = []
-
-      $windows_audit_interval = undef
-
-      ## Amazon
-      $sca_amazon_enabled = 'yes'
-      $sca_amazon_scan_on_start = 'yes'
-      $sca_amazon_interval = '12h'
-      $sca_amazon_skip_nfs = 'yes'
-      $sca_amazon_policies = []
-
-      ## RHEL
-      $sca_rhel_enabled = 'yes'
-      $sca_rhel_scan_on_start = 'yes'
-      $sca_rhel_interval = '12h'
-      $sca_rhel_skip_nfs = 'yes'
-      $sca_rhel_policies = []
-
-      ## <else>
-      $sca_else_enabled = 'yes'
-      $sca_else_scan_on_start = 'yes'
-      $sca_else_interval = '12h'
-      $sca_else_skip_nfs = 'yes'
-      $sca_else_policies = []
-
       # Wodles
 
-      ## open-scap
-      $wodle_openscap_disabled = 'yes'
-      $wodle_openscap_timeout = '1800'
-      $wodle_openscap_interval = '1d'
-      $wodle_openscap_scan_on_start = 'yes'
+      ## doker-listener
+      $wodle_doker_listener_disabled = 'yes'
 
       ## cis-cat
       $wodle_ciscat_disabled = 'yes'
@@ -214,45 +290,6 @@ class wazuh::params_agent {
       $wodle_syscollector_processes = 'yes'
       $wodle_syscollector_hotfixes = undef
 
-      ## syscheck
-      $ossec_syscheck_disabled = 'no'
-      $ossec_syscheck_frequency = '43200'
-      $ossec_syscheck_scan_on_start = 'yes'
-      $ossec_syscheck_auto_ignore = undef
-      $ossec_syscheck_directories_1 = '/etc,/usr/bin,/usr/sbin'
-      $ossec_syscheck_directories_2 = '/bin,/sbin,/boot'
-      $ossec_syscheck_report_changes_directories_1 = 'no'
-      $ossec_syscheck_whodata_directories_1 = 'no'
-      $ossec_syscheck_realtime_directories_1 = 'no'
-      $ossec_syscheck_report_changes_directories_2 = 'no'
-      $ossec_syscheck_whodata_directories_2 = 'no'
-      $ossec_syscheck_realtime_directories_2 = 'no'
-      $ossec_syscheck_ignore_list = ['/etc/mtab',
-        '/etc/hosts.deny',
-        '/etc/mail/statistics',
-        '/etc/random-seed',
-        '/etc/random.seed',
-        '/etc/adjtime',
-        '/etc/httpd/logs',
-        '/etc/utmpx',
-        '/etc/wtmpx',
-        '/etc/cups/certs',
-        '/etc/dumpdates',
-        '/etc/svc/volatile',
-        '/sys/kernel/security',
-        '/sys/kernel/debug',
-        '/dev/core',
-      ]
-      $ossec_syscheck_ignore_type_1 = '^/proc'
-      $ossec_syscheck_ignore_type_2 = '.log$|.swp$'
-
-      $ossec_syscheck_max_eps = '100'
-      $ossec_syscheck_process_priority = '10'
-      $ossec_syscheck_synchronization_enabled = 'yes'
-      $ossec_syscheck_synchronization_interval = '5m'
-      $ossec_syscheck_synchronization_max_eps = '10'
-      $ossec_syscheck_synchronization_max_interval = '1h'
-
       $ossec_ruleset_decoder_dir = 'ruleset/decoders'
       $ossec_ruleset_rule_dir = 'ruleset/rules'
       $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
@@ -263,32 +300,6 @@ class wazuh::params_agent {
 
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
-
-      $configure_labels                  = false
-      $ossec_labels_template             = 'wazuh/fragments/_labels.erb'
-      $ossec_labels                      = []
-
-      $ossec_syscheck_nodiff = '/etc/ssl/private.key'
-      $ossec_syscheck_skip_nfs = 'yes'
-
-      # Audit
-      $audit_manage_rules                = false
-      $audit_buffer_bytes                = '8192'
-      $audit_backlog_wait_time           = '0'
-      $audit_rules                       = [
-        "-b ${audit_buffer_bytes}",
-        "--backlog_wait_time ${audit_backlog_wait_time}",
-        '-f 1'
-      ]
-
-      # active-response
-      $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
-
-      # others
-      $manage_firewall = false
-      $selinux = false
-
-      $manage_repo = true
 
       case $::osfamily {
         'Debian': {
@@ -440,23 +451,17 @@ class wazuh::params_agent {
     'windows': {
       $config_file = 'C:\\Program Files (x86)\\ossec-agent\\ossec.conf'
       $shared_agent_config_file = 'C:\\Program Files (x86)\\ossec-agent\\shared\\agent.conf'
-      $config_owner = 'Administrator'
       $config_group = 'Administrators'
       $download_path = 'C:\\Temp'
+      $config_mode = '0664'
       $manage_firewall = false
 
       $keys_file = 'C:\\Program Files (x86)\\ossec-agent\\client.keys'
 
       $agent_package_name = 'Wazuh Agent'
-      $agent_service_name = 'OssecSvc'
+      $agent_service_name = 'WazuhSvc'
       $service_has_status = true
       $ossec_service_provider = undef
-
-      # Rootcheck Windows
-      $ossec_rootcheck_windows_disabled = 'no'
-      $ossec_rootcheck_windows_windows_apps = './shared/win_applications_rcl.txt'
-      $ossec_rootcheck_windows_windows_malware = './shared/win_malware_rcl.txt'
-      $ossec_rootcheck_system_audit = []
 
       # sca
       $sca_windows_enabled = 'yes'
