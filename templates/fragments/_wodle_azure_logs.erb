@@ -1,0 +1,16 @@
+<wodle name="azure-logs">
+  <disabled>no</disabled>
+  <interval><%= @wodle_azurelogs_interval %></interval>
+  <run_on_start><%= @wodle_azurelogs_run_on_start %></run_on_start>
+  <log_analytics>
+    <application_id><%= @wodle_azurelogs_application_id %></application_id>
+    <application_key><%= @wodle_azurelogs_application_key %></application_key>
+    <tenantdomain><%= @wodle_azurelogs_tennant %></tenantdomain>
+    <request>
+      <tag>azure-activity</tag>
+      <query>AzureActivity</query>
+      <workspace><%= @wodle_azurelogs_workspace %></workspace>
+      <time_offset><%= @wodle_azurelogs_timeoffset %></time_offset>
+    </request>
+  </log_analytics>
+</wodle>

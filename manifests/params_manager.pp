@@ -37,6 +37,7 @@ class wazuh::params_manager {
       $configure_wodle_osquery                         = true
       $configure_wodle_syscollector                    = true
       $configure_wodle_docker_listener                 = false
+      $configure_wodle_azure_logs                      = false
       $configure_vulnerability_detector                = true
       $configure_sca                                   = true
       $configure_syscheck                              = true
@@ -56,6 +57,7 @@ class wazuh::params_manager {
       $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
       $ossec_wodle_syscollector_template               = 'wazuh/fragments/_wodle_syscollector.erb'
       $ossec_wodle_docker_listener_template            = 'wazuh/fragments/_wodle_docker_listener.erb'
+      $ossec_wodle_azure_logs_template                 = 'wazuh/fragments/_wodle_azure_logs.erb'
       $ossec_vulnerability_detector_template           = 'wazuh/fragments/_vulnerability_detector.erb'
       $ossec_sca_template                              = 'wazuh/fragments/_sca.erb'
       $ossec_syscheck_template                         = 'wazuh/fragments/_syscheck.erb'
@@ -146,6 +148,15 @@ class wazuh::params_manager {
 
       #docker-listener
       $wodle_docker_listener_disabled                  = 'no'
+
+      #azurelogs
+      $wodle_azurelogs_interval                        = '1h'
+      $wodle_azurelogs_run_on_start                    = 'yes'
+      $wodle_azurelogs_timeoffset                      = '2h'
+      $wodle_azurelogs_application_id                  = undef
+      $wodle_azurelogs_application_key                 = undef
+      $wodle_azurelogs_tennant                         = undef
+      $wodle_azurelogs_workspace                       = undef
 
       #active-response
       $active_response_command                         = 'firewall-drop'
