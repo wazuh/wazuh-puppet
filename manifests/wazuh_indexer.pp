@@ -3,15 +3,15 @@
 class wazuh::wazuh_indexer (
   # opensearch.yml configuration
 
-  $wazuh_indexer_cluster_name = 'es-wazuh',
-  $wazuh_indexer_node_name = 'node-01',
+  $wazuh_indexer_cluster_name = 'wazuh-cluster',
+  $wazuh_indexer_node_name = 'node-1',
   $wazuh_indexer_node_master = true,
   $wazuh_indexer_node_data = true,
   $wazuh_indexer_node_ingest = true,
   $wazuh_indexer_node_max_local_storage_nodes = '1',
   $wazuh_indexer_service = 'wazuh-indexer',
   $wazuh_indexer_package = 'wazuh-indexer',
-  $wazuh_indexer_version = '4.3.0-0.0.0.todelete',
+  $wazuh_indexer_version = '4.3.0-1',
 
   $wazuh_indexer_path_data = '/var/lib/wazuh-indexer',
   $wazuh_indexer_path_logs = '/var/log/wazuh-indexer',
@@ -20,7 +20,7 @@ class wazuh::wazuh_indexer (
   $wazuh_indexer_ip = 'localhost',
   $wazuh_indexer_port = '9700',
   $wazuh_indexer_discovery_option = 'discovery.type: single-node',
-  $wazuh_indexer_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['node-01']",
+  $wazuh_indexer_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['node-1']",
 
 # JVM options
   $jvm_options_memmory = '1g',

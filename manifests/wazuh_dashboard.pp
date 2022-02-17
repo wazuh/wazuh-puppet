@@ -3,10 +3,10 @@
 class wazuh::wazuh_dashboard (
   $wazuh_dashboard_package = 'wazuh-dashboard',
   $wazuh_dashboard_service = 'wazuh-dashboard',
-  $wazuh_dashboard_version = '4.3.0-0.0.0.todelete',
+  $wazuh_dashboard_version = '4.3.0-1',
   $wazuh_dashboard_elastic_user = 'admin',
   $wazuh_dashboard_elastic_password = 'admin',
-  $wazuh_dashboard_app_version = '4.3.0-0.0.0.todelete',
+  $wazuh_dashboard_app_version = '4.3.0-1',
   $wazuh_dashboard_elasticsearch_ip = 'localhost',
   $wazuh_dashboard_elasticsearch_port = '9700',
 
