@@ -160,7 +160,6 @@ class wazuh::params_manager {
 
       $vulnerability_detector_enabled                            = 'no'
       $vulnerability_detector_interval                           = '5m'
-      $vulnerability_detector_ignore_time                        = '6h'
       $vulnerability_detector_run_on_start                       = 'yes'
 
       $vulnerability_detector_provider_canonical                 = 'yes'
@@ -313,12 +312,12 @@ class wazuh::params_manager {
 
       $config_mode = '0640'
       $config_owner = 'root'
-      $config_group = 'ossec'
+      $config_group = 'wazuh'
 
       $keys_file = '/var/ossec/etc/client.keys'
       $keys_mode = '0640'
       $keys_owner = 'root'
-      $keys_group = 'ossec'
+      $keys_group = 'wazuh'
 
 
       $authd_pass_file = '/var/ossec/etc/authd.pass'
@@ -328,7 +327,7 @@ class wazuh::params_manager {
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0640'
       $processlist_owner = 'root'
-      $processlist_group = 'ossec'
+      $processlist_group = 'wazuh'
 
       #API
 
@@ -339,17 +338,16 @@ class wazuh::params_manager {
 
       # Advanced configuration
       $wazuh_api_https_enabled = 'yes'
-      $wazuh_api_https_key = 'api/configuration/ssl/server.key'
-      $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
+      $wazuh_api_https_key = 'server.key'
+      $wazuh_api_https_cert = 'server.crt'
       $wazuh_api_https_use_ca = 'False'
-      $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
+      $wazuh_api_https_ca = 'ca.crt'
       $wazuh_api_ssl_protocol = 'TLSv1.2'
       $wazuh_api_ssl_ciphers  = '""'
 
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
       $wazuh_api_logs_level = 'info'
-      $wazuh_api_logs_path = 'logs/api.log'
 
       # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
       $wazuh_api_cors_enabled = 'no'
@@ -366,9 +364,6 @@ class wazuh::params_manager {
       $wazuh_api_access_max_login_attempts = 5
       $wazuh_api_access_block_time = 300
       $wazuh_api_access_max_request_per_minute = 300
-
-      # Force the use of authd when adding and removing agents. Values: yes, no
-      $wazuh_api_use_only_authd = 'no'
 
       # Drop privileges (Run as ossec user)
       $wazuh_api_drop_privileges = 'yes'

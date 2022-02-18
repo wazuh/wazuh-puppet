@@ -158,7 +158,6 @@ class wazuh::manager (
       #vulnerability-detector
       $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
       $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
-      $vulnerability_detector_ignore_time                        = $wazuh::params_manager::vulnerability_detector_ignore_time,
       $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
 # lint:ignore:140chars
       $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
@@ -284,7 +283,6 @@ class wazuh::manager (
       $wazuh_api_https_use_ca                   = $wazuh::params_manager::wazuh_api_https_use_ca,
       $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
       $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
-      $wazuh_api_logs_path                      = $wazuh::params_manager::wazuh_api_logs_path,
       $wazuh_api_ssl_ciphers                    = $wazuh::params_manager::wazuh_api_ssl_ciphers,
       $wazuh_api_ssl_protocol                   = $wazuh::params_manager::wazuh_api_ssl_protocol,
 
@@ -301,7 +299,6 @@ class wazuh::manager (
       $wazuh_api_access_max_login_attempts      = $::wazuh::params_manager::wazuh_api_access_max_login_attempts,
       $wazuh_api_access_block_time              = $::wazuh::params_manager::wazuh_api_access_block_time,
       $wazuh_api_access_max_request_per_minute  = $::wazuh::params_manager::wazuh_api_access_max_request_per_minute,
-      $wazuh_api_use_only_authd                 = $::wazuh::params_manager::wazuh_api_use_only_authd,
       $wazuh_api_drop_privileges                = $::wazuh::params_manager::wazuh_api_drop_privileges,
       $wazuh_api_experimental_features          = $::wazuh::params_manager::wazuh_api_experimental_features,
 
@@ -621,7 +618,7 @@ class wazuh::manager (
       file { '/var/ossec/etc/sslmanager.key':
         content => $wazuh_manager_server_key,
         owner   => 'root',
-        group   => 'ossec',
+        group   => 'wazuh',
         mode    => '0640',
         require => Package[$wazuh::params_manager::server_package],
         notify  => Service[$wazuh::params_manager::server_service],
@@ -630,7 +627,7 @@ class wazuh::manager (
       file { '/var/ossec/etc/sslmanager.cert':
         content => $wazuh_manager_server_crt,
         owner   => 'root',
-        group   => 'ossec',
+        group   => 'wazuh',
         mode    => '0640',
         require => Package[$wazuh::params_manager::server_package],
         notify  => Service[$wazuh::params_manager::server_service],
@@ -674,7 +671,7 @@ class wazuh::manager (
 
   file { '/var/ossec/api/configuration/api.yaml':
     owner   => 'root',
-    group   => 'ossec',
+    group   => 'wazuh',
     mode    => '0640',
     content => template('wazuh/wazuh_api_yml.erb'),
     require => Package[$wazuh::params_manager::server_package],
