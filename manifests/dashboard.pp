@@ -8,7 +8,7 @@ class wazuh::dashboard (
   $dashboard_password = 'admin',
   $dashboard_app_version = '4.3.0-1',
   $dashboard_ip = 'localhost',
-  $dashboard_port = '9700',
+  $dashboard_port = '9200',
 
   $dashboard_server_port = '5601',
   $dashboard_server_host = '0.0.0.0',

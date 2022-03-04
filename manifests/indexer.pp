@@ -18,7 +18,7 @@ class wazuh::indexer (
 
 
   $indexer_ip = 'localhost',
-  $indexer_port = '9700',
+  $indexer_port = '9200',
   $indexer_discovery_option = 'discovery.type: single-node',
   $indexer_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['node-1']",
 
