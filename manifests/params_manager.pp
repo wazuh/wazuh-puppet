@@ -32,6 +32,7 @@ class wazuh::params_manager {
     # ossec.conf generation parameters
 
       $configure_rootcheck                             = true
+      $configure_wodle_aws                             = true
       $configure_wodle_openscap                        = true
       $configure_wodle_cis_cat                         = true
       $configure_wodle_osquery                         = true
@@ -51,6 +52,7 @@ class wazuh::params_manager {
     # ossec.conf templates paths
       $ossec_manager_template                          = 'wazuh/wazuh_manager.conf.erb'
       $ossec_rootcheck_template                        = 'wazuh/fragments/_rootcheck.erb'
+      $ossec_aws_s3_template                           = 'wazuh/fragments/_wodle_aws_s3.erb'
       $ossec_wodle_openscap_template                   = 'wazuh/fragments/_wodle_openscap.erb'
       $ossec_wodle_cis_cat_template                    = 'wazuh/fragments/_wodle_cis_cat.erb'
       $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
@@ -110,6 +112,16 @@ class wazuh::params_manager {
 
 
       ## Wodles
+
+      #aws s3
+      $wodle_aws_disabled                               = 'yes'
+      $wodle_aws_interval                               = '1d'
+      $wodle_aws_run_on_start                           = 'yes'
+      $wodle_aws_skip_on_error                          = 'yes'
+      $wodle_aws_remove_from_bucket                     = 'yes'
+      $wodle_aws_buckets                                = []
+      $wodle_aws_services                               = []
+
 
       #openscap
       $wodle_openscap_disabled                         = 'yes'
