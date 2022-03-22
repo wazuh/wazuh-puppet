@@ -45,7 +45,6 @@ class wazuh::indexer (
   package { 'wazuh-indexer':
     ensure => $indexer_version,
     name   => $indexer_package,
-    require => Class['wazuh::repo']
   }
 
   service { 'wazuh-indexer':
@@ -72,7 +71,7 @@ class wazuh::indexer (
 
   exec { 'Launch security admin initializer':
     path    => ['/usr/bin', '/bin', '/usr/sbin'],
-    command => ['/usr/share/wazuh-indexer/bin/indexerSecurityInitializer.sh'],
+    command => '/usr/share/wazuh-indexer/bin/indexer-security-init.sh',
     require => Package[$indexer_package],
 
   }
