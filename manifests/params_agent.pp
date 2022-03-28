@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.2.5-1'
+  $agent_package_version = '4.2.6-1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
 
@@ -438,9 +438,9 @@ class wazuh::params_agent {
     'windows': {
       $config_file = 'C:\\Program Files (x86)\\ossec-agent\\ossec.conf'
       $shared_agent_config_file = 'C:\\Program Files (x86)\\ossec-agent\\shared\\agent.conf'
-      $config_owner = 'Administrator'
       $config_group = 'Administrators'
       $download_path = 'C:\\Temp'
+      $config_mode = '0664'
       $manage_firewall = false
 
       $keys_file = 'C:\\Program Files (x86)\\ossec-agent\\client.keys'
