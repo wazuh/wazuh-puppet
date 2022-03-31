@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 #Define a log-file to add to ossec
 define wazuh::addlog(
   $logfile      = undef,

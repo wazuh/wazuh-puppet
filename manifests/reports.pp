@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 #Define for a Reports section
 define wazuh::reports(
   Optional[String] $r_group               = undef,

@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Setup for Wazuh Indexer
 class wazuh::indexer (
   # opensearch.yml configuration
