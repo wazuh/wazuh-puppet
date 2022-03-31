@@ -30,7 +30,7 @@ class wazuh::dashboard (
     name   => $dashboard_package,
   }
 
-  class {'wazuh::certificates':}
+  include wazuh::certificates
 
   exec { 'Copy Certificates':
     path    => '/usr/bin:/bin',

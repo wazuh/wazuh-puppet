@@ -1,7 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh repository installation
 class wazuh::certificates (
-  $wazuh_repository = 'packages-dev.wazuh.com',
+  $wazuh_repository = 'packages.wazuh.com',
   $wazuh_version = '4.3',
 ) {
 
@@ -22,7 +22,7 @@ class wazuh::certificates (
         path    => '/usr/bin:/bin',
         command => "curl -so /tmp/wazuh-certs-tool.sh 'https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh'\
                 && chmod 744 /tmp/wazuh-certs-tool.sh\
-                && ./tmp/wazuh-certs-tool.sh --all",
+                && bash /tmp/wazuh-certs-tool.sh --all",
 
     }
   }

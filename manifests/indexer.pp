@@ -15,7 +15,7 @@ class wazuh::indexer (
 
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
-  $indexer_path_certs = '/var/wazuh-indexer/certs',
+  $indexer_path_certs = '/etc/wazuh-indexer/certs',
 
 
   $indexer_ip = 'localhost',
@@ -48,7 +48,7 @@ class wazuh::indexer (
     name   => $indexer_package,
   }
 
-  class {'wazuh::certificates':}
+  include wazuh::certificates
 
   exec { 'Copy Certificates':
     path    => '/usr/bin:/bin',

@@ -11,9 +11,9 @@ setup.template.json.path: "/etc/filebeat/wazuh-template.json"
 setup.template.json.name: "wazuh"
 setup.template.overwrite: true
 
-# Send events directly to Elasticsearch
+# Send events directly to Indexer
 output.elasticsearch:
-  hosts: ["https://<%= @filebeat_oss_elasticsearch_ip %>:<%= @filebeat_oss_elasticsearch_port %>"]
+  hosts: ["https://<%= @filebeat_oss_indexer_ip %>:<%= @filebeat_oss_indexer_port %>"]
   username: <%= @filebeat_oss_elastic_user %>
   password: <%= @filebeat_oss_elastic_password %>
   protocol: https
