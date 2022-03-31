@@ -13,6 +13,7 @@ class wazuh::filebeat_oss (
   $wazuh_app_version = '4.3.0_7.10.0',
   $wazuh_extensions_version = 'v4.3.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
+  $filebeat_path_certs = '/etc/filebeat/certs',
 ){
 
   class {'wazuh::repo_elastic_oss':}
@@ -60,6 +61,21 @@ class wazuh::filebeat_oss (
     ensure  => 'directory',
     mode    => '0755',
     require => Package[$filebeat_oss_package]
+  }
+
+  class {'wazuh::certificates':}
+
+  exec { 'Copy Certificates':
+    path    => '/usr/bin:/bin',
+    command => "mkdir $filebeat_path_certs \
+             && cp /tmp/wazuh-certificates/filebeat.pem  $filebeat_path_certs\
+             && cp /tmp/wazuh-certificates/filebeat-key.pem  $filebeat_path_certs\
+             && cp /tmp/wazuh-certificates/root-ca.pem  $filebeat_path_certs\
+             && chown root:root -R $filebeat_path_certs\
+             && chmod 500 $filebeat_path_certs\
+             && chmod 400 $filebeat_path_certs/*",
+    require => Package[$dashboard_package],
+
   }
 
   service { 'filebeat':

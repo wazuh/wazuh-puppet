@@ -16,7 +16,11 @@ output.elasticsearch:
   hosts: ["https://<%= @filebeat_oss_elasticsearch_ip %>:<%= @filebeat_oss_elasticsearch_port %>"]
   username: <%= @filebeat_oss_elastic_user %>
   password: <%= @filebeat_oss_elastic_password %>
-  ssl.verification_mode: none
+  protocol: https
+  ssl.certificate_authorities:
+    - /etc/filebeat/certs/root-ca.pem
+  ssl.certificate: "/etc/filebeat/certs/filebeat.pem"
+  ssl.key: "/etc/filebeat/certs/filebeat-key.pem"
 
 setup.ilm.enabled: false
 

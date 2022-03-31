@@ -9,6 +9,7 @@ class wazuh::dashboard (
   $dashboard_app_version = '4.3.0-1',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
+  $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
 
   $dashboard_server_port = '5601',
   $dashboard_server_host = '0.0.0.0',
@@ -27,6 +28,21 @@ class wazuh::dashboard (
   package { 'Installing Wazuh Dashboard...':
     ensure => $dashboard_version,
     name   => $dashboard_package,
+  }
+
+  class {'wazuh::certificates':}
+
+  exec { 'Copy Certificates':
+    path    => '/usr/bin:/bin',
+    command => "mkdir $dashboard_path_certs \
+             && cp /tmp/wazuh-certificates/dashboard.pem  $dashboard_path_certs\
+             && cp /tmp/wazuh-certificates/dashboard-key.pem  $dashboard_path_certs\
+             && cp /tmp/wazuh-certificates/root-ca.pem  $dashboard_path_certs\
+             && chown wazuh-dashboard:wazuh-dashboard -R $dashboard_path_certs\
+             && chmod 500 $dashboard_path_certs\
+             && chmod 400 $dashboard_path_certs/*",
+    require => Package[$dashboard_package],
+
   }
 
   service { 'wazuh-dashboard':

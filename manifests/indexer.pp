@@ -15,6 +15,7 @@ class wazuh::indexer (
 
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
+  $indexer_path_certs = '/var/wazuh-indexer/certs',
 
 
   $indexer_ip = 'localhost',
@@ -45,6 +46,23 @@ class wazuh::indexer (
   package { 'wazuh-indexer':
     ensure => $indexer_version,
     name   => $indexer_package,
+  }
+
+  class {'wazuh::certificates':}
+
+  exec { 'Copy Certificates':
+    path    => '/usr/bin:/bin',
+    command => "mkdir $indexer_path_certs \
+             && cp /tmp/wazuh-certificates/indexer.pem  $indexer_path_certs\
+             && cp /tmp/wazuh-certificates/indexer-key.pem  $indexer_path_certs\
+             && cp /tmp/wazuh-certificates/root-ca.pem  $indexer_path_certs\
+             && cp /tmp/wazuh-certificates/admin.pem  $indexer_path_certs\
+             && cp /tmp/wazuh-certificates/admin-key.pem  $indexer_path_certs\
+             && chown wazuh-indexer:wazuh-indexer -R $indexer_path_certs\
+             && chmod 500 $indexer_path_certs\
+             && chmod 400 $indexer_path_certs/*",
+    require => Package[$indexer_package],
+
   }
 
   service { 'wazuh-indexer':
