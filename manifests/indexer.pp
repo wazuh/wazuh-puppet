@@ -50,7 +50,7 @@ class wazuh::indexer (
 
   include wazuh::certificates
 
-  exec { 'Copy Certificates':
+  exec { 'Copy Indexer Certificates':
     path    => '/usr/bin:/bin',
     command => "mkdir $indexer_path_certs \
              && cp /tmp/wazuh-certificates/indexer.pem  $indexer_path_certs\
