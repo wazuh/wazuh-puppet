@@ -97,11 +97,11 @@ class wazuh::manager (
       # SCA
 
       ## Amazon
-      $sca_amazon_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
-      $sca_amazon_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
-      $sca_amazon_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
-      $sca_amazon_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
-      $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
+      $sca_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
+      $sca_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
+      $sca_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
+      $sca_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
+      $sca_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
 
       ## RHEL
       $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
