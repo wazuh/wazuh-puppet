@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Setup for Wazuh Dashboard
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
@@ -7,12 +7,13 @@ class wazuh::dashboard (
   $dashboard_user = 'admin',
   $dashboard_password = 'admin',
   $dashboard_app_version = '4.3.0-1',
-  $dashboard_ip = 'localhost',
-  $dashboard_port = '9200',
+  $indexer_server_ip = 'localhost',
+  $indexer_server_port = '9200',
+  $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
 
   $dashboard_server_port = '5601',
   $dashboard_server_host = '0.0.0.0',
-  $dashboard_server_hosts ="https://${dashboard_ip}:$dashboard_port}",
+  $dashboard_server_hosts ="https://${indexer_server_ip}:$indexer_server_port}",
   $dashboard_wazuh_api_credentials = [ {
                                       'id'       => 'default',
                                       'url'      => 'http://localhost',
@@ -29,6 +30,20 @@ class wazuh::dashboard (
     name   => $dashboard_package,
   }
 
+  include wazuh::certificates
+
+  exec { 'Copy Dashboard Certificates':
+    path    => '/usr/bin:/bin',
+    command => "mkdir $dashboard_path_certs \
+             && cp /tmp/wazuh-certificates/dashboard.pem  $dashboard_path_certs\
+             && cp /tmp/wazuh-certificates/dashboard-key.pem  $dashboard_path_certs\
+             && cp /tmp/wazuh-certificates/root-ca.pem  $dashboard_path_certs\
+             && chown wazuh-dashboard:wazuh-dashboard -R $dashboard_path_certs\
+             && chmod 500 $dashboard_path_certs\
+             && chmod 400 $dashboard_path_certs/*",
+
+  }
+
   service { 'wazuh-dashboard':
     ensure     => running,
     enable     => true,
@@ -37,7 +52,7 @@ class wazuh::dashboard (
 
   exec {'Waiting for Wazuh indexer...':
     path      => '/usr/bin',
-    command   => "curl -u ${dashboard_user}:${dashboard_password} -k -s -XGET https://${dashboard_ip}:${dashboard_port}",
+    command   => "curl -u ${dashboard_user}:${dashboard_password} -k -s -XGET https://${indexer_server_ip}:${indexer_server_port}",
     tries     => 100,
     try_sleep => 3,
   }
