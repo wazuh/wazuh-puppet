@@ -131,15 +131,6 @@ class wazuh::params_agent {
 
   # SCA
 
-  ## Windows
-  $sca_windows_enabled = undef
-  $sca_windows_scan_on_start = undef
-  $sca_windows_interval = undef
-  $sca_windows_skip_nfs = undef
-  $sca_windows_policies = []
-
-  $windows_audit_interval = undef
-
   ## Amazon
   $sca_amazon_enabled = 'yes'
   $sca_amazon_scan_on_start = 'yes'
@@ -454,7 +445,6 @@ class wazuh::params_agent {
       $config_group = 'Administrators'
       $download_path = 'C:\\Temp'
       $config_mode = '0664'
-      $manage_firewall = false
 
       $keys_file = 'C:\\Program Files (x86)\\ossec-agent\\client.keys'
 
