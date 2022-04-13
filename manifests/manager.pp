@@ -27,6 +27,7 @@ class wazuh::manager (
       $ossec_remote_port                = $wazuh::params_manager::ossec_remote_port,
       $ossec_remote_protocol            = $wazuh::params_manager::ossec_remote_protocol,
       $ossec_remote_local_ip            = $wazuh::params_manager::ossec_remote_local_ip,
+      $ossec_remote_allowed_ips         = $wazuh::params_manager::ossec_remote_allowed_ips,
       $ossec_remote_queue_size          = $wazuh::params_manager::ossec_remote_queue_size,
 
       # ossec.conf generation parameters

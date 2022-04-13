@@ -27,6 +27,7 @@ class wazuh::params_manager {
       $ossec_remote_port                               = 1514
       $ossec_remote_protocol                           = 'tcp'
       $ossec_remote_local_ip                           = undef
+      $ossec_remote_allowed_ips                        = undef
       $ossec_remote_queue_size                         = 131072
 
     # ossec.conf generation parameters
