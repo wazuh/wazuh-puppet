@@ -8,7 +8,6 @@ describe 'wazuh::repo' do
       if os_facts[:os]['kernel'] == 'Linux'
         it { is_expected.to compile }
 
-
         if os_facts[:os]['family'] == 'RedHat'
           it {
             is_expected.to contain_yumrepo('wazuh').with(
