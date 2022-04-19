@@ -337,8 +337,17 @@ class wazuh::manager (
 
 
   if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
-    package { 'Installing Auditd...':
-      name   => 'auditd',
+    case $::operatingsystem {
+      'Debian', 'debian', 'Ubuntu', 'ubuntu': {
+        package { 'Installing Auditd...':
+          name => 'auditd',
+        }
+      }
+      default: {
+        package { 'Installing Auditd...':
+          name => 'audit'
+        }
+      }
     }
     service { 'auditd':
       ensure => running,
