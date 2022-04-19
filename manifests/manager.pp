@@ -344,7 +344,7 @@ class wazuh::manager (
         }
       }
       default: {
-        package { 'Installing Auditd...':
+        package { 'Installing Audit...':
           name => 'audit'
         }
       }
