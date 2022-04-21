@@ -159,6 +159,7 @@ class wazuh::manager (
       #vulnerability-detector
       $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
       $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
+      $vulnerability_detector_min_full_scan_interval             = $wazuh::params_manager::vulnerability_detector_min_full_scan_interval
       $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
 # lint:ignore:140chars
       $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
