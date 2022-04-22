@@ -97,6 +97,7 @@ class wazuh::params_agent {
 
   # Other required to define variables
   $manage_repo = true
+  $yumrepo_enabled = true
   $manage_firewall = false
   $selinux = false
   $configure_labels = false

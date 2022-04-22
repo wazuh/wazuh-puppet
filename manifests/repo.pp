@@ -1,6 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh repository installation
 class wazuh::repo (
+  Boolean $yumrepo_enabled = true,
 ) {
 
   case $::osfamily {
@@ -48,8 +49,8 @@ class wazuh::repo (
         }
       # Set up OSSEC repo
       yumrepo { 'wazuh':
-        descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
-        enabled  => true,
+        descr    => 'WAZUH Repository - www.wazuh.com',
+        enabled  => $yumrepo_enabled,
         gpgcheck => 1,
         gpgkey   => $gpgkey,
         baseurl  => $baseurl
