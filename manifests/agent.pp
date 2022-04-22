@@ -286,6 +286,7 @@ class wazuh::agent (
       }
       package { $agent_package_name:
         ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
+        install_options => [ { "--enablerepo"  => "wazuh" }, ],
       }
     }
     'windows': {
@@ -663,5 +664,4 @@ class wazuh::agent (
       require => Package[$wazuh::params_agent::agent_package_name],
     }
   }
-
 }
