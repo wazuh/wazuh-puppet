@@ -375,7 +375,8 @@ class wazuh::manager (
   # Install and configure Wazuh-manager package
 
   package { $wazuh::params_manager::server_package:
-    ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
+    ensure          => $server_package_version, # lint:ignore:security_package_pinned_version
+    install_options => [ { '--enablerepo'  => 'wazuh' }, ],
   }
 
   file {

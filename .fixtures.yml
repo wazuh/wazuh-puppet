@@ -4,3 +4,6 @@ fixtures:
     stdlib:
       repo: "puppetlabs/stdlib"
       ref: "4.13.0"
+    yumrepo:
+      repo: "puppetlabs/yumrepo_core"
+      ref: "1.1.0"

@@ -14,6 +14,7 @@ class wazuh::agent (
   # Manage repository
 
   $manage_repo                       = $wazuh::params_agent::manage_repo,
+  $yumrepo_enabled                   = $wazuh::params_agent::yumrepo_enabled,
 
   # Authd registration options
   $manage_client_keys                = $wazuh::params_agent::manage_client_keys,
@@ -274,7 +275,9 @@ class wazuh::agent (
   case $::kernel {
     'Linux': {
       if $manage_repo {
-        class { 'wazuh::repo': }
+        class { 'wazuh::repo':
+          yumrepo_enabled => $yumrepo_enabled,
+        }
         if $::osfamily == 'Debian' {
           Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
         } else {
@@ -282,7 +285,8 @@ class wazuh::agent (
         }
       }
       package { $agent_package_name:
-        ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
+        ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
+        install_options => [ { '--enablerepo'  => 'wazuh' }, ],
       }
     }
     'windows': {
