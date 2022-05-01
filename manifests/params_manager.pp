@@ -348,6 +348,8 @@ class wazuh::params_manager {
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
       $wazuh_api_logs_level = 'info'
+      # Values for API log format: 'plain', 'json', 'plain,json', 'json,plain'
+      $wazuh_api_logs_format = 'plain'
 
       # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
       $wazuh_api_cors_enabled = 'no'
