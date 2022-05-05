@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Support to 4.3.0 Wazuh release.
+- Add support for Ubuntu 22.04 (Jammy Jellyfish)
 
 ## Wazuh Puppet v4.2.5
 

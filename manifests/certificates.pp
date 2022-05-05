@@ -4,8 +4,8 @@ class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
   $wazuh_version = '4.3',
 ) {
-
-  $certs_path = '/tmp/wazuh-certificates'
+  $base_path = '/tmp'
+  $certs_path = '${base_path}/wazuh-certificates'
 
   $path_exists = find_file($certs_path)
 
@@ -20,9 +20,9 @@ class wazuh::certificates (
     
     exec { 'Create Wazuh Certificates':
         path    => '/usr/bin:/bin',
-        command => "curl -so /tmp/wazuh-certs-tool.sh 'https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh'\
+        command => "curl -so /tmp/wazuh-certs-tool.sh https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh\
                 && chmod 744 /tmp/wazuh-certs-tool.sh\
-                && if [[ ! -d ${base_path}/wazuh-certificates ]]; then bash /tmp/wazuh-certs-tool.sh --all; fi",
+                && bash /tmp/wazuh-certs-tool.sh --all",
 
     }
   }
