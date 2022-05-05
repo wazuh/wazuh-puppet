@@ -52,7 +52,7 @@ class wazuh::indexer (
 
   exec { 'Copy Indexer Certificates':
     path    => '/usr/bin:/bin',
-    command => "mkdir $indexer_path_certs \
+    command => "mkdir -p $indexer_path_certs \
              && cp /tmp/wazuh-certificates/indexer.pem  $indexer_path_certs\
              && cp /tmp/wazuh-certificates/indexer-key.pem  $indexer_path_certs\
              && cp /tmp/wazuh-certificates/root-ca.pem  $indexer_path_certs\

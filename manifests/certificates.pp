@@ -22,7 +22,7 @@ class wazuh::certificates (
         path    => '/usr/bin:/bin',
         command => "curl -so /tmp/wazuh-certs-tool.sh 'https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh'\
                 && chmod 744 /tmp/wazuh-certs-tool.sh\
-                && bash /tmp/wazuh-certs-tool.sh --all",
+                && if [[ ! -d ${base_path}/wazuh-certificates ]]; then bash /tmp/wazuh-certs-tool.sh --all; fi",
 
     }
   }
