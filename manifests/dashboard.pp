@@ -3,10 +3,9 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '4.3.0-1',
+  $dashboard_version = '4.3.0',
   $dashboard_user = 'admin',
   $dashboard_password = 'admin',
-  $dashboard_app_version = '4.3.0-1',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -24,9 +23,19 @@ class wazuh::dashboard (
                                   ]
 ) {
 
+  # assign version according to the package manager
+  case $::osfamily {
+    'Debian' : {
+      $dashboard_version_install = "${dashboard_version}-*"
+    }
+    'Linux', 'RedHat' : {
+      $dashboard_version_install = "${dashboard_version}"
+    }
+  }
+
   # install package
   package { 'Installing Wazuh Dashboard...':
-    ensure => $dashboard_version,
+    ensure => $dashboard_version_install,
     name   => $dashboard_package,
   }
 
