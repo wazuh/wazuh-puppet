@@ -6,7 +6,6 @@ class wazuh::dashboard (
   $dashboard_version = '4.3.0',
   $dashboard_user = 'admin',
   $dashboard_password = 'admin',
-  $dashboard_app_version = "${dashboard_version}-1",
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
