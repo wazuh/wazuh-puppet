@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Installation of Elastic-oss repository
 class wazuh::repo_elastic_oss (
 
@@ -15,7 +15,7 @@ class wazuh::repo_elastic_oss (
           server => 'pgp.mit.edu'
         }
         case $::lsbdistcodename {
-          /(jessie|wheezy|stretch|buster|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
+          /(jessie|wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
 
             apt::source { 'wazuh_elastic_oss':
               ensure   => present,
