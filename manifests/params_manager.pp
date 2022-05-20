@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Paramas file
 class wazuh::params_manager {
   case $::kernel {
@@ -27,6 +27,7 @@ class wazuh::params_manager {
       $ossec_remote_port                               = 1514
       $ossec_remote_protocol                           = 'tcp'
       $ossec_remote_local_ip                           = undef
+      $ossec_remote_allowed_ips                        = undef
       $ossec_remote_queue_size                         = 131072
 
     # ossec.conf generation parameters
@@ -160,6 +161,7 @@ class wazuh::params_manager {
 
       $vulnerability_detector_enabled                            = 'no'
       $vulnerability_detector_interval                           = '5m'
+      $vulnerability_detector_min_full_scan_interval             = '6h'
       $vulnerability_detector_run_on_start                       = 'yes'
 
       $vulnerability_detector_provider_canonical                 = 'yes'
@@ -181,7 +183,7 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_debian_update_interval = '1h'
       $vulnerability_detector_provider_redhat                    = 'yes'
       $vulnerability_detector_provider_redhat_enabled            = 'no'
-      $vulnerability_detector_provider_redhat_os                 = []
+      $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8']
       $vulnerability_detector_provider_redhat_update_from_year   = '2010'
       $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
 
@@ -191,6 +193,21 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_nvd_os                 = []
       $vulnerability_detector_provider_nvd_update_from_year   = '2010'
       $vulnerability_detector_provider_nvd_update_interval    = '1h'
+
+      $vulnerability_detector_provider_arch                   = 'yes'
+      $vulnerability_detector_provider_arch_enabled           = 'no'
+      $vulnerability_detector_provider_arch_update_interval   = '1h'
+
+      $vulnerability_detector_provider_alas                   = 'yes'
+      $vulnerability_detector_provider_alas_enabled           = 'no'
+      $vulnerability_detector_provider_alas_os              = ['amazon-linux',
+      'amazon-linux-2'
+      ]
+      $vulnerability_detector_provider_alas_update_interval   = '1h'
+
+      $vulnerability_detector_provider_msu                   = 'yes'
+      $vulnerability_detector_provider_msu_enabled           = 'no'
+      $vulnerability_detector_provider_msu_update_interval   = '1h'
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
@@ -424,7 +441,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
+            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -520,6 +537,12 @@ class wazuh::params_manager {
                     profiles => ['xccdf_org.ssgproject.content_profile_standard', 'xccdf_org.ssgproject.content_profile_common',]
                   },
                 }
+              }
+            }
+            'AlmaLinux': {
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
               }
             }
             default: { fail('This ossec module has not been tested on your distribution') }

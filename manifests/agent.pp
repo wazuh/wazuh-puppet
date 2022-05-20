@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 
 # Puppet class that installs and manages the Wazuh agent
 class wazuh::agent (
@@ -121,11 +121,11 @@ class wazuh::agent (
   # SCA
 
   ## Amazon
-  $sca_amazon_amazon_enabled = $wazuh::params_agent::sca_amazon_enabled,
-  $sca_amazon_amazon_scan_on_start = $wazuh::params_agent::sca_amazon_scan_on_start,
-  $sca_amazon_amazon_interval = $wazuh::params_agent::sca_amazon_interval,
-  $sca_amazon_amazon_skip_nfs = $wazuh::params_agent::sca_amazon_skip_nfs,
-  $sca_amazon_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
+  $sca_amazon_enabled = $wazuh::params_agent::sca_amazon_enabled,
+  $sca_amazon_scan_on_start = $wazuh::params_agent::sca_amazon_scan_on_start,
+  $sca_amazon_interval = $wazuh::params_agent::sca_amazon_interval,
+  $sca_amazon_skip_nfs = $wazuh::params_agent::sca_amazon_skip_nfs,
+  $sca_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
 
   ## RHEL
   $sca_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
@@ -335,7 +335,7 @@ class wazuh::agent (
         }
       }'Amazon':{
         $apply_template_os = 'amazon'
-      }'CentOS','Centos','centos':{
+      }'CentOS','Centos','centos','AlmaLinux':{
         $apply_template_os = 'centos'
       }
       default: { fail('OS not supported') }
