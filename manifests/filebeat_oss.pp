@@ -10,8 +10,8 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elastic_user = 'admin',
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
-  $wazuh_app_version = '4.3.1_7.10.0',
-  $wazuh_extensions_version = 'v4.3.1',
+  $wazuh_app_version = '4.3.2_7.10.0',
+  $wazuh_extensions_version = 'v4.3.2',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
   $filebeat_path_certs = '/etc/filebeat/certs',
 ){
