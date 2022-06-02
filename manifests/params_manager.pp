@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.3.3-1'
+      $server_package_version                          = '4.4.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -365,6 +365,8 @@ class wazuh::params_manager {
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
       $wazuh_api_logs_level = 'info'
+      # Values for API log format: 'plain', 'json', 'plain,json', 'json,plain'
+      $wazuh_api_logs_format = 'plain'
 
       # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
       $wazuh_api_cors_enabled = 'no'
@@ -563,7 +565,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.3.3'
+      $agent_package  = 'Wazuh Agent 4.4.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
