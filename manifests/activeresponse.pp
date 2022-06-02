@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 #Define for a specific ossec active-response
 define wazuh::activeresponse(
   $active_response_name               = 'Rendering active-response template',

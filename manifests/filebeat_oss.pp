@@ -1,9 +1,9 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Setup for Filebeat_oss
 class wazuh::filebeat_oss (
-  $filebeat_oss_elasticsearch_ip = 'localhost',
-  $filebeat_oss_elasticsearch_port = '9200',
-  $elasticsearch_server_ip = "\"${filebeat_oss_elasticsearch_ip}:${filebeat_oss_elasticsearch_port}\"",
+  $filebeat_oss_indexer_ip = '127.0.0.1',
+  $filebeat_oss_indexer_port = '9200',
+  $indexer_server_ip = "\"${filebeat_oss_indexer_ip}:${filebeat_oss_indexer_port}\"",
 
   $filebeat_oss_package = 'filebeat',
   $filebeat_oss_service = 'filebeat',
@@ -13,6 +13,7 @@ class wazuh::filebeat_oss (
   $wazuh_app_version = '4.4.0_7.10.0',
   $wazuh_extensions_version = 'v4.4.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.1.tar.gz',
+  $filebeat_path_certs = '/etc/filebeat/certs',
 ){
 
   class {'wazuh::repo_elastic_oss':}
@@ -60,6 +61,21 @@ class wazuh::filebeat_oss (
     ensure  => 'directory',
     mode    => '0755',
     require => Package[$filebeat_oss_package]
+  }
+
+  include wazuh::certificates
+
+  exec { 'Copy Filebeat Certificates':
+    path    => '/usr/bin:/bin',
+    command => "mkdir $filebeat_path_certs \
+             && cp /tmp/wazuh-certificates/server.pem  $filebeat_path_certs/filebeat.pem\
+             && cp /tmp/wazuh-certificates/server-key.pem  $filebeat_path_certs/filebeat-key.pem\
+             && cp /tmp/wazuh-certificates/root-ca.pem  $filebeat_path_certs\
+             && chown root:root -R $filebeat_path_certs\
+             && chmod 500 $filebeat_path_certs\
+             && chmod 400 $filebeat_path_certs/*",
+    require => Package[$filebeat_oss_package],
+
   }
 
   service { 'filebeat':
