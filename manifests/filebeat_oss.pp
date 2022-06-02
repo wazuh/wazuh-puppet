@@ -52,7 +52,7 @@ class wazuh::filebeat_oss (
   }
 
   exec { 'Unpackaging ...':
-    command => '/bin/tar -xzvf /root/wazuh-filebeat-0.1.tar.gz -C /usr/share/filebeat/module',
+    command => '/bin/tar -xzvf /root/wazuh-filebeat-0.2.tar.gz -C /usr/share/filebeat/module',
     notify  => Service[$filebeat_oss_service],
     require => Package[$filebeat_oss_package]
   }
