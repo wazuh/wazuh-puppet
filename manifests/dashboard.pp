@@ -3,7 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '4.3.3',
+  $dashboard_version = '4.5.0',
   $dashboard_user = 'admin',
   $dashboard_password = 'admin',
   $indexer_server_ip = 'localhost',
