@@ -127,7 +127,7 @@ This Puppet module has been authored by Nicolas Zin, and updated by Jonathan Gaz
 ## License and copyright
 
 WAZUH
-Copyright (C) 2021 Wazuh Inc.  (License GPLv2)
+Copyright (C) 2015, Wazuh Inc.  (License GPLv2)
 
 ## Web References
 
