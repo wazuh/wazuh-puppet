@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.4.0-1'
+      $server_package_version                          = '4.5.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -565,7 +565,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.4.0'
+      $agent_package  = 'Wazuh Agent 4.5.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
