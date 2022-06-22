@@ -77,11 +77,4 @@ class wazuh::dashboard (
     hasrestart => true,
     name       => $dashboard_service,
   }
-
-  exec { 'Waiting for Wazuh indexer...':
-    path      => '/usr/bin',
-    command   => "curl -u ${dashboard_user}:${dashboard_password} -k -s -XGET https://${indexer_server_ip}:${indexer_server_port}",
-    tries     => 100,
-    try_sleep => 3,
-  }
 }
