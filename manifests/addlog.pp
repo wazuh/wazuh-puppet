@@ -1,6 +1,6 @@
 # Copyright (C) 2015, Wazuh Inc.
 #Define a log-file to add to ossec
-define wazuh::addlog(
+define wazuh::addlog (
   $logfile      = undef,
   $logtype      = 'syslog',
   $logcommand   = undef,
@@ -15,5 +15,4 @@ define wazuh::addlog(
     content => template('wazuh/fragments/_localfile_generation.erb'),
     order   => 21,
   }
-
 }

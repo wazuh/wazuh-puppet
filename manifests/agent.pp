@@ -94,7 +94,6 @@ class wazuh::agent (
   $wazuh_delay_after_enrollment      = $wazuh::params_agent::wazuh_delay_after_enrollment,
   $wazuh_enrollment_use_source_ip    = $wazuh::params_agent::wazuh_enrollment_use_source_ip,
 
-
   # Rootcheck
   $ossec_rootcheck_disabled           = $wazuh::params_agent::ossec_rootcheck_disabled,
   $ossec_rootcheck_check_files        = $wazuh::params_agent::ossec_rootcheck_check_files,
@@ -111,7 +110,6 @@ class wazuh::agent (
   $ossec_rootcheck_rootkit_trojans    = $wazuh::params_agent::ossec_rootcheck_rootkit_trojans,
   $ossec_rootcheck_skip_nfs           = $wazuh::params_agent::ossec_rootcheck_skip_nfs,
   $ossec_rootcheck_system_audit      = $wazuh::params_agent::ossec_rootcheck_system_audit,
-
 
   # rootcheck windows
   $ossec_rootcheck_windows_disabled        = $wazuh::params_agent::ossec_rootcheck_windows_disabled,
@@ -263,7 +261,6 @@ class wazuh::agent (
     }
   }
 
-
   if $manage_client_keys == 'yes' {
     if $wazuh_register_endpoint == undef {
       fail('The $wazuh_register_endpoint parameter is needed in order to register the Agent.')
@@ -271,11 +268,11 @@ class wazuh::agent (
   }
 
   # Package installation
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux': {
       if $manage_repo {
-        class { 'wazuh::repo': }
-        if $::osfamily == 'Debian' {
+        include wazuh::repo
+        if $facts['os']['family'] == 'Debian' {
           Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
         } else {
           Class['wazuh::repo'] -> Package[$agent_package_name]
@@ -295,12 +292,12 @@ class wazuh::agent (
         group              => 'Administrators',
         mode               => '0774',
         source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}.msi",
-        source_permissions => ignore
+        source_permissions => ignore,
       }
 
       # We dont need to pin the package version on Windows since we install if from the right MSI.
       -> package { $agent_package_name:
-        ensure          => "${agent_package_version}",
+        ensure          => $agent_package_version,
         provider        => 'windows',
         source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
         install_options => [
@@ -313,41 +310,41 @@ class wazuh::agent (
     default: { fail('OS not supported') }
   }
 
-  case $::kernel {
-  'Linux': {
-    ## ossec.conf generation concats
-    case $::operatingsystem {
-      'RedHat', 'OracleLinux':{
-        $apply_template_os = 'rhel'
-        if ( $::operatingsystemrelease     =~ /^8.*/ ){
-          $rhel_version = '8'
-        }elsif ( $::operatingsystemrelease  =~ /^7.*/ ){
-          $rhel_version = '7'
-        }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
-          $rhel_version = '6'
-        }elsif ( $::operatingsystemrelease =~ /^5.*/ ){
-          $rhel_version = '5'
-        }else{
-          fail('This ossec module has not been tested on your distribution')
+  case $facts['kernel'] {
+    'Linux': {
+      ## ossec.conf generation concats
+      case $facts['os']['name'] {
+        'RedHat', 'OracleLinux': {
+          $apply_template_os = 'rhel'
+          case $facts['os']['distro']['release']['full'] {
+            /^8.*/: { $rhel_version = '8' }
+            /^7.*/: { $rhel_version = '7' }
+            /^6.*/: { $rhel_version = '6' }
+            /^5.*/: { $rhel_version = '5' }
+            default: { fail('This ossec module has not been tested on your distribution') }
+          }
         }
-      }'Debian', 'debian', 'Ubuntu', 'ubuntu':{
-        $apply_template_os = 'debian'
-        if ( $::lsbdistcodename == 'wheezy') or ($::lsbdistcodename == 'jessie'){
-          $debian_additional_templates = 'yes'
+        'Debian', 'debian', 'Ubuntu', 'ubuntu': {
+          $apply_template_os = 'debian'
+          $debian_additional_templates = $facts['os']['distro']['codename'] ? {
+            Enum['wheezy', 'jessie'] => 'yes',
+            default => undef,
+          }
         }
-      }'Amazon':{
-        $apply_template_os = 'amazon'
-      }'CentOS','Centos','centos','AlmaLinux':{
-        $apply_template_os = 'centos'
+        'Amazon':{
+          $apply_template_os = 'amazon'
+        }
+        'CentOS','Centos','centos','AlmaLinux': {
+          $apply_template_os = 'centos'
+        }
+        default: { fail('OS not supported') }
       }
-      default: { fail('OS not supported') }
     }
-  }'windows': {
+    'windows': {
       $apply_template_os = 'windows'
     }
     default: { fail('OS not supported') }
   }
-
 
   concat { 'agent_ossec.conf':
     path    => $wazuh::params_agent::config_file,
@@ -362,7 +359,7 @@ class wazuh::agent (
   concat::fragment {
     'ossec.conf_header':
       target  => 'agent_ossec.conf',
-      order   => 00,
+      order   => '00',
       before  => Service[$agent_service_name],
       content => "<ossec_config>\n";
     'ossec.conf_agent':
@@ -455,19 +452,19 @@ class wazuh::agent (
   }
   if ($configure_active_response == true) {
     wazuh::activeresponse { 'active-response configuration':
-      active_response_disabled           =>  $ossec_active_response_disabled,
-      active_response_linux_ca_store     =>  $ossec_active_response_linux_ca_store,
-      active_response_ca_verification    =>  $ossec_active_response_ca_verification,
-      active_response_repeated_offenders =>  $ossec_active_response_repeated_offenders,
+      active_response_disabled           => $ossec_active_response_disabled,
+      active_response_linux_ca_store     => $ossec_active_response_linux_ca_store,
+      active_response_ca_verification    => $ossec_active_response_ca_verification,
+      active_response_repeated_offenders => $ossec_active_response_repeated_offenders,
       order_arg                          => 40,
       before_arg                         => Service[$agent_service_name],
-      target_arg                         => 'agent_ossec.conf'
+      target_arg                         => 'agent_ossec.conf',
     }
   }
 
-  if ($configure_labels == true){
+  if ($configure_labels == true) {
     concat::fragment {
-        'ossec.conf_labels':
+      'ossec.conf_labels':
         target  => 'agent_ossec.conf',
         order   => 45,
         before  => Service[$agent_service_name],
@@ -511,9 +508,9 @@ class wazuh::agent (
       $agent_auth_option_address = ''
     }
 
-    case $::kernel {
+    case $facts['kernel'] {
       'Linux': {
-        file { $::wazuh::params_agent::keys_file:
+        file { $wazuh::params_agent::keys_file:
           owner => $wazuh::params_agent::keys_owner,
           group => $wazuh::params_agent::keys_group,
           mode  => $wazuh::params_agent::keys_mode,
@@ -573,7 +570,7 @@ class wazuh::agent (
 
         exec { 'agent-auth-linux':
           command => $agent_auth_command,
-          unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
+          unless  => "/bin/egrep -q '.' ${wazuh::params_agent::keys_file}",
           require => Concat['agent_ossec.conf'],
           before  => Service[$agent_service_name],
           notify  => Service[$agent_service_name],
@@ -601,7 +598,7 @@ class wazuh::agent (
         exec { 'agent-auth-windows':
           command  => $agent_auth_command,
           provider => 'powershell',
-          onlyif   => "if ((Get-Item '${$::wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
+          onlyif   => "if ((Get-Item '${$wazuh::params_agent::keys_file}').length -gt 0kb) {exit 1}",
           require  => Concat['agent_ossec.conf'],
           before   => Service[$agent_service_name],
           notify   => Service[$agent_service_name],
@@ -631,7 +628,7 @@ class wazuh::agent (
 
   # SELinux
   # Requires selinux module specified in metadata.json
-  if ($::osfamily == 'RedHat' and $selinux == true) {
+  if ($facts['os']['family'] == 'RedHat' and $selinux == true) {
     selinux::module { 'ossec-logrotate':
       ensure    => 'present',
       source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',
@@ -662,5 +659,4 @@ class wazuh::agent (
       require => Package[$wazuh::params_agent::agent_package_name],
     }
   }
-
 }

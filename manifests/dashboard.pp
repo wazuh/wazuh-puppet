@@ -12,24 +12,24 @@ class wazuh::dashboard (
 
   $dashboard_server_port = '5601',
   $dashboard_server_host = '0.0.0.0',
-  $dashboard_server_hosts ="https://${indexer_server_ip}:$indexer_server_port}",
-  $dashboard_wazuh_api_credentials = [ {
-                                      'id'       => 'default',
-                                      'url'      => 'http://localhost',
-                                      'port'     => '55000',
-                                      'user'     => 'foo',
-                                      'password' => 'bar',
-                                    },
-                                  ]
+  $dashboard_server_hosts ="https://${indexer_server_ip}:${indexer_server_port}",
+  $dashboard_wazuh_api_credentials = [
+    {
+      'id'       => 'default',
+      'url'      => 'http://localhost',
+      'port'     => '55000',
+      'user'     => 'foo',
+      'password' => 'bar',
+    },
+  ]
 ) {
-
   # assign version according to the package manager
-  case $::osfamily {
-    'Debian' : {
+  case $facts['os']['family'] {
+    'Debian': {
       $dashboard_version_install = "${dashboard_version}-*"
     }
-    'Linux', 'RedHat' : {
-      $dashboard_version_install = "${dashboard_version}"
+    'Linux', 'RedHat', default: {
+      $dashboard_version_install = $dashboard_version
     }
   }
 
@@ -43,14 +43,13 @@ class wazuh::dashboard (
 
   exec { 'Copy Dashboard Certificates':
     path    => '/usr/bin:/bin',
-    command => "mkdir $dashboard_path_certs \
-             && cp /tmp/wazuh-certificates/dashboard.pem  $dashboard_path_certs\
-             && cp /tmp/wazuh-certificates/dashboard-key.pem  $dashboard_path_certs\
-             && cp /tmp/wazuh-certificates/root-ca.pem  $dashboard_path_certs\
-             && chown wazuh-dashboard:wazuh-dashboard -R $dashboard_path_certs\
-             && chmod 500 $dashboard_path_certs\
-             && chmod 400 $dashboard_path_certs/*",
-
+    command => "mkdir ${dashboard_path_certs} \
+             && cp /tmp/wazuh-certificates/dashboard.pem  ${dashboard_path_certs}\
+             && cp /tmp/wazuh-certificates/dashboard-key.pem  ${dashboard_path_certs}\
+             && cp /tmp/wazuh-certificates/root-ca.pem  ${dashboard_path_certs}\
+             && chown wazuh-dashboard:wazuh-dashboard -R ${dashboard_path_certs}\
+             && chmod 500 ${dashboard_path_certs}\
+             && chmod 400 ${dashboard_path_certs}/*",
   }
 
   service { 'wazuh-dashboard':
@@ -59,11 +58,10 @@ class wazuh::dashboard (
     hasrestart => true,
   }
 
-  exec {'Waiting for Wazuh indexer...':
+  exec { 'Waiting for Wazuh indexer...':
     path      => '/usr/bin',
     command   => "curl -u ${dashboard_user}:${dashboard_password} -k -s -XGET https://${indexer_server_ip}:${indexer_server_port}",
     tries     => 100,
     try_sleep => 3,
   }
-
 }
