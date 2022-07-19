@@ -24,4 +24,11 @@ output.elasticsearch:
 
 setup.ilm.enabled: false
 
+logging.metrics.enabled: false
 
+seccomp:
+  default_action: allow
+  syscalls:
+  - action: allow
+    names:
+    - rseq
