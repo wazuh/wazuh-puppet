@@ -2,7 +2,7 @@
 # Wazuh repository installation
 class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
-  $wazuh_version = '4.3',
+  $wazuh_version = '4.5',
 ) {
 
   $certs_path = '/tmp/wazuh-certificates'
@@ -17,7 +17,7 @@ class wazuh::certificates (
         mode    => '0644',
         content => template('wazuh/wazuh_config_yml.erb'),
     }
-    
+
     exec { 'Create Wazuh Certificates':
         path    => '/usr/bin:/bin',
         command => "curl -so /tmp/wazuh-certs-tool.sh 'https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh'\
