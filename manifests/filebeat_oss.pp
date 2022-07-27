@@ -14,14 +14,16 @@ class wazuh::filebeat_oss (
   $wazuh_extensions_version = 'v4.3.6',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.2.tar.gz',
 
+  $filebeat_fileuser = 'root',
+  $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
 ) {
   include wazuh::repo_elastic_oss
 
   if $facts['os']['family'] == 'Debian' {
-    Class['wazuh::repo_elastic_oss'] -> Class['apt::update'] -> Package[$filebeat_oss_package]
+    Class['wazuh::repo_elastic_oss'] -> Class['apt::update'] -> Package['filebeat']
   } else {
-    Class['wazuh::repo_elastic_oss'] -> Package[$filebeat_oss_package]
+    Class['wazuh::repo_elastic_oss'] -> Package['filebeat']
   }
 
   package { 'filebeat':
@@ -29,57 +31,88 @@ class wazuh::filebeat_oss (
     name   => $filebeat_oss_package,
   }
 
-  file { 'Configure filebeat.yml':
+  file { '/etc/filebeat/filebeat.yml':
     owner   => 'root',
-    path    => '/etc/filebeat/filebeat.yml',
     group   => 'root',
     mode    => '0644',
-    notify  => Service[$filebeat_oss_service], ## Restarts the service
+    notify  => Service['filebeat'], ## Restarts the service
     content => template('wazuh/filebeat_oss_yml.erb'),
-    require => Package[$filebeat_oss_package],
+    require => Package['filebeat'],
   }
 
-  exec { 'Installing wazuh-template.json...':
-    path    => '/usr/bin',
-    command => "curl -so /etc/filebeat/wazuh-template.json 'https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json'",
-    notify  => Service[$filebeat_oss_service],
-    require => Package[$filebeat_oss_package],
+  # work around:
+  #  Use cmp to compare the content of local and remote file. When they differ than rm the file to get it recreated by the file resource.
+  #  Needed since GitHub can only ETAG and result in changes of the mtime everytime.
+  # TODO: Include file into the wazuh/wazuh-puppet project or use file { checksum => '..' } for this instead of the exec construct.
+  exec { 'cleanup /etc/filebeat/wazuh-template.json':
+    command => '/bin/rm /etc/filebeat/wazuh-template.json',
+    unless  => "/bin/cmp -s '/etc/filebeat/wazuh-template.json' <(curl -s https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json)",
+  }
+  -> file { '/etc/filebeat/wazuh-template.json':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
+    replace => false,  # only copy content when file not exist
+    source  => "https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json",
+    notify  => Service['filebeat'],
+    require => Package['filebeat'],
   }
 
-  exec { 'Installing filebeat module ... Downloading package':
-    path    => '/usr/bin',
-    command => "curl -o /root/${$wazuh_filebeat_module} https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+  # TODO: use archive from puppet-archive module for this task
+  file { "/tmp/${$wazuh_filebeat_module}":
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0440',
+    source => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
   }
-
-  exec { 'Unpackaging ...':
-    command => '/bin/tar -xzvf /root/wazuh-filebeat-0.2.tar.gz -C /usr/share/filebeat/module',
-    notify  => Service[$filebeat_oss_service],
-    require => Package[$filebeat_oss_package],
+  ~> exec { "Unpackaging /tmp/${$wazuh_filebeat_module}":
+    command     => "/bin/tar -xzvf /tmp/${$wazuh_filebeat_module} -C /usr/share/filebeat/module",
+    notify      => Service['filebeat'],
+    require     => Package['filebeat'],
+    refreshonly => true,
   }
 
   file { '/usr/share/filebeat/module/wazuh':
     ensure  => 'directory',
     mode    => '0755',
-    require => Package[$filebeat_oss_package],
+    require => Package['filebeat'],
   }
 
-  include wazuh::certificates
+  require wazuh::certificates
 
-  exec { 'Copy Filebeat Certificates':
+  exec { "ensure full path of ${filebeat_path_certs}":
     path    => '/usr/bin:/bin',
-    command => "mkdir ${filebeat_path_certs} \
-             && cp /tmp/wazuh-certificates/server.pem  ${filebeat_path_certs}/filebeat.pem\
-             && cp /tmp/wazuh-certificates/server-key.pem  ${filebeat_path_certs}/filebeat-key.pem\
-             && cp /tmp/wazuh-certificates/root-ca.pem  ${filebeat_path_certs}\
-             && chown root:root -R ${filebeat_path_certs}\
-             && chmod 500 ${filebeat_path_certs}\
-             && chmod 400 ${filebeat_path_certs}/*",
-    require => Package[$filebeat_oss_package],
+    command => "mkdir -p ${filebeat_path_certs}",
+    creates => $filebeat_path_certs,
+    require => Package['filebeat'],
+  }
+  -> file { $filebeat_path_certs:
+    ensure => directory,
+    owner  => $filebeat_fileuser,
+    group  => $filebeat_filegroup,
+    mode   => '0500',
+  }
+
+  $_certfiles = {
+    'server.pem'     => 'filebeat.pem',
+    'server-key.pem' => 'filebeat-key.pem',
+    'root-ca.pem'    => 'root-ca.pem',
+  }
+  $_certfiles.each |String $certfile_source, String $certfile_target| {
+    file { "${filebeat_path_certs}/${certfile_target}":
+      ensure  => file,
+      owner   => $filebeat_fileuser,
+      group   => $filebeat_filegroup,
+      mode    => '0400',
+      replace => false,  # only copy content when file not exist
+      source  => "/tmp/wazuh-certificates/${certfile_source}",
+    }
   }
 
   service { 'filebeat':
     ensure  => running,
     enable  => true,
-    require => Package[$filebeat_oss_package],
+    name    => $filebeat_oss_service,
+    require => Package['filebeat'],
   }
 }
