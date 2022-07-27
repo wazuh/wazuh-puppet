@@ -47,7 +47,7 @@ class wazuh::manager (
   $configure_cluster                    = $wazuh::params_manager::configure_cluster,
   $configure_active_response            = $wazuh::params_manager::configure_active_response,
 
-# ossec.conf templates paths
+  # ossec.conf templates paths
   $ossec_manager_template                       = $wazuh::params_manager::ossec_manager_template,
   $ossec_rootcheck_template                     = $wazuh::params_manager::ossec_rootcheck_template,
   $ossec_wodle_openscap_template                = $wazuh::params_manager::ossec_wodle_openscap_template,
@@ -328,8 +328,7 @@ class wazuh::manager (
 
   if ($facts['kernel'] == 'windows') {
     $kernel = 'Linux'
-  }
-  else {
+  } else {
     $kernel = 'Linux'
     $os_family = $facts['os']['family'] ? {
       'Debian' => 'debian',
