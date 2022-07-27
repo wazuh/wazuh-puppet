@@ -20,8 +20,8 @@ class wazuh::indexer (
 
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
-  $indexer_discovery_option = 'discovery.type: single-node',
-  $indexer_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['node-1']",
+  $indexer_discovery_hosts = [], # Empty array for single-node configuration
+  $indexer_cluster_initial_master_nodes = ['node-1'],
 
   $manage_repos = false, # Change to true when manager is not present.
 
@@ -73,6 +73,16 @@ class wazuh::indexer (
       replace => false,  # only copy content when file not exist
       source  => "/tmp/wazuh-certificates/${certfile}",
     }
+  }
+
+  file { 'configuration file':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    content => template('wazuh/wazuh_indexer_yml.erb'),
+    group   => $indexer_filegroup,
+    mode    => '0660',
+    owner   => $indexer_fileuser,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
   }
 
   service { 'wazuh-indexer':
