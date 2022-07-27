@@ -23,8 +23,20 @@ class wazuh::dashboard (
       'user'     => 'foo',
       'password' => 'bar',
     },
-  ]
+  ],
+
+  $manage_repos = false, # Change to true when manager is not present.
 ) {
+  if $manage_repos {
+    include wazuh::repo
+
+    if $::osfamily == 'Debian' {
+      Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-dashboard']
+    } else {
+      Class['wazuh::repo'] -> Package['wazuh-dashboard']
+    }
+  }
+
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
