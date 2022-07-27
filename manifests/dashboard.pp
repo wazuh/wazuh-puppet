@@ -85,16 +85,18 @@ class wazuh::dashboard (
 
   # TODO: Fully manage the opensearch_dashboards.yml and a template file resource
   file_line { 'Setting host for wazuh-dashboard':
-    path   => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
-    line   => "server.host: ${dashboard_server_host}",
-    match  => "^server.host:\s",
-    notify => Service['wazuh-dashboard'],
+    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
+    line    => "server.host: ${dashboard_server_host}",
+    match   => "^server.host:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
   file_line { 'Setting port for wazuh-dashboard':
-    path   => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
-    line   => "server.port: ${dashboard_server_port}",
-    match  => "^server.port:\s",
-    notify => Service['wazuh-dashboard'],
+    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
+    line    => "server.port: ${dashboard_server_port}",
+    match   => "^server.port:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 
   service { 'wazuh-dashboard':
