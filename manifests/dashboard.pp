@@ -20,8 +20,8 @@ class wazuh::dashboard (
       'id'       => 'default',
       'url'      => 'https://localhost',
       'port'     => '55000',
-      'user'     => 'foo',
-      'password' => 'bar',
+      'user'     => 'wazuh-wui',
+      'password' => 'wazuh-wui',
     },
   ],
 
