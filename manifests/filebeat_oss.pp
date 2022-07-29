@@ -67,6 +67,7 @@ class wazuh::filebeat_oss (
 
   exec { 'Copy Filebeat Certificates':
     path    => '/usr/bin:/bin',
+    unless => 'bash -c "test -d $filebeat_path_certs"',
     command => "mkdir $filebeat_path_certs \
              && cp /tmp/wazuh-certificates/server.pem  $filebeat_path_certs/filebeat.pem\
              && cp /tmp/wazuh-certificates/server-key.pem  $filebeat_path_certs/filebeat-key.pem\
