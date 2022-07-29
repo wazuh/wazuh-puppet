@@ -43,6 +43,7 @@ class wazuh::dashboard (
 
   exec { 'Copy Dashboard Certificates':
     path    => '/usr/bin:/bin',
+    unless => 'bash -c "test -d $dashboard_path_certs"',
     command => "mkdir $dashboard_path_certs \
              && cp /tmp/wazuh-certificates/dashboard.pem  $dashboard_path_certs\
              && cp /tmp/wazuh-certificates/dashboard-key.pem  $dashboard_path_certs\
