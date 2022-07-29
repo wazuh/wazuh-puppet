@@ -12,7 +12,7 @@ class wazuh::dashboard (
   $dashboard_fileuser = 'wazuh-dashboard',
   $dashboard_filegroup = 'wazuh-dashboard',
 
-  $dashboard_server_port = '5601',
+  $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
   $dashboard_wazuh_api_credentials = [
