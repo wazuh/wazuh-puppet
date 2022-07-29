@@ -52,6 +52,7 @@ class wazuh::indexer (
 
   exec { 'Copy Indexer Certificates':
     path    => '/usr/bin:/bin',
+    unless => 'bash -c "test -d $indexer_path_certs"',
     command => "mkdir $indexer_path_certs \
              && cp /tmp/wazuh-certificates/indexer.pem  $indexer_path_certs\
              && cp /tmp/wazuh-certificates/indexer-key.pem  $indexer_path_certs\
