@@ -92,6 +92,21 @@ class wazuh::dashboard (
     notify  => Service['wazuh-dashboard'],
   }
 
+  file { [ '/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config' ]:
+    ensure  => 'directory',
+    group   => $dashboard_filegroup,
+    mode    => '0755',
+    owner   => $dashboard_fileuser,
+    require => Package['wazuh-dashboard'],
+  }
+  -> file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
+    content => template('wazuh/wazuh_yml.erb'),
+    group   => $dashboard_filegroup,
+    mode    => '0600',
+    owner   => $dashboard_fileuser,
+    notify  => Service['wazuh-dashboard'],
+  }
+
   service { 'wazuh-dashboard':
     ensure     => running,
     enable     => true,

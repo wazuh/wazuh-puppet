@@ -124,7 +124,7 @@
 #     user: <user>
 #     password: <password>
 hosts:
-<% @kibana_wazuh_api_credentials.each do |api_profile| -%>
+<% @dashboard_wazuh_api_credentials.each do |api_profile| -%>
   - <%= api_profile['id'] %>:
       url: <%= api_profile['url'] %>
       port: <%= api_profile['port'] %>
