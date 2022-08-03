@@ -30,6 +30,11 @@ plugins.security.enable_snapshot_restore_privilege: true
 plugins.security.nodes_dn:
 <% @indexer_cluster_CN.each do |cn| -%>
 - "CN=indexer-<%= cn %>,OU=Wazuh,O=Wazuh,L=California,C=US"
+<% if @manage_certs -%>
+- "CN=indexer-<%= cn %>,OU=Wazuh,O=Wazuh,L=California,C=US"
+<% else -%>
+- "CN=<%= cn %>"
+<% end -%>
 <% end -%>
 plugins.security.restapi.roles_enabled:
 - "all_access"
