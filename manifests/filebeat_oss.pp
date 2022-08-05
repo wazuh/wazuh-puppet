@@ -58,18 +58,15 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  # TODO: use archive from puppet-archive module for this task
-  file { "/tmp/${$wazuh_filebeat_module}":
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0440',
-    source => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
-  }
-  ~> exec { "Unpackaging /tmp/${$wazuh_filebeat_module}":
-    command     => "/bin/tar -xzvf /tmp/${$wazuh_filebeat_module} -C /usr/share/filebeat/module",
-    notify      => Service['filebeat'],
-    require     => Package['filebeat'],
-    refreshonly => true,
+  archive { "/tmp/${$wazuh_filebeat_module}":
+    ensure       => present,
+    source       => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+    extract      => true,
+    extract_path => '/usr/share/filebeat/module',
+    creates      => '/usr/share/filebeat/module/wazuh',
+    cleanup      => true,
+    notify       => Service['filebeat'],
+    require      => Package['filebeat'],
   }
 
   file { '/usr/share/filebeat/module/wazuh':
