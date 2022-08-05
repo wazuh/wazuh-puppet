@@ -44,7 +44,7 @@ class wazuh::filebeat_oss (
   file { '/etc/filebeat/wazuh-template.json':
     owner   => 'root',
     group   => 'root',
-    mode    => '0440',
+    mode    => '0444',
     source  => "puppet:///modules/${module_name}/wazuh_template_4.3.json",
     notify  => Service['filebeat'],
     require => Package['filebeat'],
