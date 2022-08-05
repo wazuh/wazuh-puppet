@@ -75,6 +75,22 @@ class wazuh::indexer (
     }
   }
 
+  file_line { 'Insert line initial size of total heap space':
+    path    => '/etc/wazuh-indexer/jvm.options',
+    line    => "-Xms${jvm_options_memmory}",
+    match   => '^-Xms',
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file_line { 'Insert line maximum size of total heap space':
+    path    => '/etc/wazuh-indexer/jvm.options',
+    line    => "-Xmx${jvm_options_memmory}",
+    match   => '^-Xmx',
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
   service { 'wazuh-indexer':
     ensure  => running,
     enable  => true,
