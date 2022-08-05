@@ -5,6 +5,7 @@ class wazuh::filebeat_oss (
   $filebeat_oss_indexer_port = '9200',
   $indexer_server_ip = "\"${filebeat_oss_indexer_ip}:${filebeat_oss_indexer_port}\"",
 
+  $filebeat_oss_archives = false,
   $filebeat_oss_package = 'filebeat',
   $filebeat_oss_service = 'filebeat',
   $filebeat_oss_elastic_user = 'admin',
