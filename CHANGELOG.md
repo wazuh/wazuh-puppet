@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v3.13.5
+
+### Added
+
+- Update to Wazuh version 3.13.5
+
 ## Wazuh Puppet v3.13.4
 
 ### Added
