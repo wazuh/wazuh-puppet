@@ -7,7 +7,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.3.6-1',
+  $indexer_version = '4.3.7-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -23,7 +23,7 @@ class wazuh::indexer (
   $manage_repos = false, # Change to true when manager is not present.
 
   # JVM options
-  $jvm_options_memmory = '1g',
+  $jvm_options_memory = '1g',
 ) {
   if $manage_repos {
     include wazuh::repo
@@ -78,6 +78,22 @@ class wazuh::indexer (
     group   => $indexer_filegroup,
     mode    => '0660',
     owner   => $indexer_fileuser,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file_line { 'Insert line initial size of total heap space':
+    path    => '/etc/wazuh-indexer/jvm.options',
+    line    => "-Xms${jvm_options_memory}",
+    match   => '^-Xms',
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file_line { 'Insert line maximum size of total heap space':
+    path    => '/etc/wazuh-indexer/jvm.options',
+    line    => "-Xmx${jvm_options_memory}",
+    match   => '^-Xmx',
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }

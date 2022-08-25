@@ -5,13 +5,14 @@ class wazuh::filebeat_oss (
   $filebeat_oss_indexer_port = '9200',
   $indexer_server_ip = "\"${filebeat_oss_indexer_ip}:${filebeat_oss_indexer_port}\"",
 
+  $filebeat_oss_archives = false,
   $filebeat_oss_package = 'filebeat',
   $filebeat_oss_service = 'filebeat',
   $filebeat_oss_elastic_user = 'admin',
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
-  $wazuh_app_version = '4.3.6_7.10.2',
-  $wazuh_extensions_version = 'v4.3.6',
+  $wazuh_app_version = '4.3.7_7.10.2',
+  $wazuh_extensions_version = 'v4.3.7',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.2.tar.gz',
 
   $filebeat_fileuser = 'root',
@@ -34,7 +35,7 @@ class wazuh::filebeat_oss (
   file { '/etc/filebeat/filebeat.yml':
     owner   => 'root',
     group   => 'root',
-    mode    => '0644',
+    mode    => '0640',
     notify  => Service['filebeat'], ## Restarts the service
     content => template('wazuh/filebeat_oss_yml.erb'),
     require => Package['filebeat'],
@@ -58,18 +59,15 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  # TODO: use archive from puppet-archive module for this task
-  file { "/tmp/${$wazuh_filebeat_module}":
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0440',
-    source => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
-  }
-  ~> exec { "Unpackaging /tmp/${$wazuh_filebeat_module}":
-    command     => "/bin/tar -xzvf /tmp/${$wazuh_filebeat_module} -C /usr/share/filebeat/module",
-    notify      => Service['filebeat'],
-    require     => Package['filebeat'],
-    refreshonly => true,
+  archive { "/tmp/${$wazuh_filebeat_module}":
+    ensure       => present,
+    source       => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+    extract      => true,
+    extract_path => '/usr/share/filebeat/module',
+    creates      => '/usr/share/filebeat/module/wazuh',
+    cleanup      => true,
+    notify       => Service['filebeat'],
+    require      => Package['filebeat'],
   }
 
   file { '/usr/share/filebeat/module/wazuh':

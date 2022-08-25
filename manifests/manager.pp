@@ -13,6 +13,8 @@ class wazuh::manager (
 
       ## Global
 
+      $ossec_logall                     = $wazuh::params_manager::ossec_logall,
+      $ossec_logall_json                = $wazuh::params_manager::ossec_logall_json,
       $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
       $ossec_emailto                    = $wazuh::params_manager::ossec_emailto,
       $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
