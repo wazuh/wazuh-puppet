@@ -41,8 +41,11 @@ experimental_features: <%= @wazuh_api_experimental_features %>
 # Enable remote commands
 remote_commands:
   localfile:
-    enabled: <%= @remote_commands_localfile %>
+    allow: <%= @remote_commands_localfile %>
     exceptions: <%= @remote_commands_localfile_exceptions %>
   wodle_command:
-    enabled: <%= @remote_commands_wodle %>
+    allow: <%= @remote_commands_wodle %>
     exceptions: <%= @remote_commands_wodle_exceptions %>
+limits:
+  eps:
+     allow: <%= @limits_eps %>
