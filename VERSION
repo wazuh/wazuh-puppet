@@ -1,7 +1,2 @@
-<<<<<<< HEAD
-WAZUH-PUPPET_VERSION="v4.4.0"
-REVISION="40400"
-=======
 WAZUH-PUPPET_VERSION="v4.5.0"
 REVISION="40500"
->>>>>>> 4adcf3debadfacc38d855fbc81da47c9458fe90a
