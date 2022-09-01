@@ -322,6 +322,7 @@ class wazuh::manager (
       $remote_commands_localfile_exceptions     = $::wazuh::params_manager::remote_commands_localfile_exceptions,
       $remote_commands_wodle                    = $::wazuh::params_manager::remote_commands_wodle,
       $remote_commands_wodle_exceptions         = $::wazuh::params_manager::remote_commands_wodle_exceptions,
+      $limits_eps                               = $::wazuh::params_manager::limits_eps,
 
       $wazuh_api_template                       = $::wazuh::params_manager::wazuh_api_template,
 
