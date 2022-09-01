@@ -2,7 +2,11 @@
 # Wazuh repository installation
 class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
+<<<<<<< HEAD
   $wazuh_version = '4.4',
+=======
+  $wazuh_version = '4.5',
+>>>>>>> 4adcf3debadfacc38d855fbc81da47c9458fe90a
 ) {
 
   $certs_path = '/tmp/wazuh-certificates'

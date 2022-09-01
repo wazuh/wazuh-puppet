@@ -11,7 +11,11 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
+<<<<<<< HEAD
   $indexer_version = '4.4.0-1',
+=======
+  $indexer_version = '4.5.0-1',
+>>>>>>> 4adcf3debadfacc38d855fbc81da47c9458fe90a
 
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',

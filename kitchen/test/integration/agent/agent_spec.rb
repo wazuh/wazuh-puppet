@@ -4,7 +4,11 @@ control 'wazuh-agent' do
 
   describe package('wazuh-agent') do
     it { is_expected.to be_installed }
+<<<<<<< HEAD
     its('version') { is_expected.to eq '4.4.0-1' }
+=======
+    its('version') { is_expected.to eq '4.5.0-1' }
+>>>>>>> 4adcf3debadfacc38d855fbc81da47c9458fe90a
   end
 
   describe service('wazuh-agent') do
