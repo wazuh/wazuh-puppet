@@ -8,8 +8,8 @@ define wazuh::reports (
   Optional[String] $r_location            = undef,
   Optional[String] $r_srcip               = undef,
   Optional[String] $r_user                = undef,
-  String $r_title                         = '',
-  $r_email_to                             = '',
+  String $r_title                         = '',  #lint:ignore:params_empty_string_assignment
+  $r_email_to                             = '',  #lint:ignore:params_empty_string_assignment
   Optional[Enum['yes', 'no']] $r_showlogs = undef,
 ) {
   require wazuh::params_manager
