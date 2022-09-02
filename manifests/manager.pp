@@ -1,7 +1,6 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Main ossec server config
 class wazuh::manager (
-
   # Installation
 
   $server_package_version           = $wazuh::params_manager::server_package_version,
@@ -12,6 +11,8 @@ class wazuh::manager (
 
   ## Global
 
+  $ossec_logall                     = $wazuh::params_manager::ossec_logall,
+  $ossec_logall_json                = $wazuh::params_manager::ossec_logall_json,
   $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
   $ossec_emailto                    = $wazuh::params_manager::ossec_emailto,
   $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
@@ -158,7 +159,8 @@ class wazuh::manager (
   $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
   $vulnerability_detector_min_full_scan_interval             = $wazuh::params_manager::vulnerability_detector_min_full_scan_interval,
   $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
-# lint:ignore:140chars
+
+  # lint:ignore:140chars
   $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
   $vulnerability_detector_provider_canonical_enabled         = $wazuh::params_manager::vulnerability_detector_provider_canonical_enabled,
   $vulnerability_detector_provider_canonical_os              = $wazuh::params_manager::vulnerability_detector_provider_canonical_os,

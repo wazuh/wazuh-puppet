@@ -4,13 +4,10 @@ class wazuh::indexer (
   # opensearch.yml configuration
   $indexer_cluster_name = 'wazuh-cluster',
   $indexer_node_name = 'node-1',
-  $indexer_node_master = true,
-  $indexer_node_data = true,
-  $indexer_node_ingest = true,
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.3.6-1',
+  $indexer_version = '4.3.7-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -20,13 +17,13 @@ class wazuh::indexer (
 
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
-  $indexer_discovery_option = 'discovery.type: single-node',
-  $indexer_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['node-1']",
+  $indexer_discovery_hosts = [], # Empty array for single-node configuration
+  $indexer_cluster_initial_master_nodes = ['node-1'],
 
   $manage_repos = false, # Change to true when manager is not present.
 
   # JVM options
-  $jvm_options_memmory = '1g',
+  $jvm_options_memory = '1g',
 ) {
   if $manage_repos {
     include wazuh::repo
@@ -73,6 +70,32 @@ class wazuh::indexer (
       replace => false,  # only copy content when file not exist
       source  => "/tmp/wazuh-certificates/${certfile}",
     }
+  }
+
+  file { 'configuration file':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    content => template('wazuh/wazuh_indexer_yml.erb'),
+    group   => $indexer_filegroup,
+    mode    => '0660',
+    owner   => $indexer_fileuser,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file_line { 'Insert line initial size of total heap space':
+    path    => '/etc/wazuh-indexer/jvm.options',
+    line    => "-Xms${jvm_options_memory}",
+    match   => '^-Xms',
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file_line { 'Insert line maximum size of total heap space':
+    path    => '/etc/wazuh-indexer/jvm.options',
+    line    => "-Xmx${jvm_options_memory}",
+    match   => '^-Xmx',
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
   }
 
   service { 'wazuh-indexer':
