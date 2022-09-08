@@ -14,6 +14,7 @@ class wazuh::indexer (
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
+  $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
 
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
@@ -134,10 +135,9 @@ class wazuh::indexer (
   }
 
   exec { 'Initialize the Opensearch security index in Wazuh indexer':
-    path        => ['/usr/bin', '/bin', '/usr/sbin'],
-    command     => '/usr/share/wazuh-indexer/bin/indexer-security-init.sh',
-    refreshonly => true,  # only run when package is installed or updated
-    subscribe   => Package['wazuh-indexer'],
-    require     => Service['wazuh-indexer'],
+    path    => ['/usr/bin', '/bin', '/usr/sbin'],
+    command => "/usr/share/wazuh-indexer/bin/indexer-security-init.sh && touch ${indexer_security_init_lockfile}",
+    creates => $indexer_security_init_lockfile,
+    require => Service['wazuh-indexer'],
   }
 }
