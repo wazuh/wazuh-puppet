@@ -18,7 +18,7 @@ class wazuh::dashboard (
   $dashboard_wazuh_api_credentials = [
     {
       'id'       => 'default',
-      'url'      => 'http://localhost',
+      'url'      => 'https://localhost',
       'port'     => '55000',
       'user'     => 'foo',
       'password' => 'bar',
