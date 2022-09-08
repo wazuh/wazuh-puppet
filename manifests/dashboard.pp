@@ -4,8 +4,6 @@ class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
   $dashboard_version = '4.3.8',
-  $dashboard_user = 'kibanaserver',
-  $dashboard_password = 'kibanaserver',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -15,6 +13,13 @@ class wazuh::dashboard (
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
+
+  # If the keystore is used, the credentials are not managed by the module (TODO).
+  # If use_keystore is false, the keystore is deleted, the dashboard use the credentials in the configuration file.
+  $use_keystore = true,
+  $dashboard_user = 'kibanaserver',
+  $dashboard_password = 'kibanaserver',
+
   $dashboard_wazuh_api_credentials = [
     {
       'id'       => 'default',
@@ -97,6 +102,14 @@ class wazuh::dashboard (
     match   => "^server.port:\s",
     require => Package['wazuh-dashboard'],
     notify  => Service['wazuh-dashboard'],
+  }
+
+  unless $use_keystore {
+    file { '/usr/share/wazuh-dashboard/config/opensearch_dashboards.keystore':
+      ensure  => absent,
+      require => Package['wazuh-dashboard'],
+      before  => Service['wazuh-dashboard'],
+    }
   }
 
   service { 'wazuh-dashboard':
