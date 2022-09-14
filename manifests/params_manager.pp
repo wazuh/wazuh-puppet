@@ -556,14 +556,14 @@ class wazuh::params_manager {
       $config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/ossec.conf'), '\\\\', '/')
       $shared_agent_config_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/shared/agent.conf'), '\\\\', '/')
       $config_owner = 'Administrator'
-      $config_group = 'Administrators'
+      $config_group = 'S-1-5-32-544'
 
       $manage_firewall = false
 
       $keys_file = regsubst(sprintf('c:/Program Files (x86)/ossec-agent/client.keys'), '\\\\', '/')
       $keys_mode = '0440'
       $keys_owner = 'Administrator'
-      $keys_group = 'Administrators'
+      $keys_group = 'S-1-5-32-544'
 
       $agent_service  = 'WazuhSvc'
       $agent_package  = 'Wazuh Agent 4.5.0'
