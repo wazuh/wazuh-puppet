@@ -6,6 +6,7 @@ class wazuh::agent (
   # Versioning and package names
 
   $agent_package_version             = $wazuh::params_agent::agent_package_version,
+  $agent_package_revision            = $wazuh::params_agent::agent_package_revision,
   $agent_package_name                = $wazuh::params_agent::agent_package_name,
   $agent_service_name                = $wazuh::params_agent::agent_service_name,
   $agent_service_ensure              = $wazuh::params_agent::agent_service_ensure,
@@ -282,7 +283,7 @@ class wazuh::agent (
         }
       }
       package { $agent_package_name:
-        ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
+        ensure => "${agent_package_version}-${agent_package_revision}", # lint:ignore:security_package_pinned_version
       }
     }
     'windows': {
@@ -291,10 +292,10 @@ class wazuh::agent (
       }
 
       -> file { 'wazuh-agent':
-        path               => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
+        path               => "${download_path}\\wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         group              => 'Administrators',
         mode               => '0774',
-        source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}.msi",
+        source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         source_permissions => ignore
       }
 
@@ -302,7 +303,7 @@ class wazuh::agent (
       -> package { $agent_package_name:
         ensure          => "${agent_package_version}",
         provider        => 'windows',
-        source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
+        source          => "${download_path}\\wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         install_options => [
           '/q',
           "WAZUH_MANAGER=${wazuh_reporting_endpoint}",
