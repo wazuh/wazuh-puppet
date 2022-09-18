@@ -6,6 +6,7 @@ class wazuh::agent (
   # Versioning and package names
 
   $agent_package_version             = $wazuh::params_agent::agent_package_version,
+  $agent_package_revision            = $wazuh::params_agent::agent_package_revision,
   $agent_package_name                = $wazuh::params_agent::agent_package_name,
   $agent_service_name                = $wazuh::params_agent::agent_service_name,
   $agent_service_ensure              = $wazuh::params_agent::agent_service_ensure,
@@ -285,8 +286,8 @@ class wazuh::agent (
         }
       }
       package { $agent_package_name:
-        ensure          => $agent_package_version, # lint:ignore:security_package_pinned_version
-        install_options => [ { '--enablerepo'  => 'wazuh' }, ],
+        ensure          => "${agent_package_version}-${agent_package_revision}", # lint:ignore:security_package_pinned_version
+        install_options => [{ '--enablerepo'  => 'wazuh' }],
       }
     }
     'windows': {
@@ -295,10 +296,10 @@ class wazuh::agent (
       }
 
       -> file { 'wazuh-agent':
-        path               => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
+        path               => "${download_path}\\wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         group              => 'Administrators',
         mode               => '0774',
-        source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}.msi",
+        source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         source_permissions => ignore
       }
 
@@ -306,7 +307,7 @@ class wazuh::agent (
       -> package { $agent_package_name:
         ensure          => "${agent_package_version}",
         provider        => 'windows',
-        source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
+        source          => "${download_path}\\wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         install_options => [
           '/q',
           "WAZUH_MANAGER=${wazuh_reporting_endpoint}",
@@ -323,7 +324,9 @@ class wazuh::agent (
     case $::operatingsystem {
       'RedHat', 'OracleLinux':{
         $apply_template_os = 'rhel'
-        if ( $::operatingsystemrelease     =~ /^7.*/ ){
+        if ( $::operatingsystemrelease     =~ /^8.*/ ){
+          $rhel_version = '8'
+        }elsif ( $::operatingsystemrelease  =~ /^7.*/ ){
           $rhel_version = '7'
         }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
           $rhel_version = '6'
@@ -339,7 +342,7 @@ class wazuh::agent (
         }
       }'Amazon':{
         $apply_template_os = 'amazon'
-      }'CentOS','Centos','centos':{
+      }'CentOS','Centos','centos','AlmaLinux':{
         $apply_template_os = 'centos'
       }
       default: { fail('OS not supported') }
@@ -660,7 +663,7 @@ class wazuh::agent (
       owner   => 'root',
       group   => 'wazuh',
       mode    => '0640',
-      content => $wazuh::params_agent::wazuh_enrollment_auth_pass,
+      content => $wazuh_enrollment_auth_pass,
       require => Package[$wazuh::params_agent::agent_package_name],
     }
   }

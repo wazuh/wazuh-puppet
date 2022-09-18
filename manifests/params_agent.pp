@@ -1,9 +1,10 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.3.0-1'
+  $agent_package_version = '4.3.8'
+  $agent_package_revision = '1'
   $agent_service_ensure = 'running'
-  $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
+  $agent_msi_download_location = 'https://packages.wazuh.com/4.x/windows'
 
   $agent_name = undef
   $agent_group = undef
@@ -327,7 +328,7 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
+            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -418,6 +419,22 @@ class wazuh::params_agent {
                   }
                 }
               }
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'systemd'
+
+                $wodle_openscap_content = {
+                  'ssg-rhel-8-ds.xml'   => {
+                    'type'   => 'xccdf',
+                    profiles => [
+                      'xccdf_org.ssgproject.content_profile_pci-dss',
+                      'xccdf_org.ssgproject.content_profile_common',
+                    ]
+                  },
+                  'cve-redhat-8-ds.xml' => {
+                    'type' => 'xccdf',
+                  }
+                }
+              }
             }
             'Fedora': {
               if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
@@ -432,6 +449,11 @@ class wazuh::params_agent {
                     ]
                   },
                 }
+              }
+            }
+            'AlmaLinux': {
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
               }
             }
             default: { fail('This ossec module has not been tested on your distribution') }

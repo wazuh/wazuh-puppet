@@ -13,6 +13,8 @@ class wazuh::manager (
 
       ## Global
 
+      $ossec_logall                     = $wazuh::params_manager::ossec_logall,
+      $ossec_logall_json                = $wazuh::params_manager::ossec_logall_json,
       $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
       $ossec_emailto                    = $wazuh::params_manager::ossec_emailto,
       $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
@@ -27,6 +29,7 @@ class wazuh::manager (
       $ossec_remote_port                = $wazuh::params_manager::ossec_remote_port,
       $ossec_remote_protocol            = $wazuh::params_manager::ossec_remote_protocol,
       $ossec_remote_local_ip            = $wazuh::params_manager::ossec_remote_local_ip,
+      $ossec_remote_allowed_ips         = $wazuh::params_manager::ossec_remote_allowed_ips,
       $ossec_remote_queue_size          = $wazuh::params_manager::ossec_remote_queue_size,
 
       # ossec.conf generation parameters
@@ -158,6 +161,7 @@ class wazuh::manager (
       #vulnerability-detector
       $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
       $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
+      $vulnerability_detector_min_full_scan_interval             = $wazuh::params_manager::vulnerability_detector_min_full_scan_interval,
       $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
 # lint:ignore:140chars
       $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
@@ -182,6 +186,19 @@ class wazuh::manager (
       $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
       $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
       #lint:endignore
+
+      $vulnerability_detector_provider_arch                   = $wazuh::params_manager::vulnerability_detector_provider_arch,
+      $vulnerability_detector_provider_arch_enabled           = $wazuh::params_manager::vulnerability_detector_provider_arch_enabled,
+      $vulnerability_detector_provider_arch_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_arch_update_interval,
+
+      $vulnerability_detector_provider_alas                   = $wazuh::params_manager::vulnerability_detector_provider_alas,
+      $vulnerability_detector_provider_alas_enabled           = $wazuh::params_manager::vulnerability_detector_provider_alas_enabled,
+      $vulnerability_detector_provider_alas_os              = $wazuh::params_manager::vulnerability_detector_provider_alas_os,
+      $vulnerability_detector_provider_alas_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_alas_update_interval,
+
+      $vulnerability_detector_provider_msu                   = $wazuh::params_manager::vulnerability_detector_provider_msu,
+      $vulnerability_detector_provider_msu_enabled           = $wazuh::params_manager::vulnerability_detector_provider_msu_enabled,
+      $vulnerability_detector_provider_msu_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_msu_update_interval,
 
 
       # syslog
@@ -336,8 +353,17 @@ class wazuh::manager (
 
 
   if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
-    package { 'Installing Auditd...':
-      name   => 'auditd',
+    case $::operatingsystem {
+      'Debian', 'debian', 'Ubuntu', 'ubuntu': {
+        package { 'Installing Auditd...':
+          name => 'auditd',
+        }
+      }
+      default: {
+        package { 'Installing Audit...':
+          name => 'audit'
+        }
+      }
     }
     service { 'auditd':
       ensure => running,

@@ -1,8 +1,8 @@
   <global>
     <jsonout_output>yes</jsonout_output>
     <alerts_log>yes</alerts_log>
-    <logall>no</logall>
-    <logall_json>no</logall_json>
+    <logall><%= @ossec_logall %></logall>
+    <logall_json><%= @ossec_logall_json %></logall_json>
     <agents_disconnection_time>10m</agents_disconnection_time>
     <agents_disconnection_alert_time>0</agents_disconnection_alert_time>
   <%- if @ossec_emailnotification -%>
@@ -38,6 +38,11 @@
   <%- if @ossec_remote_local_ip -%>
     <local_ip><%= @ossec_remote_local_ip %></local_ip>
   <%- end -%>
+  <%- if @ossec_remote_connection == 'secure' then -%>
     <queue_size><%= @ossec_remote_queue_size %></queue_size>
+  <%- end -%>
+  <%- if @ossec_remote_connection == 'syslog' then -%>
+    <allowed-ips><%= @ossec_remote_allowed_ips %></allowed-ips>
+  <%- end -%>
   </remote>
 
