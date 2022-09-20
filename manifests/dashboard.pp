@@ -4,23 +4,17 @@ class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
   $dashboard_version = '4.4.0',
-  $dashboard_user = 'admin',
-  $dashboard_password = 'admin',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
 
-  $dashboard_server_port = '5601',
+  $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
-  $dashboard_server_hosts ="https://${indexer_server_ip}:$indexer_server_port}",
-  $dashboard_wazuh_api_credentials = [ {
-                                      'id'       => 'default',
-                                      'url'      => 'http://localhost',
-                                      'port'     => '55000',
-                                      'user'     => 'foo',
-                                      'password' => 'bar',
-                                    },
-                                  ]
+  $indexer_server_host = "https://${indexer_server_ip}:$indexer_server_port}",
+  $dashboard_wazuh_api_credentials_url = "http://localhost",
+  $dashboard_wazuh_api_credentials_port = "55000",
+  $dashboard_wazuh_api_credentials_user = "wazuh-wui",
+  $dashboard_wazuh_api_credentials_password = "wazuh-wui",
 ) {
 
   # assign version according to the package manager
@@ -51,6 +45,57 @@ class wazuh::dashboard (
              && chmod 500 $dashboard_path_certs\
              && chmod 400 $dashboard_path_certs/*",
 
+  }
+
+  # TODO: Fully manage the opensearch_dashboards.yml and a template file resource
+  file_line { 'Setting host for wazuh-dashboard':
+    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
+    line    => "server.host: ${dashboard_server_host}",
+    match   => "^server.host:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+  file_line { 'Setting port for wazuh-dashboard':
+    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
+    line    => "server.port: ${dashboard_server_port}",
+    match   => "^server.port:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+  file_line { 'Setting Wazuh indexer host for wazuh-dashboard':
+    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
+    line    => "opensearch.hosts: ${indexer_server_host}",
+    match   => "^opensearch.hosts:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+  file_line { 'Setting Wazuh api url for wazuh-dashboard':
+    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
+    line    => "url: ${dashboard_wazuh_api_credentials_url}",
+    match   => "^url:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+  file_line { 'Setting Wazuh api port for wazuh-dashboard':
+    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
+    line    => "port: ${dashboard_wazuh_api_credentials_port}",
+    match   => "^port:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+  file_line { 'Setting Wazuh api username for wazuh-dashboard':
+    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
+    line    => "username: ${dashboard_wazuh_api_credentials_username}",
+    match   => "^username:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+  file_line { 'Setting Wazuh api password for wazuh-dashboard':
+    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
+    line    => "password: ${dashboard_wazuh_api_credentials_password}",
+    match   => "^password:\s",
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 
   service { 'wazuh-dashboard':

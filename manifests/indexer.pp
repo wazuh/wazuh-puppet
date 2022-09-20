@@ -5,9 +5,6 @@ class wazuh::indexer (
 
   $indexer_cluster_name = 'wazuh-cluster',
   $indexer_node_name = 'node-1',
-  $indexer_node_master = true,
-  $indexer_node_data = true,
-  $indexer_node_ingest = true,
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
@@ -16,30 +13,17 @@ class wazuh::indexer (
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
-
-
-  $indexer_ip = 'localhost',
-  $indexer_port = '9200',
-  $indexer_discovery_option = 'discovery.type: single-node',
-  $indexer_cluster_initial_master_nodes = "#cluster.initial_master_nodes: ['node-1']",
-
-  $manage_repos = false, # Change to true when manager is not present.
-
-# JVM options
-  $jvm_options_memmory = '1g',
+  $network_host = '0.0.0.0',
 
 ){
 
 
-  if $manage_repos {
-    class { 'wazuh::repo':}
-    if $::osfamily == 'Debian' {
-      Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-indexer']
-    } else {
-      Class['wazuh::repo'] -> Package['wazuh-indexer']
-    }
+  class { 'wazuh::repo':}
+  if $::osfamily == 'Debian' {
+    Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-indexer']
+  } else {
+    Class['wazuh::repo'] -> Package['wazuh-indexer']
   }
-
 
 
   # install package
@@ -64,6 +48,57 @@ class wazuh::indexer (
     require => Package[$indexer_package],
 
   }
+
+  file_line { 'Setting cluster name for wazuh-indexer':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    line    => "cluster.name: ${indexer_cluster_name}",
+    match   => "^cluster.name:\s",
+    require => Package[$indexer_package],
+    notify  => Service[$indexer_service],
+  }
+  file_line { 'Setting node name for wazuh-indexer':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    line    => "node.name: ${indexer_node_name}",
+    match   => "^node.name:\s",
+    require => Package[$indexer_package],
+    notify  => Service[$indexer_service],
+  }
+  file_line { 'Setting node master for wazuh-indexer':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    line    => "- "${indexer_node_master}"",
+    match   => "^- "node-1"\s",
+    require => Package[$indexer_package],
+    notify  => Service[$indexer_service],
+  }
+  file_line { 'Setting node max local storage node for wazuh-indexer':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    line    => "node.max_local_storage_nodes: ${indexer_node_max_local_storage_nodes}",
+    match   => "^node.max_local_storage_nodes:\s",
+    require => Package[$indexer_package],
+    notify  => Service[$indexer_service],
+  }
+  file_line { 'Setting path data for wazuh-indexer':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    line    => "path.data: ${indexer_path_data}",
+    match   => "^path.data:\s",
+    require => Package[$indexer_package],
+    notify  => Service[$indexer_service],
+  }
+  file_line { 'Setting path logs for wazuh-indexer':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    line    => "path.logs: ${indexer_path_logs}",
+    match   => "^path.logs:\s",
+    require => Package[$indexer_package],
+    notify  => Service[$indexer_service],
+  }
+  file_line { 'Setting network host for wazuh-indexer':
+    path    => '/etc/wazuh-indexer/opensearch.yml',
+    line    => "network.host: ${network_host}",
+    match   => "^network.host:\s",
+    require => Package[$indexer_package],
+    notify  => Service[$indexer_service],
+  }
+
 
   service { 'wazuh-indexer':
     ensure  => running,
