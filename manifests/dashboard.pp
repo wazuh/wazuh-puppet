@@ -10,11 +10,16 @@ class wazuh::dashboard (
 
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
-  $indexer_server_host = "https://${indexer_server_ip}:$indexer_server_port}",
-  $dashboard_wazuh_api_credentials_url = "http://localhost",
-  $dashboard_wazuh_api_credentials_port = "55000",
-  $dashboard_wazuh_api_credentials_user = "wazuh-wui",
-  $dashboard_wazuh_api_credentials_password = "wazuh-wui",
+  $indexer_server_host = "https://${indexer_server_ip}:${indexer_server_port}",
+  $dashboard_wazuh_api_credentials = [
+    {
+      'id'       => 'default',
+      'url'      => 'https://localhost',
+      'port'     => '55000',
+      'user'     => 'wazuh-wui',
+      'password' => 'wazuh-wui',
+    },
+  ],
 ) {
 
   # assign version according to the package manager
@@ -28,87 +33,65 @@ class wazuh::dashboard (
   }
 
   # install package
-  package { 'Installing Wazuh Dashboard...':
+  package { 'wazuh-dashboard':
     ensure => $dashboard_version_install,
     name   => $dashboard_package,
   }
 
-  include wazuh::certificates
+  require wazuh::certificates
 
-  exec { 'Copy Dashboard Certificates':
+  exec { "ensure full path of ${dashboard_path_certs}":
     path    => '/usr/bin:/bin',
-    command => "mkdir $dashboard_path_certs \
-             && cp /tmp/wazuh-certificates/dashboard.pem  $dashboard_path_certs\
-             && cp /tmp/wazuh-certificates/dashboard-key.pem  $dashboard_path_certs\
-             && cp /tmp/wazuh-certificates/root-ca.pem  $dashboard_path_certs\
-             && chown wazuh-dashboard:wazuh-dashboard -R $dashboard_path_certs\
-             && chmod 500 $dashboard_path_certs\
-             && chmod 400 $dashboard_path_certs/*",
+    command => "mkdir -p ${dashboard_path_certs}",
+    creates => $dashboard_path_certs,
+    require => Package['wazuh-dashboard'],
+  }
+  -> file { $dashboard_path_certs:
+    ensure => directory,
+    owner  => $dashboard_fileuser,
+    group  => $dashboard_filegroup,
+    mode   => '0500',
+  }
 
+  [
+    'dashboard.pem',
+    'dashboard-key.pem',
+    'root-ca.pem',
+  ].each |String $certfile| {
+    file { "${dashboard_path_certs}/${certfile}":
+      ensure  => file,
+      owner   => $dashboard_fileuser,
+      group   => $dashboard_filegroup,
+      mode    => '0400',
+      replace => false,  # only copy content when file not exist
+      source  => "/tmp/wazuh-certificates/${certfile}",
+    }
   }
 
   # TODO: Fully manage the opensearch_dashboards.yml and a template file resource
-  file_line { 'Setting host for wazuh-dashboard':
-    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
-    line    => "server.host: ${dashboard_server_host}",
-    match   => "^server.host:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
+  file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0640',
+    content => template('wazuh/opensearch_dashboards_yml.erb'),
+    require => Package[$dashboard_package],
+    notify  => Service[$dashboard_service]
   }
-  file_line { 'Setting port for wazuh-dashboard':
-    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
-    line    => "server.port: ${dashboard_server_port}",
-    match   => "^server.port:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
+
+  file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0600',
+    content => template('wazuh/wazuh_yml.erb'),
+    require => Package[$dashboard_package],
+    notify  => Service[$dashboard_service]
   }
-  file_line { 'Setting Wazuh indexer host for wazuh-dashboard':
-    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
-    line    => "opensearch.hosts: ${indexer_server_host}",
-    match   => "^opensearch.hosts:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
-  file_line { 'Setting Wazuh api url for wazuh-dashboard':
-    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
-    line    => "url: ${dashboard_wazuh_api_credentials_url}",
-    match   => "^url:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
-  file_line { 'Setting Wazuh api port for wazuh-dashboard':
-    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
-    line    => "port: ${dashboard_wazuh_api_credentials_port}",
-    match   => "^port:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
-  file_line { 'Setting Wazuh api username for wazuh-dashboard':
-    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
-    line    => "username: ${dashboard_wazuh_api_credentials_username}",
-    match   => "^username:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
-  file_line { 'Setting Wazuh api password for wazuh-dashboard':
-    path    => '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml',
-    line    => "password: ${dashboard_wazuh_api_credentials_password}",
-    match   => "^password:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
+
 
   service { 'wazuh-dashboard':
     ensure     => running,
     enable     => true,
     hasrestart => true,
+    name       => $dashboard_service,
   }
-
-  exec {'Waiting for Wazuh indexer...':
-    path      => '/usr/bin',
-    command   => "curl -u ${dashboard_user}:${dashboard_password} -k -s -XGET https://${indexer_server_ip}:${indexer_server_port}",
-    tries     => 100,
-    try_sleep => 3,
-  }
-
 }
