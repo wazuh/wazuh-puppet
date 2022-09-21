@@ -320,7 +320,9 @@ class wazuh::agent (
     case $::operatingsystem {
       'RedHat', 'OracleLinux':{
         $apply_template_os = 'rhel'
-        if ( $::operatingsystemrelease     =~ /^7.*/ ){
+        if ( $::operatingsystemrelease     =~ /^8.*/ ){
+          $rhel_version = '8'
+        }elsif ( $::operatingsystemrelease  =~ /^7.*/ ){
           $rhel_version = '7'
         }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
           $rhel_version = '6'
@@ -657,7 +659,7 @@ class wazuh::agent (
       owner   => 'root',
       group   => 'wazuh',
       mode    => '0640',
-      content => $wazuh::params_agent::wazuh_enrollment_auth_pass,
+      content => $wazuh_enrollment_auth_pass,
       require => Package[$wazuh::params_agent::agent_package_name],
     }
   }
