@@ -35,6 +35,10 @@
     {
       "name": "puppetlabs/powershell",
       "version_requirement": ">= 2.0.0 < 5.0.0"
+    },
+    {
+      "name": "puppet/archive",
+      "version_requirement": ">= 0.4.8 < 7.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -63,7 +67,8 @@
       "operatingsystemrelease": [
         "5",
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
