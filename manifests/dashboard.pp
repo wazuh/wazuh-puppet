@@ -84,8 +84,8 @@ class wazuh::dashboard (
     group   => 'wazuh-dashboard',
     mode    => '0640',
     content => template('wazuh/opensearch_dashboards_yml.erb'),
-    require => Package[$dashboard_package],
-    notify  => Service[$dashboard_service]
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard']
   }
 
   service { 'wazuh-dashboard':
