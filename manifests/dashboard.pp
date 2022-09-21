@@ -106,6 +106,6 @@ class wazuh::dashboard (
     group   => 'wazuh-dashboard',
     mode    => '0600',
     content => template('wazuh/wazuh_yml.erb'),
-    require => Package[$dashboard_package]
+    require => Package['wazuh-dashboard']
   }
 }
