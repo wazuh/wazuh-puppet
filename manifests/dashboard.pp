@@ -7,6 +7,8 @@ class wazuh::dashboard (
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
+  $dashboard_fileuser = 'wazuh-dashboard',
+  $dashboard_filegroup = 'wazuh-dashboard',
 
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
@@ -22,13 +24,21 @@ class wazuh::dashboard (
   ],
 ) {
 
+  include wazuh::repo
+
+  if $::osfamily == 'Debian' {
+    Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-dashboard']
+  } else {
+    Class['wazuh::repo'] -> Package['wazuh-dashboard']
+  }
+
   # assign version according to the package manager
-  case $::osfamily {
-    'Debian' : {
+  case $facts['os']['family'] {
+    'Debian': {
       $dashboard_version_install = "${dashboard_version}-*"
     }
-    'Linux', 'RedHat' : {
-      $dashboard_version_install = "${dashboard_version}"
+    'Linux', 'RedHat', default: {
+      $dashboard_version_install = $dashboard_version
     }
   }
 
@@ -78,20 +88,24 @@ class wazuh::dashboard (
     notify  => Service[$dashboard_service]
   }
 
-  file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
-    owner   => 'wazuh-dashboard',
-    group   => 'wazuh-dashboard',
-    mode    => '0600',
-    content => template('wazuh/wazuh_yml.erb'),
-    require => Package[$dashboard_package],
-    notify  => Service[$dashboard_service]
-  }
-
-
   service { 'wazuh-dashboard':
     ensure     => running,
     enable     => true,
     hasrestart => true,
     name       => $dashboard_service,
+  }
+
+  exec {'Waiting for Wazuh dashboard...':
+    require => Service[$dashboard_service],
+    command => "sleep 15 ",
+    path => "/usr/bin:/bin",
+  }
+
+  file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0600',
+    content => template('wazuh/wazuh_yml.erb'),
+    require => Package[$dashboard_package]
   }
 }
