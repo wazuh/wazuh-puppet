@@ -21,14 +21,18 @@ class wazuh::indexer (
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_cluster_initial_master_nodes = ['node-1'],
 
+  $manage_repos = false, # Change to true when manager is not present.
+  
   # JVM options
   $jvm_options_memory = '1g',
 ) {
-  include wazuh::repo
-  if $facts['os']['family'] == 'Debian' {
-    Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-indexer']
-  } else {
-    Class['wazuh::repo'] -> Package['wazuh-indexer']
+  if $manage_repos {
+    include wazuh::repo
+    if $facts['os']['family'] == 'Debian' {
+      Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-indexer']
+    } else {
+      Class['wazuh::repo'] -> Package['wazuh-indexer']
+    }
   }
 
   # install package

@@ -22,14 +22,18 @@ class wazuh::dashboard (
       'password' => 'wazuh-wui',
     },
   ],
+
+  $manage_repos = false, # Change to true when manager is not present.
 ) {
 
-  include wazuh::repo
+  if $manage_repos {
+    include wazuh::repo
 
-  if $::osfamily == 'Debian' {
-    Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-dashboard']
-  } else {
-    Class['wazuh::repo'] -> Package['wazuh-dashboard']
+    if $::osfamily == 'Debian' {
+      Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-dashboard']
+    } else {
+      Class['wazuh::repo'] -> Package['wazuh-dashboard']
+    }
   }
 
   # assign version according to the package manager
@@ -95,10 +99,14 @@ class wazuh::dashboard (
     name       => $dashboard_service,
   }
 
-  exec {'Waiting for Wazuh dashboard...':
-    require => Service[$dashboard_service],
-    command => "sleep 15 ",
-    path => "/usr/bin:/bin",
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/',
+  '/usr/share/wazuh-dashboard/data/wazuh/config/']:
+    ensure => 'directory',
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0600',
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 
   file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
@@ -106,6 +114,7 @@ class wazuh::dashboard (
     group   => 'wazuh-dashboard',
     mode    => '0600',
     content => template('wazuh/wazuh_yml.erb'),
-    require => Package['wazuh-dashboard']
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 }
