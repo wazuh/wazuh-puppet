@@ -195,6 +195,10 @@ class wazuh::params_agent {
 
   $ossec_syscheck_max_eps = '100'
   $ossec_syscheck_process_priority = '10'
+
+  $ossec_syscheck_filelimit_enabled = 'yes'
+  $ossec_syscheck_filelimit_entries = '100000'
+
   $ossec_syscheck_synchronization_enabled = 'yes'
   $ossec_syscheck_synchronization_interval = '5m'
   $ossec_syscheck_synchronization_max_eps = '10'

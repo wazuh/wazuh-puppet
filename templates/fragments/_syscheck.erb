@@ -15,6 +15,12 @@
   <%- if @ossec_syscheck_process_priority -%>
   <process_priority><%=@ossec_syscheck_process_priority%></process_priority>
   <%- end -%>
+  <file_limit>
+    <%- if @ossec_syscheck_filelimit_enabled -%>
+    <enabled><%= @ossec_syscheck_filelimit_enabled %></enabled>
+    <%- end -%>
+    <entries><%= @ossec_syscheck_filelimit_entries %></entries>
+  </file_limit>
   <synchronization>
     <%- if @ossec_syscheck_synchronization_enabled -%>
     <enabled><%= @ossec_syscheck_synchronization_enabled %></enabled>
