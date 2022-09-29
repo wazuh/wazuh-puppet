@@ -47,7 +47,8 @@ class wazuh::filebeat_oss (
   # TODO: Include file into the wazuh/wazuh-puppet project or use file { checksum => '..' } for this instead of the exec construct.
   exec { 'cleanup /etc/filebeat/wazuh-template.json':
     command => '/bin/rm /etc/filebeat/wazuh-template.json',
-    unless  => "/bin/cmp -s '/etc/filebeat/wazuh-template.json' <(curl -s https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json)",
+    onlyif  => '/bin/test -f /etc/filebeat/wazuh-template.json',
+    unless  => "/bin/curl -s 'https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json' | /bin/cmp -s '/etc/filebeat/wazuh-template.json'",
   }
   -> file { '/etc/filebeat/wazuh-template.json':
     owner   => 'root',

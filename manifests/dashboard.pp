@@ -4,8 +4,6 @@ class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
   $dashboard_version = '4.4.0',
-  $dashboard_user = 'admin',
-  $dashboard_password = 'admin',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -14,19 +12,20 @@ class wazuh::dashboard (
 
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
-  $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
+  $indexer_server_host = "https://${indexer_server_ip}:${indexer_server_port}",
   $dashboard_wazuh_api_credentials = [
     {
       'id'       => 'default',
       'url'      => 'https://localhost',
       'port'     => '55000',
-      'user'     => 'foo',
-      'password' => 'bar',
+      'user'     => 'wazuh-wui',
+      'password' => 'wazuh-wui',
     },
   ],
 
   $manage_repos = false, # Change to true when manager is not present.
 ) {
+
   if $manage_repos {
     include wazuh::repo
 
@@ -84,19 +83,13 @@ class wazuh::dashboard (
   }
 
   # TODO: Fully manage the opensearch_dashboards.yml and a template file resource
-  file_line { 'Setting host for wazuh-dashboard':
-    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
-    line    => "server.host: ${dashboard_server_host}",
-    match   => "^server.host:\s",
+  file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0640',
+    content => template('wazuh/opensearch_dashboards_yml.erb'),
     require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
-  file_line { 'Setting port for wazuh-dashboard':
-    path    => '/etc/wazuh-dashboard/opensearch_dashboards.yml',
-    line    => "server.port: ${dashboard_server_port}",
-    match   => "^server.port:\s",
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard']
   }
 
   service { 'wazuh-dashboard':
@@ -104,5 +97,24 @@ class wazuh::dashboard (
     enable     => true,
     hasrestart => true,
     name       => $dashboard_service,
+  }
+
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/',
+  '/usr/share/wazuh-dashboard/data/wazuh/config/']:
+    ensure => 'directory',
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0600',
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+
+  file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0600',
+    content => template('wazuh/wazuh_yml.erb'),
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 }
