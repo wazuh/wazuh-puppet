@@ -66,9 +66,9 @@ class wazuh::filebeat_oss (
     ensure => directory,
     mode   => '0755',
   }
-  -> archive { "/tmp/${$wazuh_filebeat_module}":
+  -> archive { "/tmp/${wazuh_filebeat_module}":
     ensure       => present,
-    source       => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+    source       => "https://packages.wazuh.com/4.x/filebeat/${wazuh_filebeat_module}",
     extract      => true,
     extract_path => $wazuh_filebeat_module_dir,
     creates      => "${wazuh_filebeat_module_dir}/wazuh",
