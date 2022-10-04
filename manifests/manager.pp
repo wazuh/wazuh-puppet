@@ -38,6 +38,7 @@ class wazuh::manager (
       $configure_wodle_osquery              = $wazuh::params_manager::configure_wodle_osquery,
       $configure_wodle_syscollector         = $wazuh::params_manager::configure_wodle_syscollector,
       $configure_wodle_docker_listener      = $wazuh::params_manager::configure_wodle_docker_listener,
+      $configure_wodle_azure_logs           = $wazuh::params_manager::configure_wodle_azure_logs,
       $configure_vulnerability_detector     = $wazuh::params_manager::configure_vulnerability_detector,
       $configure_sca                        = $wazuh::params_manager::configure_sca,
       $configure_syscheck                   = $wazuh::params_manager::configure_syscheck,
@@ -56,6 +57,7 @@ class wazuh::manager (
       $ossec_wodle_osquery_template                 = $wazuh::params_manager::ossec_wodle_osquery_template,
       $ossec_wodle_syscollector_template            = $wazuh::params_manager::ossec_wodle_syscollector_template,
       $ossec_wodle_docker_listener_template         = $wazuh::params_manager::ossec_wodle_docker_listener_template,
+      $ossec_wodle_azure_logs_template              = $wazuh::params_manager::ossec_wodle_azure_logs_template,
       $ossec_vulnerability_detector_template        = $wazuh::params_manager::ossec_vulnerability_detector_template,
       $ossec_sca_template                           = $wazuh::params_manager::ossec_sca_template,
       $ossec_syscheck_template                      = $wazuh::params_manager::ossec_syscheck_template,
@@ -155,6 +157,9 @@ class wazuh::manager (
 
       #docker-listener
       $wodle_docker_listener_disabled       = $wazuh::params_manager::wodle_docker_listener_disabled,
+
+      #azurelogs
+      Optional[Wazuh::Wodle_azurelogs] $wodle_azurelogs = $wazuh::params_manager::wodle_azurelogs,
 
       #vulnerability-detector
       $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
@@ -534,6 +539,17 @@ class wazuh::manager (
         order   => 30,
         target  => 'manager_ossec.conf',
         content => template($ossec_wodle_docker_listener_template);
+    }
+  }
+  if $configure_wodle_azure_logs {
+    if ! $wodle_azurelogs {
+      fail('Please provide a valid Hash for parameter wazuh::manager::wodle_azurelogs')
+    }
+    concat::fragment {
+      'ossec.conf_wodle_azure_logs':
+        order   => 35,
+        target  => 'manager_ossec.conf',
+        content => template($ossec_wodle_azure_logs_template);
     }
   }
   if ($configure_sca == true){
