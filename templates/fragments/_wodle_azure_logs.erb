@@ -1,0 +1,19 @@
+<%- @wodle_azurelogs.each do | k,v | -%>
+<!-- <%= k %> -->
+<wodle name="azure-logs">
+  <disabled>no</disabled>
+  <interval><%= v['interval'] %></interval>
+  <run_on_start><%= v['run_on_start'] %></run_on_start>
+  <log_analytics>
+    <application_id><%= v['application_id'] %></application_id>
+    <application_key><%= v['application_key'] %></application_key>
+    <tenantdomain><%= v['tennant'] %></tenantdomain>
+    <request>
+      <tag>azure-activity</tag>
+      <query>AzureActivity</query>
+      <workspace><%= v['workspace'] %></workspace>
+      <time_offset><%= v['time_offset'] %></time_offset>
+    </request>
+  </log_analytics>
+</wodle>
+<%- end -%>
