@@ -17,7 +17,6 @@ class wazuh::dashboard (
   # Parameters used for sso login
   $enable_sso_login = undef,
   $opensearch_ssl_verificationMode = undef,
-  $opensearch_security_auth_type = undef,
   $opensearch_security_openid_connect_url = undef,
   $opensearch_security_openid_client_id = undef,
   $opensearch_security_openid_client_secret = undef,
