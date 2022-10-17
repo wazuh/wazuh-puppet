@@ -1,7 +1,8 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.3.6-1'
+  $agent_package_version = '4.3.9'
+  $agent_package_revision = '1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'https://packages.wazuh.com/4.x/windows'
 
@@ -145,6 +146,13 @@ class wazuh::params_agent {
   $sca_rhel_skip_nfs = 'yes'
   $sca_rhel_policies = []
 
+  ## Windows
+  $sca_windows_enabled = 'yes'
+  $sca_windows_scan_on_start = 'yes'
+  $sca_windows_interval = '12h'
+  $sca_windows_skip_nfs = 'yes'
+  $sca_windows_policies = []
+
   ## <else>
   $sca_else_enabled = 'yes'
   $sca_else_scan_on_start = 'yes'
@@ -213,6 +221,7 @@ class wazuh::params_agent {
     '-f 1'
   ]
 
+  $windows_audit_interval = 300
 
   # active-response
   $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
@@ -250,8 +259,8 @@ class wazuh::params_agent {
 
       # Wodles
 
-      ## doker-listener
-      $wodle_doker_listener_disabled = 'yes'
+      ## docker-listener
+      $wodle_docker_listener_disabled = 'yes'
 
       ## cis-cat
       $wodle_ciscat_disabled = 'yes'
@@ -474,14 +483,6 @@ class wazuh::params_agent {
       $service_has_status = true
       $ossec_service_provider = undef
 
-      # sca
-      $sca_windows_enabled = 'yes'
-      $sca_windows_scan_on_start = 'yes'
-      $sca_windows_interval = '12h'
-      $sca_windows_skip_nfs = 'yes'
-      $sca_windows_policies = []
-
-
       # Wodles
 
       ## syscollector
@@ -540,7 +541,6 @@ and EventID != 5152 and EventID != 5157]'
           'log_format' => 'syslog'
         },
       ]
-      $windows_audit_interval = 300
     }
     default: { fail('This ossec module has not been tested on your distribution') }
   }

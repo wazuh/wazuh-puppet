@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.3.6-1'
+      $server_package_version                          = '4.3.9-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -13,6 +13,8 @@ class wazuh::params_manager {
     ### Ossec.conf blocks
 
       ## Global
+      $ossec_logall                                    = 'no'
+      $ossec_logall_json                               = 'no'
       $ossec_emailnotification                         = false
       $ossec_emailto                                   = ['recipient@example.wazuh.com']
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
@@ -563,7 +565,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.3.6'
+      $agent_package  = 'Wazuh Agent 4.3.9'
       $server_service = ''
       $server_package = ''
       $api_service = ''
