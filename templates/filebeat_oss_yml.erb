@@ -4,7 +4,7 @@ filebeat.modules:
     alerts:
       enabled: true
     archives:
-      enabled: false
+      enabled: <%= @filebeat_oss_archives %>
 
 setup.template.json.enabled: true
 setup.template.json.path: "/etc/filebeat/wazuh-template.json"

@@ -4,28 +4,29 @@ class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
   $wazuh_version = '4.5',
 ) {
-
-  $certs_path = '/tmp/wazuh-certificates'
-
-  $path_exists = find_file($certs_path)
-
-  unless $path_exists {
-    file { 'Configure config.yml':
-        owner   => 'root',
-        path    => '/tmp/config.yml',
-        group   => 'root',
-        mode    => '0644',
-        content => template('wazuh/wazuh_config_yml.erb'),
-    }
-
-    exec { 'Create Wazuh Certificates':
-        path    => '/usr/bin:/bin',
-        command => "curl -so /tmp/wazuh-certs-tool.sh 'https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh'\
-                && chmod 744 /tmp/wazuh-certs-tool.sh\
-                && bash /tmp/wazuh-certs-tool.sh --all",
-
-    }
+  file { 'Configure Wazuh Certificates config.yml':
+    owner   => 'root',
+    path    => '/tmp/config.yml',
+    group   => 'root',
+    mode    => '0640',
+    content => template('wazuh/wazuh_config_yml.erb'),
   }
 
-}
+  file { '/tmp/wazuh-certs-tool.sh':
+    ensure => file,
+    source => "https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh",
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0740',
+  }
 
+  exec { 'Create Wazuh Certificates':
+    path    => '/usr/bin:/bin',
+    command => 'bash /tmp/wazuh-certs-tool.sh --all',
+    creates => '/tmp/wazuh-certificates',
+    require => [
+      File['/tmp/wazuh-certs-tool.sh'],
+      File['/tmp/config.yml'],
+    ],
+  }
+}
