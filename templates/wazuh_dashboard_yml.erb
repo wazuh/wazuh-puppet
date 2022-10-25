@@ -9,7 +9,7 @@ opensearch.password: <%= @dashboard_password %>
 opensearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
 opensearch_security.multitenancy.enabled: false
 opensearch_security.readonly_mode.roles: ["kibana_read_only"]
-<% if @enable_sso_login -%>
+<% if @enable_openid_login -%>
 opensearch_security.auth.type: <%= @opensearch_security_auth_type %>
 opensearch_security.openid.connect_url: <%= @opensearch_security_openid_connect_url %>
 opensearch_security.openid.client_id: <%= @opensearch_security_openid_client_id %>
