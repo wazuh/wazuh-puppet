@@ -14,8 +14,8 @@ class wazuh::dashboard (
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
 
-  # Parameters used for sso login
-  $enable_sso_login = undef,
+  # Parameters used for OpenID login
+  $enable_openid_login = undef,
   $opensearch_ssl_verificationMode = undef,
   $opensearch_security_openid_connect_url = undef,
   $opensearch_security_openid_client_id = undef,
