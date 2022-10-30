@@ -114,7 +114,7 @@
     "4.5",
     "wazuh"
   ],
-  "pdk-version": "1.14.1",
-  "template-url": "pdk-default#1.10.0",
-  "template-ref": "1.10.0-0-gbba9ac3"
+  "pdk-version": "2.5.0",
+  "template-url": "pdk-default#2.5.0",
+  "template-ref": "tags/2.5.0-0-g369d483"
 }
