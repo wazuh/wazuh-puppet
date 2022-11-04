@@ -136,10 +136,10 @@ class wazuh::indexer (
   }
 
   if $full_indexer_reinstall {
-    exec { "Clean security init lockfile":
-      path    => '/usr/bin:/bin',
-      command => "rm -f ${indexer_security_init_lockfile}",
+    file { $indexer_security_init_lockfile:
+      ensure  => absent,
       require => Package['wazuh-indexer'],
+      before  => Exec['Initialize the Opensearch security index in Wazuh indexer'],
     }
   }
 
