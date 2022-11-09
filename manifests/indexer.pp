@@ -26,7 +26,7 @@ class wazuh::indexer (
   # JVM options
   $jvm_options_memory = '1g',
 
-  # Parameters used for sso login
+  # Parameters used for openid login
   $openid_connect_url   = undef,
 ) {
   if $manage_repos {
