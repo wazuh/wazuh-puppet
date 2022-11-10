@@ -12,6 +12,12 @@
   <%- if @ossec_syscheck_auto_ignore -%>
   <auto_ignore frequency="10" timeframe="3600"><%=@ossec_syscheck_auto_ignore%></auto_ignore>
   <%- end -%>
+  <file_limit>
+    <%- if @ossec_syscheck_filelimit_enabled -%>
+    <enabled><%= @ossec_syscheck_filelimit_enabled %></enabled>
+    <%- end -%>
+    <entries><%= @ossec_syscheck_filelimit_entries %></entries>
+  </file_limit>
   <%- if @ossec_syscheck_process_priority -%>
   <process_priority><%=@ossec_syscheck_process_priority%></process_priority>
   <%- end -%>
