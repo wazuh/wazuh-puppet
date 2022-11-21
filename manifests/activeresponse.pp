@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 #Define for a specific ossec active-response
 define wazuh::activeresponse(
   $active_response_name               = 'Rendering active-response template',
@@ -13,7 +13,7 @@ define wazuh::activeresponse(
   $active_response_timeout            = undef,
   $active_response_repeated_offenders = [],
   $target_arg                         = 'manager_ossec.conf',
-  $order_arg                          = undef,
+  $order_arg                          = 80,
   $before_arg                         = undef,
   $content_arg                        = 'wazuh/fragments/_activeresponse.erb'
 ) {
