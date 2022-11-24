@@ -17,7 +17,7 @@ cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 cd kitchen
 
 #echo "Installing dependencies"
-#bundle install
+bundle install
 
 echo "Kitchen is creating the new instances"
 bundle exec kitchen create
