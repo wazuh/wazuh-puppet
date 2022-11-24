@@ -1,4 +1,4 @@
-FROM wazuh/wazuh-puppet-action:latest
+FROM wazuh/wazuh-puppet-action:0.0.1
 
 LABEL "com.github.actions.name"="puppet-tests"
 LABEL "com.github.actions.description"="Launch Puppet tests"
