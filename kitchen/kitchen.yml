@@ -7,8 +7,8 @@ driver:
 
 provisioner:
   name: puppet_apply
-  manifests_path: manifests
-  modules_path: modules
+  manifests_path: modules/wazuh/manifests
+  modules_path: modules/wazuh/pkg
   hiera_data_path: hieradata
 
 platforms:
