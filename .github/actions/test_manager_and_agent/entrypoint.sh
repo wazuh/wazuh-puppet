@@ -23,7 +23,7 @@ echo "Kitchen is creating the new instances"
 bundle exec kitchen create
 
 echo "Getting Wazuh managers IPs to the agents"
-manager_ip="$(docker ps | awk '{print $NF}' | grep manager)"
+manager_ip="$(docker inspect --format '{{ range .NetworkSettings.Networks }}{{ .IPAddress }}{{end}}'`docker ps | awk '{print $NF}' | grep manager`)"
 
 docker ps
 
