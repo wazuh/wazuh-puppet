@@ -1,0 +1,5 @@
+FROM wazuh/wazuh-puppet-kitchen:latest
+RUN git clone https://github.com/wazuh/wazuh-puppet.git
+RUN cd wazuh-puppet && git checkout 438-pipeline-actions
+RUN BUNDLE_GEMFILE="/wazuh-puppet/kitchen/Gemfile" bundle install
+ENTRYPOINT ["/entrypoint.sh"]

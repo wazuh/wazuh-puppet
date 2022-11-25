@@ -17,7 +17,7 @@ cd .. && cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
 cd kitchen
 
 #echo "Installing dependencies"
-bundle install
+#bundle install
 
 echo "Kitchen is creating the new instances"
 bundle exec kitchen create
@@ -39,10 +39,10 @@ echo `sed -i 's/manager_ip/'${manager_ip}'/g' ./manifests/site.pp`
 
 echo `cat ./manifests/site.pp`
 
-if [[ $PLATFORM == *"centos"* ]] || [[ $PLATFORM == *"rhel"* ]]; then
-   echo "suite is a Centos one and requires OpenSSL to be installed. .. Installing .."
-   bundle exec kitchen exec $PLATFORM -c "sudo yum install -y openssl"
-fi
+#if [[ $PLATFORM == *"centos"* ]] || [[ $PLATFORM == *"rhel"* ]]; then
+#   echo "suite is a Centos one and requires OpenSSL to be installed. .. Installing .."
+#   bundle exec kitchen exec $PLATFORM -c "sudo yum install -y openssl"
+#fi
 
 echo "Kitchen is converging ..."
 bundle exec kitchen converge
