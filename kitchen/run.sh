@@ -3,8 +3,7 @@
 set -e
 
 
-mkdir kitchen/modules
-mkdir kitchen/modules/wazuh
+mkdir -p kitchen/modules/wazuh
 echo `ls -lah ./`
 echo `ls -lah kitchen/modules`
 cp -r `ls -A | grep -v "kitchen"` kitchen/modules/wazuh/
