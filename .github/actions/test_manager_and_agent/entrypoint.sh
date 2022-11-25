@@ -25,6 +25,8 @@ bundle exec kitchen create
 echo "Getting Wazuh managers IPs to the agents"
 manager_ip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' `docker ps | awk '{print $NF}' | grep manager`)"
 
+docker ps
+
 echo "getting a copy of ./manifests/site.pp.template"
 cp ./manifests/site.pp.template ./manifests/site.pp
 
@@ -38,6 +40,8 @@ echo "Assigning Wazuh managers IPs to the corresponding agents."
 echo `sed -i 's/manager_ip/'${manager_ip}'/g' ./manifests/site.pp`
 
 echo `cat ./manifests/site.pp`
+
+kitchen diagnose --all
 
 #if [[ $PLATFORM == *"centos"* ]] || [[ $PLATFORM == *"rhel"* ]]; then
 #   echo "suite is a Centos one and requires OpenSSL to be installed. .. Installing .."
