@@ -3,11 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-<<<<<<< HEAD
-  $dashboard_version = '4.3.10',
-=======
   $dashboard_version = '4.4.0',
->>>>>>> d21823b4c950a023d9176bb13dab0c83ec6c1091
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -16,7 +12,6 @@ class wazuh::dashboard (
 
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
-<<<<<<< HEAD
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
 
   # If the keystore is used, the credentials are not managed by the module (TODO).
@@ -25,9 +20,6 @@ class wazuh::dashboard (
   $dashboard_user = 'kibanaserver',
   $dashboard_password = 'kibanaserver',
 
-=======
-  $indexer_server_host = "https://${indexer_server_ip}:${indexer_server_port}",
->>>>>>> d21823b4c950a023d9176bb13dab0c83ec6c1091
   $dashboard_wazuh_api_credentials = [
     {
       'id'       => 'default',
@@ -97,7 +89,6 @@ class wazuh::dashboard (
     }
   }
 
-<<<<<<< HEAD
   file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
     content => template('wazuh/wazuh_dashboard_yml.erb'),
     group   => $dashboard_filegroup,
@@ -120,16 +111,6 @@ class wazuh::dashboard (
     mode    => '0600',
     owner   => $dashboard_fileuser,
     notify  => Service['wazuh-dashboard'],
-=======
-  # TODO: Fully manage the opensearch_dashboards.yml and a template file resource
-  file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
-    owner   => 'wazuh-dashboard',
-    group   => 'wazuh-dashboard',
-    mode    => '0640',
-    content => template('wazuh/opensearch_dashboards_yml.erb'),
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard']
->>>>>>> d21823b4c950a023d9176bb13dab0c83ec6c1091
   }
 
   unless $use_keystore {

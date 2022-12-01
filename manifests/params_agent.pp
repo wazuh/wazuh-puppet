@@ -1,11 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-<<<<<<< HEAD
-  $agent_package_version = '4.3.10'
-=======
   $agent_package_version = '4.4.0'
->>>>>>> d21823b4c950a023d9176bb13dab0c83ec6c1091
   $agent_package_revision = '1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'https://packages.wazuh.com/4.x/windows'

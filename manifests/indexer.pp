@@ -8,11 +8,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-<<<<<<< HEAD
-  $indexer_version = '4.3.10-1',
-=======
   $indexer_version = '4.4.0-1',
->>>>>>> d21823b4c950a023d9176bb13dab0c83ec6c1091
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -28,7 +24,7 @@ class wazuh::indexer (
   $indexer_cluster_initial_master_nodes = ['node-1'],
 
   $manage_repos = false, # Change to true when manager is not present.
-  
+
   # JVM options
   $jvm_options_memory = '1g',
 ) {
