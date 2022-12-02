@@ -3,7 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '4.3.10',
+  $dashboard_version = '4.4.0',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -32,6 +32,7 @@ class wazuh::dashboard (
 
   $manage_repos = false, # Change to true when manager is not present.
 ) {
+
   if $manage_repos {
     include wazuh::repo
 
@@ -125,5 +126,24 @@ class wazuh::dashboard (
     enable     => true,
     hasrestart => true,
     name       => $dashboard_service,
+  }
+
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/',
+  '/usr/share/wazuh-dashboard/data/wazuh/config/']:
+    ensure => 'directory',
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0600',
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+
+  file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
+    owner   => 'wazuh-dashboard',
+    group   => 'wazuh-dashboard',
+    mode    => '0600',
+    content => template('wazuh/wazuh_yml.erb'),
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 }
