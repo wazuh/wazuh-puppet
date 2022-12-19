@@ -1,5 +1,4 @@
 ---
-#
 # Wazuh app - App configuration file
 # Copyright (C) 2015, Wazuh Inc.
 #
@@ -10,119 +9,230 @@
 #
 # Find more information about this on the LICENSE file.
 #
-# ======================== Wazuh app configuration file ========================
+# ======================== Wazuh dashboard configuration file ========================
 #
-# Please check the documentation for more information on configuration options:
-# https://documentation.wazuh.com/current/installation-guide/index.html
+# Please check the documentation for more information about configuration options:
+# https://documentation.wazuh.com/4.3/user-manual/wazuh-dashboard/config-file.html
 #
 # Also, you can check our repository:
 # https://github.com/wazuh/wazuh-kibana-app
 #
+# ---------------------------- Unauthorized roles ------------------------------
+#
+# Disable Wazuh for the Elasticsearch / OpenSearch roles defined here.
+# disabled_roles:
+#   - wazuh_disabled
+#
 # ------------------------------- Index patterns -------------------------------
 #
-# Default index pattern to use.
-#pattern: wazuh-alerts-4.x-*
+# Default index pattern to use on the app. If there's no valid index pattern, the
+# app will automatically create one with the name indicated in this option.
+# pattern: wazuh-alerts-*
 #
 # ----------------------------------- Checks -----------------------------------
 #
-# Defines which checks must to be consider by the healthcheck
-# step once the Wazuh app starts. Values must to be true or false.
-#checks.pattern : true
-#checks.template: true
-#checks.api     : true
-#checks.setup   : true
+# Define which checks will be executed by the App's HealthCheck.
+# Allowed values are: true, false
+#
+# Enable or disable the index pattern health check when opening the app.
+# checks.pattern: true
+#
+# Enable or disable the template health check when opening the app.
+# checks.template: true
+#
+# Enable or disable the API health check when opening the app.
+# checks.api: true
+#
+# Enable or disable the setup health check when opening the app.
+# checks.setup: true
+#
+# Enable or disable the known fields health check when opening the app.
+# checks.fields: true
+#
+# Change the default value of the Wazuh dashboard metaField configuration
+# checks.metaFields: true
+#
+# Change the default value of the Wazuh dashboard timeFilter configuration
+# checks.timeFilter: true
+#
+# Change the default value of the Wazuh dashboard max buckets configuration
+# checks.maxBuckets: true
 #
 # --------------------------------- Extensions ---------------------------------
 #
-# Defines which extensions should be activated when you add a new API entry.
-# You can change them after Wazuh app starts.
-# Values must to be true or false.
-#extensions.pci       : true
-#extensions.gdpr      : true
-#extensions.hipaa     : true
-#extensions.nist      : true
-#extensions.audit     : true
-#extensions.oscap     : false
-#extensions.ciscat    : false
-#extensions.aws       : false
-#extensions.virustotal: false
-#extensions.osquery   : false
-#extensions.docker    : false
+# Define the initial state of the extensions (enabled / disabled) for recently
+# added hosts. The extensions can be enabled or disabled anytime using the UI.
+# Allowed values are: true, false
 #
-# ---------------------------------- Time out ----------------------------------
+# Enable or disable the PCI DSS tab on Overview and Agents.
+# extensions.pci: true
 #
-# Defines maximum timeout to be used on the Wazuh app requests.
-# It will be ignored if it is bellow 1500.
-# It means milliseconds before we consider a request as failed.
-# Default: 20000
-#timeout: 20000
+# Enable or disable the GDPR tab on Overview and Agents.
+# extensions.gdpr: true
 #
-# ------------------------------ Advanced indices ------------------------------
+# Enable or disable the HIPAA tab on Overview and Agents.
+# extensions.hipaa: true
 #
-# Configure .wazuh indices shards and replicas.
-#wazuh.shards          : 1
-#wazuh.replicas        : 0
+# Enable or disable the NIST 800-53 tab on Overview and Agents.
+# extensions.nist: true
+#
+# Enable or disable the TSC tab on Overview and Agents.
+# extensions.tsc: true
+#
+# Enable or disable the Audit tab on Overview and Agents.
+# extensions.audit: true
+#
+# Enable or disable the Open SCAP tab on Overview and Agents.
+# extensions.oscap: false
+#
+# Enable or disable the CIS-CAT tab on Overview and Agents.
+# extensions.ciscat: false
+#
+# Enable or disable the Amazon (AWS) tab on Overview.
+# extensions.aws: false
+#
+# Enable or disable the Google Cloud Platform tab on Overview.
+# extensions.gcp: false
+#
+# Enable or disable the VirusTotal tab on Overview and Agents.
+# extensions.virustotal: false
+#
+# Enable or disable the Osquery tab on Overview and Agents.
+# extensions.osquery: false
+#
+# Enable or disable the Docker listener tab on Overview and Agents.
+# extensions.docker: false
+#
+# ------------------------------- Timeout --------------------------------------
+#
+# Maximum time, in milliseconds, the app will wait for an API response when making
+# requests to it. It will be ignored if the value is set under 1500 milliseconds.
+# timeout: 20000
 #
 # --------------------------- Index pattern selector ---------------------------
 #
-# Defines if the user is allowed to change the selected
-# index pattern directly from the Wazuh app top menu.
-# Default: true
-#ip.selector: true
+# Define if the user is allowed to change the selected index pattern directly from
+# the top menu bar.
+# ip.selector: true
 #
-# List of index patterns to be ignored
-#ip.ignore: []
+# Disable certain index pattern names from being available in index pattern
+# selector from the Wazuh app.
+# ip.ignore: 
 #
-# -------------------------------- X-Pack RBAC ---------------------------------
+# ------------------------------ Monitoring ------------------------------------
 #
-# Custom setting to enable/disable built-in X-Pack RBAC security capabilities.
-# Default: enabled
-#xpack.rbac.enabled: true
+# Enable or disable the wazuh-monitoring index creation and/or visualization.
+# wazuh.monitoring.enabled: true
 #
-# ------------------------------ wazuh-monitoring ------------------------------
+# Frequency, in seconds, of API requests to get the state of the agents and create
+# a new document in the wazuh-monitoring index with this data.
+# wazuh.monitoring.frequency: 900
 #
-# Custom setting to enable/disable wazuh-monitoring indices.
-# Values: true, false, worker
-# If worker is given as value, the app will show the Agents status
-# visualization but won't insert data on wazuh-monitoring indices.
-# Default: true
-#wazuh.monitoring.enabled: true
+# Define the number of shards to use for the wazuh-monitoring-* indices.
+# wazuh.monitoring.shards: 1
 #
-# Custom setting to set the frequency for wazuh-monitoring indices cron task.
-# Default: 900 (s)
-#wazuh.monitoring.frequency: 900
+# Define the number of replicas to use for the wazuh-monitoring-* indices.
+# wazuh.monitoring.replicas: 0
 #
-# Configure wazuh-monitoring-4.x-* indices shards and replicas.
-#wazuh.monitoring.shards: 2
-#wazuh.monitoring.replicas: 0
+# Define the interval in which a new wazuh-monitoring index will be created.
+# Allowed values are: h (hourly), d (daily), w (weekly), m (monthly)
+# wazuh.monitoring.creation: w
 #
-# Configure wazuh-monitoring-4.x-* indices custom creation interval.
-# Values: h (hourly), d (daily), w (weekly), m (monthly)
-# Default: d
-#wazuh.monitoring.creation: d
+# Default index pattern to use for Wazuh monitoring.
+# wazuh.monitoring.pattern: wazuh-monitoring-*
 #
-# Default index pattern to use for Wazuh monitoring
-#wazuh.monitoring.pattern: wazuh-monitoring-4.x-*
+# --------------------------------- Sample data --------------------------------
 #
+# Define the index name prefix of sample alerts. It must match the template used
+# by the index pattern to avoid unknown fields in dashboards.
+# alerts.sample.prefix: wazuh-alerts-4.x-
 #
-# ------------------------------- App privileges --------------------------------
-#admin: true
+# ------------------------------ Background tasks ------------------------------
 #
-# ------------------------------- App logging level -----------------------------
-# Set the logging level for the Wazuh App log files.
-# Default value: info
-# Allowed values: info, debug
-#logs.level: info
+# Define the index prefix of predefined jobs.
+# cron.prefix: wazuh
 #
-#-------------------------------- API entries -----------------------------------
-#The following configuration is the default structure to define an API entry.
+# ------------------------------ Wazuh Statistics ------------------------------
 #
-#hosts:
-#  - <id>:
-#     url: http(s)://<url>
-#     port: <port>
-#     user: <user>
-#     password: <password>
+# Enable or disable the statistics tasks.
+# cron.statistics.status: true
+#
+# Enter the ID of the hosts you want to save data from, leave this empty to run
+# the task on every host.
+# cron.statistics.apis: 
+#
+# Define the frequency of task execution using cron schedule expressions.
+# cron.statistics.interval: 0 */5 * * * *
+#
+# Define the name of the index in which the documents will be saved.
+# cron.statistics.index.name: statistics
+#
+# Define the interval in which a new index will be created.
+# cron.statistics.index.creation: w
+#
+# Define the number of shards to use for the statistics indices.
+# cron.statistics.shards: 1
+#
+# Define the number of replicas to use for the statistics indices.
+# cron.statistics.replicas: 0
+#
+# ------------------------------ Logo customization ----------------------------
+#
+# Set the name of the app logo stored at /plugins/wazuh/public/assets/
+# customization.logo.app: 
+#
+# Set the name of the sidebar logo stored at /plugins/wazuh/public/assets/
+# customization.logo.sidebar: 
+#
+# Set the name of the health-check logo stored at /plugins/wazuh/public/assets/
+# customization.logo.healthcheck: 
+#
+# Set the name of the reports logo (.png) stored at /plugins/wazuh/public/assets/
+# customization.logo.reports: 
+#
+# ---------------------------- Hide manager alerts -----------------------------
+#
+# Hide the alerts of the manager in every dashboard.
+# hideManagerAlerts: false
+#
+# ------------------------------- App logging level ----------------------------
+#
+# Logging level of the App.
+# Allowed values are: info, debug
+# logs.level: info
+#
+# ------------------------------- Agent enrollment -----------------------------
+#
+# Specifies the Wazuh registration server, used for the agent enrollment.
+# enrollment.dns: 
+#
+# Specifies the password used to authenticate during the agent enrollment.
+# enrollment.password: 
+#
+#-------------------------------- Wazuh hosts ----------------------------------
+#
+# The following configuration is the default structure to define a host.
+#
+# hosts:
+#   # Host ID / name,
+#   - env-1:
+#       # Host URL
+#       url: https://env-1.example
+#       # Host / API port
+#       port: 55000
+#       # Host / API username
+#       username: wazuh-wui
+#       # Host / API password
+#       password: wazuh-wui
+#       # Use RBAC or not. If set to true, the username must be "wazuh-wui".
+#       run_as: true
+#   - env-2:
+#       url: https://env-2.example
+#       port: 55000
+#       username: wazuh-wui
+#       password: wazuh-wui
+#       run_as: true
+
 hosts:
 <% @dashboard_wazuh_api_credentials.each do |api_profile| -%>
   - <%= api_profile['id'] %>:
@@ -130,4 +240,5 @@ hosts:
       port: <%= api_profile['port'] %>
       username: <%= api_profile['user'] %>
       password: <%= api_profile['password'] %>
+      run_as: false
 <% end -%>

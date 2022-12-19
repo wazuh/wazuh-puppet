@@ -15,6 +15,8 @@ class wazuh::indexer (
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
+  $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
+  $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
@@ -22,7 +24,7 @@ class wazuh::indexer (
   $indexer_cluster_initial_master_nodes = ['node-1'],
 
   $manage_repos = false, # Change to true when manager is not present.
-  
+
   # JVM options
   $jvm_options_memory = '1g',
 ) {
@@ -125,7 +127,7 @@ class wazuh::indexer (
     '/usr/share/wazuh-indexer',
     '/var/lib/wazuh-indexer',
   ].each |String $file| {
-    exec { "set ecusive ownership of ${file}":
+    exec { "set recusive ownership of ${file}":
       path        => '/usr/bin:/bin',
       command     => "chown ${indexer_fileuser}:${indexer_filegroup} -R ${file}",
       refreshonly => true,  # only run when package is installed or updated
@@ -134,11 +136,18 @@ class wazuh::indexer (
     }
   }
 
+  if $full_indexer_reinstall {
+    file { $indexer_security_init_lockfile:
+      ensure  => absent,
+      require => Package['wazuh-indexer'],
+      before  => Exec['Initialize the Opensearch security index in Wazuh indexer'],
+    }
+  }
+
   exec { 'Initialize the Opensearch security index in Wazuh indexer':
-    path        => ['/usr/bin', '/bin', '/usr/sbin'],
-    command     => '/usr/share/wazuh-indexer/bin/indexer-security-init.sh',
-    refreshonly => true,  # only run when package is installed or updated
-    subscribe   => Package['wazuh-indexer'],
-    require     => Service['wazuh-indexer'],
+    path    => ['/usr/bin', '/bin', '/usr/sbin'],
+    command => "/usr/share/wazuh-indexer/bin/indexer-security-init.sh && touch ${indexer_security_init_lockfile}",
+    creates => $indexer_security_init_lockfile,
+    require => Service['wazuh-indexer'],
   }
 }
