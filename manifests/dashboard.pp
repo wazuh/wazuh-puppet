@@ -128,22 +128,4 @@ class wazuh::dashboard (
     name       => $dashboard_service,
   }
 
-  file { ['/usr/share/wazuh-dashboard/data/wazuh/',
-  '/usr/share/wazuh-dashboard/data/wazuh/config/']:
-    ensure => 'directory',
-    owner   => 'wazuh-dashboard',
-    group   => 'wazuh-dashboard',
-    mode    => '0600',
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
-
-  file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
-    owner   => 'wazuh-dashboard',
-    group   => 'wazuh-dashboard',
-    mode    => '0600',
-    content => template('wazuh/wazuh_yml.erb'),
-    require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
-  }
 }
