@@ -41,21 +41,11 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  # work around:
-  #  Use cmp to compare the content of local and remote file. When they differ than rm the file to get it recreated by the file resource.
-  #  Needed since GitHub can only ETAG and result in changes of the mtime everytime.
-  # TODO: Include file into the wazuh/wazuh-puppet project or use file { checksum => '..' } for this instead of the exec construct.
-  exec { 'cleanup /etc/filebeat/wazuh-template.json':
-    command => '/bin/rm /etc/filebeat/wazuh-template.json',
-    onlyif  => '/bin/test -f /etc/filebeat/wazuh-template.json',
-    unless  => "/bin/curl -s 'https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json' | /bin/cmp -s '/etc/filebeat/wazuh-template.json'",
-  }
-  -> file { '/etc/filebeat/wazuh-template.json':
+  file { '/etc/filebeat/wazuh-template.json':
     owner   => 'root',
     group   => 'root',
-    mode    => '0440',
-    replace => false,  # only copy content when file not exist
-    source  => "https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json",
+    mode    => '0444',
+    source  => "puppet:///modules/${module_name}/wazuh_template_4.3.json",
     notify  => Service['filebeat'],
     require => Package['filebeat'],
   }
