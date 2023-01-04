@@ -4,63 +4,363 @@ on: [push, workflow_dispatch]
 
 jobs:
 
-  pdk-validate:
+  validate-and-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Run PDK validation tests
-        uses: './.github/actions/validate_module'
+    - name: Create enviroment variables
+      run: |
+        cat VERSION > $GITHUB_ENV
 
-  amazonlinux:
-    runs-on: ubuntu-latest
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install curl apt-transport-https lsb-release wget
+
+    - name: Download and Install Puppet server
+      run: |
+        wget https://apt.puppet.com/puppet7-release-focal.deb
+        sudo dpkg -i puppet7-release-focal.deb
+        sudo apt-get update
+        sudo apt-get install -y puppetserver
+        sudo ln -s /opt/puppetlabs/bin/puppet /bin
+        sudo ln -s /opt/puppetlabs/server/bin/puppetserver /bin
+
+    - name: Download and Install pdk
+      run: |
+        wget https://apt.puppet.com/puppet-tools-release-focal.deb
+        sudo dpkg -i puppet-tools-release-focal.deb
+        sudo apt-get update
+        sudo apt-get install pdk
+
+    - name: Create Puppet module
+      run: |
+        pdk validate
+        pdk build
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: wazuh-module
+        path: ./pkg/wazuh-wazuh-${{ env.VERSION }}.tar.gz
+#-------------------------------------------------------------------------------
+  ubuntu20:
+    runs-on: ubuntu-20.04
+    needs: validate-and-build
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Amazon linux - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: diodonfrost/amazonlinux-2-puppet
-          PLATFORM: rhel
-          RELEASE: latest
-          RUN_COMMAND: /usr/sbin/init
+    - uses: actions/checkout@v2
 
-  centos7:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: CentOS 7 - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: centos:7
-          PLATFORM: centos
-          RELEASE: 7
-          RUN_COMMAND: /sbin/init
+    - name: Create enviroment variables
+      run: |
+        cat VERSION > $GITHUB_ENV
 
-  ubuntu16:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Ubuntu 16.04 - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: jrei/systemd-ubuntu:16.04
-          PLATFORM: ubuntu
-          RELEASE: 16
-          RUN_COMMAND: /sbin/init
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install curl apt-transport-https lsb-release wget
 
-  ubuntu18:
-    runs-on: ubuntu-latest
+    - name: Download and Install Puppet server
+      run: |
+        wget https://apt.puppet.com/puppet7-release-focal.deb
+        sudo dpkg -i puppet7-release-focal.deb
+        sudo apt-get update
+        sudo apt-get install -y puppetserver
+        sudo ln -s /opt/puppetlabs/bin/puppet /bin
+        sudo ln -s /opt/puppetlabs/server/bin/puppetserver /bin
+
+    - name: Configure puppet server
+      run: |
+        echo "[main]" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
+        echo "server = "$HOSTNAME | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
+        echo "dns_alt_names = "$HOSTNAME | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
+        sudo echo "127.0.0.1 puppet" | sudo tee -a /etc/hosts > /dev/null
+        sudo cat /etc/puppetlabs/puppet/puppet.conf
+
+    - name: Start Puppet Server
+      run: |
+        sudo systemctl start puppetserver
+        sudo systemctl enable puppetserver
+        sudo systemctl status puppetserver
+
+    - name: Retrieve saved Wazuh module
+      uses: actions/download-artifact@v3
+      with:
+        name: wazuh-module
+
+    - name: Install Wazuh Module
+      run: |
+        sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
+
+    - name: Create manifest for install Wazuh stack
+      run: |
+        hostname=$(sudo puppetserver ca list --all | awk '{if(NR>1)print $1;}')
+        sudo echo "127.0.0.1 "$hostname | sudo tee -a /etc/hosts > /dev/null
+        sudo echo "node "\"$hostname\"" {" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp  > /dev/null
+        sudo echo "class {'wazuh::manager':} ->  class {'wazuh::indexer':} -> class {'wazuh::filebeat_oss':} -> class {'wazuh::dashboard':}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo cat /etc/puppetlabs/code/environments/production/manifests/stack.pp
+
+    - name: Install Wazuh Stack
+      run: sudo bash -c 'puppet agent -tod || test $? -eq 2'
+
+    - name: Wait for start Wazuh Cluster
+      run: sleep 120
+
+    - name: Check Wazuh indexer start
+      run: |
+        status_green="`curl -XGET "https://0.0.0.0:9200/_cluster/health" -u admin:admin -k -s | grep green | wc -l`"
+        if [[ $status_green -eq 1 ]]; then
+          curl -XGET "https://0.0.0.0:9200/_cluster/health" -u admin:admin -k -s
+        else
+          curl -XGET "https://0.0.0.0:9200/_cluster/health" -u admin:admin -k -s
+          exit 1
+        fi
+        status_index="`curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s | wc -l`"
+        status_index_green="`curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s | grep "green" | wc -l`"
+        if [[ $status_index_green -eq $status_index ]]; then
+          curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s
+        else
+          curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s
+          exit 1
+        fi
+
+    - name: Check Wazuh indexer nodes
+      run: |
+        nodes="`curl -XGET "https://0.0.0.0:9200/_cat/nodes" -u admin:admin -k -s | wc -l`"
+        if [[ $nodes -eq 1 ]]; then
+          echo "Wazuh indexer nodes: ${nodes}"
+        else
+          echo "Wazuh indexer nodes: ${nodes}"
+          exit 1
+        fi
+
+    - name: Check documents into wazuh-alerts index
+      run: |
+        docs="`curl -XGET "https://0.0.0.0:9200/wazuh-alerts*/_doc/_search" -u admin:admin -k -s | jq -r ".hits.total.value"`"
+        if [[ $docs -gt 100 ]]; then
+          echo "wazuh-alerts index documents: ${docs}"
+        else
+          echo "wazuh-alerts index documents: ${docs}"
+          exit 1
+        fi
+
+    - name: Check Wazuh templates
+      run: |
+        qty_templates="`curl -XGET "https://0.0.0.0:9200/_cat/templates" -u admin:admin -k -s | grep -P "wazuh|wazuh-agent|wazuh-statistics" | wc -l`"
+        templates="`curl -XGET "https://0.0.0.0:9200/_cat/templates" -u admin:admin -k -s | grep -P "wazuh|wazuh-agent|wazuh-statistics"`"
+        if [[ $qty_templates -eq 3 ]]; then
+          echo "wazuh templates:"
+          echo "${templates}"
+        else
+          echo "wazuh templates:"
+          echo "${templates}"
+          exit 1
+        fi
+
+    - name: Check Wazuh manager start
+      run: |
+        services="`curl -k -s -X GET "https://0.0.0.0:55000/manager/status?pretty=true" -H  "Authorization: Bearer ${{env.TOKEN}}" | jq -r .data.affected_items | grep running | wc -l`"
+        if [[ $services -gt 9 ]]; then
+          echo "Wazuh Manager Services: ${services}"
+          echo "OK"
+        else
+          echo "Wazuh indexer nodes: ${nodes}"
+          curl -k -X GET "https://0.0.0.0:55000/manager/status?pretty=true" -H  "Authorization: Bearer ${{env.TOKEN}}" | jq -r .data.affected_items
+          exit 1
+        fi
+      env:
+        TOKEN: $(curl -s -u wazuh-wui:wazuh-wui -k -X GET "https://0.0.0.0:55000/security/user/authenticate?raw=true")
+
+    - name: Check Wazuh dashboard service URL
+      run: |
+        status=$(curl -XGET --silent  https://0.0.0.0:443/app/status -k -u admin:admin -I -s | grep -E "^HTTP" | awk  '{print $2}')
+        if [[ $status -eq 200 ]]; then
+          echo "Wazuh dashboard status: ${status}"
+        else
+          echo "Wazuh dashboard status: ${status}"
+          exit 1
+        fi
+
+    - name: Check Errors in ossec.log
+      run: |
+        log=$(sudo awk 'BEGIN{IGNORECASE=1} /ERROR|CRITICAL/' /var/ossec/logs/ossec.log)
+        if [[ -z "$log" ]]; then
+          echo "No errors in ossec.log"
+        else
+          echo "Errors in ossec.log:"
+          echo "${log}"
+          exit 1
+        fi
+
+    - name: Check Errors from filebeat
+      run: |
+        filebeatout=$(sudo filebeat test output)
+        filebeatstatus=$(echo "${filebeatout}" | grep -c OK)
+        if [[ filebeatstatus -eq 7 ]]; then
+          echo "No errors in filebeat"
+        else
+          echo "Errors in filebeat"
+          echo "${filebeatout}"
+          exit 1
+        fi
+#-------------------------------------------------------------------------------
+  ubuntu22:
+    runs-on: ubuntu-22.04
+    needs: validate-and-build
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Ubuntu 18.04 - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: jrei/systemd-ubuntu:18.04
-          PLATFORM: ubuntu
-          RELEASE: 18
-          RUN_COMMAND: /sbin/init
+    - uses: actions/checkout@v2
+
+    - name: Create enviroment variables
+      run: |
+        cat VERSION > $GITHUB_ENV
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install curl apt-transport-https lsb-release wget
+
+    - name: Download and Install Puppet server
+      run: |
+        wget https://apt.puppet.com/puppet7-release-focal.deb
+        sudo dpkg -i puppet7-release-focal.deb
+        sudo apt-get update
+        sudo apt-get install -y puppetserver
+        sudo ln -s /opt/puppetlabs/bin/puppet /bin
+        sudo ln -s /opt/puppetlabs/server/bin/puppetserver /bin
+
+    - name: Configure puppet server
+      run: |
+        echo "[main]" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
+        echo "server = "$HOSTNAME | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
+        echo "dns_alt_names = "$HOSTNAME | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
+        sudo echo "127.0.0.1 puppet" | sudo tee -a /etc/hosts > /dev/null
+        sudo cat /etc/puppetlabs/puppet/puppet.conf
+
+    - name: Start Puppet Server
+      run: |
+        sudo systemctl start puppetserver
+        sudo systemctl enable puppetserver
+        sudo systemctl status puppetserver
+
+    - name: Retrieve saved Wazuh module
+      uses: actions/download-artifact@v3
+      with:
+        name: wazuh-module
+
+    - name: Install Wazuh Module
+      run: |
+        sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
+
+    - name: Create manifest for install Wazuh stack
+      run: |
+        hostname=$(sudo puppetserver ca list --all | awk '{if(NR>1)print $1;}')
+        sudo echo "127.0.0.1 "$hostname | sudo tee -a /etc/hosts > /dev/null
+        sudo echo "node "\"$hostname\"" {" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp  > /dev/null
+        sudo echo "class {'wazuh::manager':} ->  class {'wazuh::indexer':} -> class {'wazuh::filebeat_oss':} -> class {'wazuh::dashboard':}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo cat /etc/puppetlabs/code/environments/production/manifests/stack.pp
+
+    - name: Install Wazuh Stack
+      run: sudo bash -c 'puppet agent -tod || test $? -eq 2'
+
+    - name: Wait for start Wazuh Cluster
+      run: sleep 120
+
+    - name: Check Wazuh indexer start
+      run: |
+        status_green="`curl -XGET "https://0.0.0.0:9200/_cluster/health" -u admin:admin -k -s | grep green | wc -l`"
+        if [[ $status_green -eq 1 ]]; then
+          curl -XGET "https://0.0.0.0:9200/_cluster/health" -u admin:admin -k -s
+        else
+          curl -XGET "https://0.0.0.0:9200/_cluster/health" -u admin:admin -k -s
+          exit 1
+        fi
+        status_index="`curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s | wc -l`"
+        status_index_green="`curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s | grep "green" | wc -l`"
+        if [[ $status_index_green -eq $status_index ]]; then
+          curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s
+        else
+          curl -XGET "https://0.0.0.0:9200/_cat/indices" -u admin:admin -k -s
+          exit 1
+        fi
+
+    - name: Check Wazuh indexer nodes
+      run: |
+        nodes="`curl -XGET "https://0.0.0.0:9200/_cat/nodes" -u admin:admin -k -s | wc -l`"
+        if [[ $nodes -eq 1 ]]; then
+          echo "Wazuh indexer nodes: ${nodes}"
+        else
+          echo "Wazuh indexer nodes: ${nodes}"
+          exit 1
+        fi
+
+    - name: Check documents into wazuh-alerts index
+      run: |
+        docs="`curl -XGET "https://0.0.0.0:9200/wazuh-alerts*/_doc/_search" -u admin:admin -k -s | jq -r ".hits.total.value"`"
+        if [[ $docs -gt 100 ]]; then
+          echo "wazuh-alerts index documents: ${docs}"
+        else
+          echo "wazuh-alerts index documents: ${docs}"
+          exit 1
+        fi
+
+    - name: Check Wazuh templates
+      run: |
+        qty_templates="`curl -XGET "https://0.0.0.0:9200/_cat/templates" -u admin:admin -k -s | grep -P "wazuh|wazuh-agent|wazuh-statistics" | wc -l`"
+        templates="`curl -XGET "https://0.0.0.0:9200/_cat/templates" -u admin:admin -k -s | grep -P "wazuh|wazuh-agent|wazuh-statistics"`"
+        if [[ $qty_templates -eq 3 ]]; then
+          echo "wazuh templates:"
+          echo "${templates}"
+        else
+          echo "wazuh templates:"
+          echo "${templates}"
+          exit 1
+        fi
+
+    - name: Check Wazuh manager start
+      run: |
+        services="`curl -k -s -X GET "https://0.0.0.0:55000/manager/status?pretty=true" -H  "Authorization: Bearer ${{env.TOKEN}}" | jq -r .data.affected_items | grep running | wc -l`"
+        if [[ $services -gt 9 ]]; then
+          echo "Wazuh Manager Services: ${services}"
+          echo "OK"
+        else
+          echo "Wazuh indexer nodes: ${nodes}"
+          curl -k -X GET "https://0.0.0.0:55000/manager/status?pretty=true" -H  "Authorization: Bearer ${{env.TOKEN}}" | jq -r .data.affected_items
+          exit 1
+        fi
+      env:
+        TOKEN: $(curl -s -u wazuh-wui:wazuh-wui -k -X GET "https://0.0.0.0:55000/security/user/authenticate?raw=true")
+
+    - name: Check Wazuh dashboard service URL
+      run: |
+        status=$(curl -XGET --silent  https://0.0.0.0:443/app/status -k -u admin:admin -I -s | grep -E "^HTTP" | awk  '{print $2}')
+        if [[ $status -eq 200 ]]; then
+          echo "Wazuh dashboard status: ${status}"
+        else
+          echo "Wazuh dashboard status: ${status}"
+          exit 1
+        fi
+
+    - name: Check Errors in ossec.log
+      run: |
+        log=$(sudo awk 'BEGIN{IGNORECASE=1} /ERROR|CRITICAL/' /var/ossec/logs/ossec.log)
+        if [[ -z "$log" ]]; then
+          echo "No errors in ossec.log"
+        else
+          echo "Errors in ossec.log:"
+          echo "${log}"
+          exit 1
+        fi
+
+    - name: Check Errors from filebeat
+      run: |
+        filebeatout=$(sudo filebeat test output)
+        filebeatstatus=$(echo "${filebeatout}" | grep -c OK)
+        if [[ filebeatstatus -eq 7 ]]; then
+          echo "No errors in filebeat"
+        else
+          echo "Errors in filebeat"
+          echo "${filebeatout}"
+          exit 1
+        fi
