@@ -25,7 +25,6 @@ jobs:
 
     - name: Create Puppet module
       run: |
-        pdk update
         pdk validate
         pdk build
 
