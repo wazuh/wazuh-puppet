@@ -1,6 +1,9 @@
 name: Debian install
+inputs:
+  environment:
+    description: The environment to deploy to
+    required: false
 steps:
-  - uses: actions/checkout@v2
   - name: Install dependencies
     run: |
       sudo apt-get update
