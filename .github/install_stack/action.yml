@@ -1,6 +1,6 @@
 runs:
   using: "composite"
-    steps:
+  steps:
     - name: Create manifest for install Wazuh stack
       shell: bash
       run: |

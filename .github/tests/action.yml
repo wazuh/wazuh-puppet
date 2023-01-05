@@ -1,6 +1,6 @@
 runs:
   using: "composite"
-    steps:
+  steps:
     - name: Wait for start Wazuh Cluster
       shell: bash
       run: sleep 120
