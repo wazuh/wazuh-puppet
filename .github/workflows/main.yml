@@ -14,7 +14,7 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: ./.github/actions/debian
+      uses: ./.github/actions
 
     - name: Download and Install pdk
       run: |
