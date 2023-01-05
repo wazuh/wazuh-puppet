@@ -1,5 +1,5 @@
-jobs:
-  configure:
+runs:
+  using: "composite"
     steps:
     - name: Configure puppet server
       run: |

@@ -1,5 +1,5 @@
-jobs:
-  tests:
+runs:
+  using: "composite"
     steps:
     - name: Wait for start Wazuh Cluster
       run: sleep 120

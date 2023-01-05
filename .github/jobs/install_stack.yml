@@ -1,5 +1,5 @@
-jobs:
-  install_stack:
+runs:
+  using: "composite"
     steps:
     - name: Create manifest for install Wazuh stack
       run: |

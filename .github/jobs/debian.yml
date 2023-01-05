@@ -1,6 +1,6 @@
-jobs:
-  debian:
-    steps:
+runs:
+  using: "composite"
+  steps:
     - name: Install dependencies
       run: |
         sudo apt-get update
