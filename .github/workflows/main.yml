@@ -14,7 +14,7 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: debian.yml
+      uses: .github/workflows/debian.yml
 
     - name: Download and Install pdk
       run: |
@@ -25,6 +25,7 @@ jobs:
 
     - name: Create Puppet module
       run: |
+        pdk update
         pdk validate
         pdk build
 
@@ -45,10 +46,10 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: debian.yml
+      uses: .github/workflows/debian.yml
 
     - name: Configure Puppet server
-      uses: configure.yml
+      uses: .github/workflows/configure.yml
 
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
@@ -60,10 +61,10 @@ jobs:
         sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
 
     - name: Install Wazuh Stack
-      uses: install_stack.yml
+      uses: .github/workflows/install_stack.yml
 
     - name: Test stack
-      uses: tests.yml
+      uses: .github/workflows/tests.yml
 #-------------------------------------------------------------------------------
   ubuntu22:
     runs-on: ubuntu-22.04
@@ -76,10 +77,10 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: debian.yml
+      uses: .github/workflows/debian.yml
 
     - name: Configure Puppet server
-      uses: configure.yml
+      uses: .github/workflows/configure.yml
 
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
@@ -91,7 +92,7 @@ jobs:
         sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
 
     - name: Install Wazuh Stack
-      uses: install_stack.yml
+      uses: .github/workflows/install_stack.yml
 
     - name: Test stack
-      uses: tests.yml
+      uses: .github/workflows/tests.yml
