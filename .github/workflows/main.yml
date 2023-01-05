@@ -46,10 +46,10 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: ./.github/jobs/debian.yml
+      uses: ./.github/actions/debian.yml
 
     - name: Configure Puppet server
-      uses: ./.github/jobs/configure.yml
+      uses: ./.github/actions/configure.yml
 
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
@@ -61,10 +61,10 @@ jobs:
         sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
 
     - name: Install Wazuh Stack
-      uses: ./.github/jobs/install_stack.yml
+      uses: ./.github/actions/install_stack.yml
 
     - name: Test stack
-      uses: ./.github/jobs/tests.yml
+      uses: ./.github/actions/tests.yml
 #-------------------------------------------------------------------------------
   ubuntu22:
     runs-on: ubuntu-22.04
@@ -77,10 +77,10 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: ./.github/jobs/debian.yml
+      uses: ./.github/actions/debian.yml
 
     - name: Configure Puppet server
-      uses: ./.github/jobs/configure.yml
+      uses: ./.github/actions/configure.yml
 
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
@@ -92,7 +92,7 @@ jobs:
         sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
 
     - name: Install Wazuh Stack
-      uses: ./.github/jobs/install_stack.yml
+      uses: ./.github/actions/install_stack.yml
 
     - name: Test stack
-      uses: ./.github/jobs/tests.yml
+      uses: ./.github/actions/tests.yml
