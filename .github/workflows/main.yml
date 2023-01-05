@@ -14,7 +14,7 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: ./.github/jobs/debian.yml
+      uses: ./.github/actions/debian.yml
 
     - name: Download and Install pdk
       run: |
