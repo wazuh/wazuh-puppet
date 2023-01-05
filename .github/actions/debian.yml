@@ -1,14 +1,14 @@
 name: Debian install
+
 inputs:
   environment:
-    description: The environment to deploy to
-    required: false
+
 steps:
+  - uses: actions/checkout@v2
   - name: Install dependencies
     run: |
       sudo apt-get update
       sudo apt-get install curl apt-transport-https lsb-release wget
-
   - name: Download and Install Puppet server
     run: |
       wget https://apt.puppet.com/puppet7-release-focal.deb
