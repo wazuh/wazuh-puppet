@@ -2,9 +2,11 @@ runs:
   using: "composite"
     steps:
     - name: Wait for start Wazuh Cluster
+      shell: bash
       run: sleep 120
 
     - name: Check Wazuh indexer start
+      shell: bash
       run: |
         status_green="`curl -XGET "https://0.0.0.0:9200/_cluster/health" -u admin:admin -k -s | grep green | wc -l`"
         if [[ $status_green -eq 1 ]]; then
@@ -23,6 +25,7 @@ runs:
         fi
 
     - name: Check Wazuh indexer nodes
+      shell: bash
       run: |
         nodes="`curl -XGET "https://0.0.0.0:9200/_cat/nodes" -u admin:admin -k -s | wc -l`"
         if [[ $nodes -eq 1 ]]; then
@@ -33,6 +36,7 @@ runs:
         fi
 
     - name: Check documents into wazuh-alerts index
+      shell: bash
       run: |
         docs="`curl -XGET "https://0.0.0.0:9200/wazuh-alerts*/_doc/_search" -u admin:admin -k -s | jq -r ".hits.total.value"`"
         if [[ $docs -gt 100 ]]; then
@@ -43,6 +47,7 @@ runs:
         fi
 
     - name: Check Wazuh templates
+      shell: bash
       run: |
         qty_templates="`curl -XGET "https://0.0.0.0:9200/_cat/templates" -u admin:admin -k -s | grep -P "wazuh|wazuh-agent|wazuh-statistics" | wc -l`"
         templates="`curl -XGET "https://0.0.0.0:9200/_cat/templates" -u admin:admin -k -s | grep -P "wazuh|wazuh-agent|wazuh-statistics"`"
@@ -56,6 +61,7 @@ runs:
         fi
 
     - name: Check Wazuh manager start
+      shell: bash
       run: |
         services="`curl -k -s -X GET "https://0.0.0.0:55000/manager/status?pretty=true" -H  "Authorization: Bearer ${{env.TOKEN}}" | jq -r .data.affected_items | grep running | wc -l`"
         if [[ $services -gt 9 ]]; then
@@ -70,6 +76,7 @@ runs:
         TOKEN: $(curl -s -u wazuh-wui:wazuh-wui -k -X GET "https://0.0.0.0:55000/security/user/authenticate?raw=true")
 
     - name: Check Wazuh dashboard service URL
+      shell: bash
       run: |
         status=$(curl -XGET --silent  https://0.0.0.0:443/app/status -k -u admin:admin -I -s | grep -E "^HTTP" | awk  '{print $2}')
         if [[ $status -eq 200 ]]; then
@@ -80,6 +87,7 @@ runs:
         fi
 
     - name: Check Errors in ossec.log
+      shell: bash
       run: |
         log=$(sudo awk 'BEGIN{IGNORECASE=1} /ERROR|CRITICAL/' /var/ossec/logs/ossec.log)
         if [[ -z "$log" ]]; then
@@ -91,6 +99,7 @@ runs:
         fi
 
     - name: Check Errors from filebeat
+      shell: bash
       run: |
         filebeatout=$(sudo filebeat test output)
         filebeatstatus=$(echo "${filebeatout}" | grep -c OK)

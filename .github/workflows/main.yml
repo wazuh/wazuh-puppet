@@ -14,7 +14,7 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: ./.github/actions
+      uses: ./.github/debian_install
 
     - name: Download and Install pdk
       run: |
@@ -46,10 +46,10 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: ./.github/actions/debian.yml
+      uses: ./.github/debian_install
 
     - name: Configure Puppet server
-      uses: ./.github/actions/configure.yml
+      uses: ./.github/configure
 
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
@@ -61,10 +61,10 @@ jobs:
         sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
 
     - name: Install Wazuh Stack
-      uses: ./.github/actions/install_stack.yml
+      uses: ./.github/install_stack
 
     - name: Test stack
-      uses: ./.github/actions/tests.yml
+      uses: ./.github/tests
 #-------------------------------------------------------------------------------
   ubuntu22:
     runs-on: ubuntu-22.04
@@ -77,10 +77,10 @@ jobs:
         cat VERSION > $GITHUB_ENV
 
     - name: Install Puppet
-      uses: ./.github/actions/debian.yml
+      uses: ./.github/debian_install
 
     - name: Configure Puppet server
-      uses: ./.github/actions/configure.yml
+      uses: ./.github/configure
 
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
@@ -92,7 +92,7 @@ jobs:
         sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
 
     - name: Install Wazuh Stack
-      uses: ./.github/actions/install_stack.yml
+      uses: ./.github/install_stack
 
     - name: Test stack
-      uses: ./.github/actions/tests.yml
+      uses: ./.github/tests

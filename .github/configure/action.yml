@@ -2,6 +2,7 @@ runs:
   using: "composite"
     steps:
     - name: Configure puppet server
+      shell: bash
       run: |
         echo "[main]" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
         echo "server = "$HOSTNAME | sudo tee -a /etc/puppetlabs/puppet/puppet.conf > /dev/null
@@ -10,6 +11,7 @@ runs:
         sudo cat /etc/puppetlabs/puppet/puppet.conf
 
     - name: Start Puppet Server
+      shell: bash
       run: |
         sudo systemctl start puppetserver
         sudo systemctl enable puppetserver
