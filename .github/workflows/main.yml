@@ -108,12 +108,6 @@ jobs:
         cat VERSION > $GITHUB_ENV
         echo $GITHUB_ENV > /tmp/.env
 
-    - name: Install Puppet
-      uses: ./.github/centos_install
-
-    - name: Configure Puppet server
-      uses: ./.github/configure
-
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
       with:
