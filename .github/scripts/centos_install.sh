@@ -1,5 +1,6 @@
 rpm -Uvh https://yum.puppet.com/puppet7-release-el-8.noarch.rpm
 yum update -y
+yum install glibc -y
 yum -y install puppetserver
 ln -s /opt/puppetlabs/bin/puppet /bin
 ln -s /opt/puppetlabs/server/bin/puppetserver /bin
