@@ -1,0 +1,11 @@
+runs:
+  using: "composite"
+  steps:
+
+    - name: Download and Install Puppet server
+      shell: bash
+      run: |
+        sudo rpm -Uvh https://yum.puppet.com/puppet7-release-el-8.noarch.rpm
+        yum -y install puppetserver
+        sudo ln -s /opt/puppetlabs/bin/puppet /bin
+        sudo ln -s /opt/puppetlabs/server/bin/puppetserver /bin

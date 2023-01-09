@@ -95,3 +95,41 @@ jobs:
 
     - name: Test stack
       uses: ./.github/tests
+
+#-------------------------------------------------------------------------------
+  Centos7:
+    runs-on: ubuntu-22.04
+    needs: validate-and-build
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create enviroment variables
+      run: |
+        cat VERSION > $GITHUB_ENV
+        echo $GITHUB_ENV > /tmp/.env
+
+    - name: Initiate Docker image for Centos
+    - run: |
+        docker run -it -v $GITHUB_WORKSPACE/:/workspace --env-file /tmp/.env $GITHUB_ENV centos:centos7
+        cd /workspace
+
+    - name: Install Puppet
+      uses: ./.github/centos_install
+
+    - name: Configure Puppet server
+      uses: ./.github/configure
+
+    - name: Retrieve saved Wazuh module
+      uses: actions/download-artifact@v3
+      with:
+        name: wazuh-module
+
+    - name: Install Wazuh Module
+      run: |
+        puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
+
+    - name: Install Wazuh Stack
+      uses: ./.github/install_stack
+
+    - name: Test stack
+      uses: ./.github/tests
