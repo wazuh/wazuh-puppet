@@ -12,7 +12,7 @@ puppet module install /tmp/wazuh-wazuh-$VERSION.tar.gz
 hostname=$(puppetserver ca list --all | awk '{if(NR>1)print $1;}')
 echo "127.0.0.1 "$hostname | tee -a /etc/hosts > /dev/null
 echo "node "\"$hostname\"" {" | tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp  > /dev/null
-echo "class {'wazuh::manager':} ->  class {'wazuh::indexer':} -> class {'wazuh::filebeat_oss':} -> class {'wazuh::dashboard':}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+echo "class {'wazuh::manager':} ->  class {'wazuh::indexer':} -> class {'wazuh::filebeat_oss':} -> class {'wazuh::dashboard':}" | tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
 echo "}" | tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
 cat /etc/puppetlabs/code/environments/production/manifests/stack.pp
 bash -c 'puppet agent -tod || test $? -eq 2'
