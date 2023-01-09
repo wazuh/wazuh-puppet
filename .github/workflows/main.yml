@@ -111,7 +111,6 @@ jobs:
     - name: Initiate Docker image for Centos
       run: |
         docker run -i -v $GITHUB_WORKSPACE/:/workspace --env-file /tmp/.env centos:centos7
-        cd /workspace
 
     - name: Install Puppet
       uses: ./.github/centos_install
