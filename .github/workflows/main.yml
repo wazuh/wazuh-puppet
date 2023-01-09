@@ -116,10 +116,11 @@ jobs:
     - name: Move Wazuh Module
       run: |
         mv ./wazuh-wazuh-${{ env.VERSION }}.tar.gz /tmp/
+        cp ./.github/scripts/centos_install.sh /tmp/
 
     - name: Initiate Docker image for Centos
       run: |
-        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v ./.github/scripts/centos_install.sh:/tmp/install.sh --env-file /tmp/.env centos:centos7 /tmp/install.sh
+        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh --env-file /tmp/.env centos:centos7 /tmp/install.sh
 
     - name: Test stack
       uses: ./.github/tests
