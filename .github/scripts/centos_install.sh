@@ -1,4 +1,5 @@
 rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+ls _ltr /tmp
 yes | yum -y install puppet
 puppet module install /tmp/wazuh-wazuh-$VERSION.tar.gz
 mkdir /etc/puppet/manifests
