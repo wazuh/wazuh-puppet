@@ -108,10 +108,6 @@ jobs:
         cat VERSION > $GITHUB_ENV
         echo $GITHUB_ENV > /tmp/.env
 
-    - name: Initiate Docker image for Centos
-      run: |
-        docker run -i -v $GITHUB_WORKSPACE/:/workspace --env-file /tmp/.env centos:centos7
-
     - name: Install Puppet
       uses: ./.github/centos_install
 
@@ -123,12 +119,13 @@ jobs:
       with:
         name: wazuh-module
 
-    - name: Install Wazuh Module
+    - name: Move Wazuh Module
       run: |
-        puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
+        mv ./wazuh-wazuh-${{ env.VERSION }}.tar.gz /tmp/
 
-    - name: Install Wazuh Stack
-      uses: ./.github/install_stack
+    - name: Initiate Docker image for Centos
+      run: |
+        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz --env-file /tmp/.env centos:centos7
 
     - name: Test stack
       uses: ./.github/tests
