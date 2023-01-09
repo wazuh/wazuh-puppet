@@ -1,7 +1,6 @@
 runs:
   using: "composite"
   steps:
-
     - name: Download and Install Puppet server
       shell: bash
       run: |
