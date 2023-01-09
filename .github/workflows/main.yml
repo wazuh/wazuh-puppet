@@ -107,6 +107,7 @@ jobs:
       run: |
         cat VERSION > $GITHUB_ENV
         echo $GITHUB_ENV > /tmp/.env
+        cat
 
     - name: Retrieve saved Wazuh module
       uses: actions/download-artifact@v3
@@ -120,7 +121,7 @@ jobs:
 
     - name: Initiate Docker image for Centos
       run: |
-        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh --env-file /tmp/.env centos:centos7 bash /tmp/install.sh
+        docker run -i -v /home/runner/work/wazuh-puppet/wazuh-puppet/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION centos:centos7 bash /tmp/install.sh
 
     - name: Test stack
       uses: ./.github/tests
