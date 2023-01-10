@@ -8,3 +8,4 @@ echo "class {'wazuh::manager':} ->  class {'wazuh::indexer':} -> class {'wazuh::
 echo "}" | tee -a /etc/puppet/manifests/wazuh.pp > /dev/null
 cat /etc/puppet/manifests/wazuh.pp
 puppet apply -l /etc/puppet/manifests/wazuh.pp
+ls -ltr /var/ossec
