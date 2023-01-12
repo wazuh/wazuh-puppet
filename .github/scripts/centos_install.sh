@@ -1,4 +1,4 @@
-rpm -Uvh https://yum.puppet.com/puppet7-release-el-8.noarch.rpm
+rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
 ls -ltr /tmp
 yes | yum -y install puppet
 ln -s /opt/puppetlabs/bin/puppet /bin
