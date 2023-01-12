@@ -1,5 +1,6 @@
 rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
 ls -ltr /tmp
+yum install -y openssl
 yes | yum -y install puppet
 ln -s /opt/puppetlabs/bin/puppet /bin
 puppet module install /tmp/wazuh-wazuh-$VERSION.tar.gz
