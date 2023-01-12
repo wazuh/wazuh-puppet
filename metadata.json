@@ -1,7 +1,7 @@
 {
-  "name": "wazuh-wazuh",
-  "version": "4.4.0",
-  "author": "WAZUH",
+  "name": "cbordon-test",
+  "version": "4.4.2",
+  "author": "WAZUH-DEV",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
   "source": "https://github.com/wazuh/wazuh-puppet",
