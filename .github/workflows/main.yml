@@ -121,7 +121,7 @@ jobs:
 
     - name: Initiate Docker image for Centos
       run: |
-        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION centos:centos7 bash /tmp/install.sh
+        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION wazuh/docker-centos7-ansible bash /tmp/install.sh
 
     - name: Test stack
       uses: ./.github/tests
