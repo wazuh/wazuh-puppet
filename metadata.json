@@ -1,6 +1,6 @@
 {
   "name": "cbordon-test",
-  "version": "4.4.2",
+  "version": "4.4.3",
   "author": "WAZUH-DEV",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
