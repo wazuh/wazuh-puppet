@@ -98,7 +98,7 @@ jobs:
 
 #-------------------------------------------------------------------------------
   Centos7:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     needs: validate-and-build
     steps:
     - uses: actions/checkout@v2
@@ -121,7 +121,7 @@ jobs:
 
     - name: Initiate Docker image for Centos
       run: |
-        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION --privileged --cgroupns host -v /sys/fs/cgroup:/sys/fs/cgroup:rw  wazuh/docker-centos7-ansible bash /tmp/install.sh
+        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION --privileged --cgroupns host -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v /var/lib/containerd wazuh/docker-centos7-ansible command: /sbin/init && bash /tmp/install.sh
 
     - name: Test stack
       uses: ./.github/tests
