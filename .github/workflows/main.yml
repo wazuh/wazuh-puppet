@@ -118,10 +118,16 @@ jobs:
       run: |
         mv ./wazuh-wazuh-${{ env.VERSION }}.tar.gz /tmp/
         cp ./.github/scripts/centos_install.sh /tmp/
+    - name: host
+      un: |
+        echo $'{\n    "default-cgroupns-mode":host\n}' | sudo tee /etc/docker/daemon.json
+        cat /etc/docker/daemon.json
+        docker --version
+        sudo service docker restart
 
     - name: Initiate Docker image for Centos
       run: |
-        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION --privileged --cgroupns-mode host -v /sys/fs/cgroup:/sys/fs/cgroup:rw  wazuh/centos7_systemd:latest bash /tmp/install.sh
+        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw  wazuh/centos7_systemd:latest bash /tmp/install.sh
 
     - name: Test stack
       uses: ./.github/tests
