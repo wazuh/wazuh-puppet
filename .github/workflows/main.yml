@@ -119,7 +119,7 @@ jobs:
         mv ./wazuh-wazuh-${{ env.VERSION }}.tar.gz /tmp/
         cp ./.github/scripts/centos_install.sh /tmp/
     - name: host
-      un: |
+      run: |
         echo $'{\n    "default-cgroupns-mode":host\n}' | sudo tee /etc/docker/daemon.json
         cat /etc/docker/daemon.json
         docker --version
