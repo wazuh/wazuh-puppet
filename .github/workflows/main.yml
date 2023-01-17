@@ -121,7 +121,7 @@ jobs:
 
     - name: Initiate Docker image for Centos
       run: |
-        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION --privileged --cgroupns_mode=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw  wazuh/centos7_systemd:latest bash /tmp/install.sh
+        docker run -i -v /tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz:/tmp/wazuh-wazuh-${{ env.VERSION }}.tar.gz -v /tmp/centos_install.sh:/tmp/install.sh -e VERSION --privileged --cgroupns-mode host -v /sys/fs/cgroup:/sys/fs/cgroup:rw  wazuh/centos7_systemd:latest bash /tmp/install.sh
 
     - name: Test stack
       uses: ./.github/tests
