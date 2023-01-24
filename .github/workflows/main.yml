@@ -11,9 +11,9 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION > $GITHUB_ENV
+        cat VERSION >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
-        WAZUH_VERSION=$VER > $GITHUB_ENV
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
     - name: Install Puppet
       uses: ./.github/debian_install
@@ -66,9 +66,9 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION > $GITHUB_ENV
+        cat VERSION >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
-        WAZUH_VERSION=$VER > $GITHUB_ENV
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
     - name: Install Puppet
       uses: ./.github/debian_install
@@ -99,9 +99,9 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION > $GITHUB_ENV
+        cat VERSION >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
-        WAZUH_VERSION=$VER > $GITHUB_ENV
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
     - name: Install Puppet
       uses: ./.github/debian_install
