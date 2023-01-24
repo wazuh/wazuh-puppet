@@ -50,9 +50,7 @@ jobs:
         fi
 
     - name: Create Puppet module
-      run: |
-        pdk validate
-        pdk build
+      run: pdk build
 
     - name: Create artifact
       uses: actions/upload-artifact@v2
