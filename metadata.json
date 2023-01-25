@@ -1,6 +1,6 @@
 {
-  "name": "wazuh-wazuh_dev",
-  "version": "4.4.0",
+  "name": "cbordon-cbordon_dev",
+  "version": "4.4.8",
   "author": "WAZUH-DEV",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
