@@ -1,66 +1,125 @@
 name: Kitchen tests for Wazuh Puppet
 
-on: [push, workflow_dispatch]
+on: [pull_request, workflow_dispatch, release]
 
 jobs:
 
-  pdk-validate:
+  validate-and-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
 
-      - name: Run PDK validation tests
-        uses: './.github/actions/validate_module'
+    - name: Create enviroment variables
+      run: |
+        cat VERSION >> $GITHUB_ENV
+        VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
-  amazonlinux:
-    runs-on: ubuntu-latest
+    - name: Install Puppet
+      uses: ./.github/debian_install
+
+    - name: Download and Install pdk
+      run: |
+        wget https://apt.puppet.com/puppet-tools-release-focal.deb
+        sudo dpkg -i puppet-tools-release-focal.deb
+        sudo apt-get update
+        sudo apt-get install pdk
+
+    - name: Compare versions
+      run: |
+        function compare_versions() {
+        operator="${2}"
+        echo $operator
+        if [ $operator == "-gt" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -V | head -n 1)" != "$1";
+        elif [ $operator == "-le" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -V | head -n 1)" == "$1";
+        elif [ $operator == "-lt" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -rV | head -n 1)" != "$1";
+        elif [ $operator == "-ge" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -rV | head -n 1)" == "$1";
+        else
+            echo "Operator not supported"
+            exit 1
+        fi
+        }
+        if compare_versions "{{ env.VERSION }}" -gt "{{ env.WAZUH_VERSION }}"; then
+          sed -i 's/packages.wazuh.com/packages-dev.wazuh.com/' manifests/repo.pp
+          sed -i 's/4.x/pre-release/' manifests/repo.pp
+          sed -i "s/'stable'/'unstable'/" manifests/repo.pp
+        fi
+
+    - name: Create Puppet module
+      run: pdk build
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: wazuh-module
+        path: ./pkg/wazuh-wazuh-${{ env.VERSION }}.tar.gz
+#-------------------------------------------------------------------------------
+  ubuntu20:
+    runs-on: ubuntu-20.04
+    needs: validate-and-build
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Amazon linux - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: diodonfrost/amazonlinux-2-puppet
-          PLATFORM: rhel
-          RELEASE: latest
-          RUN_COMMAND: /usr/sbin/init
+    - uses: actions/checkout@v2
 
-  centos7:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: CentOS 7 - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: centos:7
-          PLATFORM: centos
-          RELEASE: 7
-          RUN_COMMAND: /sbin/init
+    - name: Create enviroment variables
+      run: |
+        cat VERSION >> $GITHUB_ENV
+        VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
-  ubuntu16:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Ubuntu 16.04 - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: jrei/systemd-ubuntu:16.04
-          PLATFORM: ubuntu
-          RELEASE: 16
-          RUN_COMMAND: /sbin/init
+    - name: Install Puppet
+      uses: ./.github/debian_install
 
-  ubuntu18:
-    runs-on: ubuntu-latest
+    - name: Configure Puppet server
+      uses: ./.github/configure
+
+    - name: Retrieve saved Wazuh module
+      uses: actions/download-artifact@v3
+      with:
+        name: wazuh-module
+
+    - name: Install Wazuh Module
+      run: |
+        sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
+
+    - name: Install Wazuh Stack
+      uses: ./.github/install_stack
+
+    - name: Test stack
+      uses: ./.github/tests
+#-------------------------------------------------------------------------------
+  ubuntu22:
+    runs-on: ubuntu-22.04
+    needs: validate-and-build
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Ubuntu 18.04 - (Manager + Agent)
-        uses: './.github/actions/test_manager_and_agent'
-        env:
-          IMAGE: jrei/systemd-ubuntu:18.04
-          PLATFORM: ubuntu
-          RELEASE: 18
-          RUN_COMMAND: /sbin/init
+    - uses: actions/checkout@v2
+
+    - name: Create enviroment variables
+      run: |
+        cat VERSION >> $GITHUB_ENV
+        VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
+
+    - name: Install Puppet
+      uses: ./.github/debian_install
+
+    - name: Configure Puppet server
+      uses: ./.github/configure
+
+    - name: Retrieve saved Wazuh module
+      uses: actions/download-artifact@v3
+      with:
+        name: wazuh-module
+
+    - name: Install Wazuh Module
+      run: |
+        sudo puppet module install ./wazuh-wazuh-${{ env.VERSION }}.tar.gz
+
+    - name: Install Wazuh Stack
+      uses: ./.github/install_stack
+
+    - name: Test stack
+      uses: ./.github/tests
