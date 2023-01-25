@@ -21,7 +21,7 @@ class wazuh::indexer (
   $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_cluster_initial_master_nodes = ['node-1'],
-  $enable_openid_login                   = $wazuh::dashboard::enable_openid_login
+  $enable_openid_login                   = $wazuh::dashboard::enable_openid_login,
 
   $manage_repos = false, # Change to true when manager is not present.
 
