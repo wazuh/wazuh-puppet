@@ -19,12 +19,12 @@ class wazuh::filebeat_oss (
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
 ) {
-  include wazuh::repo_elastic_oss
+  include wazuh::repo
 
   if $facts['os']['family'] == 'Debian' {
-    Class['wazuh::repo_elastic_oss'] -> Class['apt::update'] -> Package['filebeat']
+    Class['wazuh::repo'] -> Class['apt::update'] -> Package['filebeat']
   } else {
-    Class['wazuh::repo_elastic_oss'] -> Package['filebeat']
+    Class['wazuh::repo'] -> Package['filebeat']
   }
 
   package { 'filebeat':
