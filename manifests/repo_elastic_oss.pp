@@ -15,7 +15,7 @@ class wazuh::repo_elastic_oss (
           server => 'pgp.mit.edu'
         }
         case $::lsbdistcodename {
-          /(jessie|wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal)/: {
+          /(jessie|wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|jammy)/: {
 
             apt::source { 'wazuh_elastic_oss':
               ensure   => present,
@@ -50,8 +50,9 @@ class wazuh::repo_elastic_oss (
         # Import GPG key
 
         exec { 'Install Elasticsearch GPG key':
-          path    => '/usr/bin',
+          path    => ['/bin', '/usr/bin'],
           command => 'rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch',
+          unless  => 'test $(rpm -qa gpg-pubkey | grep -i "D88E42B4" | wc -l) -eq 1',
         }
 
         # Adding repo by Puppet yumrepo resource

@@ -7,7 +7,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.3.9-1',
+  $indexer_version = '4.3.10-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -15,6 +15,7 @@ class wazuh::indexer (
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
   $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
+  $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
@@ -25,6 +26,9 @@ class wazuh::indexer (
 
   # JVM options
   $jvm_options_memory = '1g',
+
+  # Parameters used for openid login
+  $openid_connect_url   = undef,
 ) {
   if $manage_repos {
     include wazuh::repo
@@ -83,6 +87,12 @@ class wazuh::indexer (
     notify  => Service['wazuh-indexer'],
   }
 
+  file {
+    '/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/config.yml':
+      content => template('wazuh/opensearch_security_config.yml.erb'),
+      notify  => Service['wazuh-indexer'],
+  }
+
   file_line { 'Insert line initial size of total heap space':
     path    => '/etc/wazuh-indexer/jvm.options',
     line    => "-Xms${jvm_options_memory}",
@@ -125,12 +135,20 @@ class wazuh::indexer (
     '/usr/share/wazuh-indexer',
     '/var/lib/wazuh-indexer',
   ].each |String $file| {
-    exec { "set ecusive ownership of ${file}":
+    exec { "set recusive ownership of ${file}":
       path        => '/usr/bin:/bin',
       command     => "chown ${indexer_fileuser}:${indexer_filegroup} -R ${file}",
       refreshonly => true,  # only run when package is installed or updated
       subscribe   => Package['wazuh-indexer'],
       notify      => Service['wazuh-indexer'],
+    }
+  }
+
+  if $full_indexer_reinstall {
+    file { $indexer_security_init_lockfile:
+      ensure  => absent,
+      require => Package['wazuh-indexer'],
+      before  => Exec['Initialize the Opensearch security index in Wazuh indexer'],
     }
   }
 

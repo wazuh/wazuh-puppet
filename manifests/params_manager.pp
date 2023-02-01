@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.3.9-1'
+      $server_package_version                          = '4.3.10-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -441,7 +441,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy)$/: {
+            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -565,7 +565,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.3.9'
+      $agent_package  = 'Wazuh Agent 4.3.10'
       $server_service = ''
       $server_package = ''
       $api_service = ''
