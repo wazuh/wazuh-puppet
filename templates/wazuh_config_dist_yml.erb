@@ -1,18 +1,18 @@
 nodes:
   indexer:
     - name: indexer-<%= @indexer_node1_name %>
-      ip: <%= @node1ip %>
+      ip: <%= @node1host %>
     - name: indexer-<%= @indexer_node2_name %>
-      ip: <%= @node2ip %>
+      ip: <%= @node2host %>
     - name: indexer-<%= @indexer_node3_name %>
-      ip: <%= @node3ip %>
+      ip: <%= @node3host %>
   server:
     - name: manager-master
-      ip: <%= @masterip %>
+      ip: <%= @masterhost %>
       node_type: master
     - name: manager-worker
-      ip: <%= @workerip %>
+      ip: <%= @workerhost %>
       node_type: worker
   dashboard:
     - name: dashboard
-      ip: <%= @dashboardip %>
+      ip: <%= @dashboardhost %>

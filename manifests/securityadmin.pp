@@ -1,6 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh repository installation
 class wazuh::securityadmin (
+  $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
 ) {
   exec { 'Initialize the Opensearch security index in Wazuh indexer':
     path    => ['/usr/bin', '/bin', '/usr/sbin'],

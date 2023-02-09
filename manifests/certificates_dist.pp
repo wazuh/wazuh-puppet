@@ -1,6 +1,6 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh repository installation
-define class wazuh::certificates_dist (
+class wazuh::certificates_dist (
   $wazuh_repository = 'packages-dev.wazuh.com',
   $wazuh_version = '4.4',
 ) {
@@ -28,5 +28,14 @@ define class wazuh::certificates_dist (
       File['/tmp/wazuh-certs-tool.sh'],
       File['/tmp/config.yml'],
     ],
+  }
+  file { 'Copy all certificates into module':
+    ensure => 'directory',
+    source => '/tmp/wazuh-certificates/',
+    recurse => 'remote',
+    path => '/etc/puppetlabs/code/environments/production/modules/archive/files/',
+    owner => 'root',
+    group => 'root',
+    mode  => '0755',
   }
 }

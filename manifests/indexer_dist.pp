@@ -20,9 +20,9 @@ class wazuh::indexer_dist (
 
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
-  $indexer_discovery_hosts = ['$(indexer_node1_name)', '$(indexer_node2_name)', '$(indexer_node3_name)'],
-  $indexer_cluster_initial_master_nodes = ['$(indexer_node1_name)', '$(indexer_node2_name)', '$(indexer_node3_name)'],
-  $indexer_master_node = 'puppet',
+  $indexer_discovery_hosts = [$node1host, $node2host, $node3host],
+  $indexer_cluster_initial_master_nodes = [$node1host, $node2host, $node3host],
+  $indexer_cluster_CN = [$indexer_node1_name, $indexer_node2_name, $indexer_node3_name],
 
   # JVM options
   $jvm_options_memory = '1g',
@@ -48,8 +48,8 @@ class wazuh::indexer_dist (
   }
 
   [
-   'indexer-$(indexer_node_name).pem',
-   'indexer-$(indexer_node_name)-key.pem',
+   "indexer-$indexer_node_name.pem",
+   "indexer-$indexer_node_name-key.pem",
    'root-ca.pem',
    'admin.pem',
    'admin-key.pem',
@@ -59,15 +59,17 @@ class wazuh::indexer_dist (
       owner   => $indexer_fileuser,
       group   => $indexer_filegroup,
       mode    => '0400',
-      replace => false,  # only copy content when file not exist
-      source  => "$indexer_master_node:///tmp/wazuh-certificates/${certfile}",
+      replace => true,
+      recurse => remote,
+      source  => "puppet:///modules/archive/${certfile}",
     }
   }
 
 
+
   file { 'configuration file':
     path    => '/etc/wazuh-indexer/opensearch.yml',
-    content => template('wazuh/wazuh_indexer_yml.erb'),
+    content => template('wazuh/wazuh_indexer_yml_dist.erb'),
     group   => $indexer_filegroup,
     mode    => '0660',
     owner   => $indexer_fileuser,
