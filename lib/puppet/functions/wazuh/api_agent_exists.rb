@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 #
-# @summary A custom fact to remove a Wazuh agent via API. Meant to be run on Puppet server.
+# @summary A custom fact to check the existense of an agent
 #
-Puppet::Functions.create_function(:'wazuh::api_remove_agent') do
+Puppet::Functions.create_function(:'wazuh::api_agent_exists') do
 
-  dispatch :remove_remote_agent do
+  dispatch :api_agent_exists? do
     param 'Hash', :config
+    return_type 'Boolean'
   end
 
-  def token_uri(config)
+def token_uri(config)
     URI("https://#{config['api_host']}:#{config['api_host_port']}/security/user/authenticate")
   end
 
@@ -16,7 +17,7 @@ Puppet::Functions.create_function(:'wazuh::api_remove_agent') do
     URI("https://#{config['api_host']}:#{config['api_host_port']}/agents?name=#{config['agent_name']}")
   end
 
-  def delete_agent_uri(config, id)
+  def agent_info_uri(config, id)
     URI("https://#{config['api_host']}:#{config['api_host_port']}/agents?agents_list=#{id}&status=#{config['agent_status']}&older_than=0")
   end
 
@@ -53,35 +54,13 @@ Puppet::Functions.create_function(:'wazuh::api_remove_agent') do
 
     id = JSON.parse(res.body)&.dig('data', 'affected_items', 0, 'id')
     if res.code == '200'
-      return id.nil? ? nil : id
+      return id.nil? ? false : true
     end
   end
   
-  def remove_agent(config, id, token)
-    uri = delete_agent_uri(config, id)
-    headers = { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}" }
-
-    begin
-      res = Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
-        req = Net::HTTP::Delete.new(uri, headers)
-        http.request(req)
-      end
-    rescue StandardError => e
-      Puppet.err("Error: #{e.message}")
-    end
-    
-    if res.code == '200'
-      Puppet.notice("Agent #{config['agent_name']}, id #{id} successfully removed from Wazuh server.")
-    else
-      Puppet.err("Failed to remove agent #{config['agent_name']}, id #{id} from Wazuh server. HTTP status code: #{res.code}")
-    end
-  end
-  
-  def remove_remote_agent(config)
+  def api_agent_exists?(config)
     token = get_token(config)
-    agent_id = get_agent_id_by_name(config, token)
-    unless agent_id.nil?
-      remove_agent(config, agent_id, token)
-    end
+    agent_info = get_agent_id_by_name(config, token)
   end
 end
+
