@@ -34,6 +34,11 @@ Puppet::Type.newtype(:local_agent_name) do
     desc 'The server enrollment port'
     defaultto 1515
   end
+
+  newparam(:communication_port) do
+    desc 'The server communication port'
+    defaultto 1514
+  end
   
   newproperty(:agent_name) do
     desc 'The name of the agent'

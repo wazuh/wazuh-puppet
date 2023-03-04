@@ -29,6 +29,7 @@ define wazuh::utils::agent_supervise(
 
   notify { "got: ${when}": }
   
+  # Restart local agent if any of these conditions are true
   if ($facts['wazuh']['state']['status'] == $when['status'] or
       $facts['wazuh']['state']['last_keepalive_since'] > $when['last_keepalive_since'] or
       $facts['wazuh']['state']['last_ack_since'] > $when['last_ack_since']) {
@@ -37,4 +38,23 @@ define wazuh::utils::agent_supervise(
           action => 'restart',
         }
       }
+
+
+      /*
+      # get remote status
+      # get local status 
+      # if either is not connected
+      # loop 10 times and give up with a warning 
+      if $out_of_sync['local_status'] && $out_of_sync['remote_status'] {
+        $range = range(0, 9)
+        $range.each |$index| {
+          warning('Still out of sync...')
+          if local_status == 'connected' and remote_status == 'connected' {
+            break
+          }
+          sleep(5)
+        }
+      }
+      */
 }
+

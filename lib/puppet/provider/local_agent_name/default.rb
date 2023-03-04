@@ -26,6 +26,10 @@ Puppet::Type.type(:local_agent_name).provide(:ruby) do
     @current_password ||= File.read(authdfile).chomp if File.exist?(authdfile) 
   end
 
+  def current_auth_password_hash
+    @current_password_hash ||= Digest::SHA256.hexdigest(current_auth_password)
+  end
+
   def current_agent_name
     @current_name ||= File.read(keyfile).split[1].chomp if File.exist?(keyfile)
   end
@@ -59,10 +63,22 @@ Puppet::Type.type(:local_agent_name).provide(:ruby) do
     @auth_password
   end
 
+  def auth_password_hash
+     @auth_password_hash ||= Digest::SHA256.hexdigest(auth_password)
+  end
+  
   def enrollment_port
     @enrollment_port ||= resource[:enrollment_port]
   end
+
+  def communication_port
+    @communication_port ||= resource[:communication_port]
+  end
   
+  def current_communication_port
+    @communication_port ||= get_ossec_conf_value('port')
+  end
+
   def remove_keys_file
     File.delete(keyfile)
   end
@@ -80,7 +96,8 @@ Puppet::Type.type(:local_agent_name).provide(:ruby) do
   def exists?
     agent_name == current_agent_name &&
       auth_server_name == current_auth_server_name &&
-      auth_password == current_auth_password &&
+      auth_password_hash == current_auth_password_hash &&
+      communication_port == current_communication_port &&
       enrollment_port == 1515
   end
   

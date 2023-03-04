@@ -15,6 +15,7 @@ Facter.add(:wazuh) do
   setcode do
     
     @keyfile = String.new('/var/ossec/etc/client.keys')
+    @authd_pass_file = String.new('/var/ossec/etc/authd.pass')
     
     def wazuh_agent_data(index)
       if File.exist?(@keyfile)
@@ -39,13 +40,23 @@ Facter.add(:wazuh) do
       end
       Facter::Core::Execution.execute(cmd)
     end
+
+    def password_hash
+      if File.exists?(@authd_pass_file)
+        password = File.read(@authd_pass_file).chomp
+        hash = Digest::SHA256.hexdigest(password)
+      else
+        nil
+      end
+    end
     
     wazuh_agent_hash = {
       id: wazuh_agent_id,
       name: wazuh_agent_name,
       ip_address: wazuh_agent_ip,
       key: wazuh_agent_key,
-      version: wazuh_agent_version
+      version: wazuh_agent_version,
+      password_hash: password_hash
     }
     
     def get_ossec_conf_value(key)
@@ -58,11 +69,16 @@ Facter.add(:wazuh) do
     end
     
     def wazuh_server_name
-      get_ossec_conf_value('address')
+      get_ossec_conf_value('address') || nil
+    end
+
+    def wazuh_server_port
+      get_ossec_conf_value('port').to_i || nil
     end
   
     wazuh_server_hash = {
       name: wazuh_server_name,
+      port: wazuh_server_port
     }
     
     wazuh_state_hash = {}
@@ -80,7 +96,7 @@ Facter.add(:wazuh) do
           seconds_since_ack = (Time.now - Time.parse(value)).to_i
           wazuh_state_hash['last_ack_since'] = seconds_since_ack
         when 'status'
-          wazuh_state_hash['status'] = value
+          wazuh_state_hash['status'] = value.gsub("'", "")
         end
       end
     end
