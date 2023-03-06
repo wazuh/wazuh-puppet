@@ -2,6 +2,8 @@
 #
 # @summary A custom fact to check the existense of an agent
 #
+# @author Kibahop <petri.lammi@puppeteers.net>
+#
 Puppet::Functions.create_function(:'wazuh::api_agent_exists') do
 
   dispatch :api_agent_exists? do
@@ -61,6 +63,7 @@ def token_uri(config)
   def api_agent_exists?(config)
     token = get_token(config)
     agent_info = get_agent_id_by_name(config, token)
+    return agent_info
   end
 end
 

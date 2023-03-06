@@ -1,7 +1,7 @@
 #
 # @summmary Example wazuh_actions
 #
-class local_profile::wazuh_actions {
+class wazuh_actions {  #lint:ignore:autoloader_layout
 
   wazuh::utils::agent_actions { 'start_wazuh_service':
     action => start,

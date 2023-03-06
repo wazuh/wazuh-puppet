@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 #
-# @summary A custom fact to remove a Wazuh agent via API. Meant to be run on Puppet server.
+# @summary A custom fact to remove a Wazuh agent via API. Targeted to be run on a Puppet server.
+#
+# @author Kibahop <petri.lammi@puppeteers.net>
 #
 Puppet::Functions.create_function(:'wazuh::api_remove_agent') do
 

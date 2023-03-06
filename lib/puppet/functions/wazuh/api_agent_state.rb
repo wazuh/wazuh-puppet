@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 #
-# @summary A custom fact to check the status of an agent
+# @summary A custom fact to check the status of an agent on the manager side
+#
+# @author Kibahop <petri.lammi@puppeteers.net>
 #
 Puppet::Functions.create_function(:'wazuh::api_agent_state') do
 
@@ -33,10 +35,12 @@ def token_uri(config)
 
     begin
       response = http.request(request)
+      token = JSON.parse(response.body)&.dig('data','token')
     rescue StandardError => e
-      Puppet.err("Failed to retrieve token: #{e.message}")
+      error_message = "Failed to retrieve token: #{e.message}"
+      Puppet.err(error_message)
+      fail(error_message)
     end
-    token = JSON.parse(response.body)&.dig('data','token')
   end
 
   def get_agent_id_by_name(config, token)
@@ -50,6 +54,7 @@ def token_uri(config)
       end
     rescue StandardError => e
       Puppet.err("Failed to retrieve agent id: #{e.message}")
+      raise e
     end
 
     status = JSON.parse(res.body)&.dig('data', 'affected_items', 0, 'status')
@@ -59,10 +64,16 @@ def token_uri(config)
       return nil
     end
   end
-  
+
   def api_agent_state(config)
-    token = get_token(config)
-    agent_state = get_agent_id_by_name(config, token)
+    begin
+      token = get_token(config)
+      agent_state = get_agent_id_by_name(config, token)
+      return agent_state
+    rescue StandardError => e
+      Puppet.err("Failed to get agent state: #{e.message}")
+      return nil
+    end
   end
 end
 

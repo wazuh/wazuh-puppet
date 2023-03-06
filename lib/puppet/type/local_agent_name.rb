@@ -6,7 +6,7 @@
 #
 Puppet::Type.newtype(:local_agent_name) do
 
-  @doc = 'Custom resource to ensure name on an agent.'
+  @doc = 'Custom resource change wazuh agent properties.'
 
   ensurable do
 
@@ -21,12 +21,12 @@ Puppet::Type.newtype(:local_agent_name) do
   
   def pre_run_check
     if !File.exist?('/var/ossec/etc/ossec.conf')
-      raise Puppet::ResourceError, "No configuration file, no agent name management."
+      raise Puppet::ResourceError, 'No ossec configuration file, no changes'
     end              
   end           
   
   newparam(:name) do
-    desc 'Just here for the itself'
+    desc 'Just here for itself'
     isnamevar
   end
 

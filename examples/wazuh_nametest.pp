@@ -1,7 +1,7 @@
 #
 # @summary Agent name change example
 #
-class local_profile::wazuh_nametest {
+class wazuh_nametest {  #lint:ignore:autoloader_layout
 
   # $agent_name = 'my-brand-new-agent.example.com'
   $agent_name = 'wazuh-agent.example.com'

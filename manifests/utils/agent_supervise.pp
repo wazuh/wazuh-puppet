@@ -27,34 +27,45 @@ define wazuh::utils::agent_supervise(
   Hash $when,
 ) {
 
-  notify { "got: ${when}": }
-  
   # Restart local agent if any of these conditions are true
   if ($facts['wazuh']['state']['status'] == $when['status'] or
       $facts['wazuh']['state']['last_keepalive_since'] > $when['last_keepalive_since'] or
       $facts['wazuh']['state']['last_ack_since'] > $when['last_ack_since']) {
-        
-        wazuh::utils::agent_actions { 'Agent has gone too far, restarting...':
+
+        warning("Agent ${profile::wazuh::agent::wazuh_agent_name} has lost touch with the server, restarting...")
+
+        wazuh::utils::agent_actions { "Agent ${profile::wazuh::agent::wazuh_agent_name} has lost touch with the server, restarting...":
           action => 'restart',
         }
       }
 
+      #
+      # TODO: replace this with a loop  
+      #
+      if $facts.dig('wazuh', 'state', 'status') != undef {
 
-      /*
-      # get remote status
-      # get local status 
-      # if either is not connected
-      # loop 10 times and give up with a warning 
-      if $out_of_sync['local_status'] && $out_of_sync['remote_status'] {
-        $range = range(0, 9)
-        $range.each |$index| {
-          warning('Still out of sync...')
-          if local_status == 'connected' and remote_status == 'connected' {
-            break
+        if $facts.dig('wazuh', 'agent', 'name') == $profile::wazuh_agent::wazuh_agent_name {
+
+          $agent_local_state = assert_type(String[1], $facts.dig('wazuh', 'state', 'status'))
+          $agent_remote_state = assert_type(String[1], wazuh::api_agent_state($profile::wazuh_agent::api_hash))
+
+          if $agent_local_state != 'connected' and $agent_remote_state != 'active' {
+
+            warning("local and remote state for ${profile::wazuh::agent::wazuh_agent_name} disagree about their state")
+
+            # remove current name from the manager
+            wazuh::utils::api_remove_agent { "${profile::wazuh_agent::wazuh_agent_name}_supervise":
+              *          => $profile::wazuh_agent::api_hash,
+              agent_name => $profile::wazuh_agent::wazuh_agent_name,
+            }
+
+            # reauth
+            wazuh::utils::local_agent_name { "${profile::wazuh_agent::wazuh_agent_name}_supervise":
+              *          => $profile::wazuh_agent::agent_params_hash,
+              agent_name => $profile::wazuh_agent::wazuh_agent_name,
+              require    => Wazuh::Utils::Api_remove_agent["${profile::wazuh_agent::wazuh_agent_name}_supervise"],
+            }
           }
-          sleep(5)
         }
       }
-      */
 }
-
