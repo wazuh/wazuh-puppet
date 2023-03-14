@@ -539,7 +539,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            'AlmaLinux': {
+            'AlmaLinux','Rocky': {
               if ( $::operatingsystemrelease =~ /^8.*/ ) {
                 $ossec_service_provider = 'redhat'
                 $api_service_provider = 'redhat'
