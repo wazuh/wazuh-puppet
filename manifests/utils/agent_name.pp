@@ -3,27 +3,36 @@
 #
 # @author Petri Lammi petri.lammi@puppeteers.net
 #
-# @example Basic usage
-#
-define wazuh::utils::local_agent_name(
+define wazuh::utils::agent_name(
   Stdlib::Host $wazuh_register_endpoint,
-  Optional[String] $wazuh_enrollment_auth_pass,
-  Boolean $wazuh_enrollment_enabled,
   Stdlib::Port $wazuh_enrollment_port,
+  Optional[String] $wazuh_enrollment_auth_pass,
   String $agent_auth_password,
   Stdlib::Port $ossec_port,
   Stdlib::Host $agent_name = $agent_name,
+  Optional[Boolean] $wazuh_enrollment_enabled = undef,
   Optional[Stdlib::Host] $wazuh_reporting_endpoint = undef,
   Optional[String] $agent_package_version = undef,
   Optional[String] $agent_package_revision = undef,
 
 ) {
 
-  with($agent_auth_password,
+  notify { "before agent_name: ${agent_name}": }
+  notify { "before auth_password: ${agent_auth_password}": }
+  notify { "before auth_server_name: ${$wazuh_register_endpoint}": }
+  notify { "before enrollment_port: ${wazuh_enrollment_port}": }
+  notify { "before communication_port: ${ossec_port}": }
+
+  with(
+    $agent_auth_password,
     $wazuh_register_endpoint,
     $wazuh_enrollment_port,
-    $ossec_port)
-  |$auth_password, $auth_server_name, $enrollment_port, $communication_port | {
+    $ossec_port
+  )
+  |$auth_password,
+  $auth_server_name,
+  $enrollment_port,
+  $communication_port| {
 
     local_agent_name { $agent_name:
       agent_name         => $agent_name,

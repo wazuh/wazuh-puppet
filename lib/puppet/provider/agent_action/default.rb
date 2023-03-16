@@ -1,29 +1,29 @@
 # frozen_string_literal: true
+
 #
 # @summary A Puppet provider for performing actions on the Wazuh agent
 #
 # @author Petri Lammi petri.lammi@puppeteers.net
 #
 Puppet::Type.type(:agent_action).provide(:ruby) do
-
-  desc "Provider for managing agent actions"
+  desc 'Provider for managing agent actions'
 
   mk_resource_methods
-  
+
   def refresh=(value)
     command = generate_command(value)
-    unless command.nil?
-      Puppet.debug("Executing command: #{command}")
-      system(command)
-    end
+    return if command.nil?
+
+    Puppet.debug("Executing command: #{command}")
+    system(command)
   end
 
   def action=(value)
     command = generate_command(value)
-    unless command.nil?
-      Puppet.debug("Executing command: #{command}")
-      system(command)
-    end
+    return if command.nil?
+
+    Puppet.debug("Executing command: #{command}")
+    system(command)
   end
 
   private
@@ -41,6 +41,7 @@ Puppet::Type.type(:agent_action).provide(:ruby) do
     if command.nil?
       raise Puppet::Error, "Invalid action specified: #{action}. Valid values are 'start', 'stop', 'restart', 'enable', and 'disable'."
     end
+
     command
   end
 end

@@ -1,4 +1,5 @@
-#
+# frozen_string_literal: true
+
 # @summary Check if Wazuh configuration file exist
 #
 # @author Petri Lammi petri.lammi@puppeteers.net
