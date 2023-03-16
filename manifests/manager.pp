@@ -438,7 +438,7 @@ class wazuh::manager (
   case $::operatingsystem{
     'RedHat', 'OracleLinux':{
       $apply_template_os = 'rhel'
-      if ( $::operatingsystemrelease     =~ /^9.*/ ){
+      if ( $::operatingsystemrelease =~ /^9.*/ ){
         $rhel_version = '9'
       }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
         $rhel_version = '8'
