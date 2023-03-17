@@ -17,12 +17,6 @@ define wazuh::utils::agent_name(
 
 ) {
 
-  notify { "before agent_name: ${agent_name}": }
-  notify { "before auth_password: ${agent_auth_password}": }
-  notify { "before auth_server_name: ${$wazuh_register_endpoint}": }
-  notify { "before enrollment_port: ${wazuh_enrollment_port}": }
-  notify { "before communication_port: ${ossec_port}": }
-
   with(
     $agent_auth_password,
     $wazuh_register_endpoint,

@@ -116,7 +116,7 @@ Puppet::Type.type(:local_agent_name).provide(:ruby) do
   def exists?
     (agent_name == current_agent_name) &&
       (auth_server_name == current_auth_server_name) &&
-      (auth_password_hash == current_auth_password_hash) &&
+      (auth_password == current_auth_password) &&
       (communication_port == current_communication_port) &&
       (enrollment_port == current_enrollment_port)
   end
