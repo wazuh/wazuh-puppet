@@ -135,8 +135,8 @@ class ApiHelper
         data = JSON.parse(res.body)
         data['data']['affected_items'][0]['id']
       rescue StandardError => e
-        Puppet.warning("WAZUH: #{@agent_name} doesn't exist on the server #{@api_host} - probably ok: #{e.message}")
-        nil
+        Puppet.warning("WAZUH: #{@agent_name} doesn't exist on the server #{@api_host} - probably ok: #{res.body}")
+        return 'not_found'
       end
     else
       Puppet.err("WAZUH: Unspecific response error from server #{@api_host} for #{@agent_name}")
