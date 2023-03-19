@@ -56,8 +56,15 @@ define wazuh::utils::agent_supervise(
             }
             
             $agent_local_state = assert_type(String[1], $facts.dig('wazuh', 'state', 'status'))
-            $agent_remote_state = assert_type(String[1], wazuh::api_agent_status($local_api_hash))
-            
+            # $agent_remote_state = assert_type(String[1], wazuh::api_agent_status($local_api_hash))
+            $agent_remote_state = wazuh::api_agent_status($local_api_hash) ? {
+              'pending'         => 'pending',
+              'active'          => 'active',
+              'never_connected' => 'never_connected',
+              'disconnected'    => 'disconnected',
+              default           => undef,
+            }
+
             if ($agent_local_state != 'connected') and ($agent_remote_state != 'active') {
               
               warning("WAZUH: local and remote state for ${profile::wazuh::agent::wazuh_agent_name} disagree about their state")
