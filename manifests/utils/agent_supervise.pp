@@ -62,6 +62,7 @@ define wazuh::utils::agent_supervise(
               'active'          => 'active',
               'never_connected' => 'never_connected',
               'disconnected'    => 'disconnected',
+              undef             => undef,
               default           => undef,
             }
 
