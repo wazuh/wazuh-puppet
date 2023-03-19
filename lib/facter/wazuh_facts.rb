@@ -90,11 +90,11 @@ Facter.add(:wazuh) do
         case key
         when 'last_keepalive'
           # calculate seconds since last keepalive
-          seconds_since_keepalive = value.empty? ? 0 : (Time.now - Time.parse(value)).to_i
+          seconds_since_keepalive = value.gsub("'", '').empty? ? 0 : (Time.now - Time.parse(value)).to_i
           wazuh_state_hash['last_keepalive_since'] = seconds_since_keepalive
         when 'last_ack'
           # calculate seconds since last ack
-          seconds_since_ack =  value.empty? ? 0 : (Time.now - Time.parse(value)).to_i
+          seconds_since_ack = value.gsub("'", '').empty? ? 0 : (Time.now - Time.parse(value)).to_i
           wazuh_state_hash['last_ack_since'] = seconds_since_ack
         when 'status'
           wazuh_state_hash['status'] = value.gsub("'", '')
