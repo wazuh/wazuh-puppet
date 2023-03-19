@@ -62,7 +62,7 @@ Facter.add(:wazuh) do
     def get_ossec_conf_value(key)
       if File.exist?(@keyfile)
         IO.readlines('/var/ossec/etc/ossec.conf').grep(%r{^.*<#{key}>}).map { |line|
-          line.match(%r{^.*<#{key}>(.*)</#{key}>})&.captures&.first&.strip
+          line.match(%r{^.*<#{key}>(.*)</#{key}>}).captures.first.strip
         }.compact.first
       else
         nil
@@ -90,11 +90,11 @@ Facter.add(:wazuh) do
         case key
         when 'last_keepalive'
           # calculate seconds since last keepalive
-          seconds_since_keepalive = (Time.now - Time.parse(value)).to_i
+          seconds_since_keepalive = value.empty? ? 0 : (Time.now - Time.parse(value)).to_i
           wazuh_state_hash['last_keepalive_since'] = seconds_since_keepalive
         when 'last_ack'
           # calculate seconds since last ack
-          seconds_since_ack = (Time.now - Time.parse(value)).to_i
+          seconds_since_ack =  value.empty? ? 0 : (Time.now - Time.parse(value)).to_i
           wazuh_state_hash['last_ack_since'] = seconds_since_ack
         when 'status'
           wazuh_state_hash['status'] = value.gsub("'", '')
