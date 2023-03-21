@@ -9,7 +9,7 @@ define wazuh::utils::agent_name(
   Optional[String] $wazuh_enrollment_auth_pass,
   String $agent_auth_password,
   Stdlib::Port $ossec_port,
-  Stdlib::Host $agent_name = $agent_name,
+  String $agent_name = $agent_name,
   Optional[Boolean] $wazuh_enrollment_enabled = undef,
   Optional[Stdlib::Host] $wazuh_reporting_endpoint = undef,
   Optional[String] $agent_package_version = undef,
