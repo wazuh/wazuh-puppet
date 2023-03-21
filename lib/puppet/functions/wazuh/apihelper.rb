@@ -45,8 +45,8 @@ class ApiHelper
     Puppet.err("agent_status")
     if agent_exists?
       status = retrieve_agent_status
-      Puppet.err(status)
-      status
+      Puppet.err("got status: #{status}")
+      !status.nil? ? status : 'unknown'
     else
       'non_existent'
     end
