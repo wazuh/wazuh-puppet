@@ -181,6 +181,7 @@ class ApiHelper
         verify_mode: OpenSSL::SSL::VERIFY_NONE,
       ) do |http|
         req = Net::HTTP::Get.new(uri.request_uri, headers)
+        Puppet.err(http.request(req))
         http.request(req)
       end
     rescue StandardError => e
@@ -189,6 +190,7 @@ class ApiHelper
     else
       if res.code == '200'
         data = JSON.parse(res.body)
+        Puppet.err("WAZUH: got 200, data: #{data}")
         status = data['data']['affected_items'][0]['status']
       else
         Puppet.err("WAZUH: Failed to retrieve agent status for #{@agent_name}/#{@agent_id}: #{e.message}")
