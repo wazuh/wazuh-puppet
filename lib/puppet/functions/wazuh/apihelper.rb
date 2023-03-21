@@ -189,9 +189,14 @@ class ApiHelper
       'non_existent'
     else
       if res.code == '200'
-        data = JSON.parse(res.body)
-        Puppet.err("WAZUH: got 200, data: #{data}")
-        status = data['data']['affected_items'][0]['status']
+        begin
+          data = !JSON.parse(res.body).nil? ? JSON.parse(res.body) : nil
+          Puppet.err("WAZUH: got 200, data: #{data}")
+          status = data['data']['affected_items'][0]['status'].nil? unless data.nil?   
+        rescue StandardError => e
+          Puppet.err("WAZUH: data hash parsing eneded up with: #{e.message}")
+          'non_existent'
+        end
       else
         Puppet.err("WAZUH: Failed to retrieve agent status for #{@agent_name}/#{@agent_id}: #{e.message}")
         'non_existent'
