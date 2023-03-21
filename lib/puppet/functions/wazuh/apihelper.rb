@@ -192,7 +192,8 @@ class ApiHelper
         begin
           data = !JSON.parse(res.body).nil? ? JSON.parse(res.body) : nil
           Puppet.err("WAZUH: got 200, data: #{data}")
-          status = data['data']['affected_items'][0]['status'].nil? unless data.nil?   
+          status = data['data']['affected_items'][0]['status'] unless data.nil? 
+          !status.nil? ? status.to_s : 'unknown'
         rescue StandardError => e
           Puppet.err("WAZUH: data hash parsing eneded up with: #{e.message}")
           'non_existent'
