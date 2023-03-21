@@ -35,46 +35,37 @@ define wazuh::utils::agent_supervise(
     if ($facts['wazuh']['state']['status'] == $when['control_status'] or
         $facts['wazuh']['state']['last_keepalive_since'] > $when['last_keepalive_since'] or
         $facts['wazuh']['state']['last_ack_since'] > $when['last_ack_since']) {
-          
-          warning("WAZUH: Agent ${profile::wazuh::agent::wazuh_agent_name} has lost touch with the server, restarting...")
-          
-          wazuh::utils::agent_actions { "Agent ${profile::wazuh::agent::wazuh_agent_name} has lost touch with the server, restarting...":
+
+          warning("WAZUH: Agent ${profile::wazuh_agent::wazuh_agent_name} has lost touch with the server, restarting...")
+
+          wazuh::utils::agent_actions { "Agent ${profile::wazuh_agent::wazuh_agent_name} has lost touch with the server, restarting...":
             action => 'restart',
           }
         }
-        
+
         #
-        # TODO: replace this with a loop  
+        # TODO: replace this with a loop (function) 
         #
         if $facts.dig('wazuh', 'state', 'status') != undef {
-          
+
           if $facts.dig('wazuh', 'agent', 'name') == $profile::wazuh_agent::wazuh_agent_name {
-            
+
             $_name = $profile::wazuh_agent::wazuh_agent_name
             if ! $profile::wazuh_agent::api_hash.has_key('api_agent_name') {
               $local_api_hash = $profile::wazuh_agent::api_hash.merge({ 'api_agent_name' => $_name })
             }
-            
+
             $agent_local_state = assert_type(String[1], $facts.dig('wazuh', 'state', 'status'))
-            # $agent_remote_state = assert_type(String[1], wazuh::api_agent_status($local_api_hash))
-            $agent_remote_state = wazuh::api_agent_status($local_api_hash) ? {
-              'pending'         => 'pending',
-              'active'          => 'active',
-              'never_connected' => 'never_connected',
-              'disconnected'    => 'disconnected',
-              'not_found'       => 'not_found',
-              default           => undef,
-            }
+            $agent_remote_state = assert_type(String[1], wazuh::api_agent_status($local_api_hash))
 
             if ($agent_local_state != 'connected') and ($agent_remote_state != 'active') {
-              
-              warning("WAZUH: local and remote state for ${profile::wazuh::agent::wazuh_agent_name} disagree about their state")
-              
+
+              warning("WAZUH: local and remote state for ${profile::wazuh_agent::wazuh_agent_name} disagree about their state")
+
               # remove current name from the manager
               wazuh::utils::api_agent_remove { "${profile::wazuh_agent::wazuh_agent_name}_supervise_remove":
                 * => $local_api_hash,
               }
-              
               # reauth
               wazuh::utils::agent_name { "${profile::wazuh_agent::wazuh_agent_name}_supervise_reauth":
                 *       => $local_api_hash,

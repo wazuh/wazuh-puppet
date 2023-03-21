@@ -10,7 +10,8 @@
 #     api_username => $api_username,
 #     api_password => $api_password,
 #     api_host  => $api_host,
-#     api_host_port => $api_host_port
+#     api_host_port => $api_host_port,
+#     api_agent_name => 'myagent.example.com'
 #   }
 #
 # @param api_username,
@@ -28,7 +29,7 @@
 # @param $api_agent_name
 #   Agent name to remove.
 #
-# @param agent_check_statess
+# @param agent_check_states
 #   Limit removal to agents that have this
 #   status. Default 'all'
 #

@@ -25,22 +25,33 @@ class ApiHelper
   attr_reader :agent_name
 
   def agent_id
+    Puppet.err("in agent_id")
     @agent_id ||= retrieve_agent_id
+    Puppet.err("agent_id: #{@agent_id}")
+    @agent_id
   end
 
   def agent_exists?
     id = agent_id
-    if !id.nil? && (id != '000')
+    Puppet.err("agent_exists: #{@agent_id}")
+    if !id.nil? && (id != 000) && (id != 0)
       true
     else
       false
     end
   end
-
+  
   def agent_status
-    status = retrieve_agent_status if agent_exists?
+    Puppet.err("agent_status")
+    if agent_exists?
+      status = retrieve_agent_status
+      Puppet.err(status)
+      status
+    else
+      'non_existent'
+    end
   end
-
+  
   def agent_remove
     api_agent_remove if agent_exists? 
   end
@@ -57,7 +68,7 @@ class ApiHelper
   end
   
   def retrieve_token_uri
-    Puppet.debug("in retrieve_token_uri")
+    Puppet.err("in retrieve_token_uri")
     URI("https://#{@api_host}:#{@api_host_port}/security/user/authenticate")
   end
 
@@ -82,18 +93,19 @@ class ApiHelper
       end
     rescue StandardError => e
       Puppet.err("WAZUH: Failed to retrieve agent token: #{e.message}")
-    end
-
-    if !res.code.nil? && (res.code == '200')
-      begin
-        data = JSON.parse(res.body)
-        token = data['data']['token']
-        (!token.nil?) ? token : nil
-      rescue StandardError => e
-        Puppet.warning("WAZUH: Failed to extract agent token - probably ok: #{e.message}")
-      end
     else
-      Puppet.err('WAZUH: error communicating with the server')
+      if res.code == '200'
+        begin
+          data = JSON.parse(res.body)
+          token = data['data']['token']
+        rescue StandardError => e
+          Puppet.err("WAZUH: Failed to extract agent token: #{e.message}")
+        else
+          !token.nil? ? token : nil
+        end
+      else
+        Puppet.err('WAZUH: error communicating with the server')
+      end
     end
   end
 
@@ -115,6 +127,7 @@ class ApiHelper
     uri = build_agent_uri
     headers = { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{@token}" }
     Puppet.err("retrieve_agent_id uri: #{uri}")
+    Puppet.err("in retrieve_agent_id, about to begin")
     begin
       res = Net::HTTP.start(
         uri.host,
@@ -127,29 +140,36 @@ class ApiHelper
       end
     rescue StandardError => e
       Puppet.err("Wazuh: Error connecting to Wazuh API: #{e.message}")
-      return nil
-    end
-
-    if !res.nil? && (res.code == '200')
-      begin
-        data = JSON.parse(res.body)
-        data['data']['affected_items'][0]['id']
-      rescue StandardError => e
-        Puppet.warning("WAZUH: #{@agent_name} doesn't exist on the server #{@api_host} - probably ok: #{res.body}")
-        return 'not_found'
-      end
     else
-      Puppet.err("WAZUH: Unspecific response error from server #{@api_host} for #{@agent_name}")
-      nil
+      if res.code == '200'
+        data = JSON.parse(res.body)
+        Puppet.err(data)
+        Puppet.err(data['data']['total_affected_items'])
+        if data['data']['total_affected_items'] == 0 # agent doesn't exist
+          0 
+        elsif
+          data['data']['total_affected_items'] == 1 # exactly one agent exists
+          id = data['data']['affected_items'][0]['id']
+          id
+        else
+          fail('WAZUH: more than one affected_items in the server response') 
+          0
+        end
+      end
     end
   end
-
+  
   def retrieve_agent_status
     Puppet.err("in retrieve_agent_status")
+
+    return 'non_existent' if @agent_id == 0
+
     status_params = {
       :agents_list => @agent_id,
+      :status => @api_check_states,
       :older_than => 0
     }
+
     uri = build_agent_uri(params = status_params)
     headers = { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{@token}" }
     Puppet.err("retrieve_agent_status uri: #{uri}")
@@ -165,20 +185,18 @@ class ApiHelper
       end
     rescue StandardError => e
       Puppet.err("WAZUH: Failed to retrieve agent status for #{@agent_name}/#{@agent_id}: #{e.message}")
-      return 'not_found'
-    end
-
-    if res.code == '200'
-      begin
+      'non_existent'
+    else
+      if res.code == '200'
         data = JSON.parse(res.body)
         status = data['data']['affected_items'][0]['status']
-        return !status.nil? ? status : nil
-      rescue StandardError => e
-        Puppet.err("WAZUH: Failed to extract agent status from data: #{e.message}")
+      else
+        Puppet.err("WAZUH: Failed to retrieve agent status for #{@agent_name}/#{@agent_id}: #{e.message}")
+        'non_existent'
       end
     end
   end
-
+  
   def api_agent_remove
     remove_params = {
       :agents_list =>  @agent_id,
@@ -202,15 +220,15 @@ class ApiHelper
       end
     rescue StandardError => e
       Puppet.err("WAZUH: Failed to remove agent #{@agent_name} from server #{@api_host}: #{e.message} #{res.body}")
-    end
-
-    case res.code
-    when '200'
-      Puppet.info("WAZUH: agent #{@agent_name}, id #{@agent_id} successfully removed from Wazuh server.")
-    when '400'
-      Puppet.err("WAZUH: Failed to remove agent #{@agent_name}, agent_id #{@agent_id} from Wazuh server. HTTP status code: #{res.code}")
     else
-      Puppet.err("WAZUH: Failed to remove agent #{@agen_name}: #{res.body}")
+      case res.code
+      when '200'
+        Puppet.info("WAZUH: agent #{@agent_name}, id #{@agent_id} successfully removed from Wazuh server.")
+      when '400'
+        Puppet.err("WAZUH: Failed to remove agent #{@agent_name}, agent_id #{@agent_id} from Wazuh server. HTTP status code: #{res.code}")
+      else
+        Puppet.err("WAZUH: Failed to remove agent #{@agen_name}: #{res.body}")
+      end
     end
   end
 end

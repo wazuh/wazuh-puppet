@@ -1,5 +1,5 @@
 #
-# @summary A define to check if and agent exists
+# @summary A define to check if and agent exists on the server
 #
 # @author Petri Lammi petri.lammi@puppeteers.net
 #
