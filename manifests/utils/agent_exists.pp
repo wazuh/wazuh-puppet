@@ -32,7 +32,7 @@ define wazuh::utils::agent_exists(
   String $api_username,
   String $api_password,
   Stdlib::Host $api_host,
-  Stdlib::Host $api_agent_name,
+  String $api_agent_name,
   String $api_check_states = 'all',
   Stdlib::Port $api_host_port = 55000,
 ) {

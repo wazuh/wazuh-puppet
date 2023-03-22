@@ -37,7 +37,7 @@ define wazuh::utils::api_agent_remove(
   String $api_username,
   String $api_password,
   Stdlib::Host $api_host,
-  Stdlib::Host $api_agent_name,
+  String $api_agent_name,
   Stdlib::Port $api_host_port = 55000,
   Enum['active', 'pending', 'disconnected', 'never_connected', 'all'] $api_check_states = 'all',
 ) {
