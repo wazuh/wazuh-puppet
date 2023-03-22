@@ -28,8 +28,12 @@ define wazuh::utils::agent_supervise(
 ) {
 
   # do not supervise if name has been changed
-  # TODO: cover all meaninfull changes
-  unless $profile::wazuh_agent::agent_name_changed {
+  # TODO: cover all meaninful changes
+  unless ($profile::wazuh_agent::agent_name_changed or
+          $profile::wazuh_agent::server_name_changed or
+          $profile::wazuh_agent::password_changed or
+          $profile::wazuh_agent::server_port_changed)
+  {
 
     # Restart local agent if any of these conditions are true
     if ($facts['wazuh']['state']['status'] == $when['control_status'] or
@@ -38,7 +42,7 @@ define wazuh::utils::agent_supervise(
 
           warning("WAZUH: Agent ${profile::wazuh_agent::wazuh_agent_name} has lost touch with the server, restarting...")
 
-          wazuh::utils::agent_actions { "Agent ${profile::wazuh_agent::wazuh_agent_name} has lost touch with the server, restarting...":
+          wazuh::utils::agent_actions { "Agent ${profile::wazuh_agent::wazuh_agent_name} restarting...":
             action => 'restart',
           }
         }
