@@ -68,8 +68,9 @@ define wazuh::utils::agent_supervise(
               }
               # reauth
               wazuh::utils::agent_name { "${profile::wazuh_agent::wazuh_agent_name}_supervise_reauth":
-                *       => $local_api_hash,
-                require => Wazuh::Utils::Api_agent_remove["${profile::wazuh_agent::wazuh_agent_name}_supervise_remove"],
+                *          => $profile::wazuh_agent::agent_params_hash,
+                agent_name => $profile::wazuh_agent::wazuh_agent_name,
+                require    => Wazuh::Utils::Api_agent_remove["${profile::wazuh_agent::wazuh_agent_name}_supervise_remove"],
               }
             }
           }
