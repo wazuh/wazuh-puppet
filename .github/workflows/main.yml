@@ -25,6 +25,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install pdk
 
+<<<<<<< HEAD
     - name: Compare versions
       run: |
         function compare_versions() {
@@ -51,6 +52,12 @@ jobs:
 
     - name: Create Puppet module
       run: pdk build
+=======
+    - name: Create Puppet module
+      run: |
+        pdk validate
+        pdk build
+>>>>>>> 3546884f2497105619ab6851c02a2cd35dbff301
 
     - name: Create artifact
       uses: actions/upload-artifact@v2
@@ -66,9 +73,13 @@ jobs:
 
     - name: Create enviroment variables
       run: |
+<<<<<<< HEAD
         cat VERSION >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
         WAZUH_VERSION=$VER >> $GITHUB_ENV
+=======
+        cat VERSION > $GITHUB_ENV
+>>>>>>> 3546884f2497105619ab6851c02a2cd35dbff301
 
     - name: Install Puppet
       uses: ./.github/debian_install
@@ -99,9 +110,13 @@ jobs:
 
     - name: Create enviroment variables
       run: |
+<<<<<<< HEAD
         cat VERSION >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
         WAZUH_VERSION=$VER >> $GITHUB_ENV
+=======
+        cat VERSION > $GITHUB_ENV
+>>>>>>> 3546884f2497105619ab6851c02a2cd35dbff301
 
     - name: Install Puppet
       uses: ./.github/debian_install

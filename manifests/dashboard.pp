@@ -3,7 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '4.4.0',
+  $dashboard_version = '4.3.10',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -13,6 +13,17 @@ class wazuh::dashboard (
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
+
+  # Parameters used for OpenID login
+  $enable_openid_login = undef,
+  $opensearch_ssl_verificationMode = undef,
+  $opensearch_security_auth_type = undef,
+  $opensearch_security_openid_connect_url = undef,
+  $opensearch_security_openid_client_id = undef,
+  $opensearch_security_openid_client_secret = undef,
+  $opensearch_security_openid_base_redirect_url = undef,
+  $opensearch_security_openid_verify_hostnames = undef,
+
 
   # If the keystore is used, the credentials are not managed by the module (TODO).
   # If use_keystore is false, the keystore is deleted, the dashboard use the credentials in the configuration file.
@@ -32,7 +43,6 @@ class wazuh::dashboard (
 
   $manage_repos = false, # Change to true when manager is not present.
 ) {
-
   if $manage_repos {
     include wazuh::repo
 
@@ -127,5 +137,8 @@ class wazuh::dashboard (
     hasrestart => true,
     name       => $dashboard_service,
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3546884f2497105619ab6851c02a2cd35dbff301
 }

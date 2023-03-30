@@ -2,13 +2,12 @@
 # Setup for Wazuh Indexer
 class wazuh::indexer (
   # opensearch.yml configuration
-  $indexer_network_host = '0.0.0.0',
   $indexer_cluster_name = 'wazuh-cluster',
   $indexer_node_name = 'node-1',
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.4.0-1',
+  $indexer_version = '4.3.10-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -27,6 +26,9 @@ class wazuh::indexer (
 
   # JVM options
   $jvm_options_memory = '1g',
+
+  # Parameters used for openid login
+  $openid_connect_url   = undef,
 ) {
   if $manage_repos {
     include wazuh::repo
@@ -83,6 +85,12 @@ class wazuh::indexer (
     owner   => $indexer_fileuser,
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
+  }
+
+  file {
+    '/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/config.yml':
+      content => template('wazuh/opensearch_security_config.yml.erb'),
+      notify  => Service['wazuh-indexer'],
   }
 
   file_line { 'Insert line initial size of total heap space':
