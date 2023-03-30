@@ -137,8 +137,4 @@ class wazuh::dashboard (
     hasrestart => true,
     name       => $dashboard_service,
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 3546884f2497105619ab6851c02a2cd35dbff301
 }
