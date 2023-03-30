@@ -2,7 +2,7 @@
 # Wazuh repository installation
 class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
-  $wazuh_version = '4.4',
+  $wazuh_version = '4.6',
 ) {
   file { 'Configure Wazuh Certificates config.yml':
     owner   => 'root',
