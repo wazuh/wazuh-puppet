@@ -399,7 +399,7 @@ class wazuh::params_manager {
       $remote_commands_wodle_exceptions = []
 
       # Wazuh API template path
-      $wazuh_api_template = 'wazuh/wazuh_api.erb'
+      $wazuh_api_template = 'wazuh/wazuh_api_yml.erb'
 
 
       case $::osfamily {
