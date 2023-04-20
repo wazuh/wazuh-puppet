@@ -397,6 +397,7 @@ class wazuh::params_manager {
       $remote_commands_localfile_exceptions = []
       $remote_commands_wodle = 'yes'
       $remote_commands_wodle_exceptions = []
+      $limits_eps = 'yes'
 
       # Wazuh API template path
       $wazuh_api_template = 'wazuh/wazuh_api_yml.erb'
