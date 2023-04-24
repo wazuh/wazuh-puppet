@@ -31,7 +31,11 @@ plugins.security.check_snapshot_restore_write_privileges: true
 plugins.security.enable_snapshot_restore_privilege: true
 plugins.security.nodes_dn:
 <% @indexer_cluster_initial_master_nodes.each do |node| -%>
+<% if @manage_certs -%>
 - "CN=<%= node %>,OU=Wazuh,O=Wazuh,L=California,C=US"
+<% else -%>
+- "CN=<%= node %>"
+<% end -%>
 <% end -%>
 plugins.security.restapi.roles_enabled:
 - "all_access"

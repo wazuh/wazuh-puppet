@@ -22,6 +22,7 @@ class wazuh::indexer (
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_cluster_initial_master_nodes = ['node-1'],
 
+  $manage_certs = true,
   $manage_repos = false, # Change to true when manager is not present.
 
   # JVM options
@@ -45,35 +46,37 @@ class wazuh::indexer (
     name   => $indexer_package,
   }
 
-  require wazuh::certificates
+  if $manage_certs {
+    require wazuh::certificates
 
-  exec { "ensure full path of ${indexer_path_certs}":
-    path    => '/usr/bin:/bin',
-    command => "mkdir -p ${indexer_path_certs}",
-    creates => $indexer_path_certs,
-    require => Package['wazuh-indexer'],
-  }
-  -> file { $indexer_path_certs:
-    ensure => directory,
-    owner  => $indexer_fileuser,
-    group  => $indexer_filegroup,
-    mode   => '0500',
-  }
+    exec { "ensure full path of ${indexer_path_certs}":
+      path    => '/usr/bin:/bin',
+      command => "mkdir -p ${indexer_path_certs}",
+      creates => $indexer_path_certs,
+      require => Package['wazuh-indexer'],
+    }
+    -> file { $indexer_path_certs:
+      ensure => directory,
+      owner  => $indexer_fileuser,
+      group  => $indexer_filegroup,
+      mode   => '0500',
+    }
 
-  [
-    'indexer.pem',
-    'indexer-key.pem',
-    'root-ca.pem',
-    'admin.pem',
-    'admin-key.pem',
-  ].each |String $certfile| {
-    file { "${indexer_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $indexer_fileuser,
-      group   => $indexer_filegroup,
-      mode    => '0400',
-      replace => false,  # only copy content when file not exist
-      source  => "/tmp/wazuh-certificates/${certfile}",
+    [
+      'indexer.pem',
+      'indexer-key.pem',
+      'root-ca.pem',
+      'admin.pem',
+      'admin-key.pem',
+    ].each |String $certfile| {
+      file { "${indexer_path_certs}/${certfile}":
+        ensure  => file,
+        owner   => $indexer_fileuser,
+        group   => $indexer_filegroup,
+        mode    => '0400',
+        replace => false,  # only copy content when file not exist
+        source  => "/tmp/wazuh-certificates/${certfile}",
+      }
     }
   }
 

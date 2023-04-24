@@ -41,7 +41,9 @@ class wazuh::dashboard (
     },
   ],
 
+  $manage_certs = true,
   $manage_repos = false, # Change to true when manager is not present.
+  $use_system_ca = false,
 ) {
   if $manage_repos {
     include wazuh::repo
@@ -69,33 +71,35 @@ class wazuh::dashboard (
     name   => $dashboard_package,
   }
 
-  require wazuh::certificates
+  if $manage_certs {
+    require wazuh::certificates
 
-  exec { "ensure full path of ${dashboard_path_certs}":
-    path    => '/usr/bin:/bin',
-    command => "mkdir -p ${dashboard_path_certs}",
-    creates => $dashboard_path_certs,
-    require => Package['wazuh-dashboard'],
-  }
-  -> file { $dashboard_path_certs:
-    ensure => directory,
-    owner  => $dashboard_fileuser,
-    group  => $dashboard_filegroup,
-    mode   => '0500',
-  }
+    exec { "ensure full path of ${dashboard_path_certs}":
+      path    => '/usr/bin:/bin',
+      command => "mkdir -p ${dashboard_path_certs}",
+      creates => $dashboard_path_certs,
+      require => Package['wazuh-dashboard'],
+    }
+    -> file { $dashboard_path_certs:
+      ensure => directory,
+      owner  => $dashboard_fileuser,
+      group  => $dashboard_filegroup,
+      mode   => '0500',
+    }
 
-  [
-    'dashboard.pem',
-    'dashboard-key.pem',
-    'root-ca.pem',
-  ].each |String $certfile| {
-    file { "${dashboard_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $dashboard_fileuser,
-      group   => $dashboard_filegroup,
-      mode    => '0400',
-      replace => false,  # only copy content when file not exist
-      source  => "/tmp/wazuh-certificates/${certfile}",
+    [
+      'dashboard.pem',
+      'dashboard-key.pem',
+      'root-ca.pem',
+    ].each |String $certfile| {
+      file { "${dashboard_path_certs}/${certfile}":
+        ensure  => file,
+        owner   => $dashboard_fileuser,
+        group   => $dashboard_filegroup,
+        mode    => '0400',
+        replace => false,  # only copy content when file not exist
+        source  => "/tmp/wazuh-certificates/${certfile}",
+      }
     }
   }
 

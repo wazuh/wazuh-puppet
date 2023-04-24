@@ -20,5 +20,7 @@ opensearch_security.openid.verify_hostnames: <%= @opensearch_security_openid_ver
 server.ssl.enabled: true
 server.ssl.key: "<%= @dashboard_path_certs %>/dashboard-key.pem"
 server.ssl.certificate: "<%= @dashboard_path_certs %>/dashboard.pem"
+<% if not @use_system_ca -%>
 opensearch.ssl.certificateAuthorities: ["<%= @dashboard_path_certs %>/root-ca.pem"]
+<% end -%>
 uiSettings.overrides.defaultRoute: /app/wazuh
