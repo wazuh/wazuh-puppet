@@ -458,7 +458,7 @@ class wazuh::params_agent {
                 }
               }
             }
-            'AlmaLinux': {
+            'AlmaLinux','Rocky': {
               if ( $::operatingsystemrelease =~ /^8.*/ ) {
                 $ossec_service_provider = 'redhat'
               }
