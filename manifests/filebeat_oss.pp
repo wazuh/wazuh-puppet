@@ -60,21 +60,25 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  archive { "/tmp/${$wazuh_filebeat_module}":
-    ensure       => present,
-    source       => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
-    extract      => true,
-    extract_path => '/usr/share/filebeat/module',
-    creates      => '/usr/share/filebeat/module/wazuh',
-    cleanup      => true,
-    notify       => Service['filebeat'],
-    require      => Package['filebeat'],
-  }
+  $wazuh_filebeat_module_dir = "/opt/filebeat_wazuh_modules/${basename($wazuh_filebeat_module, '.tar.gz')}"
 
-  file { '/usr/share/filebeat/module/wazuh':
-    ensure  => 'directory',
-    mode    => '0755',
+  file { ['/opt/filebeat_wazuh_modules', $wazuh_filebeat_module_dir]:
+    ensure => directory,
+    mode   => '0755',
+  }
+  -> archive { "/tmp/${wazuh_filebeat_module}":
+    ensure       => present,
+    source       => "https://packages.wazuh.com/4.x/filebeat/${wazuh_filebeat_module}",
+    extract      => true,
+    extract_path => $wazuh_filebeat_module_dir,
+    creates      => "${wazuh_filebeat_module_dir}/wazuh",
+    cleanup      => true,
+  }
+  -> file { '/usr/share/filebeat/module/wazuh':
+    ensure  => link,
+    target  => "${wazuh_filebeat_module_dir}/wazuh",
     require => Package['filebeat'],
+    notify  => Service['filebeat'],
   }
 
   require wazuh::certificates
