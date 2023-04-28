@@ -9,14 +9,6 @@ opensearch.password: <%= @dashboard_password %>
 opensearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
 opensearch_security.multitenancy.enabled: false
 opensearch_security.readonly_mode.roles: ["kibana_read_only"]
-<% if @enable_openid_login -%>
-opensearch_security.auth.type: <%= @opensearch_security_auth_type %>
-opensearch_security.openid.connect_url: <%= @opensearch_security_openid_connect_url %>
-opensearch_security.openid.client_id: <%= @opensearch_security_openid_client_id %>
-opensearch_security.openid.client_secret: <%= @opensearch_security_openid_client_secret %>
-opensearch_security.openid.base_redirect_url: <%= @opensearch_security_openid_base_redirect_url %>
-opensearch_security.openid.verify_hostnames: <%= @opensearch_security_openid_verify_hostnames %>
-<% end -%>
 server.ssl.enabled: true
 server.ssl.key: "<%= @dashboard_path_certs %>/dashboard-key.pem"
 server.ssl.certificate: "<%= @dashboard_path_certs %>/dashboard.pem"

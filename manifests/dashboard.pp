@@ -14,17 +14,6 @@ class wazuh::dashboard (
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
 
-  # Parameters used for OpenID login
-  $enable_openid_login = undef,
-  $opensearch_ssl_verificationMode = undef,
-  $opensearch_security_auth_type = undef,
-  $opensearch_security_openid_connect_url = undef,
-  $opensearch_security_openid_client_id = undef,
-  $opensearch_security_openid_client_secret = undef,
-  $opensearch_security_openid_base_redirect_url = undef,
-  $opensearch_security_openid_verify_hostnames = undef,
-
-
   # If the keystore is used, the credentials are not managed by the module (TODO).
   # If use_keystore is false, the keystore is deleted, the dashboard use the credentials in the configuration file.
   $use_keystore = true,
