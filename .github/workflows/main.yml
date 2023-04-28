@@ -11,7 +11,9 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION > $GITHUB_ENV
+        cat VERSION >> $GITHUB_ENV
+        VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
     - name: Install Puppet
       uses: ./.github/debian_install
@@ -23,10 +25,32 @@ jobs:
         sudo apt-get update
         sudo apt-get install pdk
 
-    - name: Create Puppet module
+    - name: Compare versions
       run: |
-        pdk validate
-        pdk build
+        function compare_versions() {
+        operator="${2}"
+        echo $operator
+        if [ $operator == "-gt" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -V | head -n 1)" != "$1";
+        elif [ $operator == "-le" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -V | head -n 1)" == "$1";
+        elif [ $operator == "-lt" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -rV | head -n 1)" != "$1";
+        elif [ $operator == "-ge" ]; then
+            test "$(echo "$1" "$3" | tr " " "\n" | sort -rV | head -n 1)" == "$1";
+        else
+            echo "Operator not supported"
+            exit 1
+        fi
+        }
+        if compare_versions "{{ env.VERSION }}" -gt "{{ env.WAZUH_VERSION }}"; then
+          sed -i 's/packages.wazuh.com/packages-dev.wazuh.com/' manifests/repo.pp
+          sed -i 's/4.x/pre-release/' manifests/repo.pp
+          sed -i "s/'stable'/'unstable'/" manifests/repo.pp
+        fi
+
+    - name: Create Puppet module
+      run: pdk build
 
     - name: Create artifact
       uses: actions/upload-artifact@v2
@@ -42,7 +66,9 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION > $GITHUB_ENV
+        cat VERSION >> $GITHUB_ENV
+        VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
     - name: Install Puppet
       uses: ./.github/debian_install
@@ -73,7 +99,9 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION > $GITHUB_ENV
+        cat VERSION >> $GITHUB_ENV
+        VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
+        WAZUH_VERSION=$VER >> $GITHUB_ENV
 
     - name: Install Puppet
       uses: ./.github/debian_install
