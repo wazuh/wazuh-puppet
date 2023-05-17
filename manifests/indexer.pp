@@ -27,7 +27,6 @@ class wazuh::indexer (
 
   # JVM options
   $jvm_options_memory = '1g',
-
 ) {
   if $manage_repos {
     include wazuh::repo
