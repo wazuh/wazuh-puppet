@@ -32,7 +32,6 @@ class wazuh::dashboard (
 
   $manage_repos = false, # Change to true when manager is not present.
 ) {
-
   if $manage_repos {
     include wazuh::repo
 
@@ -127,5 +126,4 @@ class wazuh::dashboard (
     hasrestart => true,
     name       => $dashboard_service,
   }
-
 }
