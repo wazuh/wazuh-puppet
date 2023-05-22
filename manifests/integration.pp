@@ -4,7 +4,7 @@ define wazuh::integration(
   $hook_url = '',
   $api_key = '',
   $in_rule_id = '',
-  $in_level = 7,
+  $in_level = '',
   $in_group = '',
   $in_location = '',
   $in_format = '',
