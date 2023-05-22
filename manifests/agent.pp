@@ -479,6 +479,14 @@ class wazuh::agent (
         content => template($ossec_sca_template);
     }
   }
+  if($configure_vulnerability_detector == true){
+    concat::fragment {
+      'ossec.conf_vulnerability_detector':
+        order   => 26,
+        target  => 'agent_ossec.conf',
+        content => template($ossec_vulnerability_detector_template);
+    }
+  }
   if ($configure_syscheck == true) {
     concat::fragment {
       'ossec.conf_syscheck':
