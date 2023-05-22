@@ -79,6 +79,54 @@ class wazuh::params_agent {
   $active_response_ca_verification                 = 'yes'
   $active_response_repeated_offenders              = []
 
+  #vulnerability detector
+  $vulnerability_detector_enabled                            = 'no'
+  $vulnerability_detector_interval                           = '5m'
+  $vulnerability_detector_min_full_scan_interval             = '6h'
+  $vulnerability_detector_run_on_start                       = 'yes'
+
+  $vulnerability_detector_provider_canonical                 = 'yes'
+  $vulnerability_detector_provider_canonical_enabled         = 'no'
+  $vulnerability_detector_provider_canonical_os              = ['trusty',
+        'xenial',
+        'bionic'
+      ]
+  $vulnerability_detector_provider_canonical_update_interval = '1h'
+
+  $vulnerability_detector_provider_debian                 = 'yes'
+  $vulnerability_detector_provider_debian_enabled         = 'no'
+  $vulnerability_detector_provider_debian_os              = ['wheezy',
+        'stretch',
+        'jessie',
+        'buster'
+      ]
+  $vulnerability_detector_provider_debian_update_interval = '1h'
+  $vulnerability_detector_provider_redhat                    = 'yes'
+  $vulnerability_detector_provider_redhat_enabled            = 'no'
+  $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8']
+  $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
+
+  $vulnerability_detector_provider_nvd                    = 'yes'
+  $vulnerability_detector_provider_nvd_enabled            = 'no'
+  $vulnerability_detector_provider_nvd_os                 = []
+  $vulnerability_detector_provider_nvd_update_from_year   = '2010'
+  $vulnerability_detector_provider_nvd_update_interval    = '1h'
+
+  $vulnerability_detector_provider_arch                   = 'yes'
+  $vulnerability_detector_provider_arch_enabled           = 'no'
+  $vulnerability_detector_provider_arch_update_interval   = '1h'
+
+  $vulnerability_detector_provider_alas                   = 'yes'
+  $vulnerability_detector_provider_alas_enabled           = 'no'
+  $vulnerability_detector_provider_alas_os              = ['amazon-linux',
+      'amazon-linux-2'
+      ]
+  $vulnerability_detector_provider_alas_update_interval   = '1h'
+
+  $vulnerability_detector_provider_msu                   = 'yes'
+  $vulnerability_detector_provider_msu_enabled           = 'no'
+  $vulnerability_detector_provider_msu_update_interval   = '1h'
+
   # agent autoenrollment
   $wazuh_enrollment_enabled                        = undef
   $wazuh_enrollment_manager_address                = undef

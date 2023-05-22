@@ -189,6 +189,47 @@ class wazuh::agent (
   # Docker-listener
   $wodle_docker_listener_disabled    = $wazuh::params_agent::wodle_docker_listener_disabled,
 
+  #vulnerability-detector
+  $vulnerability_detector_enabled                            = $wazuh::params_agent::vulnerability_detector_enabled,
+  $vulnerability_detector_interval                           = $wazuh::params_agent::vulnerability_detector_interval,
+  $vulnerability_detector_min_full_scan_interval             = $wazuh::params_agent::vulnerability_detector_min_full_scan_interval,
+  $vulnerability_detector_run_on_start                       = $wazuh::params_agent::vulnerability_detector_run_on_start,
+# lint:ignore:140chars
+  $vulnerability_detector_provider_canonical                 = $wazuh::params_agent::vulnerability_detector_provider_canonical,
+  $vulnerability_detector_provider_canonical_enabled         = $wazuh::params_agent::vulnerability_detector_provider_canonical_enabled,
+  $vulnerability_detector_provider_canonical_os              = $wazuh::params_agent::vulnerability_detector_provider_canonical_os,
+  $vulnerability_detector_provider_canonical_update_interval = $wazuh::params_agent::vulnerability_detector_provider_canonical_update_interval,
+
+  $vulnerability_detector_provider_debian                    = $wazuh::params_agent::vulnerability_detector_provider_debian,
+  $vulnerability_detector_provider_debian_enabled            = $wazuh::params_agent::vulnerability_detector_provider_debian_enabled,
+  $vulnerability_detector_provider_debian_os                 = $wazuh::params_agent::vulnerability_detector_provider_debian_os,
+  $vulnerability_detector_provider_debian_update_interval    = $wazuh::params_agent::vulnerability_detector_provider_debian_update_interval,
+
+  $vulnerability_detector_provider_redhat                    = $wazuh::params_agent::vulnerability_detector_provider_redhat,
+  $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_agent::vulnerability_detector_provider_redhat_enabled,
+  $vulnerability_detector_provider_redhat_os                 = $wazuh::params_agent::vulnerability_detector_provider_redhat_os,
+  $vulnerability_detector_provider_redhat_update_interval    = $wazuh::params_agent::vulnerability_detector_provider_redhat_update_interval,
+
+  $vulnerability_detector_provider_nvd                       = $wazuh::params_agent::vulnerability_detector_provider_nvd,
+  $vulnerability_detector_provider_nvd_enabled               = $wazuh::params_agent::vulnerability_detector_provider_nvd_enabled,
+  $vulnerability_detector_provider_nvd_os                    = $wazuh::params_agent::vulnerability_detector_provider_nvd_os,
+  $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_agent::vulnerability_detector_provider_nvd_update_from_year,
+  $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_agent::vulnerability_detector_provider_nvd_update_interval,
+      #lint:endignore
+
+  $vulnerability_detector_provider_arch                   = $wazuh::params_agent::vulnerability_detector_provider_arch,
+  $vulnerability_detector_provider_arch_enabled           = $wazuh::params_agent::vulnerability_detector_provider_arch_enabled,
+  $vulnerability_detector_provider_arch_update_interval   = $wazuh::params_agent::vulnerability_detector_provider_arch_update_interval,
+
+  $vulnerability_detector_provider_alas                   = $wazuh::params_agent::vulnerability_detector_provider_alas,
+  $vulnerability_detector_provider_alas_enabled           = $wazuh::params_agent::vulnerability_detector_provider_alas_enabled,
+  $vulnerability_detector_provider_alas_os                = $wazuh::params_agent::vulnerability_detector_provider_alas_os,
+  $vulnerability_detector_provider_alas_update_interval   = $wazuh::params_agent::vulnerability_detector_provider_alas_update_interval,
+
+  $vulnerability_detector_provider_msu                   = $wazuh::params_agent::vulnerability_detector_provider_msu,
+  $vulnerability_detector_provider_msu_enabled           = $wazuh::params_agent::vulnerability_detector_provider_msu_enabled,
+  $vulnerability_detector_provider_msu_update_interval   = $wazuh::params_agent::vulnerability_detector_provider_msu_update_interval,
+
   # Localfile
   $ossec_local_files                 = $wazuh::params_agent::default_local_files,
 
