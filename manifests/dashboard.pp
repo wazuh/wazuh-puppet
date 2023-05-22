@@ -24,7 +24,6 @@ class wazuh::dashboard (
   $opensearch_security_openid_base_redirect_url = undef,
   $opensearch_security_openid_verify_hostnames = undef,
 
-
   # If the keystore is used, the credentials are not managed by the module (TODO).
   # If use_keystore is false, the keystore is deleted, the dashboard use the credentials in the configuration file.
   $use_keystore = true,
