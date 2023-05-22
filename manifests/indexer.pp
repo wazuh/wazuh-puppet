@@ -89,7 +89,7 @@ class wazuh::indexer (
   }
 
   file {
-    '/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/config.yml':
+    '/etc/wazuh-indexer/opensearch-security/config.yml':
       content => template('wazuh/opensearch_security_config.yml.erb'),
       notify  => Service['wazuh-indexer'],
   }
