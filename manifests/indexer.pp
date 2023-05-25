@@ -8,7 +8,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.4.2-1',
+  $indexer_version = '4.4.3-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
