@@ -1,6 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet -- testing SSH key to sign commits 
+
 ## Wazuh Puppet v4.3.10
 
 ### Added
