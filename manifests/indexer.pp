@@ -2,13 +2,12 @@
 # Setup for Wazuh Indexer
 class wazuh::indexer (
   # opensearch.yml configuration
-  $indexer_network_host = '0.0.0.0',
   $indexer_cluster_name = 'wazuh-cluster',
   $indexer_node_name = 'node-1',
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.4.3-1',
+  $indexer_version = '4.3.10-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -16,6 +15,7 @@ class wazuh::indexer (
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
   $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
+  $indexer_truststore_filepath = undef,
   $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 
   $indexer_ip = 'localhost',

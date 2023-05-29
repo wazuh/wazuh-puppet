@@ -1,4 +1,4 @@
-network.host: "<%= @indexer_network_host %>"
+network.host: "0.0.0.0"
 node.name: "<%= @indexer_node_name %>"
 cluster.initial_master_nodes:
 <% @indexer_cluster_initial_master_nodes.each do |node| -%>
@@ -21,10 +21,12 @@ plugins.security.ssl.http.pemtrustedcas_filepath: <%= @indexer_path_certs %>/roo
 plugins.security.ssl.transport.pemcert_filepath: <%= @indexer_path_certs %>/indexer.pem
 plugins.security.ssl.transport.pemkey_filepath: <%= @indexer_path_certs %>/indexer-key.pem
 plugins.security.ssl.transport.pemtrustedcas_filepath: <%= @indexer_path_certs %>/root-ca.pem
+<% if @indexer_truststore_filepath -%>
+plugins.security.ssl.transport.truststore_filepath: <%= @indexer_truststore_filepath %>
+<% end -%>
 plugins.security.ssl.http.enabled: true
 plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.resolve_hostname: false
-
 plugins.security.authcz.admin_dn:
 - "CN=admin,OU=Wazuh,O=Wazuh,L=California,C=US"
 plugins.security.check_snapshot_restore_write_privileges: true

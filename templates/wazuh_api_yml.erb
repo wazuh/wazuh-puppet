@@ -38,14 +38,10 @@ drop_privileges: <%= @wazuh_api_drop_privileges %>
 # Enable features under development
 experimental_features: <%= @wazuh_api_experimental_features %>
 # Enable remote commands
-upload_configuration:
-  remote_commands:
-    localfile:
-      allow: <%= @remote_commands_localfile %>
-      exceptions: <%= @remote_commands_localfile_exceptions %>
-    wodle_command:
-      allow: <%= @remote_commands_wodle %>
-      exceptions: []
-  limits:
-    eps:
-      allow: <%= @limits_eps %>
+remote_commands:
+  localfile:
+    enabled: <%= @remote_commands_localfile %>
+    exceptions: <%= @remote_commands_localfile_exceptions %>
+  wodle_command:
+    enabled: <%= @remote_commands_wodle %>
+    exceptions: <%= @remote_commands_wodle_exceptions %>
