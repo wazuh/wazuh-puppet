@@ -16,6 +16,7 @@ class wazuh::indexer (
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
   $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
+  $indexer_truststore_filepath = undef,
   $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 
   $indexer_ip = 'localhost',

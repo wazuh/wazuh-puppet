@@ -21,6 +21,9 @@ plugins.security.ssl.http.pemtrustedcas_filepath: <%= @indexer_path_certs %>/roo
 plugins.security.ssl.transport.pemcert_filepath: <%= @indexer_path_certs %>/indexer.pem
 plugins.security.ssl.transport.pemkey_filepath: <%= @indexer_path_certs %>/indexer-key.pem
 plugins.security.ssl.transport.pemtrustedcas_filepath: <%= @indexer_path_certs %>/root-ca.pem
+% if @truststore_filepath -%>
+plugins.security.ssl.transport.truststore_filepath: <%= @truststore_filepath %>
+<% if @indexer_truststore_filepath -%>
 plugins.security.ssl.http.enabled: true
 plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.resolve_hostname: false
