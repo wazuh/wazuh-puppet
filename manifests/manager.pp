@@ -185,6 +185,10 @@ class wazuh::manager (
       $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,
       $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
       $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
+      $vulnerability_detector_provider_nvd_path                  = $wazuh::params_manager::vulnerability_detector_provider_nvd_path,
+      $vulnerability_detector_provider_nvd_url                   = $wazuh::params_manager::vulnerability_detector_provider_nvd_url,
+      $vulnerability_detector_provider_nvd_url_start             = $wazuh::params_manager::vulnerability_detector_provider_nvd_url_start,
+      $vulnerability_detector_provider_nvd_url_end               = $wazuh::params_manager::vulnerability_detector_provider_nvd_url_end,
       #lint:endignore
 
       $vulnerability_detector_provider_arch                   = $wazuh::params_manager::vulnerability_detector_provider_arch,
