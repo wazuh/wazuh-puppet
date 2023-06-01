@@ -127,6 +127,7 @@ class wazuh::params_manager {
       $wodle_ciscat_scan_on_start                      = 'yes'
       $wodle_ciscat_java_path                          = 'wodles/java'
       $wodle_ciscat_ciscat_path                        = 'wodles/ciscat'
+      $wodle_ciscat_content                            = {}
 
       #osquery
 
