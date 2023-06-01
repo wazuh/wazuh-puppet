@@ -1,0 +1,90 @@
+<wodle name="aws-s3">
+<% if @wodle_aws_disabled -%>
+<disabled><%= @wodle_aws_disabled %></disabled>
+<%- end -%>
+<% if @wodle_aws_interval -%>
+<interval><%= @wodle_aws_interval %></interval>
+<%- end -%>
+<% if @wodle_aws_run_on_start -%>
+<run_on_start><%= @wodle_aws_run_on_start %></run_on_start>
+<%- end -%>
+<% if @wodle_aws_skip_on_error -%>
+<skip_on_error><%= @wodle_aws_skip_on_error %></skip_on_error>
+<%- end -%>
+<% if @wodle_aws_remove_from_bucket -%>
+<remove_from_bucket><%= @wodle_aws_remove_from_bucket %></remove_from_bucket>
+<%- end -%>
+
+<% if !@wodle_aws_buckets.empty? %>
+<% @wodle_aws_buckets.each do |bucket| %>
+<bucket type="<%= bucket.type %>">
+  <name><%= bucket.type %></name>
+  <% if @bucket.aws_account_id -%>
+  <aws_account_id><%= bucket.aws_account_id %></aws_account_id>
+  <%- end -%>
+  <% if @bucket.aws_account_alias -%>
+  <aws_account_alias><%= bucket.aws_account_alias %></aws_account_alias>
+  <%- end -%>
+  <% if @bucket.access_key -%>
+  <access_key><%= bucket.access_key %></access_key>
+  <%- end -%>
+  <% if @bucket.secret_key -%>
+  <secret_key><%= bucket.secret_key %></secret_key>
+  <%- end -%>
+  <% if @bucket.aws_profile -%>
+  <aws_profile><%= bucket.aws_profile %></aws_profile>
+  <%- end -%>
+  <% if @bucket.iam_role_arn -%>
+  <iam_role_arn><%= bucket.iam_role_arn %></iam_role_arn>
+  <%- end -%>
+  <% if @bucket.path -%>
+  <path><%= bucket.path %></path>
+  <%- end -%>
+  <% if @bucket.regions -%>
+  <regions><%= bucket.regions %></regions>
+  <%- end -%>
+  <% if @bucket.aws_organization_id -%>
+  <aws_organization_id><%= bucket.aws_organization_id %></aws_organization_id>
+  <%- end -%>
+</bucket>
+<% end %>
+<% end %>
+
+<% if !@wodle_aws_services.empty? %>
+<% @wodle_aws_services.each do |service| %>
+<service type="<%= service.type %>">
+  <name><%= service.type %></name>
+  <% if @service.aws_account_id -%>
+  <aws_account_id><%= service.aws_account_id %></aws_account_id>
+  <%- end -%>
+  <% if @service.aws_account_alias -%>
+  <aws_account_alias><%= service.aws_account_alias %></aws_account_alias>
+  <%- end -%>
+  <% if @service.access_key -%>
+  <access_key><%= service.access_key %></access_key>
+  <%- end -%>
+  <% if @service.aws_log_groups -%>
+  <aws_log_groups><%= service.aws_log_groups %></aws_log_groups>
+  <%- end -%>
+  <% if @service.secret_key -%>
+  <secret_key><%= service.secret_key %></secret_key>
+  <%- end -%>
+  <% if @service.aws_profile -%>
+  <aws_profile><%= service.aws_profile %></aws_profile>
+  <%- end -%>
+  <% if @service.iam_role_arn -%>
+  <iam_role_arn><%= service.iam_role_arn %></iam_role_arn>
+  <%- end -%>
+  <% if @service.only_logs_after -%>
+  <only_logs_after><%= service.only_logs_after %></only_logs_after>
+  <%- end -%>
+  <% if @service.regions -%>
+  <regions><%= service.regions %></regions>
+  <%- end -%>
+  <% if @service.remove_log_streams -%>
+  <remove_log_streams><%= service.remove_log_streams %></remove_log_streams>
+  <%- end -%>
+</service>
+<% end %>
+<% end %>
+</wodle>
