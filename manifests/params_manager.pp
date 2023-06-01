@@ -22,6 +22,8 @@ class wazuh::params_manager {
       $ossec_email_maxperhour                          = 12
       $ossec_email_idsname                             = undef
       $ossec_email_log_source                          = 'alerts.log'
+      $ossec_agents_disconnection_time           = '20s'
+      $ossec_agents_disconnection_alert_time  = '100s'
       $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
       $ossec_alert_level                               = 3
       $ossec_email_alert_level                         = 12
@@ -49,6 +51,7 @@ class wazuh::params_manager {
       $configure_auth                                  = true
       $configure_cluster                               = true
       $configure_active_response                       = false
+      $configure_rule_test                       = true
 
 
     # ossec.conf templates paths
@@ -66,6 +69,7 @@ class wazuh::params_manager {
       $ossec_localfile_template                        = 'wazuh/fragments/_localfile.erb'
       $ossec_ruleset_template                          = 'wazuh/fragments/_ruleset.erb'
       $ossec_auth_template                             = 'wazuh/fragments/_auth.erb'
+      $ossec_rule_test_template                          = 'wazuh/fragments/_rule_test.erb'
       $ossec_cluster_template                          = 'wazuh/fragments/_cluster.erb'
       $ossec_active_response_template                  = 'wazuh/fragments/_default_activeresponse.erb'
       $ossec_syslog_output_template                    = 'wazuh/fragments/_syslog_output.erb'
@@ -228,7 +232,6 @@ class wazuh::params_manager {
       $ossec_auth_force_after_reg_time                 = '1h'
       $ossec_auth_purgue                               = 'yes'
       $ossec_auth_use_password                         = 'no'
-      $ossec_auth_limit_maxagents                      = 'yes'
       $ossec_auth_ciphers                              = 'HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH'
       $ossec_auth_ssl_verify_host                      = 'no'
       $ossec_auth_ssl_manager_cert                     = '/var/ossec/etc/sslmanager.cert'
@@ -287,6 +290,12 @@ class wazuh::params_manager {
 
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
+
+    # rule_test section
+    $ossec_rule_test_enabled   = 'yes'
+    $ossec_rule_test_threads   = 1
+    $ossec_rule_test_max_sessions   = 64
+    $ossec_rule_test_session_timeout   = '15m'
 
       # Cluster
 
