@@ -1,18 +1,28 @@
 nodes:
   indexer:
-    - name: indexer-<%= @indexer_node1_name %>
-      ip: <%= @node1host %>
-    - name: indexer-<%= @indexer_node2_name %>
-      ip: <%= @node2host %>
-    - name: indexer-<%= @indexer_node3_name %>
-      ip: <%= @node3host %>
+<% @indexer_certs.each do |node| -%>
+      - name: indexer-<%= node[0] %>
+        ip: <%= node[1] %>
+<% end -%>
   server:
-    - name: manager-master
-      ip: <%= @masterhost %>
-      node_type: master
-    - name: manager-worker
-      ip: <%= @workerhost %>
-      node_type: worker
+<% if @manager_certs -%>
+<% @manager_certs.each do |node| -%>
+      - name: manager-<%= node[0] %>
+        ip: <%= node[1] %>
+<% end -%>
+<% end -%>
+<% if @manager_master_certs -%>
+<% @manager_master_certs.each do |node| -%>
+      - name: manager-<%= node[0] %>
+          ip: <%= node[1] %>
+<% end -%>
+<% @manager_worker_certs.each do |node| -%>
+      - name: manager-<%= node[0] %>
+          ip: <%= node[1] %>
+<% end -%>
+<% end -%>
   dashboard:
-    - name: dashboard
-      ip: <%= @dashboardhost %>
+<% @dashboard_certs.each do |node| -%>
+      - name: dashboard
+        ip: <%= node %>
+<% end -%>

@@ -4,7 +4,7 @@ class wazuh::indexer_dist (
   # opensearch.yml configuration
   $indexer_network_host = '0.0.0.0',
   $indexer_cluster_name = 'wazuh-cluster',
-  $indexer_node_name = 'node1',
+  $indexer_node_name = 'node-1',
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
@@ -20,9 +20,9 @@ class wazuh::indexer_dist (
 
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
-  $indexer_discovery_hosts = [$node1host, $node2host, $node3host],
-  $indexer_cluster_initial_master_nodes = [$node1host, $node2host, $node3host],
-  $indexer_cluster_CN = [$indexer_node1_name, $indexer_node2_name, $indexer_node3_name],
+  $indexer_discovery_hosts = [ ],
+  $indexer_cluster_initial_master_nodes = ['node-1'],
+  $indexer_cluster_CN = ['node-1'],
 
   # JVM options
   $jvm_options_memory = '1g',

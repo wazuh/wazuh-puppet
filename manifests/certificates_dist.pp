@@ -3,6 +3,11 @@
 class wazuh::certificates_dist (
   $wazuh_repository = 'packages-dev.wazuh.com',
   $wazuh_version = '4.4',
+  $indexer_certs = [],
+  $manager_certs = [],
+  $manager_master_certs = [],
+  $manager_worker_certs = [],
+  $dashboard_certs = []
 ) {
   file { 'Configure Wazuh Certificates config.yml':
     owner   => 'root',
