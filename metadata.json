@@ -89,7 +89,9 @@
         "Wily",
         "Xenial",
         "Yakketi",
-        "Bionic"
+        "Bionic",
+        "focal",
+        "jammy"
       ]
     },
     {
@@ -98,7 +100,8 @@
         "Wheezy",
         "Jessie",
         "Stretch",
-        "Sid"
+        "Sid",
+        "bullseye"
       ]
     }
   ],
