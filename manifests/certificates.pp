@@ -3,6 +3,11 @@
 class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
   $wazuh_version = '4.4',
+  $indexer_certs = [],
+  $manager_certs = [],
+  $manager_master_certs = [],
+  $manager_worker_certs = [],
+  $dashboard_certs = []
 ) {
   file { 'Configure Wazuh Certificates config.yml':
     owner   => 'root',
@@ -28,5 +33,14 @@ class wazuh::certificates (
       File['/tmp/wazuh-certs-tool.sh'],
       File['/tmp/config.yml'],
     ],
+  }
+  file { 'Copy all certificates into module':
+    ensure => 'directory',
+    source => '/tmp/wazuh-certificates/',
+    recurse => 'remote',
+    path => '/etc/puppetlabs/code/environments/production/modules/archive/files/',
+    owner => 'root',
+    group => 'root',
+    mode  => '0755',
   }
 }

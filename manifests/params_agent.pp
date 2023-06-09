@@ -97,7 +97,6 @@ class wazuh::params_agent {
   $wazuh_enrollment_use_source_ip                  = undef
 
   # Other required to define variables
-  $manage_repo = true
   $manage_firewall = false
   $selinux = false
   $configure_labels = false

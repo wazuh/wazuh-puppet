@@ -12,10 +12,6 @@ class wazuh::agent (
   $agent_service_ensure              = $wazuh::params_agent::agent_service_ensure,
   $agent_msi_download_location       = $wazuh::params_agent::agent_msi_download_location,
 
-  # Manage repository
-
-  $manage_repo                       = $wazuh::params_agent::manage_repo,
-
   # Authd registration options
   $manage_client_keys                = $wazuh::params_agent::manage_client_keys,
   $agent_name                        = $wazuh::params_agent::agent_name,
@@ -248,7 +244,7 @@ class wazuh::agent (
 ) inherits wazuh::params_agent {
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
-  #   $selinux, $manage_repo,
+  #   $selinux,
   # )
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
@@ -274,14 +270,6 @@ class wazuh::agent (
   # Package installation
   case $::kernel {
     'Linux': {
-      if $manage_repo {
-        class { 'wazuh::repo': }
-        if $::osfamily == 'Debian' {
-          Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
-        } else {
-          Class['wazuh::repo'] -> Package[$agent_package_name]
-        }
-      }
       package { $agent_package_name:
         ensure => "${agent_package_version}-${agent_package_revision}", # lint:ignore:security_package_pinned_version
       }

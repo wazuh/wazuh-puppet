@@ -7,7 +7,6 @@ class wazuh::params_manager {
     # Installation
       $server_package_version                          = '4.4.0-1'
 
-      $manage_repos                                    = true
       $manage_firewall                                 = false
 
     ### Ossec.conf blocks
