@@ -47,15 +47,27 @@ class wazuh::repo (
           default: { fail('This ossec module has not been tested on your distribution.') }
         }
       # Set up OSSEC repo
-      yumrepo { 'wazuh':
-        descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
-        enabled  => true,
-        gpgcheck => 1,
-        gpgkey   => $gpgkey,
-        baseurl  => $baseurl
+      case $::os[name] {
+        /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux)$/: {
+          yumrepo { 'wazuh':
+            descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
+            enabled  => true,
+            gpgcheck => 1,
+            gpgkey   => $gpgkey,
+            baseurl  => $baseurl
+          }
+        }
+        /^SLES$/: {
+          zypprepo { 'wazuh':
+            name    => 'WAZUH OSSEC Repository - www.wazuh.com',
+            enabled  => 1,
+            gpgcheck => 1,
+            gpgkey   => $gpgkey,
+            baseurl  => $baseurl
+          }
+        }
       }
-
-    }
     default: { fail('This ossec module has not been tested on your distribution') }
+    }
   }
 }
