@@ -273,7 +273,7 @@ class wazuh::agent (
 
   # Package installation
   case $::kernel {
-    'Linux': {
+     'Linux': {
       if $manage_repo {
         class { 'wazuh::repo': }
         if $::osfamily == 'Debian' {
@@ -318,7 +318,7 @@ class wazuh::agent (
   'Linux': {
     ## ossec.conf generation concats
     case $::operatingsystem {
-      'RedHat', 'OracleLinux':{
+      'RedHat', 'OracleLinux', 'Suse':{
         $apply_template_os = 'rhel'
         if ( $::operatingsystemrelease =~ /^9.*/ ){
           $rhel_version = '9'
@@ -342,6 +342,8 @@ class wazuh::agent (
         $apply_template_os = 'amazon'
       }'CentOS','Centos','centos','AlmaLinux':{
         $apply_template_os = 'centos'
+      }'SLES':{
+        $apply_template_os = 'suse'
       }
       default: { fail('OS not supported') }
     }
