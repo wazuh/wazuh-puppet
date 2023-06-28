@@ -478,7 +478,7 @@ class wazuh::params_agent {
           ]
           case $::operatingsystem {
             'SLES': {
-              if ( $::operatingsystemrelease =~ /^(12|13|14|15).*/ ) {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
                 $ossec_service_provider = 'redhat'
               }
             }

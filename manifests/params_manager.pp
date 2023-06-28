@@ -568,7 +568,7 @@ class wazuh::params_manager {
           ]
           case $::operatingsystem {
             'SLES': {
-              if ( $::operatingsystemrelease =~ /^15.*/ ) {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
                 $ossec_service_provider = 'redhat'
                 $api_service_provider = 'redhat'
               }
