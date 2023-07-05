@@ -49,6 +49,7 @@ class wazuh::manager (
       $configure_auth                       = $wazuh::params_manager::configure_auth,
       $configure_cluster                    = $wazuh::params_manager::configure_cluster,
       $configure_integration                = $wazuh::params_manager::configure_integration,
+      $configure_database_output            = $wazuh::params_manager::configure_database_output,
       $configure_active_response            = $wazuh::params_manager::configure_active_response,
 
     # ossec.conf templates paths
@@ -68,6 +69,7 @@ class wazuh::manager (
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
       $ossec_integration_template                   = $wazuh::params_manager::ossec_integration_template,
+      $ossec_database_output_template               = $wazuh::params_manager::ossec_database_output_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
       $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
 
@@ -275,6 +277,14 @@ class wazuh::manager (
       $ossec_integration_event_location   = $wazuh::params_manager::ossec_integration_event_location,
       $ossec_integration_alert_format     = $wazuh::params_manager::ossec_integration_alert_format,
       $ossec_integration_max_log          = $wazuh::params_manager::ossec_integration_max_log,
+
+
+      # Database Output
+      $ossec_database_output_hostname     = $wazuh::params_manager::ossec_database_output_hostname,
+      $ossec_database_output_username     = $wazuh::params_manager::ossec_database_output_username,
+      $ossec_database_output_password     = $wazuh::params_manager::ossec_database_output_password,
+      $ossec_database_output_database     = $wazuh::params_manager::ossec_database_output_database,
+      $ossec_database_output_type         = $wazuh::params_manager::ossec_database_output_type,
 
       #----- End of ossec.conf parameters -------
 
@@ -626,6 +636,14 @@ class wazuh::manager (
           order   => 86,
           target  => 'manager_ossec.conf',
           content => template($ossec_integration_template);
+      }
+  }
+  if ($configure_database_output == true){
+    concat::fragment {
+        'ossec.conf_integration':
+          order   => 87,
+          target  => 'manager_ossec.conf',
+          content => template($ossec_database_output_template);
       }
   }
   if ($configure_active_response == true){

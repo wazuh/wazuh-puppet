@@ -49,6 +49,7 @@ class wazuh::params_manager {
       $configure_auth                                  = true
       $configure_cluster                               = true
       $configure_integration                           = false
+      $configure_database_output                       = false
       $configure_active_response                       = false
 
 
@@ -69,6 +70,7 @@ class wazuh::params_manager {
       $ossec_auth_template                             = 'wazuh/fragments/_auth.erb'
       $ossec_cluster_template                          = 'wazuh/fragments/_cluster.erb'
       $ossec_integration_template                      = 'wazuh/fragments/_integration.erb'
+      $ossec_database_output_template                  = 'wazuh/fragments/_database_output.erb'
       $ossec_active_response_template                  = 'wazuh/fragments/_default_activeresponse.erb'
       $ossec_syslog_output_template                    = 'wazuh/fragments/_syslog_output.erb'
 
@@ -314,6 +316,14 @@ class wazuh::params_manager {
       $ossec_integration_event_location   = ''
       $ossec_integration_alert_format     = ''
       $ossec_integration_max_log          = ''
+
+
+      # Database Output
+      $ossec_database_output_hostname     = ''
+      $ossec_database_output_username     = ''
+      $ossec_database_output_password     = ''
+      $ossec_database_output_database     = ''
+      $ossec_database_output_type         = ''
 
       #----- End of ossec.conf parameters -------
 
