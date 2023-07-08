@@ -640,7 +640,7 @@ class wazuh::manager (
   }
   if ($configure_database_output == true){
     concat::fragment {
-        'ossec.conf_integration':
+        'ossec.conf_database_output':
           order   => 87,
           target  => 'manager_ossec.conf',
           content => template($ossec_database_output_template);
