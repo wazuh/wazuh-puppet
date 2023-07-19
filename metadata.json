@@ -37,7 +37,7 @@
       "version_requirement": ">= 2.0.0 < 5.0.0"
     },
     {
-      "name": "puppetlabs/zypprepo",
+      "name": "puppet/zypprepo",
       "version_requirement": "= 4.0.1"
     },
     {
