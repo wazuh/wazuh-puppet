@@ -31,6 +31,7 @@ class wazuh::dashboard (
     },
   ],
 
+  $use_system_ca = false,
 ) {
 
   # assign version according to the package manager

@@ -12,5 +12,7 @@ opensearch_security.readonly_mode.roles: ["kibana_read_only"]
 server.ssl.enabled: true
 server.ssl.key: "<%= @dashboard_path_certs %>/dashboard-key.pem"
 server.ssl.certificate: "<%= @dashboard_path_certs %>/dashboard.pem"
+<% if not @use_system_ca -%>
 opensearch.ssl.certificateAuthorities: ["<%= @dashboard_path_certs %>/root-ca.pem"]
+<% end -%>
 uiSettings.overrides.defaultRoute: /app/wz-home
