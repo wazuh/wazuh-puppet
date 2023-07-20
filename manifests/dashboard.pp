@@ -31,6 +31,7 @@ class wazuh::dashboard (
     },
   ],
 
+  $manage_certs = true,
   $use_system_ca = false,
 ) {
 
@@ -50,32 +51,34 @@ class wazuh::dashboard (
     name   => $dashboard_package,
   }
 
-  exec { "ensure full path of ${dashboard_path_certs}":
-    path    => '/usr/bin:/bin',
-    command => "mkdir -p ${dashboard_path_certs}",
-    creates => $dashboard_path_certs,
-    require => Package['wazuh-dashboard'],
-  }
-  -> file { $dashboard_path_certs:
-    ensure => directory,
-    owner  => $dashboard_fileuser,
-    group  => $dashboard_filegroup,
-    mode   => '0500',
-  }
+  if $manage_certs {
+    exec { "ensure full path of ${dashboard_path_certs}":
+      path    => '/usr/bin:/bin',
+      command => "mkdir -p ${dashboard_path_certs}",
+      creates => $dashboard_path_certs,
+      require => Package['wazuh-dashboard'],
+    }
+    -> file { $dashboard_path_certs:
+      ensure => directory,
+      owner  => $dashboard_fileuser,
+      group  => $dashboard_filegroup,
+      mode   => '0500',
+    }
 
-  [
-    'dashboard.pem',
-    'dashboard-key.pem',
-    'root-ca.pem',
-  ].each |String $certfile| {
-    file { "${dashboard_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $dashboard_fileuser,
-      group   => $dashboard_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
+    [
+      'dashboard.pem',
+      'dashboard-key.pem',
+      'root-ca.pem',
+    ].each |String $certfile| {
+      file { "${dashboard_path_certs}/${certfile}":
+        ensure  => file,
+        owner   => $dashboard_fileuser,
+        group   => $dashboard_filegroup,
+        mode    => '0400',
+        replace => true,
+        recurse => remote,
+        source  => "puppet:///modules/archive/${certfile}",
+      }
     }
   }
 
