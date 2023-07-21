@@ -466,6 +466,25 @@ class wazuh::params_agent {
             default: { fail('This ossec module has not been tested on your distribution') }
           }
         }
+        'Suse': {
+          $service_has_status = true
+
+          $default_local_files = [
+            { 'location' => '/var/log/audit/audit.log', 'log_format' => 'audit' },
+            { 'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/messages', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/secure', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/maillog', 'log_format' => 'syslog' },
+          ]
+          case $::operatingsystem {
+            'SLES': {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
+                $ossec_service_provider = 'redhat'
+              }
+            }
+            default: { fail('This ossec module has not been tested on your distribution') }
+          }
+        }
         default: { fail('This ossec module has not been tested on your distribution') }
       }
     }

@@ -186,14 +186,12 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_redhat                    = 'yes'
       $vulnerability_detector_provider_redhat_enabled            = 'no'
       $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8']
-      $vulnerability_detector_provider_redhat_update_from_year   = '2010'
       $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
 
 
       $vulnerability_detector_provider_nvd                    = 'yes'
       $vulnerability_detector_provider_nvd_enabled            = 'no'
       $vulnerability_detector_provider_nvd_os                 = []
-      $vulnerability_detector_provider_nvd_update_from_year   = '2010'
       $vulnerability_detector_provider_nvd_update_interval    = '1h'
 
       $vulnerability_detector_provider_arch                   = 'yes'
@@ -544,6 +542,31 @@ class wazuh::params_manager {
             }
             'AlmaLinux': {
               if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
+              }
+            }
+            default: { fail('This ossec module has not been tested on your distribution') }
+          }
+        }
+        'Suse': {
+
+          $agent_service  = 'wazuh-agent'
+          $agent_package  = 'wazuh-agent'
+          $server_service = 'wazuh-manager'
+          $server_package = 'wazuh-manager'
+          $service_has_status  = true
+
+          $default_local_files =[
+              {  'location' => '/var/log/audit/audit.log' , 'log_format' => 'audit'},
+              {  'location' => '/var/ossec/logs/active-responses.log' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/messages', 'log_format' => 'syslog'},
+              {  'location' => '/var/log/secure' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/maillog' , 'log_format' => 'syslog'},
+          ]
+          case $::operatingsystem {
+            'SLES': {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
                 $ossec_service_provider = 'redhat'
                 $api_service_provider = 'redhat'
               }
