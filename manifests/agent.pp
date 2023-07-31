@@ -340,7 +340,7 @@ class wazuh::agent (
         }
       }'Amazon':{
         $apply_template_os = 'amazon'
-      }'CentOS','Centos','centos','AlmaLinux':{
+      }'CentOS','Centos','centos','AlmaLinux','Rocky':{
         $apply_template_os = 'centos'
       }
       default: { fail('OS not supported') }
