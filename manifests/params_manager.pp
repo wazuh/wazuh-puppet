@@ -209,6 +209,13 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_msu_enabled           = 'no'
       $vulnerability_detector_provider_msu_update_interval   = '1h'
 
+      $vulnerability_detector_provider_almalinux                 = 'yes'
+      $vulnerability_detector_provider_almalinux_enabled         = 'no'
+      $vulnerability_detector_provider_almalinux_os              = ['8',
+        '9'
+      ]
+      $vulnerability_detector_provider_almalinux_update_interval = '1h'
+
       $syslog_output                                   = false
       $syslog_output_level                             = 2
       $syslog_output_port                              = 514
