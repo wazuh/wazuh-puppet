@@ -178,14 +178,13 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_debian                 = 'yes'
       $vulnerability_detector_provider_debian_enabled         = 'no'
       $vulnerability_detector_provider_debian_os              = ['wheezy',
-        'stretch',
         'jessie',
         'buster'
       ]
       $vulnerability_detector_provider_debian_update_interval = '1h'
       $vulnerability_detector_provider_redhat                    = 'yes'
       $vulnerability_detector_provider_redhat_enabled            = 'no'
-      $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8']
+      $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8','9']
       $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
 
 
