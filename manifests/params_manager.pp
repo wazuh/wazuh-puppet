@@ -205,6 +205,17 @@ class wazuh::params_manager {
       ]
       $vulnerability_detector_provider_alas_update_interval   = '1h'
 
+      $vulnerability_detector_provider_suse                   = 'yes'
+      $vulnerability_detector_provider_suse_enabled           = 'no'
+      $vulnerability_detector_provider_suse_os              = ['11-server',
+      '11-desktop',
+      '12-server',
+      '12-desktop',
+      '15-server',
+      '15-desktop
+      ]
+      $vulnerability_detector_provider_suse_update_interval   = '1h'
+
       $vulnerability_detector_provider_msu                   = 'yes'
       $vulnerability_detector_provider_msu_enabled           = 'no'
       $vulnerability_detector_provider_msu_update_interval   = '1h'
