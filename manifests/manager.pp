@@ -330,7 +330,7 @@ class wazuh::manager (
 
   }else{
     $kernel = 'Linux'
-    if ($::osfamily == 'Debian'){
+    if ($facts['os']['family'] == 'Debian'){
       $os_family = 'debian'
     }else{
       $os_family = 'centos'
@@ -360,7 +360,7 @@ class wazuh::manager (
     validate_legacy(Array, 'validate_array', $ossec_emailto)
   }
 
-  if $::osfamily == 'windows' {
+  if $facts['os']['family'] == 'windows' {
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
   }
 
@@ -369,7 +369,7 @@ class wazuh::manager (
   if $manage_repos {
     # TODO: Allow filtering of EPEL requirement
     class { 'wazuh::repo':}
-    if $::osfamily == 'Debian' {
+    if $facts['os']['family'] == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params_manager::server_package]
     } else {
       Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]

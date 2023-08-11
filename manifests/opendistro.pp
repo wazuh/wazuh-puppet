@@ -30,7 +30,7 @@ class wazuh::opendistro (
   class {'wazuh::repo_opendistro':}
 
 
-  if $::osfamily == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     Class['wazuh::repo_opendistro'] -> Class['apt::update'] -> Package['opendistroforelasticsearch']
   } else {
     Class['wazuh::repo_opendistro'] -> Package['opendistroforelasticsearch']

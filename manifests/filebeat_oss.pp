@@ -17,7 +17,7 @@ class wazuh::filebeat_oss (
 
   class {'wazuh::repo_elastic_oss':}
 
-  if $::osfamily == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     Class['wazuh::repo_elastic_oss'] -> Class['apt::update'] -> Package[$filebeat_oss_package]
   } else {
     Class['wazuh::repo_elastic_oss'] -> Package[$filebeat_oss_package]

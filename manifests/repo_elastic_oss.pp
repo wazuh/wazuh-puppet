@@ -3,7 +3,7 @@
 class wazuh::repo_elastic_oss (
 
 ) {
-    case $::osfamily {
+    case $facts['os']['family'] {
       'Debian' : {
         if ! defined(Package['apt-transport-https']) {
           ensure_packages(['apt-transport-https'], {'ensure' => 'present'})

@@ -3,7 +3,7 @@
 class wazuh::repo (
 ) {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : {
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|focal)/
       and ! defined(Package['apt-transport-https']) {

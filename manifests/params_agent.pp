@@ -301,7 +301,7 @@ class wazuh::params_agent {
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
-      case $::osfamily {
+      case $facts['os']['family'] {
         'Debian': {
           $service_has_status = false
           $ossec_service_provider = undef

@@ -275,7 +275,7 @@ class wazuh::agent (
     'Linux': {
       if $manage_repo {
         class { 'wazuh::repo': }
-        if $::osfamily == 'Debian' {
+        if $facts['os']['family'] == 'Debian' {
           Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
         } else {
           Class['wazuh::repo'] -> Package[$agent_package_name]
@@ -629,7 +629,7 @@ class wazuh::agent (
 
   # SELinux
   # Requires selinux module specified in metadata.json
-  if ($::osfamily == 'RedHat' and $selinux == true) {
+  if ($facts['os']['family'] == 'RedHat' and $selinux == true) {
     selinux::module { 'ossec-logrotate':
       ensure    => 'present',
       source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',
