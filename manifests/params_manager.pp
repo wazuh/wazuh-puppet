@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.6.0-1'
+      $server_package_version                          = '4.7.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -556,6 +556,31 @@ class wazuh::params_manager {
             default: { fail('This ossec module has not been tested on your distribution') }
           }
         }
+        'Suse': {
+
+          $agent_service  = 'wazuh-agent'
+          $agent_package  = 'wazuh-agent'
+          $server_service = 'wazuh-manager'
+          $server_package = 'wazuh-manager'
+          $service_has_status  = true
+
+          $default_local_files =[
+              {  'location' => '/var/log/audit/audit.log' , 'log_format' => 'audit'},
+              {  'location' => '/var/ossec/logs/active-responses.log' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/messages', 'log_format' => 'syslog'},
+              {  'location' => '/var/log/secure' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/maillog' , 'log_format' => 'syslog'},
+          ]
+          case $::operatingsystem {
+            'SLES': {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
+              }
+            }
+            default: { fail('This ossec module has not been tested on your distribution') }
+          }
+        }
         default: { fail('This ossec module has not been tested on your distribution') }
       }
     }
@@ -573,7 +598,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.6.0'
+      $agent_package  = 'Wazuh Agent 4.7.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
