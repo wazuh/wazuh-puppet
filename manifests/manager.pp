@@ -198,6 +198,10 @@ class wazuh::manager (
       $vulnerability_detector_provider_msu_enabled           = $wazuh::params_manager::vulnerability_detector_provider_msu_enabled,
       $vulnerability_detector_provider_msu_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_msu_update_interval,
 
+      $vulnerability_detector_provider_almalinux                    = $wazuh::params_manager::vulnerability_detector_provider_almalinux,
+      $vulnerability_detector_provider_almalinux_enabled            = $wazuh::params_manager::vulnerability_detector_provider_almalinux_enabled,
+      $vulnerability_detector_provider_almalinux_os                 = $wazuh::params_manager::vulnerability_detector_provider_almalinux_os,
+      $vulnerability_detector_provider_almalinux_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_almalinux_update_interval,
 
       # syslog
       $syslog_output                        = $wazuh::params_manager::syslog_output,
