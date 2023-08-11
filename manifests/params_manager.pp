@@ -170,16 +170,17 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_canonical_enabled         = 'no'
       $vulnerability_detector_provider_canonical_os              = ['trusty',
         'xenial',
-        'bionic'
+        'bionic',
+        'focal',
+        'jammy'
       ]
       $vulnerability_detector_provider_canonical_update_interval = '1h'
 
 
       $vulnerability_detector_provider_debian                 = 'yes'
       $vulnerability_detector_provider_debian_enabled         = 'no'
-      $vulnerability_detector_provider_debian_os              = ['wheezy',
-        'jessie',
-        'buster'
+      $vulnerability_detector_provider_debian_os              = ['buster',
+        'bullseye'
       ]
       $vulnerability_detector_provider_debian_update_interval = '1h'
       $vulnerability_detector_provider_redhat                    = 'yes'
@@ -207,11 +208,11 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_suse                   = 'yes'
       $vulnerability_detector_provider_suse_enabled           = 'no'
       $vulnerability_detector_provider_suse_os              = ['11-server',
-      '11-desktop',
-      '12-server',
-      '12-desktop',
-      '15-server',
-      '15-desktop
+        '11-desktop',
+        '12-server',
+        '12-desktop',
+        '15-server',
+        '15-desktop
       ]
       $vulnerability_detector_provider_suse_update_interval   = '1h'
 
