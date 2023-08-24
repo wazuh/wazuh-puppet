@@ -170,22 +170,22 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_canonical_enabled         = 'no'
       $vulnerability_detector_provider_canonical_os              = ['trusty',
         'xenial',
-        'bionic'
+        'bionic',
+        'focal',
+        'jammy'
       ]
       $vulnerability_detector_provider_canonical_update_interval = '1h'
 
 
       $vulnerability_detector_provider_debian                 = 'yes'
       $vulnerability_detector_provider_debian_enabled         = 'no'
-      $vulnerability_detector_provider_debian_os              = ['wheezy',
-        'stretch',
-        'jessie',
-        'buster'
+      $vulnerability_detector_provider_debian_os              = ['buster',
+        'bullseye'
       ]
       $vulnerability_detector_provider_debian_update_interval = '1h'
       $vulnerability_detector_provider_redhat                    = 'yes'
       $vulnerability_detector_provider_redhat_enabled            = 'no'
-      $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8']
+      $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8','9']
       $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
 
 
@@ -204,6 +204,17 @@ class wazuh::params_manager {
       'amazon-linux-2'
       ]
       $vulnerability_detector_provider_alas_update_interval   = '1h'
+
+      $vulnerability_detector_provider_suse                   = 'yes'
+      $vulnerability_detector_provider_suse_enabled           = 'no'
+      $vulnerability_detector_provider_suse_os              = ['11-server',
+        '11-desktop',
+        '12-server',
+        '12-desktop',
+        '15-server',
+        '15-desktop
+      ]
+      $vulnerability_detector_provider_suse_update_interval   = '1h'
 
       $vulnerability_detector_provider_msu                   = 'yes'
       $vulnerability_detector_provider_msu_enabled           = 'no'
