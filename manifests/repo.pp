@@ -15,7 +15,7 @@ class wazuh::repo (
         source => 'puppet:///modules/repositories/keys/wazuh-packages.asc',
         owner  => 'root',
         group  => 'root',
-        mode   => '0444',
+        mode   => '0644',
       }
 
       case $::lsbdistcodename {
