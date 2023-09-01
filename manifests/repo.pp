@@ -9,12 +9,15 @@ class wazuh::repo (
       and ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
-      # apt-key added by issue #34
-      apt::key { 'wazuh':
-        id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
-        source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH',
-        server => 'pgp.mit.edu'
+
+      file { '/etc/apt/trusted.gpg.d/wazuh-packages.asc':
+        ensure => 'present',
+        source => 'puppet:///modules/repositories/keys/wazuh-packages.asc',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0400',
       }
+
       case $::lsbdistcodename {
         /(jessie|wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy)/: {
 
