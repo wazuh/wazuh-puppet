@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.5.2-1'
+      $server_package_version                          = '4.6.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -219,6 +219,13 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_msu                   = 'yes'
       $vulnerability_detector_provider_msu_enabled           = 'no'
       $vulnerability_detector_provider_msu_update_interval   = '1h'
+
+      $vulnerability_detector_provider_almalinux                 = 'yes'
+      $vulnerability_detector_provider_almalinux_enabled         = 'no'
+      $vulnerability_detector_provider_almalinux_os              = ['8',
+        '9'
+      ]
+      $vulnerability_detector_provider_almalinux_update_interval = '1h'
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
@@ -453,7 +460,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
+            /^(wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -577,7 +584,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.5.2'
+      $agent_package  = 'Wazuh Agent 4.6.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
