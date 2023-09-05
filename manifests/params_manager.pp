@@ -212,7 +212,7 @@ class wazuh::params_manager {
         '12-server',
         '12-desktop',
         '15-server',
-        '15-desktop
+        '15-desktop'
       ]
       $vulnerability_detector_provider_suse_update_interval   = '1h'
 
