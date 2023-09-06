@@ -113,7 +113,7 @@ class wazuh::dashboard (
   }
 
   unless $use_keystore {
-    file { '/usr/share/wazuh-dashboard/config/opensearch_dashboards.keystore':
+    file { '/etc/wazuh-dashboard/config/opensearch_dashboards.keystore':
       ensure  => absent,
       require => Package['wazuh-dashboard'],
       before  => Service['wazuh-dashboard'],
