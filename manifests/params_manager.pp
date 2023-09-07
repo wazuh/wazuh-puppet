@@ -212,7 +212,7 @@ class wazuh::params_manager {
         '12-server',
         '12-desktop',
         '15-server',
-        '15-desktop
+        '15-desktop'
       ]
       $vulnerability_detector_provider_suse_update_interval   = '1h'
 
@@ -460,7 +460,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
+            /^(wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
