@@ -35,7 +35,7 @@ class wazuh::dashboard (
   if $manage_repos {
     include wazuh::repo
 
-    if $::osfamily == 'Debian' {
+    if $facts['os']['family'] == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-dashboard']
     } else {
       Class['wazuh::repo'] -> Package['wazuh-dashboard']
