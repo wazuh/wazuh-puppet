@@ -443,7 +443,7 @@ class wazuh::manager (
   ## Declaring variables for localfile and wodles generation
 
   case $::operatingsystem{
-    'RedHat', 'OracleLinux':{
+    'RedHat', 'OracleLinux', 'Rocky':{
       $apply_template_os = 'rhel'
       if ( $::operatingsystemrelease =~ /^9.*/ ){
         $rhel_version = '9'
