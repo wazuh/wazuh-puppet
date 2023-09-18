@@ -13,6 +13,8 @@ class wazuh::manager (
 
       ## Global
 
+      $ossec_logall                     = $wazuh::params_manager::ossec_logall,
+      $ossec_logall_json                = $wazuh::params_manager::ossec_logall_json,
       $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
       $ossec_emailto                    = $wazuh::params_manager::ossec_emailto,
       $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
@@ -175,13 +177,11 @@ class wazuh::manager (
       $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,
       $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_manager::vulnerability_detector_provider_redhat_enabled,
       $vulnerability_detector_provider_redhat_os                 = $wazuh::params_manager::vulnerability_detector_provider_redhat_os,
-      $vulnerability_detector_provider_redhat_update_from_year   = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_from_year,
       $vulnerability_detector_provider_redhat_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_interval,
 
       $vulnerability_detector_provider_nvd                       = $wazuh::params_manager::vulnerability_detector_provider_nvd,
       $vulnerability_detector_provider_nvd_enabled               = $wazuh::params_manager::vulnerability_detector_provider_nvd_enabled,
       $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,
-      $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
       $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
       #lint:endignore
 
@@ -191,13 +191,22 @@ class wazuh::manager (
 
       $vulnerability_detector_provider_alas                   = $wazuh::params_manager::vulnerability_detector_provider_alas,
       $vulnerability_detector_provider_alas_enabled           = $wazuh::params_manager::vulnerability_detector_provider_alas_enabled,
-      $vulnerability_detector_provider_alas_os              = $wazuh::params_manager::vulnerability_detector_provider_alas_os,
+      $vulnerability_detector_provider_alas_os                = $wazuh::params_manager::vulnerability_detector_provider_alas_os,
       $vulnerability_detector_provider_alas_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_alas_update_interval,
+
+      $vulnerability_detector_provider_suse                   = $wazuh::params_manager::vulnerability_detector_provider_suse,
+      $vulnerability_detector_provider_suse_enabled           = $wazuh::params_manager::vulnerability_detector_provider_suse_enabled,
+      $vulnerability_detector_provider_suse_os                = $wazuh::params_manager::vulnerability_detector_provider_suse_os,
+      $vulnerability_detector_provider_suse_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_suse_update_interval,
 
       $vulnerability_detector_provider_msu                   = $wazuh::params_manager::vulnerability_detector_provider_msu,
       $vulnerability_detector_provider_msu_enabled           = $wazuh::params_manager::vulnerability_detector_provider_msu_enabled,
       $vulnerability_detector_provider_msu_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_msu_update_interval,
 
+      $vulnerability_detector_provider_almalinux                    = $wazuh::params_manager::vulnerability_detector_provider_almalinux,
+      $vulnerability_detector_provider_almalinux_enabled            = $wazuh::params_manager::vulnerability_detector_provider_almalinux_enabled,
+      $vulnerability_detector_provider_almalinux_os                 = $wazuh::params_manager::vulnerability_detector_provider_almalinux_os,
+      $vulnerability_detector_provider_almalinux_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_almalinux_update_interval,
 
       # syslog
       $syslog_output                        = $wazuh::params_manager::syslog_output,
@@ -436,7 +445,11 @@ class wazuh::manager (
   case $::operatingsystem{
     'RedHat', 'OracleLinux':{
       $apply_template_os = 'rhel'
-      if ( $::operatingsystemrelease     =~ /^7.*/ ){
+      if ( $::operatingsystemrelease =~ /^9.*/ ){
+        $rhel_version = '9'
+      }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
+        $rhel_version = '8'
+      }elsif ( $::operatingsystemrelease =~ /^7.*/ ){
         $rhel_version = '7'
       }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
         $rhel_version = '6'

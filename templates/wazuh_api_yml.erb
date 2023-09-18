@@ -17,7 +17,6 @@ https:
 # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
 logs:
   level: <%= @wazuh_api_logs_level %>
-  format: <%= @wazuh_api_logs_format %>
 # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
 cors:
   enabled: <%= @wazuh_api_cors_enabled %>
@@ -46,7 +45,7 @@ upload_configuration:
       exceptions: <%= @remote_commands_localfile_exceptions %>
     wodle_command:
       allow: <%= @remote_commands_wodle %>
-      exceptions: <%= @remote_commands_wodle_exceptions %>
+      exceptions: []
   limits:
     eps:
       allow: <%= @limits_eps %>

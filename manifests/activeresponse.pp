@@ -13,13 +13,10 @@ define wazuh::activeresponse(
   $active_response_timeout            = undef,
   $active_response_repeated_offenders = [],
   $target_arg                         = 'manager_ossec.conf',
-  $order_arg                          = undef,
+  $order_arg                          = 80,
   $before_arg                         = undef,
   $content_arg                        = 'wazuh/fragments/_activeresponse.erb'
 ) {
-
-  require wazuh::params_manager
-
   concat::fragment { $active_response_name:
     target  => $target_arg,
     order   => $order_arg,
