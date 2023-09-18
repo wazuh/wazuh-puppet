@@ -276,7 +276,7 @@ class wazuh::agent (
     'Linux': {
       if $manage_repo {
         class { 'wazuh::repo': }
-        if $::osfamily == 'Debian' {
+        if $facts['os']['family'] == 'Debian' {
           Class['wazuh::repo'] -> Class['apt::update'] -> Package[$agent_package_name]
         } else {
           Class['wazuh::repo'] -> Package[$agent_package_name]
@@ -318,11 +318,13 @@ class wazuh::agent (
   'Linux': {
     ## ossec.conf generation concats
     case $::operatingsystem {
-      'RedHat', 'OracleLinux':{
+      'RedHat', 'OracleLinux', 'Suse':{
         $apply_template_os = 'rhel'
-        if ( $::operatingsystemrelease     =~ /^8.*/ ){
+        if ( $::operatingsystemrelease =~ /^9.*/ ){
+          $rhel_version = '9'
+        }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
           $rhel_version = '8'
-        }elsif ( $::operatingsystemrelease  =~ /^7.*/ ){
+        }elsif ( $::operatingsystemrelease =~ /^7.*/ ){
           $rhel_version = '7'
         }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
           $rhel_version = '6'
@@ -340,6 +342,8 @@ class wazuh::agent (
         $apply_template_os = 'amazon'
       }'CentOS','Centos','centos','AlmaLinux','Rocky':{
         $apply_template_os = 'centos'
+      }'SLES':{
+        $apply_template_os = 'suse'
       }
       default: { fail('OS not supported') }
     }
@@ -632,7 +636,7 @@ class wazuh::agent (
 
   # SELinux
   # Requires selinux module specified in metadata.json
-  if ($::osfamily == 'RedHat' and $selinux == true) {
+  if ($facts['os']['family'] == 'RedHat' and $selinux == true) {
     selinux::module { 'ossec-logrotate':
       ensure    => 'present',
       source_te => 'puppet:///modules/wazuh/ossec-logrotate.te',

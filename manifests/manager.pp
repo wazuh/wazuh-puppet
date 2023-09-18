@@ -177,13 +177,11 @@ class wazuh::manager (
       $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,
       $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_manager::vulnerability_detector_provider_redhat_enabled,
       $vulnerability_detector_provider_redhat_os                 = $wazuh::params_manager::vulnerability_detector_provider_redhat_os,
-      $vulnerability_detector_provider_redhat_update_from_year   = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_from_year,
       $vulnerability_detector_provider_redhat_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_interval,
 
       $vulnerability_detector_provider_nvd                       = $wazuh::params_manager::vulnerability_detector_provider_nvd,
       $vulnerability_detector_provider_nvd_enabled               = $wazuh::params_manager::vulnerability_detector_provider_nvd_enabled,
       $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,
-      $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
       $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
       #lint:endignore
 
@@ -193,13 +191,22 @@ class wazuh::manager (
 
       $vulnerability_detector_provider_alas                   = $wazuh::params_manager::vulnerability_detector_provider_alas,
       $vulnerability_detector_provider_alas_enabled           = $wazuh::params_manager::vulnerability_detector_provider_alas_enabled,
-      $vulnerability_detector_provider_alas_os              = $wazuh::params_manager::vulnerability_detector_provider_alas_os,
+      $vulnerability_detector_provider_alas_os                = $wazuh::params_manager::vulnerability_detector_provider_alas_os,
       $vulnerability_detector_provider_alas_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_alas_update_interval,
+
+      $vulnerability_detector_provider_suse                   = $wazuh::params_manager::vulnerability_detector_provider_suse,
+      $vulnerability_detector_provider_suse_enabled           = $wazuh::params_manager::vulnerability_detector_provider_suse_enabled,
+      $vulnerability_detector_provider_suse_os                = $wazuh::params_manager::vulnerability_detector_provider_suse_os,
+      $vulnerability_detector_provider_suse_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_suse_update_interval,
 
       $vulnerability_detector_provider_msu                   = $wazuh::params_manager::vulnerability_detector_provider_msu,
       $vulnerability_detector_provider_msu_enabled           = $wazuh::params_manager::vulnerability_detector_provider_msu_enabled,
       $vulnerability_detector_provider_msu_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_msu_update_interval,
 
+      $vulnerability_detector_provider_almalinux                    = $wazuh::params_manager::vulnerability_detector_provider_almalinux,
+      $vulnerability_detector_provider_almalinux_enabled            = $wazuh::params_manager::vulnerability_detector_provider_almalinux_enabled,
+      $vulnerability_detector_provider_almalinux_os                 = $wazuh::params_manager::vulnerability_detector_provider_almalinux_os,
+      $vulnerability_detector_provider_almalinux_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_almalinux_update_interval,
 
       # syslog
       $syslog_output                        = $wazuh::params_manager::syslog_output,
@@ -300,6 +307,7 @@ class wazuh::manager (
       $wazuh_api_https_use_ca                   = $wazuh::params_manager::wazuh_api_https_use_ca,
       $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
       $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
+      $wazuh_api_logs_format                    = $wazuh::params_manager::wazuh_api_logs_format,
       $wazuh_api_ssl_ciphers                    = $wazuh::params_manager::wazuh_api_ssl_ciphers,
       $wazuh_api_ssl_protocol                   = $wazuh::params_manager::wazuh_api_ssl_protocol,
 
@@ -323,6 +331,7 @@ class wazuh::manager (
       $remote_commands_localfile_exceptions     = $::wazuh::params_manager::remote_commands_localfile_exceptions,
       $remote_commands_wodle                    = $::wazuh::params_manager::remote_commands_wodle,
       $remote_commands_wodle_exceptions         = $::wazuh::params_manager::remote_commands_wodle_exceptions,
+      $limits_eps                               = $::wazuh::params_manager::limits_eps,
 
       $wazuh_api_template                       = $::wazuh::params_manager::wazuh_api_template,
 
@@ -344,7 +353,7 @@ class wazuh::manager (
 
   }else{
     $kernel = 'Linux'
-    if ($::osfamily == 'Debian'){
+    if ($facts['os']['family'] == 'Debian'){
       $os_family = 'debian'
     }else{
       $os_family = 'centos'
@@ -383,7 +392,7 @@ class wazuh::manager (
     validate_legacy(Array, 'validate_array', $ossec_emailto)
   }
 
-  if $::osfamily == 'windows' {
+  if $facts['os']['family'] == 'windows' {
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
   }
 
@@ -392,7 +401,7 @@ class wazuh::manager (
   if $manage_repos {
     # TODO: Allow filtering of EPEL requirement
     class { 'wazuh::repo':}
-    if $::osfamily == 'Debian' {
+    if $facts['os']['family'] == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params_manager::server_package]
     } else {
       Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
@@ -436,7 +445,11 @@ class wazuh::manager (
   case $::operatingsystem{
     'RedHat', 'OracleLinux':{
       $apply_template_os = 'rhel'
-      if ( $::operatingsystemrelease     =~ /^7.*/ ){
+      if ( $::operatingsystemrelease =~ /^9.*/ ){
+        $rhel_version = '9'
+      }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
+        $rhel_version = '8'
+      }elsif ( $::operatingsystemrelease =~ /^7.*/ ){
         $rhel_version = '7'
       }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
         $rhel_version = '6'

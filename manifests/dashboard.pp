@@ -3,7 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '4.3.9',
+  $dashboard_version = '4.8.0',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -113,7 +113,7 @@ class wazuh::dashboard (
   }
 
   unless $use_keystore {
-    file { '/usr/share/wazuh-dashboard/config/opensearch_dashboards.keystore':
+    file { '/etc/wazuh-dashboard/opensearch_dashboards.keystore':
       ensure  => absent,
       require => Package['wazuh-dashboard'],
       before  => Service['wazuh-dashboard'],

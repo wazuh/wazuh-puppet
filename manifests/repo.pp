@@ -3,7 +3,7 @@
 class wazuh::repo (
 ) {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : {
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
       and ! defined(Package['apt-transport-https']) {
@@ -16,7 +16,7 @@ class wazuh::repo (
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
-        /(jessie|wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy)/: {
+        /(jessie|wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy)/: {
 
           apt::source { 'wazuh':
             ensure   => present,
@@ -33,9 +33,10 @@ class wazuh::repo (
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
       }
     }
-    'Linux', 'RedHat' : {
+    'Linux', 'RedHat', 'Suse' : {
         case $::os[name] {
-          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky)$/: {
+          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky|SLES)$/: {
+
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
               $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
               $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH'
@@ -46,16 +47,30 @@ class wazuh::repo (
           }
           default: { fail('This ossec module has not been tested on your distribution.') }
         }
-      # Set up OSSEC repo
-      yumrepo { 'wazuh':
-        descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
-        enabled  => true,
-        gpgcheck => 1,
-        gpgkey   => $gpgkey,
-        baseurl  => $baseurl
-      }
-
+        # Set up OSSEC repo
+        case $::os[name] {
+          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux)$/: {
+            yumrepo { 'wazuh':
+              descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
+              enabled  => true,
+              gpgcheck => 1,
+              gpgkey   => $gpgkey,
+              baseurl  => $baseurl
+            }
+          }
+          /^(SLES)$/: {
+            zypprepo { 'wazuh':
+              ensure        => present,
+              name          => 'WAZUH OSSEC Repository - www.wazuh.com',
+              enabled       => 1,
+              gpgcheck      => 0,
+              repo_gpgcheck => 0,
+              pkg_gpgcheck  => 0,
+              gpgkey        => $gpgkey,
+              baseurl       => $baseurl
+            }
+          }
+        }
     }
-    default: { fail('This ossec module has not been tested on your distribution') }
   }
 }
