@@ -1,0 +1,18 @@
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install curl apt-transport-https lsb-release wget
+
+    - name: Download and Install Puppet server
+      shell: bash
+      run: |
+        wget https://apt.puppet.com/puppet7-release-focal.deb
+        sudo dpkg -i puppet7-release-focal.deb
+        sudo apt-get update
+        sudo apt-get install -y puppetserver
+        sudo ln -s /opt/puppetlabs/bin/puppet /bin
+        sudo ln -s /opt/puppetlabs/server/bin/puppetserver /bin

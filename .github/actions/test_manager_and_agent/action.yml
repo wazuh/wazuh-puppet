@@ -1,6 +1,0 @@
-name: validate-module
-description: Validate Wazuh Puppet module
-runs:
-  using: docker
-  image: 'Dockerfile'
-    

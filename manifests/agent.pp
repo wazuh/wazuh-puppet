@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 
 # Puppet class that installs and manages the Wazuh agent
 class wazuh::agent (
@@ -6,6 +6,7 @@ class wazuh::agent (
   # Versioning and package names
 
   $agent_package_version             = $wazuh::params_agent::agent_package_version,
+  $agent_package_revision            = $wazuh::params_agent::agent_package_revision,
   $agent_package_name                = $wazuh::params_agent::agent_package_name,
   $agent_service_name                = $wazuh::params_agent::agent_service_name,
   $agent_service_ensure              = $wazuh::params_agent::agent_service_ensure,
@@ -121,11 +122,11 @@ class wazuh::agent (
   # SCA
 
   ## Amazon
-  $sca_amazon_amazon_enabled = $wazuh::params_agent::sca_amazon_enabled,
-  $sca_amazon_amazon_scan_on_start = $wazuh::params_agent::sca_amazon_scan_on_start,
-  $sca_amazon_amazon_interval = $wazuh::params_agent::sca_amazon_interval,
-  $sca_amazon_amazon_skip_nfs = $wazuh::params_agent::sca_amazon_skip_nfs,
-  $sca_amazon_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
+  $sca_amazon_enabled = $wazuh::params_agent::sca_amazon_enabled,
+  $sca_amazon_scan_on_start = $wazuh::params_agent::sca_amazon_scan_on_start,
+  $sca_amazon_interval = $wazuh::params_agent::sca_amazon_interval,
+  $sca_amazon_skip_nfs = $wazuh::params_agent::sca_amazon_skip_nfs,
+  $sca_amazon_policies = $wazuh::params_agent::sca_amazon_policies,
 
   ## RHEL
   $sca_rhel_enabled = $wazuh::params_agent::sca_rhel_enabled,
@@ -282,7 +283,7 @@ class wazuh::agent (
         }
       }
       package { $agent_package_name:
-        ensure => $agent_package_version, # lint:ignore:security_package_pinned_version
+        ensure => "${agent_package_version}-${agent_package_revision}", # lint:ignore:security_package_pinned_version
       }
     }
     'windows': {
@@ -291,10 +292,10 @@ class wazuh::agent (
       }
 
       -> file { 'wazuh-agent':
-        path               => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
+        path               => "${download_path}\\wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         group              => 'Administrators',
         mode               => '0774',
-        source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}.msi",
+        source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         source_permissions => ignore
       }
 
@@ -302,7 +303,7 @@ class wazuh::agent (
       -> package { $agent_package_name:
         ensure          => "${agent_package_version}",
         provider        => 'windows',
-        source          => "${download_path}\\wazuh-agent-${agent_package_version}.msi",
+        source          => "${download_path}\\wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         install_options => [
           '/q',
           "WAZUH_MANAGER=${wazuh_reporting_endpoint}",
@@ -317,9 +318,13 @@ class wazuh::agent (
   'Linux': {
     ## ossec.conf generation concats
     case $::operatingsystem {
-      'RedHat', 'OracleLinux':{
+      'RedHat', 'OracleLinux', 'Suse':{
         $apply_template_os = 'rhel'
-        if ( $::operatingsystemrelease     =~ /^7.*/ ){
+        if ( $::operatingsystemrelease =~ /^9.*/ ){
+          $rhel_version = '9'
+        }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
+          $rhel_version = '8'
+        }elsif ( $::operatingsystemrelease =~ /^7.*/ ){
           $rhel_version = '7'
         }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
           $rhel_version = '6'
@@ -335,8 +340,10 @@ class wazuh::agent (
         }
       }'Amazon':{
         $apply_template_os = 'amazon'
-      }'CentOS','Centos','centos':{
+      }'CentOS','Centos','centos','AlmaLinux','Rocky':{
         $apply_template_os = 'centos'
+      }'SLES':{
+        $apply_template_os = 'suse'
       }
       default: { fail('OS not supported') }
     }
@@ -654,9 +661,9 @@ class wazuh::agent (
   if ( $wazuh_enrollment_auth_pass ) {
     file { $wazuh::params_agent::authd_pass_file:
       owner   => 'root',
-      group   => 'ossec',
+      group   => 'wazuh',
       mode    => '0640',
-      content => $wazuh::params_agent::wazuh_enrollment_auth_pass,
+      content => $wazuh_enrollment_auth_pass,
       require => Package[$wazuh::params_agent::agent_package_name],
     }
   }

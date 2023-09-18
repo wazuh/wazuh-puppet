@@ -50,24 +50,18 @@ This module installs and configure Wazuh agent and manager.
     │   ├── addlog.pp
     │   ├── agent.pp
     │   ├── audit.pp
+    │   ├── certificates.pp
     │   ├── command.pp
-    │   ├── elasticsearch.pp
+    │   ├── dashboard.pp
     │   ├── email_alert.pp
     │   ├── filebeat_oss.pp
-    │   ├── filebeat.pp
+    │   ├── indexer.pp
     │   ├── init.pp
     │   ├── integration.pp
-    │   ├── kibana_od.pp
-    │   ├── kibana.pp
     │   ├── manager.pp
-    │   ├── opendistro.pp
     │   ├── params_agent.pp
-    │   ├── params_elastic.pp
     │   ├── params_manager.pp
-    │   ├── params_opendistro.pp
     │   ├── repo_elastic_oss.pp
-    │   ├── repo_elastic.pp
-    │   ├── repo_opendistro.pp
     │   ├── repo.pp
     │   ├── reports.pp
     │   └── tests.pp
@@ -82,9 +76,7 @@ This module installs and configure Wazuh agent and manager.
     │   └── spec_helper.rb
     ├── templates
     │   ├── default_commands.erb
-    │   ├── elasticsearch_yml.erb
     │   ├── filebeat_oss_yml.erb
-    │   ├── filebeat_yml.erb
     │   ├── fragments
     │   │   ├── _activeresponse.erb
     │   │   ├── _auth.erb
@@ -107,16 +99,14 @@ This module installs and configure Wazuh agent and manager.
     │   │   ├── _wodle_openscap.erb
     │   │   ├── _wodle_osquery.erb
     │   │   └── _wodle_syscollector.erb
-    │   ├── jvm_options.erb
-    │   ├── kibana_od_yml.erb
-    │   ├── kibana_yml.erb
+    │   ├── disabledlog4j_options.erb
     │   ├── local_decoder.xml.erb
     │   ├── local_rules.xml.erb
-    │   ├── opendistro_yml.erb
     │   ├── ossec_shared_agent.conf.erb
     │   ├── process_list.erb
     │   ├── wazuh_agent.conf.erb
     │   ├── wazuh_api_yml.erb
+    │   ├── wazuh_config_yml.erb
     │   ├── wazuh_manager.conf.erb
     │   └── wazuh_yml.erb
     └── VERSION
@@ -137,7 +127,7 @@ This Puppet module has been authored by Nicolas Zin, and updated by Jonathan Gaz
 ## License and copyright
 
 WAZUH
-Copyright (C) 2021 Wazuh Inc.  (License GPLv2)
+Copyright (C) 2015, Wazuh Inc.  (License GPLv2)
 
 ## Web References
 

@@ -1,4 +1,4 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Main ossec server config
 class wazuh::manager (
 
@@ -13,6 +13,8 @@ class wazuh::manager (
 
       ## Global
 
+      $ossec_logall                     = $wazuh::params_manager::ossec_logall,
+      $ossec_logall_json                = $wazuh::params_manager::ossec_logall_json,
       $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
       $ossec_emailto                    = $wazuh::params_manager::ossec_emailto,
       $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
@@ -27,6 +29,7 @@ class wazuh::manager (
       $ossec_remote_port                = $wazuh::params_manager::ossec_remote_port,
       $ossec_remote_protocol            = $wazuh::params_manager::ossec_remote_protocol,
       $ossec_remote_local_ip            = $wazuh::params_manager::ossec_remote_local_ip,
+      $ossec_remote_allowed_ips         = $wazuh::params_manager::ossec_remote_allowed_ips,
       $ossec_remote_queue_size          = $wazuh::params_manager::ossec_remote_queue_size,
 
       # ossec.conf generation parameters
@@ -97,11 +100,11 @@ class wazuh::manager (
       # SCA
 
       ## Amazon
-      $sca_amazon_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
-      $sca_amazon_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
-      $sca_amazon_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
-      $sca_amazon_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
-      $sca_amazon_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
+      $sca_amazon_enabled = $wazuh::params_manager::sca_amazon_enabled,
+      $sca_amazon_scan_on_start = $wazuh::params_manager::sca_amazon_scan_on_start,
+      $sca_amazon_interval = $wazuh::params_manager::sca_amazon_interval,
+      $sca_amazon_skip_nfs = $wazuh::params_manager::sca_amazon_skip_nfs,
+      $sca_amazon_policies = $wazuh::params_manager::sca_amazon_policies,
 
       ## RHEL
       $sca_rhel_enabled = $wazuh::params_manager::sca_rhel_enabled,
@@ -158,7 +161,7 @@ class wazuh::manager (
       #vulnerability-detector
       $vulnerability_detector_enabled                            = $wazuh::params_manager::vulnerability_detector_enabled,
       $vulnerability_detector_interval                           = $wazuh::params_manager::vulnerability_detector_interval,
-      $vulnerability_detector_ignore_time                        = $wazuh::params_manager::vulnerability_detector_ignore_time,
+      $vulnerability_detector_min_full_scan_interval             = $wazuh::params_manager::vulnerability_detector_min_full_scan_interval,
       $vulnerability_detector_run_on_start                       = $wazuh::params_manager::vulnerability_detector_run_on_start,
 # lint:ignore:140chars
       $vulnerability_detector_provider_canonical                 = $wazuh::params_manager::vulnerability_detector_provider_canonical,
@@ -174,16 +177,36 @@ class wazuh::manager (
       $vulnerability_detector_provider_redhat                    = $wazuh::params_manager::vulnerability_detector_provider_redhat,
       $vulnerability_detector_provider_redhat_enabled            = $wazuh::params_manager::vulnerability_detector_provider_redhat_enabled,
       $vulnerability_detector_provider_redhat_os                 = $wazuh::params_manager::vulnerability_detector_provider_redhat_os,
-      $vulnerability_detector_provider_redhat_update_from_year   = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_from_year,
       $vulnerability_detector_provider_redhat_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_redhat_update_interval,
 
       $vulnerability_detector_provider_nvd                       = $wazuh::params_manager::vulnerability_detector_provider_nvd,
       $vulnerability_detector_provider_nvd_enabled               = $wazuh::params_manager::vulnerability_detector_provider_nvd_enabled,
       $vulnerability_detector_provider_nvd_os                    = $wazuh::params_manager::vulnerability_detector_provider_nvd_os,
-      $vulnerability_detector_provider_nvd_update_from_year      = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_from_year,
       $vulnerability_detector_provider_nvd_update_interval       = $wazuh::params_manager::vulnerability_detector_provider_nvd_update_interval,
       #lint:endignore
 
+      $vulnerability_detector_provider_arch                   = $wazuh::params_manager::vulnerability_detector_provider_arch,
+      $vulnerability_detector_provider_arch_enabled           = $wazuh::params_manager::vulnerability_detector_provider_arch_enabled,
+      $vulnerability_detector_provider_arch_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_arch_update_interval,
+
+      $vulnerability_detector_provider_alas                   = $wazuh::params_manager::vulnerability_detector_provider_alas,
+      $vulnerability_detector_provider_alas_enabled           = $wazuh::params_manager::vulnerability_detector_provider_alas_enabled,
+      $vulnerability_detector_provider_alas_os                = $wazuh::params_manager::vulnerability_detector_provider_alas_os,
+      $vulnerability_detector_provider_alas_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_alas_update_interval,
+
+      $vulnerability_detector_provider_suse                   = $wazuh::params_manager::vulnerability_detector_provider_suse,
+      $vulnerability_detector_provider_suse_enabled           = $wazuh::params_manager::vulnerability_detector_provider_suse_enabled,
+      $vulnerability_detector_provider_suse_os                = $wazuh::params_manager::vulnerability_detector_provider_suse_os,
+      $vulnerability_detector_provider_suse_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_suse_update_interval,
+
+      $vulnerability_detector_provider_msu                   = $wazuh::params_manager::vulnerability_detector_provider_msu,
+      $vulnerability_detector_provider_msu_enabled           = $wazuh::params_manager::vulnerability_detector_provider_msu_enabled,
+      $vulnerability_detector_provider_msu_update_interval   = $wazuh::params_manager::vulnerability_detector_provider_msu_update_interval,
+
+      $vulnerability_detector_provider_almalinux                    = $wazuh::params_manager::vulnerability_detector_provider_almalinux,
+      $vulnerability_detector_provider_almalinux_enabled            = $wazuh::params_manager::vulnerability_detector_provider_almalinux_enabled,
+      $vulnerability_detector_provider_almalinux_os                 = $wazuh::params_manager::vulnerability_detector_provider_almalinux_os,
+      $vulnerability_detector_provider_almalinux_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_almalinux_update_interval,
 
       # syslog
       $syslog_output                        = $wazuh::params_manager::syslog_output,
@@ -284,7 +307,7 @@ class wazuh::manager (
       $wazuh_api_https_use_ca                   = $wazuh::params_manager::wazuh_api_https_use_ca,
       $wazuh_api_https_ca                       = $wazuh::params_manager::wazuh_api_https_ca,
       $wazuh_api_logs_level                     = $wazuh::params_manager::wazuh_api_logs_level,
-      $wazuh_api_logs_path                      = $wazuh::params_manager::wazuh_api_logs_path,
+      $wazuh_api_logs_format                    = $wazuh::params_manager::wazuh_api_logs_format,
       $wazuh_api_ssl_ciphers                    = $wazuh::params_manager::wazuh_api_ssl_ciphers,
       $wazuh_api_ssl_protocol                   = $wazuh::params_manager::wazuh_api_ssl_protocol,
 
@@ -301,7 +324,6 @@ class wazuh::manager (
       $wazuh_api_access_max_login_attempts      = $::wazuh::params_manager::wazuh_api_access_max_login_attempts,
       $wazuh_api_access_block_time              = $::wazuh::params_manager::wazuh_api_access_block_time,
       $wazuh_api_access_max_request_per_minute  = $::wazuh::params_manager::wazuh_api_access_max_request_per_minute,
-      $wazuh_api_use_only_authd                 = $::wazuh::params_manager::wazuh_api_use_only_authd,
       $wazuh_api_drop_privileges                = $::wazuh::params_manager::wazuh_api_drop_privileges,
       $wazuh_api_experimental_features          = $::wazuh::params_manager::wazuh_api_experimental_features,
 
@@ -309,6 +331,7 @@ class wazuh::manager (
       $remote_commands_localfile_exceptions     = $::wazuh::params_manager::remote_commands_localfile_exceptions,
       $remote_commands_wodle                    = $::wazuh::params_manager::remote_commands_wodle,
       $remote_commands_wodle_exceptions         = $::wazuh::params_manager::remote_commands_wodle_exceptions,
+      $limits_eps                               = $::wazuh::params_manager::limits_eps,
 
       $wazuh_api_template                       = $::wazuh::params_manager::wazuh_api_template,
 
@@ -339,8 +362,17 @@ class wazuh::manager (
 
 
   if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
-    package { 'Installing Auditd...':
-      name   => 'auditd',
+    case $::operatingsystem {
+      'Debian', 'debian', 'Ubuntu', 'ubuntu': {
+        package { 'Installing Auditd...':
+          name => 'auditd',
+        }
+      }
+      default: {
+        package { 'Installing Audit...':
+          name => 'audit'
+        }
+      }
     }
     service { 'auditd':
       ensure => running,
@@ -413,7 +445,11 @@ class wazuh::manager (
   case $::operatingsystem{
     'RedHat', 'OracleLinux':{
       $apply_template_os = 'rhel'
-      if ( $::operatingsystemrelease     =~ /^7.*/ ){
+      if ( $::operatingsystemrelease =~ /^9.*/ ){
+        $rhel_version = '9'
+      }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
+        $rhel_version = '8'
+      }elsif ( $::operatingsystemrelease =~ /^7.*/ ){
         $rhel_version = '7'
       }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
         $rhel_version = '6'
@@ -621,7 +657,7 @@ class wazuh::manager (
       file { '/var/ossec/etc/sslmanager.key':
         content => $wazuh_manager_server_key,
         owner   => 'root',
-        group   => 'ossec',
+        group   => 'wazuh',
         mode    => '0640',
         require => Package[$wazuh::params_manager::server_package],
         notify  => Service[$wazuh::params_manager::server_service],
@@ -630,7 +666,7 @@ class wazuh::manager (
       file { '/var/ossec/etc/sslmanager.cert':
         content => $wazuh_manager_server_crt,
         owner   => 'root',
-        group   => 'ossec',
+        group   => 'wazuh',
         mode    => '0640',
         require => Package[$wazuh::params_manager::server_package],
         notify  => Service[$wazuh::params_manager::server_service],
@@ -674,7 +710,7 @@ class wazuh::manager (
 
   file { '/var/ossec/api/configuration/api.yaml':
     owner   => 'root',
-    group   => 'ossec',
+    group   => 'wazuh',
     mode    => '0640',
     content => template('wazuh/wazuh_api_yml.erb'),
     require => Package[$wazuh::params_manager::server_package],

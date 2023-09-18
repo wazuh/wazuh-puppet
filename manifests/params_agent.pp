@@ -1,9 +1,10 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.4.0-1'
+  $agent_package_version = '4.8.0'
+  $agent_package_revision = '1'
   $agent_service_ensure = 'running'
-  $agent_msi_download_location = 'http://packages.wazuh.com/4.x/windows'
+  $agent_msi_download_location = 'https://packages.wazuh.com/4.x/windows'
 
   $agent_name = undef
   $agent_group = undef
@@ -131,15 +132,6 @@ class wazuh::params_agent {
 
   # SCA
 
-  ## Windows
-  $sca_windows_enabled = undef
-  $sca_windows_scan_on_start = undef
-  $sca_windows_interval = undef
-  $sca_windows_skip_nfs = undef
-  $sca_windows_policies = []
-
-  $windows_audit_interval = undef
-
   ## Amazon
   $sca_amazon_enabled = 'yes'
   $sca_amazon_scan_on_start = 'yes'
@@ -153,6 +145,13 @@ class wazuh::params_agent {
   $sca_rhel_interval = '12h'
   $sca_rhel_skip_nfs = 'yes'
   $sca_rhel_policies = []
+
+  ## Windows
+  $sca_windows_enabled = 'yes'
+  $sca_windows_scan_on_start = 'yes'
+  $sca_windows_interval = '12h'
+  $sca_windows_skip_nfs = 'yes'
+  $sca_windows_policies = []
 
   ## <else>
   $sca_else_enabled = 'yes'
@@ -222,6 +221,7 @@ class wazuh::params_agent {
     '-f 1'
   ]
 
+  $windows_audit_interval = 300
 
   # active-response
   $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
@@ -241,26 +241,26 @@ class wazuh::params_agent {
 
       $config_mode = '0640'
       $config_owner = 'root'
-      $config_group = 'ossec'
+      $config_group = 'wazuh'
 
       $keys_file = '/var/ossec/etc/client.keys'
       $keys_mode = '0640'
       $keys_owner = 'root'
-      $keys_group = 'ossec'
+      $keys_group = 'wazuh'
 
       $validate_cmd_conf = '/var/ossec/bin/verify-agent-conf -f %'
 
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0640'
       $processlist_owner = 'root'
-      $processlist_group = 'ossec'
+      $processlist_group = 'wazuh'
 
       # ossec.conf blocks
 
       # Wodles
 
-      ## doker-listener
-      $wodle_doker_listener_disabled = 'yes'
+      ## docker-listener
+      $wodle_docker_listener_disabled = 'yes'
 
       ## cis-cat
       $wodle_ciscat_disabled = 'yes'
@@ -335,7 +335,7 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
+            /^(wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -426,6 +426,22 @@ class wazuh::params_agent {
                   }
                 }
               }
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'systemd'
+
+                $wodle_openscap_content = {
+                  'ssg-rhel-8-ds.xml'   => {
+                    'type'   => 'xccdf',
+                    profiles => [
+                      'xccdf_org.ssgproject.content_profile_pci-dss',
+                      'xccdf_org.ssgproject.content_profile_common',
+                    ]
+                  },
+                  'cve-redhat-8-ds.xml' => {
+                    'type' => 'xccdf',
+                  }
+                }
+              }
             }
             'Fedora': {
               if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
@@ -442,6 +458,35 @@ class wazuh::params_agent {
                 }
               }
             }
+            'AlmaLinux': {
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+              }
+            }
+            'Rocky': {
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+              }
+            }
+            default: { fail('This ossec module has not been tested on your distribution') }
+          }
+        }
+        'Suse': {
+          $service_has_status = true
+
+          $default_local_files = [
+            { 'location' => '/var/log/audit/audit.log', 'log_format' => 'audit' },
+            { 'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/messages', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/secure', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/maillog', 'log_format' => 'syslog' },
+          ]
+          case $::operatingsystem {
+            'SLES': {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
+                $ossec_service_provider = 'redhat'
+              }
+            }
             default: { fail('This ossec module has not been tested on your distribution') }
           }
         }
@@ -454,7 +499,6 @@ class wazuh::params_agent {
       $config_group = 'Administrators'
       $download_path = 'C:\\Temp'
       $config_mode = '0664'
-      $manage_firewall = false
 
       $keys_file = 'C:\\Program Files (x86)\\ossec-agent\\client.keys'
 
@@ -462,14 +506,6 @@ class wazuh::params_agent {
       $agent_service_name = 'WazuhSvc'
       $service_has_status = true
       $ossec_service_provider = undef
-
-      # sca
-      $sca_windows_enabled = 'yes'
-      $sca_windows_scan_on_start = 'yes'
-      $sca_windows_interval = '12h'
-      $sca_windows_skip_nfs = 'yes'
-      $sca_windows_policies = []
-
 
       # Wodles
 
@@ -529,7 +565,6 @@ and EventID != 5152 and EventID != 5157]'
           'log_format' => 'syslog'
         },
       ]
-      $windows_audit_interval = 300
     }
     default: { fail('This ossec module has not been tested on your distribution') }
   }

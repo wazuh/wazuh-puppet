@@ -1,11 +1,11 @@
-# Wazuh App Copyright (C) 2021 Wazuh Inc. (License GPLv2)
+# Copyright (C) 2015, Wazuh Inc.
 # Paramas file
 class wazuh::params_manager {
   case $::kernel {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.4.0-1'
+      $server_package_version                          = '4.8.0-1'
 
       $manage_repos                                    = true
       $manage_firewall                                 = false
@@ -13,6 +13,8 @@ class wazuh::params_manager {
     ### Ossec.conf blocks
 
       ## Global
+      $ossec_logall                                    = 'no'
+      $ossec_logall_json                               = 'no'
       $ossec_emailnotification                         = false
       $ossec_emailto                                   = ['recipient@example.wazuh.com']
       $ossec_smtp_server                               = 'smtp.example.wazuh.com'
@@ -27,6 +29,7 @@ class wazuh::params_manager {
       $ossec_remote_port                               = 1514
       $ossec_remote_protocol                           = 'tcp'
       $ossec_remote_local_ip                           = undef
+      $ossec_remote_allowed_ips                        = undef
       $ossec_remote_queue_size                         = 131072
 
     # ossec.conf generation parameters
@@ -160,38 +163,69 @@ class wazuh::params_manager {
 
       $vulnerability_detector_enabled                            = 'no'
       $vulnerability_detector_interval                           = '5m'
-      $vulnerability_detector_ignore_time                        = '6h'
+      $vulnerability_detector_min_full_scan_interval             = '6h'
       $vulnerability_detector_run_on_start                       = 'yes'
 
       $vulnerability_detector_provider_canonical                 = 'yes'
       $vulnerability_detector_provider_canonical_enabled         = 'no'
       $vulnerability_detector_provider_canonical_os              = ['trusty',
         'xenial',
-        'bionic'
+        'bionic',
+        'focal',
+        'jammy'
       ]
       $vulnerability_detector_provider_canonical_update_interval = '1h'
 
 
       $vulnerability_detector_provider_debian                 = 'yes'
       $vulnerability_detector_provider_debian_enabled         = 'no'
-      $vulnerability_detector_provider_debian_os              = ['wheezy',
-        'stretch',
-        'jessie',
-        'buster'
+      $vulnerability_detector_provider_debian_os              = ['buster',
+        'bullseye'
       ]
       $vulnerability_detector_provider_debian_update_interval = '1h'
       $vulnerability_detector_provider_redhat                    = 'yes'
       $vulnerability_detector_provider_redhat_enabled            = 'no'
-      $vulnerability_detector_provider_redhat_os                 = []
-      $vulnerability_detector_provider_redhat_update_from_year   = '2010'
+      $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8','9']
       $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
 
 
       $vulnerability_detector_provider_nvd                    = 'yes'
       $vulnerability_detector_provider_nvd_enabled            = 'no'
       $vulnerability_detector_provider_nvd_os                 = []
-      $vulnerability_detector_provider_nvd_update_from_year   = '2010'
       $vulnerability_detector_provider_nvd_update_interval    = '1h'
+
+      $vulnerability_detector_provider_arch                   = 'yes'
+      $vulnerability_detector_provider_arch_enabled           = 'no'
+      $vulnerability_detector_provider_arch_update_interval   = '1h'
+
+      $vulnerability_detector_provider_alas                   = 'yes'
+      $vulnerability_detector_provider_alas_enabled           = 'no'
+      $vulnerability_detector_provider_alas_os              = ['amazon-linux',
+      'amazon-linux-2'
+      ]
+      $vulnerability_detector_provider_alas_update_interval   = '1h'
+
+      $vulnerability_detector_provider_suse                   = 'yes'
+      $vulnerability_detector_provider_suse_enabled           = 'no'
+      $vulnerability_detector_provider_suse_os              = ['11-server',
+        '11-desktop',
+        '12-server',
+        '12-desktop',
+        '15-server',
+        '15-desktop'
+      ]
+      $vulnerability_detector_provider_suse_update_interval   = '1h'
+
+      $vulnerability_detector_provider_msu                   = 'yes'
+      $vulnerability_detector_provider_msu_enabled           = 'no'
+      $vulnerability_detector_provider_msu_update_interval   = '1h'
+
+      $vulnerability_detector_provider_almalinux                 = 'yes'
+      $vulnerability_detector_provider_almalinux_enabled         = 'no'
+      $vulnerability_detector_provider_almalinux_os              = ['8',
+        '9'
+      ]
+      $vulnerability_detector_provider_almalinux_update_interval = '1h'
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
@@ -313,12 +347,12 @@ class wazuh::params_manager {
 
       $config_mode = '0640'
       $config_owner = 'root'
-      $config_group = 'ossec'
+      $config_group = 'wazuh'
 
       $keys_file = '/var/ossec/etc/client.keys'
       $keys_mode = '0640'
       $keys_owner = 'root'
-      $keys_group = 'ossec'
+      $keys_group = 'wazuh'
 
 
       $authd_pass_file = '/var/ossec/etc/authd.pass'
@@ -328,7 +362,7 @@ class wazuh::params_manager {
       $processlist_file = '/var/ossec/bin/.process_list'
       $processlist_mode = '0640'
       $processlist_owner = 'root'
-      $processlist_group = 'ossec'
+      $processlist_group = 'wazuh'
 
       #API
 
@@ -339,17 +373,18 @@ class wazuh::params_manager {
 
       # Advanced configuration
       $wazuh_api_https_enabled = 'yes'
-      $wazuh_api_https_key = 'api/configuration/ssl/server.key'
-      $wazuh_api_https_cert = 'api/configuration/ssl/server.crt'
+      $wazuh_api_https_key = 'server.key'
+      $wazuh_api_https_cert = 'server.crt'
       $wazuh_api_https_use_ca = 'False'
-      $wazuh_api_https_ca = 'api/configuration/ssl/ca.crt'
+      $wazuh_api_https_ca = 'ca.crt'
       $wazuh_api_ssl_protocol = 'TLSv1.2'
       $wazuh_api_ssl_ciphers  = '""'
 
       # Logging configuration
       # Values for API log level: disabled, info, warning, error, debug, debug2 (each level includes the previous level).
       $wazuh_api_logs_level = 'info'
-      $wazuh_api_logs_path = 'logs/api.log'
+      # Values for API log format: 'plain', 'json', 'plain,json', 'json,plain'
+      $wazuh_api_logs_format = 'plain'
 
       # Cross-origin resource sharing: https://github.com/aio-libs/aiohttp-cors#usage
       $wazuh_api_cors_enabled = 'no'
@@ -367,9 +402,6 @@ class wazuh::params_manager {
       $wazuh_api_access_block_time = 300
       $wazuh_api_access_max_request_per_minute = 300
 
-      # Force the use of authd when adding and removing agents. Values: yes, no
-      $wazuh_api_use_only_authd = 'no'
-
       # Drop privileges (Run as ossec user)
       $wazuh_api_drop_privileges = 'yes'
 
@@ -381,9 +413,10 @@ class wazuh::params_manager {
       $remote_commands_localfile_exceptions = []
       $remote_commands_wodle = 'yes'
       $remote_commands_wodle_exceptions = []
+      $limits_eps = 'yes'
 
       # Wazuh API template path
-      $wazuh_api_template = 'wazuh/wazuh_api.erb'
+      $wazuh_api_template = 'wazuh/wazuh_api_yml.erb'
 
 
       case $facts['os']['family'] {
@@ -427,7 +460,7 @@ class wazuh::params_manager {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal)$/: {
+            /^(wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -525,6 +558,37 @@ class wazuh::params_manager {
                 }
               }
             }
+            'AlmaLinux': {
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
+              }
+            }
+            default: { fail('This ossec module has not been tested on your distribution') }
+          }
+        }
+        'Suse': {
+
+          $agent_service  = 'wazuh-agent'
+          $agent_package  = 'wazuh-agent'
+          $server_service = 'wazuh-manager'
+          $server_package = 'wazuh-manager'
+          $service_has_status  = true
+
+          $default_local_files =[
+              {  'location' => '/var/log/audit/audit.log' , 'log_format' => 'audit'},
+              {  'location' => '/var/ossec/logs/active-responses.log' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/messages', 'log_format' => 'syslog'},
+              {  'location' => '/var/log/secure' , 'log_format' => 'syslog'},
+              {  'location' => '/var/log/maillog' , 'log_format' => 'syslog'},
+          ]
+          case $::operatingsystem {
+            'SLES': {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
+              }
+            }
             default: { fail('This ossec module has not been tested on your distribution') }
           }
         }
@@ -545,7 +609,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.4.0'
+      $agent_package  = 'Wazuh Agent 4.8.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
