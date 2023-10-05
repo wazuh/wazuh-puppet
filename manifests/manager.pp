@@ -5,7 +5,7 @@ class wazuh::manager (
     # Installation
 
       $server_package_version           = $wazuh::params_manager::server_package_version,
-      $manage_repos                     = $::wazuh::params_manager::manage_repos,
+      Boolean $manage_repos                     = $::wazuh::params_manager::manage_repos,
       $manage_firewall                  = $wazuh::params_manager::manage_firewall,
 
 
@@ -15,10 +15,10 @@ class wazuh::manager (
 
       $ossec_logall                     = $wazuh::params_manager::ossec_logall,
       $ossec_logall_json                = $wazuh::params_manager::ossec_logall_json,
-      $ossec_emailnotification          = $wazuh::params_manager::ossec_emailnotification,
-      $ossec_emailto                    = $wazuh::params_manager::ossec_emailto,
-      $ossec_smtp_server                = $wazuh::params_manager::ossec_smtp_server,
-      $ossec_emailfrom                  = $wazuh::params_manager::ossec_emailfrom,
+      Boolean $ossec_emailnotification  = $wazuh::params_manager::ossec_emailnotification,
+      Optional[Array[String]] $ossec_emailto      = $wazuh::params_manager::ossec_emailto,
+      Optional[String] $ossec_smtp_server         = $wazuh::params_manager::ossec_smtp_server,
+      Optional[String] $ossec_emailfrom           = $wazuh::params_manager::ossec_emailfrom,
       $ossec_email_maxperhour           = $wazuh::params_manager::ossec_email_maxperhour,
       $ossec_email_log_source           = $wazuh::params_manager::ossec_email_log_source,
       $ossec_email_idsname              = $wazuh::params_manager::ossec_email_idsname,
@@ -209,7 +209,7 @@ class wazuh::manager (
       $vulnerability_detector_provider_almalinux_update_interval    = $wazuh::params_manager::vulnerability_detector_provider_almalinux_update_interval,
 
       # syslog
-      $syslog_output                        = $wazuh::params_manager::syslog_output,
+      Boolean $syslog_output                        = $wazuh::params_manager::syslog_output,
       $syslog_output_level                  = $wazuh::params_manager::syslog_output_level,
       $syslog_output_port                   = $wazuh::params_manager::syslog_output_port,
       $syslog_output_server                 = $wazuh::params_manager::syslog_output_server,
@@ -281,14 +281,14 @@ class wazuh::manager (
       $ar_repeated_offenders                = $wazuh::params_manager::ar_repeated_offenders,
 
       $local_decoder_template               = $wazuh::params_manager::local_decoder_template,
-      $decoder_exclude                      = $wazuh::params_manager::decoder_exclude,
+      Array $decoder_exclude                = $wazuh::params_manager::decoder_exclude,
       $local_rules_template                 = $wazuh::params_manager::local_rules_template,
-      $rule_exclude                         = $wazuh::params_manager::rule_exclude,
+      Array $rule_exclude                   = $wazuh::params_manager::rule_exclude,
       $shared_agent_template                = $wazuh::params_manager::shared_agent_template,
 
-      $wazuh_manager_verify_manager_ssl     = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
-      $wazuh_manager_server_crt             = $wazuh::params_manager::wazuh_manager_server_crt,
-      $wazuh_manager_server_key             = $wazuh::params_manager::wazuh_manager_server_key,
+      Boolean $wazuh_manager_verify_manager_ssl = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
+      String $wazuh_manager_server_crt          = $wazuh::params_manager::wazuh_manager_server_crt,
+      String $wazuh_manager_server_key          = $wazuh::params_manager::wazuh_manager_server_key,
 
       $ossec_local_files                    = $::wazuh::params_manager::default_local_files,
 
@@ -339,12 +339,6 @@ class wazuh::manager (
 
 
 ) inherits wazuh::params_manager {
-  validate_legacy(
-    Boolean, 'validate_bool', $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
-  )
-  validate_legacy(
-    Array, 'validate_array', $decoder_exclude, $rule_exclude
-  )
 
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
 
@@ -382,14 +376,10 @@ class wazuh::manager (
 
   # This allows arrays of integers, sadly
   # (commented due to stdlib version requirement)
-  validate_legacy(Boolean, 'validate_bool', $ossec_emailnotification)
   if ($ossec_emailnotification) {
     if $ossec_smtp_server == undef {
       fail('$ossec_emailnotification is enabled but $smtp_server was not set')
     }
-    validate_legacy(String, 'validate_string', $ossec_smtp_server)
-    validate_legacy(String, 'validate_string', $ossec_emailfrom)
-    validate_legacy(Array, 'validate_array', $ossec_emailto)
   }
 
   if $facts['os']['family'] == 'windows' {
@@ -650,9 +640,6 @@ class wazuh::manager (
   if $wazuh_manager_verify_manager_ssl {
 
     if ($wazuh_manager_server_crt != undef) and ($wazuh_manager_server_key != undef) {
-      validate_legacy(
-        String, 'validate_string', $wazuh_manager_server_crt, $wazuh_manager_server_key
-      )
 
       file { '/var/ossec/etc/sslmanager.key':
         content => $wazuh_manager_server_key,
