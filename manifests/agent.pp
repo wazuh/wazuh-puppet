@@ -19,15 +19,15 @@ class wazuh::agent (
   # Authd registration options
   $manage_client_keys                = $wazuh::params_agent::manage_client_keys,
   String $agent_name                        = $wazuh::params_agent::agent_name,
-  String $agent_group                       = $wazuh::params_agent::agent_group,
+  Optional[String] $agent_group                       = $wazuh::params_agent::agent_group,
   $agent_address                     = $wazuh::params_agent::agent_address,
-  String $wazuh_agent_cert                  = $wazuh::params_agent::wazuh_agent_cert,
-  String $wazuh_agent_key                   = $wazuh::params_agent::wazuh_agent_key,
-  String $wazuh_agent_cert_path             = $wazuh::params_agent::wazuh_agent_cert_path,
-  String $wazuh_agent_key_path              = $wazuh::params_agent::wazuh_agent_key_path,
+  Optional[String] $wazuh_agent_cert                  = $wazuh::params_agent::wazuh_agent_cert,
+  Optional[String] $wazuh_agent_key                   = $wazuh::params_agent::wazuh_agent_key,
+  Optional[String] $wazuh_agent_cert_path             = $wazuh::params_agent::wazuh_agent_cert_path,
+  Optional[String] $wazuh_agent_key_path              = $wazuh::params_agent::wazuh_agent_key_path,
   $agent_auth_password               = $wazuh::params_agent::agent_auth_password,
-  String $wazuh_manager_root_ca_pem         = $wazuh::params_agent::wazuh_manager_root_ca_pem,
-  String $wazuh_manager_root_ca_pem_path    = $wazuh::params_agent::wazuh_manager_root_ca_pem_path,
+  Optional[String] $wazuh_manager_root_ca_pem         = $wazuh::params_agent::wazuh_manager_root_ca_pem,
+  Optional[String] $wazuh_manager_root_ca_pem_path    = $wazuh::params_agent::wazuh_manager_root_ca_pem_path,
 
   ## ossec.conf generation parameters
   # Generation variables
