@@ -633,7 +633,7 @@ class wazuh::agent (
     firewall { '1514 wazuh-agent':
       dport  => $ossec_port,
       proto  => $ossec_protocol,
-      action => 'accept',
+      jump => 'accept',
       state  => [
         'NEW',
         'RELATED',

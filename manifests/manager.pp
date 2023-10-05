@@ -667,7 +667,7 @@ class wazuh::manager (
     firewall { '1514 wazuh-manager':
       dport  => $ossec_remote_port,
       proto  => $ossec_remote_protocol,
-      action => 'accept',
+      jump => 'accept',
       state  => [
         'NEW',
         'RELATED',
@@ -679,7 +679,7 @@ class wazuh::manager (
     firewall { '1516 wazuh-manager':
       dport  => $ossec_cluster_port,
       proto  => $ossec_remote_protocol,
-      action => 'accept',
+      jump => 'accept',
       state  => [
         'NEW',
         'RELATED',
