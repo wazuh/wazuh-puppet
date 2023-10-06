@@ -27,6 +27,9 @@ class wazuh::indexer (
 
   # JVM options
   $jvm_options_memory = '1g',
+
+  # Parameters used for OpenID login
+  $openid_connect_url   = undef,
 ) {
   if $manage_repos {
     include wazuh::repo
@@ -83,6 +86,12 @@ class wazuh::indexer (
     owner   => $indexer_fileuser,
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
+  }
+
+  file {
+    '/etc/wazuh-indexer/opensearch-security/config.yml':
+      content => template('wazuh/opensearch_security_config.yml.erb'),
+      notify  => Service['wazuh-indexer'],
   }
 
   file_line { 'Insert line initial size of total heap space':
