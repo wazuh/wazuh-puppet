@@ -577,8 +577,9 @@ class wazuh::agent (
           ${agent_auth_option_manager}  ${agent_auth_option_agent} ${agent_auth_option_password} ${agent_auth_option_address}"
 
         exec { 'agent-auth-linux':
+          path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
           command => $agent_auth_command,
-          unless  => "/bin/egrep -q '.' ${::wazuh::params_agent::keys_file}",
+          unless  => "egrep -q '.' ${::wazuh::params_agent::keys_file}",
           require => Concat['agent_ossec.conf'],
           before  => Service[$agent_service_name],
           notify  => Service[$agent_service_name],
