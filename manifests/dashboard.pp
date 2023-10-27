@@ -3,7 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '4.3.11',
+  $dashboard_version = '4.9.0',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
@@ -13,17 +13,6 @@ class wazuh::dashboard (
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
-
-  # Parameters used for OpenID login
-  $enable_openid_login = undef,
-  $opensearch_ssl_verificationMode = undef,
-  $opensearch_security_auth_type = undef,
-  $opensearch_security_openid_connect_url = undef,
-  $opensearch_security_openid_client_id = undef,
-  $opensearch_security_openid_client_secret = undef,
-  $opensearch_security_openid_base_redirect_url = undef,
-  $opensearch_security_openid_verify_hostnames = undef,
-
 
   # If the keystore is used, the credentials are not managed by the module (TODO).
   # If use_keystore is false, the keystore is deleted, the dashboard use the credentials in the configuration file.
@@ -46,7 +35,7 @@ class wazuh::dashboard (
   if $manage_repos {
     include wazuh::repo
 
-    if $::osfamily == 'Debian' {
+    if $facts['os']['family'] == 'Debian' {
       Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-dashboard']
     } else {
       Class['wazuh::repo'] -> Package['wazuh-dashboard']
@@ -124,7 +113,7 @@ class wazuh::dashboard (
   }
 
   unless $use_keystore {
-    file { '/usr/share/wazuh-dashboard/config/opensearch_dashboards.keystore':
+    file { '/etc/wazuh-dashboard/opensearch_dashboards.keystore':
       ensure  => absent,
       require => Package['wazuh-dashboard'],
       before  => Service['wazuh-dashboard'],

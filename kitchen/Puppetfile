@@ -24,3 +24,6 @@ mod "wazuh/wazuh"
 
 # A module from Github pre-packaged tarball
 # mod 'puppetlabs-apache', '0.6.0', :github_tarball => 'puppetlabs/puppetlabs-apache'
+
+# A module for configure zypper repo
+# mod 'puppet-zypprepo', '4.0.1'

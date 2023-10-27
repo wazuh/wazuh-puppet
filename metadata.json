@@ -1,6 +1,6 @@
 {
   "name": "wazuh-wazuh",
-  "version": "4.3.11",
+  "version": "4.9.0",
   "author": "WAZUH",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
@@ -35,6 +35,10 @@
     {
       "name": "puppetlabs/powershell",
       "version_requirement": ">= 2.0.0 < 5.0.0"
+    },
+    {
+      "name": "puppet/zypprepo",
+      "version_requirement": "= 4.0.1"
     },
     {
       "name": "puppet/archive",
@@ -111,7 +115,7 @@
   "tags": [
     "ossec",
     "hids",
-    "4.3",
+    "4.8",
     "wazuh"
   ],
   "pdk-version": "1.14.1",
