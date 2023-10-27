@@ -8,7 +8,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.8.0-1',
+  $indexer_version = '4.9.0-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -145,7 +145,7 @@ class wazuh::indexer (
   }
 
   exec { 'Initialize the Opensearch security index in Wazuh indexer':
-    path    => ['/usr/bin', '/bin', '/usr/sbin'],
+    path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
     command => "/usr/share/wazuh-indexer/bin/indexer-security-init.sh && touch ${indexer_security_init_lockfile}",
     creates => $indexer_security_init_lockfile,
     require => Service['wazuh-indexer'],

@@ -11,8 +11,8 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elastic_user = 'admin',
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
-  $wazuh_app_version = '4.8.0_7.10.2',
-  $wazuh_extensions_version = 'v4.8.0',
+  $wazuh_app_version = '4.9.0_7.10.2',
+  $wazuh_extensions_version = 'v4.9.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.2.tar.gz',
 
   $filebeat_fileuser = 'root',
@@ -46,10 +46,12 @@ class wazuh::filebeat_oss (
   #  Needed since GitHub can only ETAG and result in changes of the mtime everytime.
   # TODO: Include file into the wazuh/wazuh-puppet project or use file { checksum => '..' } for this instead of the exec construct.
   exec { 'cleanup /etc/filebeat/wazuh-template.json':
-    command => '/bin/rm -f /etc/filebeat/wazuh-template.json',
-    onlyif  => '/bin/test -f /etc/filebeat/wazuh-template.json',
-    unless  => "/bin/curl -s 'https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json' | /bin/cmp -s '/etc/filebeat/wazuh-template.json'",
+    path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
+    command => 'rm -f /etc/filebeat/wazuh-template.json',
+    onlyif  => 'test -f /etc/filebeat/wazuh-template.json',
+    unless  => "curl -s 'https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json' | cmp -s '/etc/filebeat/wazuh-template.json'",
   }
+
   -> file { '/etc/filebeat/wazuh-template.json':
     owner   => 'root',
     group   => 'root',
