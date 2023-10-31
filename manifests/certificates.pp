@@ -1,8 +1,8 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh repository installation
 class wazuh::certificates (
-  $wazuh_repository = 'packages.wazuh.com',
-  $wazuh_version = '4.8',
+  $wazuh_repository = 'packages-dev.wazuh.com',
+  $wazuh_version = '4.6',
   $indexer_certs = [],
   $manager_certs = [],
   $manager_master_certs = [],

@@ -12,7 +12,7 @@ class wazuh::repo (
       # apt-key added by issue #34
       apt::key { 'wazuh':
         id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
-        source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH',
+        source => 'https://packages-dev.wazuh.com/key/GPG-KEY-WAZUH',
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
@@ -39,10 +39,10 @@ class wazuh::repo (
 
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
               $baseurl  = 'https://packages-dev.wazuh.com/pre-release/yum/5/'
-              $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH'
+              $gpgkey   = 'http://packages-dev.wazuh.com/key/GPG-KEY-WAZUH'
             } else {
               $baseurl  = 'https://packages-dev.wazuh.com/pre-release/yum/'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
+              $gpgkey   = 'https://packages-dev.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }
           default: { fail('This ossec module has not been tested on your distribution.') }
