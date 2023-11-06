@@ -6,6 +6,9 @@
   <% if @ossec_ruleset_decoder_dir -%>
   <decoder_dir><%= @ossec_ruleset_decoder_dir %></decoder_dir>
   <%- end -%>
+  <% @ossec_ruleset_decoder_exclude.each do |decoder_element| -%>
+  <decoder_exclude><%= decoder_element %></decoder_exclude>
+  <%- end -%>
   <% if @ossec_ruleset_rule_dir -%>
   <rule_dir><%= @ossec_ruleset_rule_dir %></rule_dir>
   <%- end -%>

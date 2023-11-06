@@ -295,6 +295,7 @@ class wazuh::params_manager {
       $ossec_syscheck_skip_nfs                         = 'yes'
 
       $ossec_ruleset_decoder_dir = 'ruleset/decoders'
+      $ossec_ruleset_decoder_exclude = []
       $ossec_ruleset_rule_dir = 'ruleset/rules'
       $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
       $ossec_ruleset_list = [ 'etc/lists/audit-keys',
