@@ -1,0 +1,20 @@
+
+<database_output>
+  <% if @ossec_database_output_hostname != '' -%>
+  <hostname>192.168.1.122</hostname>
+  <% end %>
+  <% if @ossec_database_output_username != '' -%>
+  <username>MySQLadmin</username>
+  <% end %>
+  <% if @ossec_database_output_password != '' -%>
+  <password>secret1234</password>
+  <% end %>
+  <% if @ossec_database_output_databse != '' -%>
+  <database>Alerts_DB</database>
+  <% end %>
+  <% if @ossec_database_output_type != '' -%>
+  <type>mysql</type>
+  <% end %>
+</database_output>
+
+

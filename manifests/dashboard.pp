@@ -27,6 +27,7 @@ class wazuh::dashboard (
       'port'     => '55000',
       'user'     => 'wazuh-wui',
       'password' => 'wazuh-wui',
+      'run_as'   => 'false',
     },
   ],
 
@@ -45,7 +46,7 @@ class wazuh::dashboard (
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
-      $dashboard_version_install = "${dashboard_version}-*"
+      $dashboard_version_install = "${dashboard_version}"
     }
     'Linux', 'RedHat', default: {
       $dashboard_version_install = $dashboard_version
