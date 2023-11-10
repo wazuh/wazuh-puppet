@@ -12,7 +12,7 @@ class wazuh::repo (
       # apt-key added by issue #34
       apt::key { 'wazuh':
         id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
-        source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH',
+        source => 'https://packages-dev.wazuh.com/key/GPG-KEY-WAZUH',
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
@@ -21,7 +21,7 @@ class wazuh::repo (
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/4.x/apt',
+            location => 'https://packages-dev.wazuh.com/staging/apt',
             release  => 'unstable',
             repos    => 'main',
             include  => {
@@ -38,11 +38,11 @@ class wazuh::repo (
           /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky|SLES)$/: {
 
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
-              $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH'
+              $baseurl  = 'https://packages-dev.wazuh.com/staging/yum/5/'
+              $gpgkey   = 'http://packages-dev.wazuh.com/key/GPG-KEY-WAZUH'
             } else {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
+              $baseurl  = 'https://packages-dev.wazuh.com/staging/yum/'
+              $gpgkey   = 'https://packages-dev.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }
           default: { fail('This ossec module has not been tested on your distribution.') }
