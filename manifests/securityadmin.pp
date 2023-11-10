@@ -9,4 +9,10 @@ class wazuh::securityadmin (
     creates => $indexer_security_init_lockfile,
     require => Service['wazuh-indexer'],
   }
+
+  exec { 'Create ISM rollover policy in Wazuh indexer':
+    path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
+    command => "/usr/share/wazuh-indexer/bin/indexer-ism-init.sh -i ${indexer_server_ip}"
+    require => Service['wazuh-indexer'],
+  }
 }
