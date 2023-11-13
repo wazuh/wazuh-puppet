@@ -1,18 +1,12 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh repository installation
 class wazuh::securityadmin (
-  $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
+  $indexer_init_lockfile = '/var/tmp/indexer-init.lock',
 ) {
-  exec { 'Initialize the Opensearch security index in Wazuh indexer':
+  exec { 'Initialize the Opensearch security index and ISM Polciy in Wazuh indexer':
     path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
-    command => "/usr/share/wazuh-indexer/bin/indexer-security-init.sh && touch ${indexer_security_init_lockfile}",
-    creates => $indexer_security_init_lockfile,
-    require => Service['wazuh-indexer'],
-  }
-
-  exec { 'Create ISM rollover policy in Wazuh indexer':
-    path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
-    command => "/usr/share/wazuh-indexer/bin/indexer-ism-init.sh -i ${indexer_server_ip}"
+    command => "/usr/share/wazuh-indexer/bin/indexer-init.sh && touch ${indexer_init_lockfile}",
+    creates => $indexer_init_lockfile,
     require => Service['wazuh-indexer'],
   }
 }
