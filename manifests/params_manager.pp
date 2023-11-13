@@ -5,7 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.8.0-40800'
+      $server_package_version                          = '4.8.0-1'
 
       $manage_firewall                                 = false
 
