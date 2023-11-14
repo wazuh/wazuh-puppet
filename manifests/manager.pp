@@ -5,7 +5,6 @@ class wazuh::manager (
     # Installation
 
       $server_package_version           = $wazuh::params_manager::server_package_version,
-      $manage_repos                     = $::wazuh::params_manager::manage_repos,
       $manage_firewall                  = $wazuh::params_manager::manage_firewall,
 
 
@@ -340,7 +339,7 @@ class wazuh::manager (
 
 ) inherits wazuh::params_manager {
   validate_legacy(
-    Boolean, 'validate_bool', $manage_repos, $syslog_output,$wazuh_manager_verify_manager_ssl
+    Boolean, 'validate_bool', $syslog_output,$wazuh_manager_verify_manager_ssl
   )
   validate_legacy(
     Array, 'validate_array', $decoder_exclude, $rule_exclude
@@ -396,17 +395,6 @@ class wazuh::manager (
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
   }
 
-  # Install wazuh-repository
-
-  if $manage_repos {
-    # TODO: Allow filtering of EPEL requirement
-    class { 'wazuh::repo':}
-    if $::osfamily == 'Debian' {
-      Class['wazuh::repo'] -> Class['apt::update'] -> Package[$wazuh::params_manager::server_package]
-    } else {
-      Class['wazuh::repo'] -> Package[$wazuh::params_manager::server_package]
-    }
-  }
   # Install and configure Wazuh-manager package
 
   package { $wazuh::params_manager::server_package:

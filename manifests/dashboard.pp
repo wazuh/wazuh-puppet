@@ -6,6 +6,7 @@ class wazuh::dashboard (
   $dashboard_version = '4.9.0',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
+  $manager_api_host = 'localhost',
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
   $dashboard_fileuser = 'wazuh-dashboard',
   $dashboard_filegroup = 'wazuh-dashboard',
@@ -23,24 +24,14 @@ class wazuh::dashboard (
   $dashboard_wazuh_api_credentials = [
     {
       'id'       => 'default',
-      'url'      => 'https://localhost',
+      'url'      => "https://${manager_api_host}",
       'port'     => '55000',
       'user'     => 'wazuh-wui',
       'password' => 'wazuh-wui',
     },
   ],
 
-  $manage_repos = false, # Change to true when manager is not present.
 ) {
-  if $manage_repos {
-    include wazuh::repo
-
-    if $::osfamily == 'Debian' {
-      Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-dashboard']
-    } else {
-      Class['wazuh::repo'] -> Package['wazuh-dashboard']
-    }
-  }
 
   # assign version according to the package manager
   case $facts['os']['family'] {
@@ -57,8 +48,6 @@ class wazuh::dashboard (
     ensure => $dashboard_version_install,
     name   => $dashboard_package,
   }
-
-  require wazuh::certificates
 
   exec { "ensure full path of ${dashboard_path_certs}":
     path    => '/usr/bin:/bin',
@@ -83,8 +72,9 @@ class wazuh::dashboard (
       owner   => $dashboard_fileuser,
       group   => $dashboard_filegroup,
       mode    => '0400',
-      replace => false,  # only copy content when file not exist
-      source  => "/tmp/wazuh-certificates/${certfile}",
+      replace => true,
+      recurse => remote,
+      source  => "puppet:///modules/archive/${certfile}",
     }
   }
 
