@@ -13,7 +13,7 @@ class wazuh::filebeat_oss (
   $filebeat_oss_version = '7.10.2',
   $wazuh_app_version = '4.7.1_7.10.2',
   $wazuh_extensions_version = 'v4.7.1',
-  $wazuh_filebeat_module = 'wazuh-filebeat-0.2.tar.gz',
+  $wazuh_filebeat_module = 'wazuh-filebeat-0.3.tar.gz',
 
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
