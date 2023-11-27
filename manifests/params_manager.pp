@@ -200,7 +200,7 @@ class wazuh::params_manager {
       $vulnerability_detector_provider_alas                   = 'yes'
       $vulnerability_detector_provider_alas_enabled           = 'no'
       $vulnerability_detector_provider_alas_os              = ['amazon-linux',
-        'amazon-linux-2', 
+        'amazon-linux-2',
         'amazon-linux-2023'
       ]
       $vulnerability_detector_provider_alas_update_interval   = '1h'
