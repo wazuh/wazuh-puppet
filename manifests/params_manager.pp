@@ -166,14 +166,14 @@ class wazuh::params_manager {
       $vulnerability_detection_index_status            = 'yes'
       $vulnerability_detection_feed_update_interval    = '60m'
 
-      $vulnerability_indexer_enabled                   = 'yes',
-      $vulnerability_indexer_hosts_host                = '0.0.0.0',
+      $vulnerability_indexer_enabled                   = 'yes'
+      $vulnerability_indexer_hosts_host                = ["0.0.0.0"]
       $vulnerability_indexer_hosts_port                = '9200',
-      $vulnerability_indexer_username                  = 'admin',
-      $vulnerability_indexer_password                  = 'admin',
-      $vulnerability_indexer_ssl_ca                    = '/etc/filebeat/certs/root-ca.pem',
-      $vulnerability_indexer_ssl_certificate           = '/etc/filebeat/certs/filebeat.pem',
-      $vulnerability_indexer_ssl_key                   = '/etc/filebeat/certs/filebeat-key.pem',
+      $vulnerability_indexer_username                  = 'admin'
+      $vulnerability_indexer_password                  = 'admin'
+      $vulnerability_indexer_ssl_ca                    = '/etc/filebeat/certs/root-ca.pem'
+      $vulnerability_indexer_ssl_certificate           = '/etc/filebeat/certs/filebeat.pem'
+      $vulnerability_indexer_ssl_key                   = '/etc/filebeat/certs/filebeat-key.pem'
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
