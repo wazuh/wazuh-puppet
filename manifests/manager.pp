@@ -166,13 +166,11 @@ class wazuh::manager (
 
       #vulnerability-indexer
       $vulnerability_indexer_enabled            = $wazuh::params_manager::vulnerability_indexer_enabled,
-      $vulnerability_indexer_hosts              = $wazuh::params_manager::vulnerability_indexer_hosts,
       $vulnerability_indexer_hosts_host         = $wazuh::params_manager::vulnerability_indexer_hosts_host,
+      $vulnerability_indexer_hosts_port         = $wazuh::params_manager::vulnerability_indexer_hosts_port,
       $vulnerability_indexer_username           = $wazuh::params_manager::vulnerability_indexer_username,
       $vulnerability_indexer_password           = $wazuh::params_manager::vulnerability_indexer_password,
-      $vulnerability_indexer_ssl                = $wazuh::params_manager::vulnerability_indexer_ssl,
       $vulnerability_indexer_ssl_ca             = $wazuh::params_manager::vulnerability_indexer_ssl_ca,
-      $vulnerability_indexer_ssl_ca_ca          = $wazuh::params_manager::vulnerability_indexer_ssl_ca_ca,
       $vulnerability_indexer_ssl_certificate    = $wazuh::params_manager::vulnerability_indexer_ssl_certificate,
       $vulnerability_indexer_ssl_key            = $wazuh::params_manager::vulnerability_indexer_ssl_key,
 
