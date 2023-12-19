@@ -14,6 +14,7 @@ class wazuh::filebeat_oss (
   $wazuh_app_version = '4.8.0_7.10.2',
   $wazuh_extensions_version = 'v4.8.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.3.tar.gz',
+  $wazuh_node_name = 'master'
 
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
@@ -86,8 +87,8 @@ class wazuh::filebeat_oss (
   }
 
   $_certfiles = {
-    'manager-master.pem'     => 'filebeat.pem',
-    'manager-master-key.pem' => 'filebeat-key.pem',
+    'manager-${wazuh_node_name}.pem'     => 'filebeat.pem',
+    'manager-${wazuh_node_name}-key.pem' => 'filebeat-key.pem',
     'root-ca.pem'    => 'root-ca.pem',
   }
   $_certfiles.each |String $certfile_source, String $certfile_target| {
