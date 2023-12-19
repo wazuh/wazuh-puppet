@@ -167,8 +167,9 @@ class wazuh::params_manager {
       $vulnerability_detection_feed_update_interval    = '60m'
 
       $vulnerability_indexer_enabled                   = 'yes'
-      $vulnerability_indexer_hosts_host                = ["0.0.0.0"]
-      $vulnerability_indexer_hosts_port                = '9200',
+      $vulnerability_indexer_hosts                     = true
+      $vulnerability_indexer_hosts_host                = ['127.0.0.1']
+      $vulnerability_indexer_hosts_port                = '9200'
       $vulnerability_indexer_username                  = 'admin'
       $vulnerability_indexer_password                  = 'admin'
       $vulnerability_indexer_ssl_ca                    = '/etc/filebeat/certs/root-ca.pem'
