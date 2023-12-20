@@ -1,11 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## Wazuh Puppet v4.8.0
+## Wazuh Puppet v4.7.0
 
 ### Added
 
-- Support to 4.8.0 Wazuh release.
+- Support to 4.7.0 Wazuh release.
 
 ## Wazuh Puppet v4.7.1
 
