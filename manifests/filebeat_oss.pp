@@ -87,8 +87,8 @@ class wazuh::filebeat_oss (
   }
 
   $_certfiles = {
-    'manager-${wazuh_node_name}.pem'     => 'filebeat.pem',
-    'manager-${wazuh_node_name}-key.pem' => 'filebeat-key.pem',
+    "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
+    "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
     'root-ca.pem'    => 'root-ca.pem',
   }
   $_certfiles.each |String $certfile_source, String $certfile_target| {
