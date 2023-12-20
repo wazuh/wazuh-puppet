@@ -22,7 +22,7 @@ class wazuh::repo (
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
             location => 'https://packages.wazuh.com/4.x/apt',
-            release  => 'unstable',
+            release  => 'stable',
             repos    => 'main',
             include  => {
               'src' => false,
