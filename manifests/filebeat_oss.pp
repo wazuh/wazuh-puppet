@@ -14,6 +14,7 @@ class wazuh::filebeat_oss (
   $wazuh_app_version = '4.8.0_7.10.2',
   $wazuh_extensions_version = 'v4.8.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
+  $wazuh_node_name = 'master',
 
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
