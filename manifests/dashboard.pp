@@ -36,7 +36,7 @@ class wazuh::dashboard (
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
-      $dashboard_version_install = "${dashboard_version}-*"
+      $dashboard_version_install = "${dashboard_version}-1"
     }
     'Linux', 'RedHat', default: {
       $dashboard_version_install = $dashboard_version
