@@ -1,29 +1,29 @@
   <integration>
-    <name><%= @name %></name>
-    <% if @hook_url != '' -%>
-      <hook_url><%= @hook_url %></hook_url>
+    <name><%= @ossec_integration_name %></name>
+    <% if @ossec_integration_hook_url != '' -%>
+    <hook_url><%= @ossec_integration_hook_url %></hook_url>
     <% end %>
-    <% if @api_key != '' -%>
-      <api_key><%= @api_key %></api_key>
+    <% if @ossec_integration_api_key != '' -%>
+    <api_key><%= @ossec_integration_api_key %></api_key>
     <% end %>
-    <% if @in_rule_id != '' -%>
-      <rule_id><%= @in_rule_id %></rule_id>
+    <% if @ossec_integration_rule_id != '' -%>
+    <rule_id><%= @ossec_integration_rule_id %></rule_id>
     <% end %>
-    <% if @in_level != '' -%>
-      <level><%= @in_level %></level>
+    <% if @ossec_integration_level != '' -%>
+    <level><%= @ossec_integration_level %></level>
     <% end %>
-    <% if @in_group != '' -%>
-      <group><%= @in_group %></group>
-    <% end %>  
-    <% if @in_location != '' -%>
-      <event_location><%= @in_location %></event_location>
+    <% if @ossec_integration_group != '' -%>
+    <group><%= @ossec_integration_group %></group>
     <% end %>
-    <% if @in_format != '' -%>
-    <alert_format><%= @in_format %></alert_format>
+    <% if @ossec_integration_event_location != '' -%>
+    <event_location><%= @ossec_integration_event_location %></event_location>
     <% end %>
-    <% if @in_max_log != '' -%>
-      <max_log><%= @in_max_log %></max_log>
+    <% if @ossec_integration_alert_format != '' -%>
+    <alert_format><%= @ossec_integration_alert_format %></alert_format>
+    <% end %>
+    <% if @ossec_integration_max_log != '' -%>
+    <max_log><%= @ossec_integration_max_log %></max_log>
     <% end %>
   </integration>
 
-  
+
