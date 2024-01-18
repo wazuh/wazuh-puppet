@@ -584,6 +584,7 @@ class wazuh::agent (
           ensure    => $agent_service_ensure,
           enable    => true,
           hasstatus => $wazuh::params_agent::service_has_status,
+          status    => "/usr/sbin/service ${agent_service_name} status",
           pattern   => $wazuh::params_agent::agent_service_name,
           provider  => $wazuh::params_agent::ossec_service_provider,
           require   => Package[$agent_package_name],
