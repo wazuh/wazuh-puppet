@@ -1,29 +1,29 @@
-  <integration>
-    <name><%= @ossec_integration_name %></name>
-    <% if @ossec_integration_hook_url != '' -%>
-    <hook_url><%= @ossec_integration_hook_url %></hook_url>
-    <% end %>
-    <% if @ossec_integration_api_key != '' -%>
-    <api_key><%= @ossec_integration_api_key %></api_key>
-    <% end %>
-    <% if @ossec_integration_rule_id != '' -%>
-    <rule_id><%= @ossec_integration_rule_id %></rule_id>
-    <% end %>
-    <% if @ossec_integration_level != '' -%>
-    <level><%= @ossec_integration_level %></level>
-    <% end %>
-    <% if @ossec_integration_group != '' -%>
-    <group><%= @ossec_integration_group %></group>
-    <% end %>
-    <% if @ossec_integration_event_location != '' -%>
-    <event_location><%= @ossec_integration_event_location %></event_location>
-    <% end %>
-    <% if @ossec_integration_alert_format != '' -%>
-    <alert_format><%= @ossec_integration_alert_format %></alert_format>
-    <% end %>
-    <% if @ossec_integration_max_log != '' -%>
-    <max_log><%= @ossec_integration_max_log %></max_log>
-    <% end %>
-  </integration>
+<integration>
+    <name><%= $servicename %></name>
+    <%- unless $hook_url =~ Undef { -%>
+    <hook_url><%= $hook_url %></hook_url>
+    <%- } -%>
+    <%- unless $api_key =~ Undef { -%>
+    <api_key><%= $api_key %></api_key>
+    <%- } -%>
+    <%- unless $rule_id =~ Undef { -%>
+    <rule_id><%= $rule_id %></rule_id>
+    <%- } -%>
+    <%- unless $level =~ Undef { -%>
+    <level><%= $level %></level>
+    <%- } -%>
+    <%- unless $group =~ Undef { -%>
+    <group><%= $group %></group>
+    <%- } -%>
+    <%- unless $event_location =~ Undef { -%>
+    <event_location><%= $event_location %></event_location>
+    <%- } -%>
+    <%- unless $alert_format =~ Undef { -%>
+    <alert_format><%= $alert_format %></alert_format>
+    <%- } -%>
+    <%- unless $max_log =~ Undef { -%>
+    <max_log><%= $max_log %></max_log>
+    <%- } -%>
+</integration>
 
 

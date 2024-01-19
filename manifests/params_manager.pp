@@ -269,15 +269,7 @@ class wazuh::params_manager {
       $ossec_cluster_enable_firewall                   = 'no'
 
       # Integration
-      $ossec_integration_name             = ''
-      $ossec_integration_hook_url         = ''
-      $ossec_integration_api_key          = ''
-      $ossec_integration_rule_id          = ''
-      $ossec_integration_level            = ''
-      $ossec_integration_group            = ''
-      $ossec_integration_event_location   = ''
-      $ossec_integration_alert_format     = ''
-      $ossec_integration_max_log          = ''
+      $ossec_integration             = []
 
       #----- End of ossec.conf parameters -------
 

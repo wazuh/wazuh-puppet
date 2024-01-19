@@ -239,15 +239,7 @@ class wazuh::manager (
 
 
       # Integration
-      $ossec_integration_name             = $wazuh::params_manager::ossec_integration_name,
-      $ossec_integration_hook_url         = $wazuh::params_manager::ossec_integration_hook_url,
-      $ossec_integration_api_key          = $wazuh::params_manager::ossec_integration_api_key,
-      $ossec_integration_rule_id          = $wazuh::params_manager::ossec_integration_rule_id,
-      $ossec_integration_level            = $wazuh::params_manager::ossec_integration_level,
-      $ossec_integration_group            = $wazuh::params_manager::ossec_integration_group,
-      $ossec_integration_event_location   = $wazuh::params_manager::ossec_integration_event_location,
-      $ossec_integration_alert_format     = $wazuh::params_manager::ossec_integration_alert_format,
-      $ossec_integration_max_log          = $wazuh::params_manager::ossec_integration_max_log,
+      $ossec_integration                    = $wazuh::params_manager::ossec_integration,
 
       #----- End of ossec.conf parameters -------
 
@@ -591,12 +583,12 @@ class wazuh::manager (
       }
   }
   if ($configure_integration == true){
-    concat::fragment {
-        'ossec.conf_integration':
-          order   => 86,
-          target  => 'manager_ossec.conf',
-          content => template($ossec_integration_template);
-      }
+    $ossec_integration.each |String $name, Hash $conf| {
+            wazuh::integration { $name:
+              service => $name,
+              params  => $conf,
+            }
+    }
   }
   if ($configure_active_response == true){
     wazuh::activeresponse { 'active-response configuration':
