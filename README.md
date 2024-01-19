@@ -117,6 +117,46 @@ This module installs and configure Wazuh agent and manager.
 * `master` branch contains the latest code, be aware of possible bugs on this branch.
 * `stable` branch on correspond to the last Wazuh-Puppet stable version.
 
+## Wazuh Integrations
+
+Wazuh integrations might be used and declared by using a few hiera variables.
+
+* `wazuh::manager::configure_integration`: Boolean, true or false. If true, looks for integration and use them. If false, ignore any declaration of integration.
+* `wazuh::manager::ossec_integration`: Hash, containing declarations of miscellaneous integrations.
+
+### Structure and variables of the `wazuh::manager::ossec_integration` hash:
+
+* `hook_url`
+* `api_key`
+* `rule_id`
+* `level`
+* `group`
+* `event_location`
+* `alert_format`
+* `max_log`
+
+All those variables are explained on the Wazuh site:
+https://documentation.wazuh.com/current/user-manual/manager/manual-integration.html
+
+
+### Integration example
+
+This will create two integrations, one to slack, and one to mattermost:
+
+```yaml
+---
+wazuh::manager::configure_integration: true
+wazuh::manager::ossec_integration:
+  'slack':
+    alert_format: 'json'
+    hook_url: 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX'
+    level: '12'
+  'mattermost':
+    alert_format: 'json'
+    hook_url: 'https://mattermost.domain.tld/hooks/XXXXXXXXXXXXXXXXXXXXXXXX'
+    level: '12'
+```
+
 ## Contribute
 
 If you want to contribute to our project please don't hesitate to send a pull request. You can also join our users [mailing list](https://groups.google.com/d/forum/wazuh) or the [Wazuh Slack community channel](https://wazuh.com/community/join-us-on-slack/) to ask questions and participate in discussions.
