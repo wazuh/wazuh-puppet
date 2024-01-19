@@ -5,12 +5,6 @@ define wazuh::integration (
   Hash $params,
 ) {
 
-#require wazuh::params_manager
-
-notify { "integparams $service":
-message => "params: $params; service: $service",
-}
-
 concat::fragment { $service:
     order   => 86,
     target  => 'manager_ossec.conf',
