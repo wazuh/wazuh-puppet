@@ -595,6 +595,14 @@ class wazuh::manager (
       content => "</ossec_config>\n";
   }
 
+  exec { 'Generate the wazuh-keystore':
+    path    => ['/var/ossec/bin'],
+    command => ["wazuh-keystore -f indexer -k user -v ${vulnerability_indexer_username}",
+                "wazuh-keystore -f indexer -k password -v ${vulnerability_indexer_password}"],
+    onlyif  => 'test -f /var/ossec/bin/wazuh-keystore',
+    unless  => 'systemctl restart wazuh-manager',
+  }
+
   if ( $manage_client_keys == 'yes') {
     # TODO: ensure the authd service is started if manage_client_keys == authd
     # (see https://github.com/wazuh/wazuh/issues/80)
