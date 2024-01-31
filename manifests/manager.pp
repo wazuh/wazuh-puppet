@@ -597,7 +597,7 @@ class wazuh::manager (
 
   exec { 'Generate the wazuh-keystore':
     path    => ['/var/ossec/bin'],
-    command => ["wazuh-keystore -f indexer -k user -v ${vulnerability_indexer_username}",
+    command => ["wazuh-keystore -f indexer -k username -v ${vulnerability_indexer_username}",
                 "wazuh-keystore -f indexer -k password -v ${vulnerability_indexer_password}"],
     onlyif  => 'test -f /var/ossec/bin/wazuh-keystore',
     unless  => 'systemctl restart wazuh-manager',
