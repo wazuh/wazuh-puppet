@@ -12,7 +12,7 @@ class wazuh::repo (
       # apt-key added by issue #34
       apt::key { 'wazuh':
         id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
-        source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH',
+        source => 'https://packages-dev.wazuh.com/key/GPG-KEY-WAZUH',
         server => 'pgp.mit.edu'
       }
       case $::lsbdistcodename {
@@ -21,8 +21,8 @@ class wazuh::repo (
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/4.x/apt',
-            release  => 'stable',
+            location => 'https://packages-dev.wazuh.com/pre-release/apt',
+            release  => 'unstable',
             repos    => 'main',
             include  => {
               'src' => false,
