@@ -14,6 +14,9 @@ discovery.seed_hosts:
 node.max_local_storage_nodes: "<%= @indexer_node_max_local_storage_nodes %>"
 path.data: "<%= @indexer_path_data %>"
 path.logs: "<%= @indexer_path_logs %>"
+<% if not @indexer_path_repo.empty? -%>
+path.repo: <%= @indexer_path_repo %>
+<% end -%>
 plugins.security.ssl.http.pemcert_filepath: <%= @indexer_path_certs %>/indexer-<%= @indexer_node_name %>.pem
 plugins.security.ssl.http.pemkey_filepath: <%= @indexer_path_certs %>/indexer-<%= @indexer_node_name %>-key.pem
 plugins.security.ssl.http.pemtrustedcas_filepath: <%= @indexer_path_certs %>/root-ca.pem
