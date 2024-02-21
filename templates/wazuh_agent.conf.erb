@@ -21,6 +21,9 @@
   <%- if @ossec_time_reconnect then -%>
     <time-reconnect><%= @ossec_time_reconnect %></time-reconnect>
   <%- end -%>
+  <%- if @wazuh_ip_update_interval then -%>
+    <ip_update_interval><%= @wazuh_ip_update_interval %></ip_update_interval>
+  <%- end -%>
   <%- if @ossec_crypto_method then -%>
     <crypto_method><%= @ossec_crypto_method %></crypto_method>
   <%- end -%>
