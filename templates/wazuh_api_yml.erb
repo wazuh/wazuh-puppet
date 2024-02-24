@@ -38,6 +38,7 @@ drop_privileges: <%= @wazuh_api_drop_privileges %>
 # Enable features under development
 experimental_features: <%= @wazuh_api_experimental_features %>
 # Enable remote commands
+<%- if scope.function_versioncmp([@server_package_version, '4.4']) >= 0 -%>
 upload_configuration:
   remote_commands:
     localfile:
@@ -49,3 +50,12 @@ upload_configuration:
   limits:
     eps:
       allow: <%= @limits_eps %>
+<%- else -%>
+remote_commands:
+  localfile:
+    enabled: <%= @remote_commands_localfile %>
+    exceptions: <%= @remote_commands_localfile_exceptions %>
+  wodle_command:
+    enabled: <%= @remote_commands_wodle %>
+    exceptions: []
+<%- end -%>
