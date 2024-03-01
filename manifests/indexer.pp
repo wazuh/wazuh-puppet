@@ -15,7 +15,7 @@ class wazuh::indexer (
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
-  $indexer_init_lockfile = '/var/tmp/indexer-init.lock',
+  $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
   $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 
   $indexer_ip = 'localhost',
@@ -129,7 +129,7 @@ class wazuh::indexer (
   }
 
   if $full_indexer_reinstall {
-    file { $indexer_init_lockfile:
+    file { $indexer_security_init_lockfile:
       ensure  => absent,
       require => Package['wazuh-indexer'],
       before  => Exec['Initialize the Opensearch security index in Wazuh indexer'],
