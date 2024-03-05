@@ -11,21 +11,15 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elastic_user = 'admin',
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
-  $wazuh_app_version = '4.9.0_7.10.2',
-  $wazuh_extensions_version = 'v4.9.0',
-  $wazuh_filebeat_module = 'wazuh-filebeat-0.2.tar.gz',
+  $wazuh_app_version = '5.0.0_7.10.2',
+  $wazuh_extensions_version = 'v5.0.0',
+  $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
+  $wazuh_node_name = 'master',
 
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
 ) {
-  include wazuh::repo
-
-  if $facts['os']['family'] == 'Debian' {
-    Class['wazuh::repo'] -> Class['apt::update'] -> Package['filebeat']
-  } else {
-    Class['wazuh::repo'] -> Package['filebeat']
-  }
 
   package { 'filebeat':
     ensure => $filebeat_oss_version,
@@ -79,8 +73,6 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  require wazuh::certificates
-
   exec { "ensure full path of ${filebeat_path_certs}":
     path    => '/usr/bin:/bin',
     command => "mkdir -p ${filebeat_path_certs}",
@@ -95,8 +87,8 @@ class wazuh::filebeat_oss (
   }
 
   $_certfiles = {
-    'server.pem'     => 'filebeat.pem',
-    'server-key.pem' => 'filebeat-key.pem',
+    "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
+    "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
     'root-ca.pem'    => 'root-ca.pem',
   }
   $_certfiles.each |String $certfile_source, String $certfile_target| {
@@ -105,8 +97,9 @@ class wazuh::filebeat_oss (
       owner   => $filebeat_fileuser,
       group   => $filebeat_filegroup,
       mode    => '0400',
-      replace => false,  # only copy content when file not exist
-      source  => "/tmp/wazuh-certificates/${certfile_source}",
+      replace => true,
+      recurse => remote,
+      source  => "puppet:///modules/archive/${certfile_source}",
     }
   }
 

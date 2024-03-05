@@ -8,7 +8,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.9.0-1',
+  $indexer_version = '5.0.0-1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -22,28 +22,17 @@ class wazuh::indexer (
   $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_cluster_initial_master_nodes = ['node-1'],
-
-  $manage_repos = false, # Change to true when manager is not present.
+  $indexer_cluster_CN = ['node-1'],
 
   # JVM options
   $jvm_options_memory = '1g',
 ) {
-  if $manage_repos {
-    include wazuh::repo
-    if $facts['os']['family'] == 'Debian' {
-      Class['wazuh::repo'] -> Class['apt::update'] -> Package['wazuh-indexer']
-    } else {
-      Class['wazuh::repo'] -> Package['wazuh-indexer']
-    }
-  }
 
   # install package
   package { 'wazuh-indexer':
     ensure => $indexer_version,
     name   => $indexer_package,
   }
-
-  require wazuh::certificates
 
   exec { "ensure full path of ${indexer_path_certs}":
     path    => '/usr/bin:/bin',
@@ -59,21 +48,24 @@ class wazuh::indexer (
   }
 
   [
-    'indexer.pem',
-    'indexer-key.pem',
-    'root-ca.pem',
-    'admin.pem',
-    'admin-key.pem',
+   "indexer-$indexer_node_name.pem",
+   "indexer-$indexer_node_name-key.pem",
+   'root-ca.pem',
+   'admin.pem',
+   'admin-key.pem',
   ].each |String $certfile| {
     file { "${indexer_path_certs}/${certfile}":
       ensure  => file,
       owner   => $indexer_fileuser,
       group   => $indexer_filegroup,
       mode    => '0400',
-      replace => false,  # only copy content when file not exist
-      source  => "/tmp/wazuh-certificates/${certfile}",
+      replace => true,
+      recurse => remote,
+      source  => "puppet:///modules/archive/${certfile}",
     }
   }
+
+
 
   file { 'configuration file':
     path    => '/etc/wazuh-indexer/opensearch.yml',
@@ -142,12 +134,5 @@ class wazuh::indexer (
       require => Package['wazuh-indexer'],
       before  => Exec['Initialize the Opensearch security index in Wazuh indexer'],
     }
-  }
-
-  exec { 'Initialize the Opensearch security index in Wazuh indexer':
-    path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
-    command => "/usr/share/wazuh-indexer/bin/indexer-security-init.sh && touch ${indexer_security_init_lockfile}",
-    creates => $indexer_security_init_lockfile,
-    require => Service['wazuh-indexer'],
   }
 }

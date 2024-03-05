@@ -5,9 +5,8 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.9.0-1'
+      $server_package_version                          = '5.0.0-1'
 
-      $manage_repos                                    = true
       $manage_firewall                                 = false
 
     ### Ossec.conf blocks
@@ -40,7 +39,8 @@ class wazuh::params_manager {
       $configure_wodle_osquery                         = true
       $configure_wodle_syscollector                    = true
       $configure_wodle_docker_listener                 = false
-      $configure_vulnerability_detector                = true
+      $configure_vulnerability_detection               = true
+      $configure_vulnerability_indexer                 = true
       $configure_sca                                   = true
       $configure_syscheck                              = true
       $configure_command                               = true
@@ -59,7 +59,8 @@ class wazuh::params_manager {
       $ossec_wodle_osquery_template                    = 'wazuh/fragments/_wodle_osquery.erb'
       $ossec_wodle_syscollector_template               = 'wazuh/fragments/_wodle_syscollector.erb'
       $ossec_wodle_docker_listener_template            = 'wazuh/fragments/_wodle_docker_listener.erb'
-      $ossec_vulnerability_detector_template           = 'wazuh/fragments/_vulnerability_detector.erb'
+      $ossec_vulnerability_detection_template          = 'wazuh/fragments/_vulnerability_detection.erb'
+      $ossec_vulnerability_indexer_template            = 'wazuh/fragments/_vulnerability_indexer.erb'
       $ossec_sca_template                              = 'wazuh/fragments/_sca.erb'
       $ossec_syscheck_template                         = 'wazuh/fragments/_syscheck.erb'
       $ossec_default_commands_template                 = 'wazuh/default_commands.erb'
@@ -159,74 +160,20 @@ class wazuh::params_manager {
       $active_response_timeout                         = 300
       $active_response_repeated_offenders              = ['30,60,120']
 
-      #vulnerability-detector
+      #vulnerability-detection
 
-      $vulnerability_detector_enabled                            = 'no'
-      $vulnerability_detector_interval                           = '5m'
-      $vulnerability_detector_min_full_scan_interval             = '6h'
-      $vulnerability_detector_run_on_start                       = 'yes'
+      $vulnerability_detection_enabled                 = 'yes'
+      $vulnerability_detection_index_status            = 'yes'
+      $vulnerability_detection_feed_update_interval    = '60m'
 
-      $vulnerability_detector_provider_canonical                 = 'yes'
-      $vulnerability_detector_provider_canonical_enabled         = 'no'
-      $vulnerability_detector_provider_canonical_os              = ['trusty',
-        'xenial',
-        'bionic',
-        'focal',
-        'jammy'
-      ]
-      $vulnerability_detector_provider_canonical_update_interval = '1h'
-
-
-      $vulnerability_detector_provider_debian                 = 'yes'
-      $vulnerability_detector_provider_debian_enabled         = 'no'
-      $vulnerability_detector_provider_debian_os              = ['buster',
-        'bullseye'
-      ]
-      $vulnerability_detector_provider_debian_update_interval = '1h'
-      $vulnerability_detector_provider_redhat                    = 'yes'
-      $vulnerability_detector_provider_redhat_enabled            = 'no'
-      $vulnerability_detector_provider_redhat_os                 = ['5','6','7','8','9']
-      $vulnerability_detector_provider_redhat_update_interval    = '1h'      # syslog
-
-
-      $vulnerability_detector_provider_nvd                    = 'yes'
-      $vulnerability_detector_provider_nvd_enabled            = 'no'
-      $vulnerability_detector_provider_nvd_os                 = []
-      $vulnerability_detector_provider_nvd_update_interval    = '1h'
-
-      $vulnerability_detector_provider_arch                   = 'yes'
-      $vulnerability_detector_provider_arch_enabled           = 'no'
-      $vulnerability_detector_provider_arch_update_interval   = '1h'
-
-      $vulnerability_detector_provider_alas                   = 'yes'
-      $vulnerability_detector_provider_alas_enabled           = 'no'
-      $vulnerability_detector_provider_alas_os              = ['amazon-linux',
-        'amazon-linux-2', 
-        'amazon-linux-2023'
-      ]
-      $vulnerability_detector_provider_alas_update_interval   = '1h'
-
-      $vulnerability_detector_provider_suse                   = 'yes'
-      $vulnerability_detector_provider_suse_enabled           = 'no'
-      $vulnerability_detector_provider_suse_os              = ['11-server',
-        '11-desktop',
-        '12-server',
-        '12-desktop',
-        '15-server',
-        '15-desktop'
-      ]
-      $vulnerability_detector_provider_suse_update_interval   = '1h'
-
-      $vulnerability_detector_provider_msu                   = 'yes'
-      $vulnerability_detector_provider_msu_enabled           = 'no'
-      $vulnerability_detector_provider_msu_update_interval   = '1h'
-
-      $vulnerability_detector_provider_almalinux                 = 'yes'
-      $vulnerability_detector_provider_almalinux_enabled         = 'no'
-      $vulnerability_detector_provider_almalinux_os              = ['8',
-        '9'
-      ]
-      $vulnerability_detector_provider_almalinux_update_interval = '1h'
+      $vulnerability_indexer_enabled                   = 'yes'
+      $vulnerability_indexer_hosts_host                = ['127.0.0.1']
+      $vulnerability_indexer_hosts_port                = '9200'
+      $vulnerability_indexer_username                  = 'admin'
+      $vulnerability_indexer_password                  = 'admin'
+      $vulnerability_indexer_ssl_ca                    = '/etc/filebeat/certs/root-ca.pem'
+      $vulnerability_indexer_ssl_certificate           = '/etc/filebeat/certs/filebeat.pem'
+      $vulnerability_indexer_ssl_key                   = '/etc/filebeat/certs/filebeat-key.pem'
 
       $syslog_output                                   = false
       $syslog_output_level                             = 2
@@ -611,7 +558,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.9.0'
+      $agent_package  = 'Wazuh Agent 5.0.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
