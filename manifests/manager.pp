@@ -70,6 +70,9 @@ class wazuh::manager (
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
       $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
 
+    # ossec.conf ruleset section
+      $ossec_ruleset_list  = $wazuh::params_manager::ossec_ruleset_list,
+
       # active-response
       $ossec_active_response_command                =  $wazuh::params_manager::active_response_command,
       $ossec_active_response_location               =  $wazuh::params_manager::active_response_location,
