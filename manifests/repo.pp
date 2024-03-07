@@ -9,28 +9,55 @@ class wazuh::repo (
       and ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
-      # apt-key added by issue #34
-      apt::key { 'wazuh':
-        id     => '0DCFCA5547B19D2A6099506096B3EE5F29111145',
-        source => 'https://packages.wazuh.com/key/GPG-KEY-WAZUH',
-        server => 'pgp.mit.edu'
+      exec { 'import-wazuh-key':
+        command => '/bin/curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | /usr/bin/gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
+        unless  => '/usr/bin/gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --list-keys | /bin/grep -q 29111145',
+        path    => ['/bin', '/usr/bin'],
+      }
+
+      # Ensure permissions on the keyring
+      file { '/usr/share/keyrings/wazuh.gpg':
+        ensure => file,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+        require => Exec['import-wazuh-key'],
       }
       case $::lsbdistcodename {
         /(jessie|wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy)/: {
-
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/4.x/apt',
-            release  => 'stable',
+            location => 'https://packages-dev.wazuh.com/pre-release/apt',
+            release  => 'unstable',
             repos    => 'main',
             include  => {
               'src' => false,
               'deb' => true,
             },
           }
+
+          # Manage the APT source list file content using concat
+          concat { '/etc/apt/sources.list.d/wazuh.list':
+            ensure  => present,
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0644',
+          }
+
+          concat::fragment { 'wazuh-source':
+            target  => '/etc/apt/sources.list.d/wazuh.list',
+            content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages-dev.wazuh.com/pre-release/apt/ unstable main\n",
+            order   => '01',
+          }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
+      }
+      # Define an exec resource to run 'apt-get update'
+      exec { 'apt-update':
+        command     => '/usr/bin/apt-get update',
+        refreshonly => true,
+        path        => ['/bin', '/usr/bin'],
       }
     }
     'Linux', 'RedHat', 'Suse' : {
