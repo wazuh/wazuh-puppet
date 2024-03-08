@@ -6,6 +6,7 @@ class wazuh::repo (
   case $::osfamily {
     'Debian' : {
       $wazuh_repo_url = 'https://packages.wazuh.com/4.x/apt'
+      $repo_release = 'stable'
 
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
       and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) {
@@ -31,7 +32,7 @@ class wazuh::repo (
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
             location => 'https://packages.wazuh.com/4.x/apt',
-            release  => 'unstable',
+            release  => $repo_release,
             repos    => 'main',
             include  => {
               'src' => false,
@@ -49,7 +50,7 @@ class wazuh::repo (
 
           concat::fragment { 'wazuh-source':
             target  => '/etc/apt/sources.list.d/wazuh.list',
-            content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] $wazuh_repo_url unstable main\n",
+            content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] $wazuh_repo_url $repo_release main\n",
             order   => '01',
             require => File['/usr/share/keyrings/wazuh.gpg'],
           }
