@@ -5,6 +5,8 @@ class wazuh::repo (
 
   case $::osfamily {
     'Debian' : {
+      $wazuh_repo_url = 'https://packages-dev.wazuh.com/pre-release/apt'
+      
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
       and ! defined(Package['apt-transport-https']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
