@@ -10,9 +10,9 @@ class wazuh::repo (
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
       exec { 'import-wazuh-key':
+        path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
         command => '/bin/curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | /usr/bin/gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
         unless  => '/usr/bin/gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --list-keys | /bin/grep -q 29111145',
-        path    => ['/bin', '/usr/bin'],
       }
 
       # Ensure permissions on the keyring
