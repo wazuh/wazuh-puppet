@@ -36,6 +36,19 @@ class wazuh::repo (
               'deb' => true,
             },
           }
+          # Manage the APT source list file content using concat
+          concat { '/etc/apt/sources.list.d/wazuh.list':
+            ensure  => present,
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0644',
+          }
+
+          concat::fragment { 'wazuh-source':
+            target  => '/etc/apt/sources.list.d/wazuh.list',
+            content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] $wazuh_repo_url unstable main\n",
+            order   => '01',
+          }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
       }
