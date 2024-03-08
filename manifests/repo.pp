@@ -5,16 +5,16 @@ class wazuh::repo (
 
   case $::osfamily {
     'Debian' : {
-      $wazuh_repo_url = 'https://packages-dev.wazuh.com/pre-release/apt'
-      
+      $wazuh_repo_url = 'https://packages.wazuh.com/4.x/apt'
+
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
-      and ! defined(Package['apt-transport-https']) {
+      and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) {
         ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
       }
       exec { 'import-wazuh-key':
         path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
-        command => '/bin/curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | /usr/bin/gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
-        unless  => '/usr/bin/gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --list-keys | /bin/grep -q 29111145',
+        command => 'curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
+        unless  => 'gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --list-keys | grep -q 29111145',
       }
 
       # Ensure permissions on the keyring
@@ -30,13 +30,14 @@ class wazuh::repo (
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages-dev.wazuh.com/pre-release/apt',
+            location => 'https://packages.wazuh.com/4.x/apt',
             release  => 'unstable',
             repos    => 'main',
             include  => {
               'src' => false,
               'deb' => true,
             },
+            require => File['/usr/share/keyrings/wazuh.gpg'],
           }
           # Manage the APT source list file content using concat
           concat { '/etc/apt/sources.list.d/wazuh.list':
@@ -50,6 +51,7 @@ class wazuh::repo (
             target  => '/etc/apt/sources.list.d/wazuh.list',
             content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] $wazuh_repo_url unstable main\n",
             order   => '01',
+            require => File['/usr/share/keyrings/wazuh.gpg'],
           }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
