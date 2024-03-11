@@ -10,7 +10,7 @@ class wazuh::repo (
 
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
       and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) {
-        ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
+        ensure_packages(['apt-transport-https', 'gnupg'], {'ensure' => 'present'})
       }
       exec { 'import-wazuh-key':
         path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
@@ -31,7 +31,7 @@ class wazuh::repo (
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
-            location => 'https://packages.wazuh.com/4.x/apt',
+            location => $wazuh_repo_url,
             release  => $repo_release,
             repos    => 'main',
             include  => {
