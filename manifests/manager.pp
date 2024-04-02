@@ -48,6 +48,7 @@ class wazuh::manager (
       $configure_ruleset                    = $wazuh::params_manager::configure_ruleset,
       $configure_auth                       = $wazuh::params_manager::configure_auth,
       $configure_cluster                    = $wazuh::params_manager::configure_cluster,
+      $configure_integration                = $wazuh::params_manager::configure_integration,
       $configure_active_response            = $wazuh::params_manager::configure_active_response,
 
     # ossec.conf templates paths
@@ -67,6 +68,7 @@ class wazuh::manager (
       $ossec_ruleset_template                       = $wazuh::params_manager::ossec_ruleset_template,
       $ossec_auth_template                          = $wazuh::params_manager::ossec_auth_template,
       $ossec_cluster_template                       = $wazuh::params_manager::ossec_cluster_template,
+      $ossec_integration_template                   = $wazuh::params_manager::ossec_integration_template,
       $ossec_active_response_template               = $wazuh::params_manager::ossec_active_response_template,
       $ossec_syslog_output_template                 = $wazuh::params_manager::ossec_syslog_output_template,
 
@@ -234,6 +236,10 @@ class wazuh::manager (
       $ossec_cluster_nodes                  = $wazuh::params_manager::ossec_cluster_nodes,
       $ossec_cluster_hidden                 = $wazuh::params_manager::ossec_cluster_hidden,
       $ossec_cluster_disabled               = $wazuh::params_manager::ossec_cluster_disabled,
+
+
+      # Integration
+      $ossec_integration                    = $wazuh::params_manager::ossec_integration,
 
       #----- End of ossec.conf parameters -------
 
@@ -575,6 +581,14 @@ class wazuh::manager (
           target  => 'manager_ossec.conf',
           content => template($ossec_cluster_template);
       }
+  }
+  if ($configure_integration == true){
+    $ossec_integration.each |String $name, Hash $conf| {
+            wazuh::integration { $name:
+              service => $name,
+              params  => $conf,
+            }
+    }
   }
   if ($configure_active_response == true){
     wazuh::activeresponse { 'active-response configuration':
