@@ -2,7 +2,7 @@
 # Wazuh repository installation
 class wazuh::securityadmin (
   $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
-  $indexer_network_host = 'localhost',
+  $indexer_network_host = '127.0.0.1',
 ) {
   exec { 'Initialize the Opensearch security index in Wazuh indexer':
     path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
