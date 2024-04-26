@@ -5,9 +5,42 @@ runs:
       shell: bash
       run: |
         hostname=$(sudo puppetserver ca list --all | awk '{if(NR>1)print $1;}'| sed 's/[.]$//')
-        sudo echo "127.0.0.1 "$hostname | sudo tee -a /etc/hosts > /dev/null
+        sudo echo "$discovery_type = 'single-node'" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage { 'certificates': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage { 'repo': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage { 'indexerdeploy': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage { 'securityadmin': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage { 'dashboard': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage { 'manager': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "Stage[certificates] -> Stage[repo] -> Stage[indexerdeploy] -> Stage[securityadmin] -> Stage[manager] -> Stage[dashboard]" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "Exec {" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "timeout => 0," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
         sudo echo "node "\"$hostname\"" {" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp  > /dev/null
-        sudo echo "class {'wazuh::manager':} ->  class {'wazuh::indexer':} -> class {'wazuh::filebeat_oss':} -> class {'wazuh::dashboard':}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "class { 'wazuh::certificates':" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  indexer_certs => [['node-1','127.0.0.1']]," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  manager_certs => [['master','127.0.0.1']]," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  dashboard_certs => ['127.0.0.1']," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  stage => certificates," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "class { 'wazuh::repo':" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage => repo," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "class { 'wazuh::indexer':" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  stage => indexerdeploy," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "class { 'wazuh::securityadmin':" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "stage => securityadmin" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "class { 'wazuh::manager':" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  stage => manager," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "class { 'wazuh::filebeat_oss':" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  stage => manager," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "class { 'wazuh::dashboard':" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "  stage => dashboard," | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
         sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
         sudo cat /etc/puppetlabs/code/environments/production/manifests/stack.pp
 
