@@ -95,6 +95,7 @@ runs:
         else
           echo "Errors in ossec.log:"
           echo "${log}"
+          cat /var/ossec/logs/ossec.log
           exit 1
         fi
 
