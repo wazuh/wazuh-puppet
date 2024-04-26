@@ -5,7 +5,7 @@ runs:
       shell: bash
       run: |
         hostname=$(sudo puppetserver ca list --all | awk '{if(NR>1)print $1;}'| sed 's/[.]$//')
-        sudo echo "$discovery_type = 'single-node'" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
+        sudo echo "\$discovery_type = 'single-node'" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
         sudo echo "stage { 'certificates': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
         sudo echo "stage { 'repo': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
         sudo echo "stage { 'indexerdeploy': }" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
@@ -44,6 +44,24 @@ runs:
         sudo echo "}" | sudo tee -a /etc/puppetlabs/code/environments/production/manifests/stack.pp > /dev/null
         sudo cat /etc/puppetlabs/code/environments/production/manifests/stack.pp
 
+    - name: Create manifest for install Wazuh stack
+      shell: bash
+      run: |
+        sed -i 's/packages.wazuh.com/packages-dev.wazuh.com/g' /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/certificates.pp
+        sed -i 's/packages.wazuh.com\/4.x/packages-dev.wazuh.com\/pre-release/g' /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/filebeat_oss.pp
+        sed -i 's/v4.8.0/4.8.0/g' /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/filebeat_oss.pp
+        sed -i 's/packages.wazuh.com\/4.x/packages-dev.wazuh.com\/pre-release/g' /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/params_agent.pp
+        sed -i 's/packages.wazuh.com\/4.x/packages-dev.wazuh.com\/pre-release/g' /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/repo.pp
+        sed -i 's/packages.wazuh.com\/key/packages-dev.wazuh.com\/key/g' /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/repo.pp
+        sed -i "s/'stable'/'unstable'/g" /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/repo.pp
+        echo "certificates.pp"
+        cat /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/certificates.pp
+        echo "filebeat_oss.pp"
+        cat /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/filebeat_oss.pp
+        echo "repo.pp"
+        cat /etc/puppetlabs/code/environments/production/modules/wazuh/manifests/repo.pp
+
     - name: Install Wazuh Stack
       shell: bash
       run: sudo bash -c 'puppet agent -tod || test $? -eq 2'
+
