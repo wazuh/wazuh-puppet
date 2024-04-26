@@ -95,6 +95,15 @@ runs:
         else
           echo "Errors in ossec.log:"
           echo "${log}"
+          echo "Stoping Wazuh"
+          sudo /var/ossec/bin/wazuh-control stop
+          echo "conf debug in modulesd"
+          sudo sed -i 's/wazuh_modules.debug=0/wazuh_modules.debug=2/g' /var/ossec/etc/internal_options.conf
+          echo "Starting Wazuh"
+          sudo /var/ossec/bin/wazuh-control start
+          echo "sleeping for 60 seconds"
+          sleep 60
+          echo "wazuh Log"
           sudo cat /var/ossec/logs/ossec.log
           exit 1
         fi
