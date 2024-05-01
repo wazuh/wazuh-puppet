@@ -49,7 +49,7 @@ class wazuh::repo (
         }
         # Set up OSSEC repo
         case $::os[name] {
-          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux)$/: {
+          /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky)$/: {
             yumrepo { 'wazuh':
               descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
               enabled  => true,
