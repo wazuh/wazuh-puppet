@@ -357,10 +357,6 @@ class wazuh::params_agent {
           ]
           case $::operatingsystem {
             'Amazon': {
-              # Amazon is based on Centos-6 with some improvements
-              # taken from RHEL-7 but uses SysV-Init, not Systemd.
-              # Probably best to leave this undef until we can
-              # write/find a release-specific file.
               $ossec_service_provider = 'systemd'
             }
             'CentOS': {
