@@ -361,7 +361,6 @@ class wazuh::params_agent {
               # taken from RHEL-7 but uses SysV-Init, not Systemd.
               # Probably best to leave this undef until we can
               # write/find a release-specific file.
-              $wodle_openscap_content = undef
               $ossec_service_provider = 'systemd'
             }
             'CentOS': {
