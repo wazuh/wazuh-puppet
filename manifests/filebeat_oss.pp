@@ -11,8 +11,8 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elastic_user = 'admin',
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
-  $wazuh_app_version = '4.7.4_7.10.2',
-  $wazuh_extensions_version = 'v4.7.4',
+  $wazuh_app_version = '4.7.5_7.10.2',
+  $wazuh_extensions_version = 'v4.7.5',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.3.tar.gz',
 
   $filebeat_fileuser = 'root',
