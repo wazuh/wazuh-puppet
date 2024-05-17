@@ -17,7 +17,7 @@ runs:
         Exec {
             timeout => 0,
         }
-        node "\$hostname" {
+        node "$hostname" {
             class { 'wazuh::certificates':
                 indexer_certs => [['node-1','127.0.0.1']],
                 manager_certs => [['master','127.0.0.1']],
