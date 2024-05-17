@@ -12,7 +12,7 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
   $wazuh_app_version = '4.8.0_7.10.2',
-  $wazuh_extensions_version = 'v4.8.0',
+  $wazuh_extensions_version = '4.8.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
   $wazuh_node_name = 'master',
 
@@ -58,7 +58,7 @@ class wazuh::filebeat_oss (
 
   archive { "/tmp/${$wazuh_filebeat_module}":
     ensure       => present,
-    source       => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+    source       => "https://packages-dev.wazuh.com/pre-release/filebeat/${$wazuh_filebeat_module}",
     extract      => true,
     extract_path => '/usr/share/filebeat/module',
     creates      => '/usr/share/filebeat/module/wazuh',
