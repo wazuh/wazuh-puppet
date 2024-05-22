@@ -94,7 +94,8 @@ This module installs and configure Wazuh agent and manager.
     │   │   ├── _sca.erb
     │   │   ├── _syscheck.erb
     │   │   ├── _syslog_output.erb
-    │   │   ├── _vulnerability_detector.erb
+    │   │   ├── _vulnerability_detection.erb
+    │   │   ├── _vulnerability_indexer.erb
     │   │   ├── _wodle_cis_cat.erb
     │   │   ├── _wodle_openscap.erb
     │   │   ├── _wodle_osquery.erb
