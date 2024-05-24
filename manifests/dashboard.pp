@@ -10,6 +10,7 @@ class wazuh::dashboard (
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
   $dashboard_fileuser = 'wazuh-dashboard',
   $dashboard_filegroup = 'wazuh-dashboard',
+  $dashboard_run_as = false,
 
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
@@ -28,6 +29,7 @@ class wazuh::dashboard (
       'port'     => '55000',
       'user'     => 'wazuh-wui',
       'password' => 'wazuh-wui',
+      'run_as'   => $dashboard_run_as,
     },
   ],
 
