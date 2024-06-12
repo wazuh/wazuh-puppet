@@ -557,7 +557,11 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
+<<<<<<< HEAD
       $agent_package  = 'Wazuh Agent 4.9.0'
+=======
+      $agent_package  = 'Wazuh Agent 4.8.1'
+>>>>>>> 4.8.1
       $server_service = ''
       $server_package = ''
       $api_service = ''
