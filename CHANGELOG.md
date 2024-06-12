@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Support to 4.9.0 Wazuh release. 
+- Support to 4.9.0 Wazuh release.
 
 ## Wazuh Puppet v4.8.1
 
