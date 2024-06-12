@@ -104,8 +104,9 @@
         "Wheezy",
         "Jessie",
         "Stretch",
-        "Sid",
-        "bullseye"
+        "buster",
+        "bullseye",
+        "bookworm"
       ]
     }
   ],
