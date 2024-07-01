@@ -34,6 +34,7 @@ class wazuh::manager (
       # ossec.conf generation parameters
 
       $configure_rootcheck                  = $wazuh::params_manager::configure_rootcheck,
+      $configure_wodle_aws                  = $wazuh::params_manager::configure_wodle_aws,
       $configure_wodle_openscap             = $wazuh::params_manager::configure_wodle_openscap,
       $configure_wodle_cis_cat              = $wazuh::params_manager::configure_wodle_cis_cat,
       $configure_wodle_osquery              = $wazuh::params_manager::configure_wodle_osquery,
@@ -123,6 +124,15 @@ class wazuh::manager (
 
 
       ## Wodles
+
+      #aws s3
+      $wodle_aws_disabled                   = $wazuh::params_manager::wodle_aws_disabled,
+      $wodle_aws_interval                   = $wazuh::params_manager::wodle_aws_interval,
+      $wodle_aws_run_on_start               = $wazuh::params_manager::wodle_aws_run_on_start,
+      $wodle_aws_skip_on_error              = $wazuh::params_manager::wodle_aws_skip_on_error,
+      $wodle_aws_remove_from_bucket         = $wazuh::params_manager::wodle_aws_remove_from_bucket,
+      $wodle_aws_buckets                    = $wazuh::params_manager::wodle_aws_buckets,
+      $wodle_aws_services                   = $wazuh::params_manager::wodle_aws_services,
 
       #openscap
       $wodle_openscap_disabled              = $wazuh::params_manager::wodle_openscap_disabled,
@@ -464,6 +474,14 @@ class wazuh::manager (
       }
   }
 
+  if ($configure_wodle_aws == true){
+    concat::fragment {
+      'ossec.conf_wodle_aws':
+        order   => 30,
+        target  => 'manager_ossec.conf',
+        content => template($ossec_aws_s3_template);
+    }
+  }
   if ($configure_wodle_openscap == true){
     concat::fragment {
       'ossec.conf_wodle_openscap':
