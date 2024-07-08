@@ -4,7 +4,7 @@ control 'wazuh-manager' do
 
   describe package('wazuh-manager') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '4.8.1-1' }
+    its('version') { is_expected.to eq '4.9.0-1' }
   end
 
   # Verifying service
