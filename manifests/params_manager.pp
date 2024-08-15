@@ -243,7 +243,7 @@ class wazuh::params_manager {
 
       $ossec_ruleset_decoder_dir = 'ruleset/decoders'
       $ossec_ruleset_rule_dir = 'ruleset/rules'
-      $ossec_ruleset_rule_exclude = '0215-policy_rules.xml'
+      $ossec_ruleset_rule_exclude = ['0215-policy_rules.xml']
       $ossec_ruleset_list = [ 'etc/lists/audit-keys',
         'etc/lists/amazon/aws-eventnames',
         'etc/lists/security-eventchannel',
@@ -280,7 +280,6 @@ class wazuh::params_manager {
       $local_decoder_template              = 'wazuh/local_decoder.xml.erb'
       $decoder_exclude                     = []
       $local_rules_template                = 'wazuh/local_rules.xml.erb'
-      $rule_exclude                        = []
       $shared_agent_template               = 'wazuh/ossec_shared_agent.conf.erb'
 
       $wazuh_manager_verify_manager_ssl    = false

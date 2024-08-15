@@ -9,9 +9,10 @@
   <% if @ossec_ruleset_rule_dir -%>
   <rule_dir><%= @ossec_ruleset_rule_dir %></rule_dir>
   <%- end -%>
-  <% if @ossec_ruleset_rule_exclude -%>
-  <rule_exclude><%= @ossec_ruleset_rule_exclude %></rule_exclude>
-  <%- end -%>
+  <%- if @ossec_ruleset_rule_exclude -%>
+   <%- @ossec_ruleset_rule_exclude.each do |list_element| -%>
+    <rule_exclude><%= list_element %></rule_exclude>
+   <%- end -%>
   <%- @ossec_ruleset_list.each do |list_element| -%>
   <list><%= list_element %></list>
   <%- end -%>
