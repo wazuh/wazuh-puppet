@@ -362,10 +362,20 @@ class wazuh::manager (
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
   }
 
+  # assign version according to the package manager
+  case $facts['os']['family'] {
+    'Debian': {
+      $server_version_install = "${server_package_version}-*"
+    }
+    'Linux', 'RedHat', default: {
+      $server_version_install = $server_package_version
+    }
+  }
+
   # Install and configure Wazuh-manager package
 
   package { $wazuh::params_manager::server_package:
-    ensure  => $server_package_version, # lint:ignore:security_package_pinned_version
+    ensure  => $server_version_install, # lint:ignore:security_package_pinned_version
   }
 
   file {
