@@ -42,10 +42,10 @@ jobs:
         run: |
             WAZUH_TAG=$(curl --silent https://api.github.com/repos/wazuh/wazuh/git/refs/tags | grep '["]ref["]:' | sed -E 's/.*\"([^\"]+)\".*/\1/'  | cut -c 11- | grep ^${{ inputs.BRANCH_NAME }}$)
             PUPPET_MODULE_NAME=$(jq .name ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
-            PUPPET_MODULE_VERSOIN=$(jq .version ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
+            PUPPET_MODULE_VERSION=$(jq .version ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
             echo "WAZUH_TAG=$WAZUH_TAG" >> "$GITHUB_ENV"
             echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
-            echo "PUPPET_MODULE_VERSOIN=$PUPPET_MODULE_VERSOIN" >> "$GITHUB_ENV"
+            echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
 
       - name: Install dependencies
         run: |
