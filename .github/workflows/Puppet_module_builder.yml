@@ -1,4 +1,4 @@
-run-name: Build Wazuh Puppet module ${{ inputs.BRANCH_NAME }}
+run-name: Build Wazuh Puppet module ${{ inputs.BRANCH_NAME }} - Launched by @${{ github.actor }}
 name: Puppet Module Builder
 
 on:
