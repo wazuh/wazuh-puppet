@@ -1,0 +1,75 @@
+run-name: Build Wazuh Puppet module ${{ inputs.BRANCH_NAME }}
+name: Puppet Module Builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      BRANCH_NAME:
+        type: string
+        description: "Branch or tag name"
+        required: true
+        default: "v5.0.0"
+      UPLOAD_S3:
+        type: boolean
+        description: "Upload Puppet module to S3"
+        required: true
+        default: false
+      S3_REPOSITORY:
+        type: choice
+        description: "S3 Repository"
+        required: true
+        options:
+          - staging
+          - pre-release
+
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
+jobs:
+  build_module:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.BRANCH_NAME }}
+
+      - name: Verify Tag name
+        run: |
+            WAZUH_TAG=$(curl --silent https://api.github.com/repos/wazuh/wazuh/git/refs/tags | grep '["]ref["]:' | sed -E 's/.*\"([^\"]+)\".*/\1/'  | cut -c 11- | grep ^${{ inputs.BRANCH_NAME }}$)
+            echo "WAZUH_TAG=$WAZUH_TAG" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: |
+            curl -O https://apt.puppet.com/puppet-tools-release-noble.deb && \
+            dpkg -i puppet-tools-release-noble.deb && \
+            apt-get update && \
+            apt-get install pdk
+            pdk set config user.analytics.disabled false --type boolean --force
+
+      - name: Build Wazuh Puppet module
+        run: |
+            mkdir -p ${{ github.workspace }}/output
+            pdk build --force --target-dir=${{ github.workspace }}/output/
+
+      - name: Create Puppet module artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Puppet module artifact
+          path: ${{ github.workspace }}/output/wazuh-wazuh-.tar.gz
+          retention-days: 1
+
+      - name: Configure aws credentials
+        if: ${{ env.WAZUH_TAG != '' && inputs.UPLOAD_S3 == true }}
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_PUPPET_ROLE }}
+          role-session-name: "Puppet module-Builder"
+          aws-region: "${{ secrets.AWS_REGION }}"
+          role-duration-seconds: 10800
+
+      - name: Upload Puppet module to S3
+        if: ${{ env.WAZUH_TAG != '' && inputs.UPLOAD_S3 == true }}
+        run: aws s3 cp ${{ github.workspace }}/output/*.tar.gz s3://${{ secrets.AWS_S3_BUCKET }}/${{ inputs.S3_REPOSITORY }}/puppet-module/
+
