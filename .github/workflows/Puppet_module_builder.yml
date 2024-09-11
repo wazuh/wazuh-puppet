@@ -35,6 +35,9 @@ jobs:
         with:
           ref: ${{ inputs.BRANCH_NAME }}
 
+      - name: View parameters
+        run: echo "${{ toJson(inputs) }}"
+
       - name: Verify Tag name
         run: |
             WAZUH_TAG=$(curl --silent https://api.github.com/repos/wazuh/wazuh/git/refs/tags | grep '["]ref["]:' | sed -E 's/.*\"([^\"]+)\".*/\1/'  | cut -c 11- | grep ^${{ inputs.BRANCH_NAME }}$)
@@ -42,10 +45,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-            curl -O https://apt.puppet.com/puppet-tools-release-noble.deb && \
-            dpkg -i puppet-tools-release-noble.deb && \
-            apt-get update && \
-            apt-get install pdk
+            curl -O https://apt.puppet.com/puppet-tools-release-noble.deb
+            sudo dpkg -i puppet-tools-release-noble.deb
+            sudo apt-get update
+            sudo apt-get install pdk
             pdk set config user.analytics.disabled false --type boolean --force
 
       - name: Build Wazuh Puppet module
