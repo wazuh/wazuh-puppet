@@ -72,9 +72,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ secrets.AWS_IAM_PUPPET_ROLE }}
-          role-session-name: "Puppet module-Builder"
           aws-region: "${{ secrets.AWS_REGION }}"
-          role-duration-seconds: 10800
 
       - name: Upload Puppet module to S3
         if: ${{ env.WAZUH_TAG != '' && inputs.UPLOAD_S3 == true }}
