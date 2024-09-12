@@ -40,10 +40,8 @@ jobs:
 
       - name: Create environment variables for workflow
         run: |
-            WAZUH_TAG=$(curl --silent https://api.github.com/repos/wazuh/wazuh-puppet/git/refs/tags | grep '["]ref["]:' | sed -E 's/.*\"([^\"]+)\".*/\1/'  | cut -c 11- | grep ^${{ inputs.BRANCH_NAME }}$)
             PUPPET_MODULE_NAME=$(jq .name ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
             PUPPET_MODULE_VERSION=$(jq .version ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
-            echo "WAZUH_TAG=$WAZUH_TAG" >> "$GITHUB_ENV"
             echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
             echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
 
@@ -68,13 +66,13 @@ jobs:
           retention-days: 1
 
       - name: Configure aws credentials
-        if: ${{ env.WAZUH_TAG != '' && inputs.UPLOAD_S3 == true }}
+        if: ${{ inputs.UPLOAD_S3 == true }}
         uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ secrets.AWS_IAM_PUPPET_ROLE }}
           aws-region: "${{ secrets.AWS_REGION }}"
 
       - name: Upload Puppet module to S3
-        if: ${{ env.WAZUH_TAG != '' && inputs.UPLOAD_S3 == true }}
+        if: ${{ inputs.UPLOAD_S3 == true }}
         run: aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz s3://${{ secrets.AWS_S3_BUCKET }}/${{ inputs.S3_REPOSITORY }}/puppet-module/
 
