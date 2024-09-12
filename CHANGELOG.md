@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- None
+- Delete tag verification ([#1113](https://github.com/wazuh/wazuh-puppet/pull/1113)) \- (Puppet Module Builder)
 
 ### Fixed
 
