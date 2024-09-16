@@ -4,27 +4,21 @@ name: Puppet Module Builder
 on:
   workflow_dispatch:
     inputs:
-      BRANCH_NAME:
-        type: string
-        description: "Branch or tag name"
-        required: true
-        default: "v4.10.0"
-      UPLOAD_S3:
+      upload:
+        description: "Upload ?"
         type: boolean
-        description: "Upload Puppet module to S3"
-        required: true
         default: false
-      S3_REPOSITORY:
-        type: choice
-        description: "S3 Repository"
-        required: true
-        options:
-          - staging
-          - pre-release
+      is_stage:
+        description: "Is stage ?"
+        type: boolean
+        default: false
 
 permissions:
   id-token: write   # This is required for requesting the JWT
   contents: read    # This is required for actions/checkout
+
+env:
+  S3_PATH: "/development/wazuh/4.x/secondary/puppet-module/"
 
 jobs:
   build_module:
@@ -32,18 +26,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.BRANCH_NAME }}
 
       - name: View parameters
         run: echo "${{ toJson(inputs) }}"
 
       - name: Create environment variables for workflow
         run: |
-            PUPPET_MODULE_NAME=$(jq .name ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
+            PUPPET_MODULE_REPO=$(jq .name ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
             PUPPET_MODULE_VERSION=$(jq .version ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
-            echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
+            calculatedSha=$(git rev-parse --short ${{ github.sha }})
+            echo "PUPPET_MODULE_REPO=$PUPPET_MODULE_REPO" >> "$GITHUB_ENV"
             echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
+            echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |
@@ -57,22 +51,32 @@ jobs:
         run: |
             mkdir -p ${{ github.workspace }}/output
             pdk build --force --target-dir=${{ github.workspace }}/output/
+            PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
+            echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
+
+      - name: Modify name for stage build
+        if: ${{ inputs.is_stage == true }}
+        run:
+            mv ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_REPO }}-${{ env.COMMIT_SHORT_SHA}}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
+            PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.COMMIT_SHORT_SHA}}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
+            echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
+
 
       - name: Create Puppet module artifact
         uses: actions/upload-artifact@v4
         with:
           name: Puppet module artifact
-          path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
+          path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}
           retention-days: 1
 
       - name: Configure aws credentials
-        if: ${{ inputs.UPLOAD_S3 == true }}
+        if: ${{ inputs.upload == true }}
         uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ secrets.AWS_IAM_PUPPET_ROLE }}
           aws-region: "${{ secrets.AWS_REGION }}"
 
       - name: Upload Puppet module to S3
-        if: ${{ inputs.UPLOAD_S3 == true }}
-        run: aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz s3://${{ secrets.AWS_S3_BUCKET }}/${{ inputs.S3_REPOSITORY }}/puppet-module/
+        if: ${{ inputs.upload == true }}
+        run: aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
 
