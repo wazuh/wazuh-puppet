@@ -58,7 +58,7 @@ jobs:
         if: ${{ inputs.is_stage == true }}
         run: |
             mv ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_REPO }}-${{ env.COMMIT_SHORT_SHA}}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
-            PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.COMMIT_SHORT_SHA}}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
+            PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.PUPPET_MODULE_VERSION }}-${{ env.COMMIT_SHORT_SHA}}.tar.gz
             echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
 
 
