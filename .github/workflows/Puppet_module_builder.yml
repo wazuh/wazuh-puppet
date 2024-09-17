@@ -47,20 +47,20 @@ jobs:
             sudo apt-get install pdk
             pdk set config user.analytics.disabled false --type boolean --force
 
+      - name: Modify name for stage build
+        if: ${{ inputs.is_stage == false }}
+        run: |
+            pip install sde
+            PUPPET_MODULE_VERSION="${PUPPET_MODULE_VERSION%-*}-0-${{ env.COMMIT_SHORT_SHA}}"
+            sde version $PUPPET_MODULE_VERSION metadata.json
+            echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
+
       - name: Build Wazuh Puppet module
         run: |
             mkdir -p ${{ github.workspace }}/output
             pdk build --force --target-dir=${{ github.workspace }}/output/
             PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
             echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
-
-      - name: Modify name for stage build
-        if: ${{ inputs.is_stage == true }}
-        run: |
-            mv ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_REPO }}-${{ env.COMMIT_SHORT_SHA}}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
-            PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.PUPPET_MODULE_VERSION }}-${{ env.COMMIT_SHORT_SHA}}.tar.gz
-            echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
-
 
       - name: Create Puppet module artifact
         uses: actions/upload-artifact@v4
