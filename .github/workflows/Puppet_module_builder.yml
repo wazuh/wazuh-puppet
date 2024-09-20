@@ -87,11 +87,25 @@ jobs:
             PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
             echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
 
+      - name: Build Wazuh Puppet module checksum
+        if: ${{ inputs.checksum == true }}
+        run: |
+            sha512sum ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} > ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512
+
+
       - name: Create Puppet module artifact
         uses: actions/upload-artifact@v4
         with:
           name: Puppet module artifact
           path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}
+          retention-days: 1
+
+      - name: Create Puppet module checksum artifact
+        if: ${{ inputs.checksum == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Puppet module checksum artifact
+          path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512
           retention-days: 1
 
       - name: Configure aws credentials
@@ -104,4 +118,9 @@ jobs:
       - name: Upload Puppet module to S3
         if: ${{ inputs.upload == true }}
         run: aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
+
+      - name: Create checksum file and upload
+        if: ${{ inputs.checksum == true && inputs.upload == true }}
+        run: |
+          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512 s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
 
