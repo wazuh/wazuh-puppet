@@ -1,4 +1,4 @@
-run-name: Build Wazuh Puppet module ${{ inputs.BRANCH_NAME }} - Launched by @${{ github.actor }}
+run-name: Puppet module ${{ inputs.is_stage && ' - is stage' || '' }}${{ inputs.checksum && ' - checksum' || '' }} ${{ inputs.id }}
 name: Puppet Module Builder
 
 on:
@@ -12,6 +12,31 @@ on:
         description: "Is stage ?"
         type: boolean
         default: false
+      checksum:
+        description: "Checksum ?"
+        type: boolean
+        default: false
+      id:
+        description: "ID used to identify the workflow uniquely."
+        type: string
+        required: false
+  workflow_call:
+    inputs:
+      upload:
+        description: "Upload ?"
+        type: boolean
+        default: false
+      is_stage:
+        description: "Is stage ?"
+        type: boolean
+        default: false
+      checksum:
+        description: "Checksum ?"
+        type: boolean
+        default: false
+      id:
+        type: string
+        required: false
 
 permissions:
   id-token: write   # This is required for requesting the JWT
