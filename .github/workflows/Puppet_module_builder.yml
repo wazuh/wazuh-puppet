@@ -105,3 +105,9 @@ jobs:
         if: ${{ inputs.upload == true }}
         run: aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
 
+      - name: Create checksum file and upload
+        if: ${{ inputs.checksum == true }}
+        run: |
+          sha512sum ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} > ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512
+          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512 s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
+
