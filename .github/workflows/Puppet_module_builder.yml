@@ -104,7 +104,7 @@ jobs:
         if: ${{ inputs.checksum == true }}
         uses: actions/upload-artifact@v4
         with:
-          name: Puppet module artifact
+          name: Puppet module checksum artifact
           path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512
           retention-days: 1
 
