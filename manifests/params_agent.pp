@@ -1,7 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh-Agent configuration parameters
 class wazuh::params_agent {
-  $agent_package_version = '4.3.11'
+  $agent_package_version = '4.9.0'
   $agent_package_revision = '1'
   $agent_service_ensure = 'running'
   $agent_msi_download_location = 'https://packages.wazuh.com/4.x/windows'
@@ -226,6 +226,8 @@ class wazuh::params_agent {
   # active-response
   $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
 
+  ## Ensure variable exists
+  $ossec_service_provider = undef
 
   # OS specific configurations
   case $::kernel {
@@ -301,7 +303,7 @@ class wazuh::params_agent {
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
-      case $::osfamily {
+      case $facts['os']['family'] {
         'Debian': {
           $service_has_status = false
           $ossec_service_provider = undef
@@ -335,7 +337,7 @@ class wazuh::params_agent {
                 }
               }
             }
-            /^(wheezy|stretch|buster|bullseye|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
+            /^(wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -460,6 +462,30 @@ class wazuh::params_agent {
             }
             'AlmaLinux': {
               if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+              }
+            }
+            'Rocky': {
+              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+              }
+            }
+            default: { fail('This ossec module has not been tested on your distribution') }
+          }
+        }
+        'Suse': {
+          $service_has_status = true
+
+          $default_local_files = [
+            { 'location' => '/var/log/audit/audit.log', 'log_format' => 'audit' },
+            { 'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/messages', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/secure', 'log_format' => 'syslog' },
+            { 'location' => '/var/log/maillog', 'log_format' => 'syslog' },
+          ]
+          case $::operatingsystem {
+            'SLES': {
+              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
                 $ossec_service_provider = 'redhat'
               }
             }
