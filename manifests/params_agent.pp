@@ -226,6 +226,8 @@ class wazuh::params_agent {
   # active-response
   $active_response_linux_ca_store = '/var/ossec/etc/wpk_root.pem'
 
+  ## Ensure variable exists
+  $ossec_service_provider = undef
 
   # OS specific configurations
   case $::kernel {
