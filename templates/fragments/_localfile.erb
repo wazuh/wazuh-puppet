@@ -23,6 +23,9 @@
     <%- if localfile.key?('only-future-events') -%>
     <only-future-events><%= localfile['only-future-events'] %></only-future-events>
     <%- end -%>
+    <%- if localfile.key?('ignore') -%>
+    <ignore type="<%= localfile['ignore']['type'] %>"><%= localfile['ignore']['value'] %></ignore>
+    <%- end -%>
     <%- if localfile.key?('target') -%>
     <target><%= localfile['target'] %></target>
     <%- end -%>
