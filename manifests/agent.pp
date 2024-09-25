@@ -527,7 +527,7 @@ class wazuh::agent (
           }
           $agent_auth_option_manager = '-v /var/ossec/etc/rootCA.pem'
         } elsif $wazuh_manager_root_ca_pem_path != undef {
-          validate_legacy(String, 'validate_string', $wazuh_manager_root_ca_pem)
+          validate_legacy(String, 'validate_string', $wazuh_manager_root_ca_pem_path)
           $agent_auth_option_manager = "-v ${wazuh_manager_root_ca_pem_path}"
         } else {
           $agent_auth_option_manager = ''  # Avoid errors when compounding final command
