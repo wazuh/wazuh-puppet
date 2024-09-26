@@ -1,0 +1,29 @@
+<integration>
+    <name><%= $servicename %></name>
+    <%- unless $hook_url =~ Undef { -%>
+    <hook_url><%= $hook_url %></hook_url>
+    <%- } -%>
+    <%- unless $api_key =~ Undef { -%>
+    <api_key><%= $api_key %></api_key>
+    <%- } -%>
+    <%- unless $rule_id =~ Undef { -%>
+    <rule_id><%= $rule_id %></rule_id>
+    <%- } -%>
+    <%- unless $level =~ Undef { -%>
+    <level><%= $level %></level>
+    <%- } -%>
+    <%- unless $group =~ Undef { -%>
+    <group><%= $group %></group>
+    <%- } -%>
+    <%- unless $event_location =~ Undef { -%>
+    <event_location><%= $event_location %></event_location>
+    <%- } -%>
+    <%- unless $alert_format =~ Undef { -%>
+    <alert_format><%= $alert_format %></alert_format>
+    <%- } -%>
+    <%- unless $max_log =~ Undef { -%>
+    <max_log><%= $max_log %></max_log>
+    <%- } -%>
+</integration>
+
+
