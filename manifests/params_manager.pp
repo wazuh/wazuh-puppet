@@ -367,7 +367,7 @@ class wazuh::params_manager {
       $wazuh_api_template = 'wazuh/wazuh_api_yml.erb'
 
 
-      case $::osfamily {
+      case $facts['os']['family'] {
         'Debian': {
 
           $agent_service  = 'wazuh-agent'
