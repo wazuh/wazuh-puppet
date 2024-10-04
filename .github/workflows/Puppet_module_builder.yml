@@ -16,6 +16,11 @@ on:
         description: "Checksum ?"
         type: boolean
         default: false
+      wazuh_puppet_reference:
+        description: "wazuh-puppet reference"
+        type: string
+        default: "4.10.0"
+        required: false
       id:
         description: "ID used to identify the workflow uniquely."
         type: string
@@ -34,6 +39,11 @@ on:
         description: "Checksum ?"
         type: boolean
         default: false
+      wazuh_puppet_reference:
+        description: "wazuh-puppet reference"
+        type: string
+        default: "4.10.0"
+        required: false
       id:
         type: string
         required: false
@@ -51,6 +61,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.wazuh_puppet_reference }}
 
       - name: View parameters
         run: echo "${{ toJson(inputs) }}"
