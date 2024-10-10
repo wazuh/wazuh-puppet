@@ -249,7 +249,7 @@ class wazuh::manager (
       $local_decoder_template               = $wazuh::params_manager::local_decoder_template,
       $decoder_exclude                      = $wazuh::params_manager::decoder_exclude,
       $local_rules_template                 = $wazuh::params_manager::local_rules_template,
-      $rule_exclude                         = $wazuh::params_manager::rule_exclude,
+      $ossec_ruleset_rule_exclude           = $wazuh::params_manager::ossec_ruleset_rule_exclude,
       $shared_agent_template                = $wazuh::params_manager::shared_agent_template,
 
       $wazuh_manager_verify_manager_ssl     = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
