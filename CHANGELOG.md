@@ -1,6 +1,25 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v4.10.0
+
+### Added
+
+- Wazuh Puppet module builder ([#1107](https://github.com/wazuh/wazuh-puppet/pull/1107)) \- (Puppet Module Builder)
+- Wazuh Puppet module builder ([#1109](https://github.com/wazuh/wazuh-puppet/pull/1109)) \- (Puppet Module Builder)
+
+### Changed
+
+- Modfy Puppet module builder ([#1113](https://github.com/wazuh/wazuh-puppet/pull/1113)) \- (Puppet Module Builder)
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## Wazuh Puppet v4.9.1
 
 ### Added
