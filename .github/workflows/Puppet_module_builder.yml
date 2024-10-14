@@ -78,8 +78,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-            curl -O https://apt.puppet.com/puppet-tools-release-noble.deb
-            sudo dpkg -i puppet-tools-release-noble.deb
+            curl -O https://apt.puppet.com/puppet-tools-release-jammy.deb
+            sudo dpkg -i puppet-tools-release-jammy.deb
             sudo apt-get update
             sudo apt-get install pdk
             pdk set config user.analytics.disabled false --type boolean --force
