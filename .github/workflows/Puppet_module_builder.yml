@@ -57,7 +57,7 @@ env:
 
 jobs:
   build_module:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -87,7 +87,7 @@ jobs:
       - name: Modify name for stage build
         if: ${{ inputs.is_stage == false }}
         run: |
-            pip install sde --break-system-packages
+            pip install sde
             PUPPET_MODULE_VERSION="${PUPPET_MODULE_VERSION}-${{ env.COMMIT_SHORT_SHA}}"
             sde version $PUPPET_MODULE_VERSION ${{ github.workspace }}/metadata.json
             echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
