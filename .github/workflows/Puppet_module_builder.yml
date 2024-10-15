@@ -130,14 +130,14 @@ jobs:
       - name: Upload Puppet module to S3
         if: ${{ inputs.upload == true }}
         run: |
-          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
-          s3uri="s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}/${{ env.PUPPET_MODULE_NAME }}"
+          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
+          s3uri="s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}/${{ env.PUPPET_MODULE_NAME }}"
           echo "S3 URI: ${s3uri}"
 
       - name: Create checksum file and upload
         if: ${{ inputs.checksum == true && inputs.upload == true }}
         run: |
-          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512 s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
-          s3uri="s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.S3_PATH }}/${{ env.PUPPET_MODULE_NAME }}.sha512"
+          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512 s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
+          s3uri="s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}/${{ env.PUPPET_MODULE_NAME }}.sha512"
           echo "S3 sha512 URI: ${s3uri}"
 
