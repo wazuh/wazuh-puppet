@@ -28,11 +28,12 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Add URI file after upload ([#1143](https://github.com/wazuh/wazuh-puppet/pull/1143)) \- (Puppet Module Builder)
 - Modfy Puppet module builder ([#1113](https://github.com/wazuh/wazuh-puppet/pull/1113)) \- (Puppet Module Builder)
 
 ### Fixed
 
-- None
+- Changed GitHub Runner OS version to Ubuntu 22.04. ([#1142](https://github.com/wazuh/wazuh-puppet/pull/1142))
 
 ### Deleted
 
