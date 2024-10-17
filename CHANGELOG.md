@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Changed GitHub Runner OS version to Ubuntu 22.04. ([#1142](https://github.com/wazuh/wazuh-puppet/pull/1142))
 
 ### Deleted
 
