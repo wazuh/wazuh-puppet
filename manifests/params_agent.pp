@@ -306,7 +306,7 @@ class wazuh::params_agent {
             { 'location' => '/var/log/dpkg.log', 'log_format' => 'syslog' },
             { 'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog' },
           ]
-          case $facts['os']['family']['codename'] {
+          case $facts['os']['distro']['codename'] {
             'xenial': {
               $wodle_openscap_content = {
                 'ssg-ubuntu-1604-ds.xml'        => {

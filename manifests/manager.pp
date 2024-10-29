@@ -49,7 +49,7 @@ class wazuh::manager (
   $configure_cluster                    = $wazuh::params_manager::configure_cluster,
   $configure_active_response            = $wazuh::params_manager::configure_active_response,
 
-  # ossec.conf templates paths
+# ossec.conf templates paths
   $ossec_manager_template                       = $wazuh::params_manager::ossec_manager_template,
   $ossec_rootcheck_template                     = $wazuh::params_manager::ossec_rootcheck_template,
   $ossec_wodle_openscap_template                = $wazuh::params_manager::ossec_wodle_openscap_template,
@@ -255,7 +255,6 @@ class wazuh::manager (
   $ossec_local_files                    = $wazuh::params_manager::default_local_files,
 
   # API
-
   $wazuh_api_host                           = $wazuh::params_manager::wazuh_api_host,
 
   $wazuh_api_port                           = $wazuh::params_manager::wazuh_api_port,
@@ -275,11 +274,7 @@ class wazuh::manager (
   $wazuh_api_cors_enabled                   = $wazuh::params_manager::wazuh_api_cors_enabled,
   $wazuh_api_cors_source_route              = $wazuh::params_manager::wazuh_api_cors_source_route,
   $wazuh_api_cors_expose_headers            = $wazuh::params_manager::wazuh_api_cors_expose_headers,
-
   $wazuh_api_cors_allow_credentials         = $wazuh::params_manager::wazuh_api_cors_allow_credentials,
-  $wazuh_api_cache_enabled                  = $wazuh::params_manager::wazuh_api_cache_enabled,
-
-  $wazuh_api_cache_time                     = $wazuh::params_manager::wazuh_api_cache_time,
 
   $wazuh_api_access_max_login_attempts      = $wazuh::params_manager::wazuh_api_access_max_login_attempts,
   $wazuh_api_access_block_time              = $wazuh::params_manager::wazuh_api_access_block_time,
@@ -306,9 +301,9 @@ class wazuh::manager (
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
 
   if ( $facts['kernel'] == 'windows') {
-    $facts['kernel'] = 'Linux'
+    $kernel = 'Linux'
   } else {
-    $facts['kernel'] = 'Linux'
+    $kernel = 'Linux'
     if ( $facts['os']['family'] == 'Debian') {
       $os_family = 'debian'
     } else {
@@ -414,7 +409,7 @@ class wazuh::manager (
       }
     } 'Debian', 'debian', 'Ubuntu', 'ubuntu':{
       $apply_template_os = 'debian'
-      if ( $facts['os']['family']['codename'] == 'wheezy') or ( $facts['os']['family']['codename'] == 'jessie') {
+      if ( $facts['os']['distro']['codename'] == 'wheezy') or ( $facts['os']['distro']['codename'] == 'jessie') {
         $debian_additional_templates = 'yes'
       }
     } 'Amazon':{

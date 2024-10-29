@@ -2,7 +2,8 @@
 # Wazuh API configuration file
 # Copyright (C) 2015, Wazuh Inc.
 #
-host: <%= @wazuh_api_host %>
+host: 
+  - <%= @wazuh_api_host %>
 port: <%= @wazuh_api_port %>
 # Advanced configuration
 https:
@@ -24,10 +25,6 @@ cors:
   expose_headers: <%= @wazuh_api_cors_expose_headers %>
   allow_headers: <%= @wazuh_api_cors_allow_headers %>
   allow_credentials: <%= @wazuh_api_cors_allow_credentials %>
-# Cache (time in seconds)
-cache:
-  enabled: <%= @wazuh_api_cache_enabled %>
-  time: <%= @wazuh_api_cache_time %>
 # Access parameters
 access:
   max_login_attempts: <%= @wazuh_api_access_max_login_attempts %>

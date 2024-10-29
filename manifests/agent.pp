@@ -320,7 +320,7 @@ class wazuh::agent (
           }
         } 'Debian', 'debian', 'Ubuntu', 'ubuntu':{
           $apply_template_os = 'debian'
-          if ( $facts['os']['family']['codename']  == 'wheezy') or ( $facts['os']['family']['codename'] == 'jessie') {
+          if ( $facts['os']['distro']['codename']  == 'wheezy') or ( $facts['os']['distro']['codename'] == 'jessie') {
             $debian_additional_templates = 'yes'
           }
         } 'Amazon':{

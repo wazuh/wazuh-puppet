@@ -7,7 +7,7 @@ class wazuh::repo (
       $wazuh_repo_url = 'https://packages.wazuh.com/4.x/apt'
       $repo_release = 'stable'
 
-      if $facts['os']['family']['codename'] =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
+      if $facts['os']['distro']['codename'] =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
       and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) {
         ensure_packages(['apt-transport-https', 'gnupg'], { 'ensure' => 'present' })
       }
@@ -25,7 +25,7 @@ class wazuh::repo (
         mode    => '0644',
         require => Exec['import-wazuh-key'],
       }
-      case $facts['os']['family']['codename'] {
+      case $facts['os']['distro']['codename'] {
         /(jessie|wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy)/: {
           apt::source { 'wazuh':
             ensure   => present,

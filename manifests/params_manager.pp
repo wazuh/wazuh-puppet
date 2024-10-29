@@ -333,10 +333,6 @@ class wazuh::params_manager {
       $wazuh_api_cors_allow_headers = '"*"'
       $wazuh_api_cors_allow_credentials = 'no'
 
-      # Cache (time in seconds)
-      $wazuh_api_cache_enabled = 'yes'
-      $wazuh_api_cache_time = '0.750'
-
       # Access parameters
       $wazuh_api_access_max_login_attempts = 5
       $wazuh_api_access_block_time = 300
@@ -372,7 +368,7 @@ class wazuh::params_manager {
             { 'location' => '/var/log/auth.log', 'log_format' => 'syslog' },
             { 'location' => '/var/ossec/logs/active-responses.log', 'log_format' => 'syslog' },
           ]
-          case $facts['os']['family']['codename'] {
+          case $facts['os']['distro']['codename'] {
             'xenial': {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
@@ -555,7 +551,7 @@ class wazuh::params_manager {
       $validate_cmd_conf = undef
       # Pushed by shared agent config now
       $default_local_files = [
-        { 'location' => 'Security' , 'log_format' => 'eventchannel',
+        { 'location' => 'Security', 'log_format' => 'eventchannel',
         'query' => 'Event/System[EventID != 5145 and EventID != 5156 and EventID != 5447 and EventID != 4656 and EventID != 4658\
         and EventID != 4663 and EventID != 4660 and EventID != 4670 and EventID != 4690 and EventID!= 4703 and EventID != 4907]' },
         { 'location' => 'System' , 'log_format' => 'eventlog' },
