@@ -283,9 +283,6 @@ class wazuh::manager (
 
 
       $wazuh_api_cors_allow_credentials         = $::wazuh::params_manager::wazuh_api_cors_allow_credentials,
-      $wazuh_api_cache_enabled                  = $::wazuh::params_manager::wazuh_api_cache_enabled,
-
-      $wazuh_api_cache_time                     = $::wazuh::params_manager::wazuh_api_cache_time,
 
       $wazuh_api_access_max_login_attempts      = $::wazuh::params_manager::wazuh_api_access_max_login_attempts,
       $wazuh_api_access_block_time              = $::wazuh::params_manager::wazuh_api_access_block_time,

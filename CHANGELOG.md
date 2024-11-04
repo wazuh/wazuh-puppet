@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Delete API parameters from wazuh.yml template ([#1155](https://github.com/wazuh/wazuh-puppet/pull/1155)) \- (Puppet Module)
 - Add URI file after upload ([#1143](https://github.com/wazuh/wazuh-puppet/pull/1143)) \- (Puppet Module Builder)
 - Modfy Puppet module builder ([#1113](https://github.com/wazuh/wazuh-puppet/pull/1113)) \- (Puppet Module Builder)
 
@@ -38,6 +39,12 @@ All notable changes to this project will be documented in this file.
 ### Deleted
 
 - None
+
+## Wazuh Puppet v4.9.2
+
+### Added
+
+- Support to 4.9.2 Wazuh release.
 
 ## Wazuh Puppet v4.9.1
 
