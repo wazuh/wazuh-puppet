@@ -4,7 +4,7 @@ control 'wazuh-agent' do
 
   describe package('wazuh-agent') do
     it { is_expected.to be_installed }
-    its('version') { is_expected.to eq '4.10.2-1' }
+    its('version') { is_expected.to eq '5.0.0-1' }
   end
 
   describe service('wazuh-agent') do
