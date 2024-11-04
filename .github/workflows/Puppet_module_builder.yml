@@ -1,0 +1,143 @@
+run-name: Puppet module ${{ inputs.is_stage && ' - is stage' || '' }}${{ inputs.checksum && ' - checksum' || '' }} ${{ inputs.id }}
+name: Puppet Module Builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: "Upload ?"
+        type: boolean
+        default: false
+      is_stage:
+        description: "Is stage ?"
+        type: boolean
+        default: false
+      checksum:
+        description: "Checksum ?"
+        type: boolean
+        default: false
+      wazuh_puppet_reference:
+        description: "wazuh-puppet reference"
+        type: string
+        default: "4.10.0"
+        required: false
+      id:
+        description: "ID used to identify the workflow uniquely."
+        type: string
+        required: false
+  workflow_call:
+    inputs:
+      upload:
+        description: "Upload ?"
+        type: boolean
+        default: false
+      is_stage:
+        description: "Is stage ?"
+        type: boolean
+        default: false
+      checksum:
+        description: "Checksum ?"
+        type: boolean
+        default: false
+      wazuh_puppet_reference:
+        description: "wazuh-puppet reference"
+        type: string
+        default: "4.10.0"
+        required: false
+      id:
+        type: string
+        required: false
+
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
+env:
+  S3_PATH: "development/wazuh/4.x/secondary/puppet-module/"
+
+jobs:
+  build_module:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.wazuh_puppet_reference }}
+
+      - name: View parameters
+        run: echo "${{ toJson(inputs) }}"
+
+      - name: Create environment variables for workflow
+        run: |
+            PUPPET_MODULE_REPO=$(jq .name ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
+            PUPPET_MODULE_VERSION=$(jq .version ${{ github.workspace }}/metadata.json | sed -e 's|["'\'']||g')
+            calculatedSha=$(git rev-parse --short ${{ github.sha }})
+            echo "PUPPET_MODULE_REPO=$PUPPET_MODULE_REPO" >> "$GITHUB_ENV"
+            echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
+            echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+            curl -O https://apt.puppet.com/puppet-tools-release-jammy.deb
+            sudo dpkg -i puppet-tools-release-jammy.deb
+            sudo apt-get update
+            sudo apt-get install pdk
+            pdk set config user.analytics.disabled false --type boolean --force
+
+      - name: Modify name for stage build
+        if: ${{ inputs.is_stage == false }}
+        run: |
+            pip install sde
+            PUPPET_MODULE_VERSION="${PUPPET_MODULE_VERSION}-${{ env.COMMIT_SHORT_SHA}}"
+            sde version $PUPPET_MODULE_VERSION ${{ github.workspace }}/metadata.json
+            echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
+
+      - name: Build Wazuh Puppet module
+        run: |
+            mkdir -p ${{ github.workspace }}/output
+            pdk build --force --target-dir=${{ github.workspace }}/output/
+            PUPPET_MODULE_NAME=${{ env.PUPPET_MODULE_REPO }}-${{ env.PUPPET_MODULE_VERSION }}.tar.gz
+            echo "PUPPET_MODULE_NAME=$PUPPET_MODULE_NAME" >> "$GITHUB_ENV"
+
+      - name: Build Wazuh Puppet module checksum
+        if: ${{ inputs.checksum == true }}
+        run: |
+            sha512sum ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} > ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512
+
+
+      - name: Create Puppet module artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Puppet module artifact
+          path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}
+          retention-days: 1
+
+      - name: Create Puppet module checksum artifact
+        if: ${{ inputs.checksum == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Puppet module checksum artifact
+          path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512
+          retention-days: 1
+
+      - name: Configure aws credentials
+        if: ${{ inputs.upload == true }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_PUPPET_ROLE }}
+          aws-region: "${{ secrets.AWS_REGION }}"
+
+      - name: Upload Puppet module to S3
+        if: ${{ inputs.upload == true }}
+        run: |
+          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }} s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
+          s3uri="s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}/${{ env.PUPPET_MODULE_NAME }}"
+          echo "S3 URI: ${s3uri}"
+
+      - name: Create checksum file and upload
+        if: ${{ inputs.checksum == true && inputs.upload == true }}
+        run: |
+          aws s3 cp ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512 s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}
+          s3uri="s3://${{ vars.AWS_S3_BUCKET }}/${{ env.S3_PATH }}/${{ env.PUPPET_MODULE_NAME }}.sha512"
+          echo "S3 sha512 URI: ${s3uri}"
+

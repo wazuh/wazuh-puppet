@@ -1,6 +1,27 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v4.10.0
+
+### Added
+
+- Wazuh Puppet module builder ([#1107](https://github.com/wazuh/wazuh-puppet/pull/1107)) \- (Puppet Module Builder)
+- Wazuh Puppet module builder ([#1109](https://github.com/wazuh/wazuh-puppet/pull/1109)) \- (Puppet Module Builder)
+
+### Changed
+
+- Delete API parameters from wazuh.yml template ([#1155](https://github.com/wazuh/wazuh-puppet/pull/1155)) \- (Puppet Module)
+- Add URI file after upload ([#1143](https://github.com/wazuh/wazuh-puppet/pull/1143)) \- (Puppet Module Builder)
+- Modfy Puppet module builder ([#1113](https://github.com/wazuh/wazuh-puppet/pull/1113)) \- (Puppet Module Builder)
+
+### Fixed
+
+- Changed GitHub Runner OS version to Ubuntu 22.04. ([#1142](https://github.com/wazuh/wazuh-puppet/pull/1142))
+
+### Deleted
+
+- None
+
 ## Wazuh Puppet v4.9.2
 
 ### Added
