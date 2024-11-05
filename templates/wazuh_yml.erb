@@ -240,5 +240,5 @@ hosts:
       port: <%= api_profile['port'] %>
       username: <%= api_profile['user'] %>
       password: <%= api_profile['password'] %>
-      run_as: false
+      run_as: <%= api_profile['run_as'] %>
 <% end -%>
