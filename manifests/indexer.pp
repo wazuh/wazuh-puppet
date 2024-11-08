@@ -129,12 +129,11 @@ class wazuh::indexer (
     '/usr/share/wazuh-indexer',
     '/var/lib/wazuh-indexer',
   ].each |String $file| {
-    exec { "set recusive ownership of ${file}":
-      path        => '/usr/bin:/bin',
-      command     => "chown ${indexer_fileuser}:${indexer_filegroup} -R ${file}",
-      refreshonly => true,  # only run when package is installed or updated
-      subscribe   => Package['wazuh-indexer'],
-      notify      => Service['wazuh-indexer'],
+    file { "${file}":
+      ensure => directory,
+      owner  => 'wazuh-indexer',
+      group  => 'wazuh-indexer',
+      mode   => '0750',
     }
   }
 
