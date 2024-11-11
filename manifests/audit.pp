@@ -6,19 +6,29 @@ class wazuh::audit (
   $audit_backlog_wait_time = '0',
   $audit_rules = [],
   $audit_package_title = 'Installing Audit..',
+  $audispd_plugins_package_title = 'Installing audispd-plugins..',
 ) {
-
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux': {
-      case $::operatingsystem {
+      case $facts['os']['name'] {
         'Debian', 'debian', 'Ubuntu', 'ubuntu': {
           package { $audit_package_title:
             name => 'auditd',
           }
+          # Install audispd-plugins for Debian/Ubuntu
+          package { $audispd_plugins_package_title:
+            ensure => installed,
+            name   => 'audispd-plugins',
+          }
         }
         default: {
           package { $audit_package_title:
-            name => 'audit'
+            name => 'audit',
+          }
+          # Install audispd-plugins for other Linux distributions
+          package { $audispd_plugins_package_title:
+            ensure => installed,
+            name   => 'audispd-plugins',
           }
         }
       }
@@ -26,12 +36,12 @@ class wazuh::audit (
       service { 'auditd':
         ensure  => running,
         enable  => true,
-        require => Package[$audit_package_title],
+        require => Package[$audit_package_title, $audispd_plugins_package_title],
       }
 
       if $audit_manage_rules == true {
         file { '/etc/audit/rules.d/audit.rules':
-          ensure  => present,
+          ensure  => file,
           require => Service['auditd'],
         }
 
@@ -39,13 +49,13 @@ class wazuh::audit (
           file_line { "Append rule ${rule} to /etc/audit/rules.d/audit.rules":
             path    => '/etc/audit/rules.d/audit.rules',
             line    => $rule,
-            require => File['/etc/audit/rules.d/audit.rules']
+            require => File['/etc/audit/rules.d/audit.rules'],
           }
         }
       }
     }
     default: {
-      fail("Module Audit not supported on ${::operatingsystem}")
+      fail("Module Audit not supported on ${facts['os']['name']}")
     }
   }
 }
