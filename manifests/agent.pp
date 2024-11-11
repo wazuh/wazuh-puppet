@@ -281,7 +281,7 @@ class wazuh::agent (
 
       -> file { 'wazuh-agent':
         path               => "${download_path}\\wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
-        group              => 'Administrators',
+        group              => 'S-1-5-32-544',
         mode               => '0774',
         source             => "${agent_msi_download_location}/wazuh-agent-${agent_package_version}-${agent_package_revision}.msi",
         source_permissions => ignore
