@@ -23,6 +23,7 @@ class wazuh::indexer (
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_cluster_initial_master_nodes = ['node-1'],
   $indexer_cluster_CN = ['node-1'],
+  $manage_certs = true,
 
   # JVM options
   $jvm_options_memory = '1g',
@@ -44,38 +45,38 @@ class wazuh::indexer (
     name   => $indexer_package,
   }
 
-  exec { "ensure full path of ${indexer_path_certs}":
-    path    => '/usr/bin:/bin',
-    command => "mkdir -p ${indexer_path_certs}",
-    creates => $indexer_path_certs,
-    require => Package['wazuh-indexer'],
-  }
-  -> file { $indexer_path_certs:
-    ensure => directory,
-    owner  => $indexer_fileuser,
-    group  => $indexer_filegroup,
-    mode   => '0500',
-  }
+  if $manage_certs {
+    exec { "ensure full path of ${indexer_path_certs}":
+      path    => '/usr/bin:/bin',
+      command => "mkdir -p ${indexer_path_certs}",
+      creates => $indexer_path_certs,
+      require => Package['wazuh-indexer'],
+    }
+    -> file { $indexer_path_certs:
+      ensure => directory,
+      owner  => $indexer_fileuser,
+      group  => $indexer_filegroup,
+      mode   => '0500',
+    }
 
-  [
-   "indexer-$indexer_node_name.pem",
-   "indexer-$indexer_node_name-key.pem",
-   'root-ca.pem',
-   'admin.pem',
-   'admin-key.pem',
-  ].each |String $certfile| {
-    file { "${indexer_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $indexer_fileuser,
-      group   => $indexer_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
+    [
+     "indexer-$indexer_node_name.pem",
+     "indexer-$indexer_node_name-key.pem",
+     'root-ca.pem',
+     'admin.pem',
+     'admin-key.pem',
+    ].each |String $certfile| {
+      file { "${indexer_path_certs}/${certfile}":
+        ensure  => file,
+        owner   => $indexer_fileuser,
+        group   => $indexer_filegroup,
+        mode    => '0400',
+        replace => true,
+        recurse => remote,
+        source  => "puppet:///modules/archive/${certfile}",
+      }
     }
   }
-
-
 
   file { 'configuration file':
     path    => '/etc/wazuh-indexer/opensearch.yml',

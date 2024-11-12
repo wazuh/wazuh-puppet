@@ -17,8 +17,10 @@ output.elasticsearch:
   username: <%= @filebeat_oss_elastic_user %>
   password: <%= @filebeat_oss_elastic_password %>
   protocol: https
+<% if not @use_system_ca -%>
   ssl.certificate_authorities:
     - /etc/filebeat/certs/root-ca.pem
+<% end -%>
   ssl.certificate: "/etc/filebeat/certs/filebeat.pem"
   ssl.key: "/etc/filebeat/certs/filebeat-key.pem"
 

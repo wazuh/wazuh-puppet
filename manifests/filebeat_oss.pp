@@ -19,6 +19,9 @@ class wazuh::filebeat_oss (
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
+
+  $manage_certs = true,
+  $use_system_ca = false,
 ) {
 
   package { 'filebeat':
@@ -73,33 +76,35 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  exec { "ensure full path of ${filebeat_path_certs}":
-    path    => '/usr/bin:/bin',
-    command => "mkdir -p ${filebeat_path_certs}",
-    creates => $filebeat_path_certs,
-    require => Package['filebeat'],
-  }
-  -> file { $filebeat_path_certs:
-    ensure => directory,
-    owner  => $filebeat_fileuser,
-    group  => $filebeat_filegroup,
-    mode   => '0500',
-  }
+  if $manage_certs {
+    exec { "ensure full path of ${filebeat_path_certs}":
+      path    => '/usr/bin:/bin',
+      command => "mkdir -p ${filebeat_path_certs}",
+      creates => $filebeat_path_certs,
+      require => Package['filebeat'],
+    }
+    -> file { $filebeat_path_certs:
+      ensure => directory,
+      owner  => $filebeat_fileuser,
+      group  => $filebeat_filegroup,
+      mode   => '0500',
+    }
 
-  $_certfiles = {
-    "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
-    "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
-    'root-ca.pem'    => 'root-ca.pem',
-  }
-  $_certfiles.each |String $certfile_source, String $certfile_target| {
-    file { "${filebeat_path_certs}/${certfile_target}":
-      ensure  => file,
-      owner   => $filebeat_fileuser,
-      group   => $filebeat_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile_source}",
+    $_certfiles = {
+      "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
+      "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
+      'root-ca.pem'    => 'root-ca.pem',
+    }
+    $_certfiles.each |String $certfile_source, String $certfile_target| {
+      file { "${filebeat_path_certs}/${certfile_target}":
+        ensure  => file,
+        owner   => $filebeat_fileuser,
+        group   => $filebeat_filegroup,
+        mode    => '0400',
+        replace => true,
+        recurse => remote,
+        source  => "puppet:///modules/archive/${certfile_source}",
+      }
     }
   }
 
