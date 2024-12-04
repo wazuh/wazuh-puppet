@@ -31,7 +31,6 @@ class wazuh::params_manager {
       $ossec_remote_queue_size                         = 131072
 
       # ossec.conf generation parameters
-
       $configure_rootcheck                             = true
       $configure_wodle_openscap                        = true
       $configure_wodle_cis_cat                         = true
@@ -70,7 +69,6 @@ class wazuh::params_manager {
       $ossec_syslog_output_template                    = 'wazuh/fragments/_syslog_output.erb'
 
       ## Rootcheck
-
       $ossec_rootcheck_disabled                        = 'no'
       $ossec_rootcheck_check_files                     = 'yes'
       $ossec_rootcheck_check_trojans                   = 'yes'
@@ -158,7 +156,6 @@ class wazuh::params_manager {
       $active_response_repeated_offenders              = ['30,60,120']
 
       #vulnerability-detection
-
       $vulnerability_detection_enabled                 = 'yes'
       $vulnerability_detection_index_status            = 'yes'
       $vulnerability_detection_feed_update_interval    = '60m'
@@ -179,7 +176,6 @@ class wazuh::params_manager {
       $syslog_output_format                            = undef
 
       # Authd configuration
-
       $ossec_auth_disabled                             = 'no'
       $ossec_auth_port                                 = 1515
       $ossec_auth_use_source_ip                        = 'yes'
@@ -197,7 +193,6 @@ class wazuh::params_manager {
       $ossec_auth_ssl_auto_negotiate                   = 'no'
 
       # syscheck
-
       $ossec_syscheck_disabled                         = 'no'
       $ossec_syscheck_frequency                        = '43200'
       $ossec_syscheck_scan_on_start                    = 'yes'
@@ -249,7 +244,6 @@ class wazuh::params_manager {
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
       # Cluster
-
       $ossec_cluster_name                              = 'wazuh'
       $ossec_cluster_node_name                         = 'node01'
       $ossec_cluster_node_type                         = 'master'
@@ -282,7 +276,6 @@ class wazuh::params_manager {
       $wazuh_manager_server_key            = undef
 
       ## Wazuh config folders and modes
-
       $config_file = '/var/ossec/etc/ossec.conf'
       $shared_agent_config_file = '/var/ossec/etc/shared/default/agent.conf'
 
@@ -305,7 +298,6 @@ class wazuh::params_manager {
       $processlist_group = 'wazuh'
 
       #API
-
       $wazuh_api_host = ['0.0.0.0']
       $wazuh_api_port = '55000'
 
