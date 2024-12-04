@@ -10,7 +10,9 @@ class wazuh::dashboard (
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
   $dashboard_fileuser = 'wazuh-dashboard',
   $dashboard_filegroup = 'wazuh-dashboard',
-
+  $dashboard_cert_content = 'puppet:///modules/archive/dashboard.pem',
+  $dashboard_certkey_content = 'puppet:///modules/archive/dashboard-key.pem',
+  $dashboard_rootca_content = 'puppet:///modules/archive/root-ca.pem',
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
@@ -32,7 +34,6 @@ class wazuh::dashboard (
   ],
 
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -62,20 +63,34 @@ class wazuh::dashboard (
     mode   => '0500',
   }
 
-  [
-    'dashboard.pem',
-    'dashboard-key.pem',
-    'root-ca.pem',
-  ].each |String $certfile| {
-    file { "${dashboard_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $dashboard_fileuser,
-      group   => $dashboard_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
-    }
+  file { "${dashboard_path_certs}/dashboard.pem":
+    ensure  => file,
+    owner   => $dashboard_fileuser,
+    group   => $dashboard_filegroup,
+    mode    => '0400',
+    source  => $dashboard_cert_content,
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+
+  file { "${dashboard_path_certs}/dashboard-key.pem":
+    ensure  => file,
+    owner   => $dashboard_fileuser,
+    group   => $dashboard_filegroup,
+    mode    => '0400',
+    source  => $dashboard_certkey_content,
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+
+  file { "${dashboard_path_certs}/root-ca.pem":
+    ensure  => file,
+    owner   => $dashboard_fileuser,
+    group   => $dashboard_filegroup,
+    mode    => '0400',
+    source  => $dashboard_rootca_content,
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 
   file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
@@ -87,7 +102,7 @@ class wazuh::dashboard (
     notify  => Service['wazuh-dashboard'],
   }
 
-  file { [ '/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config' ]:
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config']:
     ensure  => 'directory',
     group   => $dashboard_filegroup,
     mode    => '0755',
