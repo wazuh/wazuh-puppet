@@ -1,6 +1,6 @@
 # Copyright (C) 2015, Wazuh Inc.
 #Define for a specific ossec active-response
-define wazuh::activeresponse(
+define wazuh::activeresponse (
   $active_response_name               = 'Rendering active-response template',
   $active_response_disabled           = undef,
   $active_response_linux_ca_store     = undef,
@@ -21,6 +21,6 @@ define wazuh::activeresponse(
     target  => $target_arg,
     order   => $order_arg,
     before  => $before_arg,
-    content => template($content_arg)
+    content => template($content_arg),
   }
 }

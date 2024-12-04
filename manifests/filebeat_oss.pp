@@ -20,7 +20,6 @@ class wazuh::filebeat_oss (
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
 ) {
-
   package { 'filebeat':
     ensure => $filebeat_oss_version,
     name   => $filebeat_oss_package,

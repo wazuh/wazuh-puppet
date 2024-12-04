@@ -1,6 +1,6 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Define an email alert
-define wazuh::email_alert(
+define wazuh::email_alert (
   $alert_email,
   $alert_group    = false,
   $target_arg     = 'manager_ossec.conf',

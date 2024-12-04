@@ -32,7 +32,6 @@ class wazuh::dashboard (
   ],
 
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -87,7 +86,7 @@ class wazuh::dashboard (
     notify  => Service['wazuh-dashboard'],
   }
 
-  file { [ '/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config' ]:
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config']:
     ensure  => 'directory',
     group   => $dashboard_filegroup,
     mode    => '0755',
