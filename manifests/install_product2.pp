@@ -1,27 +1,15 @@
-# This class installs the specified Wazuh package.
-#
-# Parameters:
-#   String $package_name: The name of the package to install.
-#   String $wazuh_version: The version of Wazuh to install (default: '4.9.2').
-#   String $prod_url: The URL to download the package list from.
-#   Optional[String] $expected_checksum: Optional checksum for package verification.
-#   String $destination: The destination path for the downloaded file (default: '/tmp/packages_url.txt').
-#   String $rpm_based: Regex for RPM-based OS families (default: 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky').
-#   String $deb_based: Regex for DEB-based OS families (default: 'Debian|Ubuntu|Mint|Kali|Raspbian').
-#   Optional[String] $download_dir: Optional parameter for download directory.
 #
 class wazuh::install_product2 (
   String $package_name,
   String $wazuh_version = '4.9.2',
   String $prod_url = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
-  Optional[String] $expected_checksum = undef, # Optional checksum for package verification
+  String $source_url = "puppet:///modules/archive/packages_url.txt",
   String $destination = '/tmp/packages_url.txt', # Destination path for the downloaded file
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky', # Regex for RPM-based OS families
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian', # Regex for DEB-based OS families
   Optional[String] $download_dir = undef, # Optional parameter for download directory
 
 ) {
-
   # Determine the package type (rpm or deb) based on the OS family.
   if $facts['os']['family'] =~ Regexp($rpm_based) {
     $package_type = 'rpm'
@@ -53,10 +41,19 @@ class wazuh::install_product2 (
   $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
   # Download the file using the archive resource.
-  archive { $destination:
-    source  => $prod_url,
-    mode    => '0644',
-    creates => $destination,
+  file { $destination:
+    ensure => file,
+    source => $source_url,
+    mode   => '0644',
+  }
+
+  exec { "download_packages_url_from_url":
+    command     => "/usr/bin/curl --fail --location -o ${destination} ${prod_url}",
+    path        => ['/usr/bin', '/bin'],
+    creates     => $destination, # is created when the file does not exist
+    unless      => "test -f ${destination}", # not executed if file exists.
+    logoutput   => true,
+    require     => File[$destination],
   }
 
   # Find the package URL in the downloaded file.
@@ -79,9 +76,11 @@ class wazuh::install_product2 (
     $package_file = "${download_dir}/${package_pattern}"
 
     # Download the package using the archive resource.
+    $checksum_type = $expected_checksum ? { undef => undef, default => 'sha256' }
+
     archive { $package_file:
       source         => $package_url,
-      checksum       => $expected_checksum ? { undef => undef, default => 'sha256' },
+      checksum       => $checksum_type,
       checksum_value => $expected_checksum,
       creates        => $package_file,
       require        => Exec["find_${package_pattern}_in_file"],
