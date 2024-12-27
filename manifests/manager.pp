@@ -3,6 +3,8 @@
 class wazuh::manager (
   String $version = '4.9.2',
 ) {
+
+  include wazuh::install_product
   # Instalar Wazuh Manager
   wazuh::install_product { 'wazuh-manager':
     package_name   => 'wazuh-manager',
