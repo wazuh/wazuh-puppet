@@ -1,4 +1,4 @@
-class wazuh:install_product (
+class wazuh::install_product (
   String $package_name,
   String $wazuh_version = '5.0.0',
   String $prod_url       = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
