@@ -6,9 +6,9 @@ class wazuh::install_product (
   String $download_dir    = '/tmp',
   Optional[String] $custom_url_file = undef,
 ) {
-  String $destination = "${download_dir}/packages_url.txt"
-  String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky'
-  String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian'
+  $destination = "${download_dir}/packages_url.txt"
+  $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky'
+  $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian'
 
   if $facts['os']['family'] =~ Regexp($rpm_based) {
     $package_type = 'rpm'
