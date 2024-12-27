@@ -53,7 +53,6 @@ class wazuh::install_product (
     creates     => $destination, # is created when the file does not exist
     unless      => "test -f ${destination}", # not executed if file exists.
     logoutput   => true,
-    require     => File[$destination],
   }
 
   # Find the package URL in the downloaded file.
