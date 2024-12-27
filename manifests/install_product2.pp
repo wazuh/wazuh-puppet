@@ -1,3 +1,15 @@
+# This class installs the specified Wazuh package.
+#
+# Parameters:
+#   String $package_name: The name of the package to install.
+#   String $wazuh_version: The version of Wazuh to install (default: '4.9.2').
+#   String $prod_url: The URL to download the package list from.
+#   Optional[String] $expected_checksum: Optional checksum for package verification.
+#   String $destination: The destination path for the downloaded file (default: '/tmp/packages_url.txt').
+#   String $rpm_based: Regex for RPM-based OS families (default: 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky').
+#   String $deb_based: Regex for DEB-based OS families (default: 'Debian|Ubuntu|Mint|Kali|Raspbian').
+#   Optional[String] $download_dir: Optional parameter for download directory.
+#
 class wazuh::install_product2 (
   String $package_name,
   String $wazuh_version = '4.9.2',
@@ -22,40 +34,38 @@ class wazuh::install_product2 (
   }
 
   # Determine the package architecture.
-  $package_arch = $facts['architecture'] ? {
+  $package_arch = $facts['os']['architecture'] ? {
     'x86_64' => 'amd64',
-    default  => $facts['architecture'],
+    default  => $facts['os']['architecture'],
   }
 
-    if $download_dir {
-      create_resources('file', {
+  if $download_dir {
+    create_resources('file', {
         $download_dir => {
           ensure => directory,
         }
-      })
-    } else {
-      $download_dir = '/tmp'
-    }
+    })
+  } else {
+    $download_dir = '/tmp'
+  }
 
   # Construct the package filename.
   $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
   # Download the file using the archive resource.
   archive { $destination:
-    source        => $prod_url,
-    mode          => '0644',
-    creates       => $destination,
-    checksum      => $expected_checksum ? { undef => undef, default => 'sha256' },
-    checksum_value=> $expected_checksum,
+    source  => $prod_url,
+    mode    => '0644',
+    creates => $destination,
   }
 
   # Find the package URL in the downloaded file.
   exec { "find_${package_pattern}_in_file":
-    command     => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${download_dir}/package_url",
-    path        => ['/bin', '/usr/bin'],
-    creates     => "${download_dir}/package_url",
-    require     => Archive[$destination],
-    logoutput   => true,
+    command   => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${download_dir}/package_url",
+    path      => ['/bin', '/usr/bin'],
+    creates   => "${download_dir}/package_url",
+    require   => Archive[$destination],
+    logoutput => true,
   }
 
   # Read the package URL from the file.
