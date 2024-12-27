@@ -74,13 +74,8 @@ class wazuh::install_product (
   if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
 
-    # Download the package using the archive resource.
-    $checksum_type = $expected_checksum ? { undef => undef, default => 'sha256' }
-
     archive { $package_file:
       source         => $package_url,
-      checksum       => $checksum_type,
-      checksum_value => $expected_checksum,
       creates        => $package_file,
       require        => Exec["find_${package_pattern}_in_file"],
     }
