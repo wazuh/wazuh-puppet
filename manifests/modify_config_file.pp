@@ -1,4 +1,4 @@
-class modify_config_file (
+class wazuh:modify_config_file (
   String $config_file,                     # Path to the configuration file
   Array[String] $config_lines,             # Array of configurations to modify or add
   Enum['yaml', 'xml'] $file_type,          # File type: yaml or xml
