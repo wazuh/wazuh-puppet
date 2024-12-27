@@ -1,4 +1,4 @@
-class wazuh:wazuh_manager {
+class wazuh::wazuh_manager {
 
   waazuh:install_product { 'wazuh-manager':
     package_name    => 'wazuh-manager',
