@@ -1,90 +1,111 @@
-class wazuh::install_product2 (
-  String $package_name,
-  String $wazuh_version = '5.0.0',
-  String $prod_url       = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
-  Optional[String] $expected_checksum = undef, # Optional checksum for package verification
-  Optional[String] $custom_url_file = undef, # Optional path to a local URL file
+#
+# Class to install Wazuh product
+#
+# @param package_name The name of the package to be installed.
+# @param wazuh_version The version of the Wazuh package to be installed.
+# @param prod_url The URL to download the package list from.
+# @param source_url The Puppet URL to download the package list from.
+# @param destination Destination path for the downloaded file
+# @param rpm_based Regex for RPM-based OS families
+# @param deb_based Regex for DEB-based OS families
+# @param download_dir Optional parameter for download directory
+class wazuh::install_product (
+  String $package_name = 'wazuh-manager',
+  String $wazuh_version = '4.9.2',
+  String $prod_url = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
+  String $source_url = 'puppet:///modules/archive/packages_url.txt',
   String $destination = '/tmp/packages_url.txt',
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
-) {
+  Optional[String] $download_dir = undef,
 
+) {
+  # Determine the package type (rpm or deb) based on the OS family.
   if $facts['os']['family'] =~ Regexp($rpm_based) {
     $package_type = 'rpm'
-    $check_command = "/bin/rpm -q ${package_name}"
+    $check_command = "/bin/rpm -q ${package_name}" # Command to check if the package is installed (RPM)
   } elsif $facts['os']['family'] =~ Regexp($deb_based) {
     $package_type = 'deb'
-    $check_command = "/usr/bin/dpkg-query -l ${package_name}"
+    $check_command = "/usr/bin/dpkg-query -l ${package_name}" # Command to check if the package is installed (DEB)
   } else {
-    fail("Unsupported OS family: ${facts['os']['family']}")
+    fail("Unsupported OS family: ${facts['os']['family']}") # Fail if the OS family is not supported
   }
 
-  $package_arch = $facts['architecture'] ? {
+  # Determine the package architecture.
+  $package_arch = $facts['os']['architecture'] ? {
     'x86_64' => 'amd64',
-    default  => $facts['architecture'],
+    default  => $facts['os']['architecture'],
   }
 
+  if $download_dir {
+    create_resources('file', {
+        $download_dir => {
+          ensure => directory,
+        }
+    })
+  } else {
+    $download_dir = '/tmp'
+  }
+
+  # Construct the package filename.
   $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
-  $source_url = $custom_url_file ? {
-    undef   => $prod_url,
-    default => $custom_url_file,
+  # Download the file using the archive resource.
+  file { $destination:
+    ensure => file,
+    source => $source_url,
+    mode   => '0644',
   }
 
-  if $source_url == $prod_url {
-    exec { 'fetch_packages_url':
-      command  => "/usr/bin/curl --fail --location -o ${destination} ${prod_url}",
-      path     => ['/usr/bin', '/bin'],
-      creates  => $destination,
-      logoutput => true,
-    }
-  } else {
-    file { $destination:
-      ensure => file,
-      source => $source_url,
-      mode   => '0644',
-    }
-  }
-
-  exec { "find_${package_pattern}_in_file":
-    command  => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${destination}",
-    path     => ['/bin', '/usr/bin'],
-    creates  => "${destination}",
-    require  => File[$destination],
+  exec { 'download_packages_url_from_url':
+    command   => "/usr/bin/curl --fail --location -o ${destination} ${prod_url}",
+    path      => ['/usr/bin', '/bin'],
+    creates   => $destination, # is created when the file does not exist
+    unless    => "test -f ${destination}", # not executed if file exists.
     logoutput => true,
   }
 
-  # Refactor para leer archivo condicionalmente
-  if file("${destination}") != '' {
-    $package_url = file("${destination}")
+  # Find the package URL in the downloaded file.
+  exec { "find_${package_pattern}_in_file":
+    command   => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${download_dir}/package_url",
+    path      => ['/bin', '/usr/bin'],
+    creates   => "${download_dir}/package_url",
+    require   => Archive[$destination],
+    logoutput => true,
+  }
+
+  # Read the package URL from the file.
+  if file("${download_dir}/package_url") != '' {
+    $package_url = file("${download_dir}/package_url")
   } else {
     $package_url = undef
   }
 
-  if $package_url != undef {
+  if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
 
     archive { $package_file:
-      source          => $package_url,
-      checksum        => $expected_checksum ? { undef => undef, default => 'sha256' },
-      checksum_value  => $expected_checksum,
-      creates         => $package_file,
-      require         => Exec["find_${package_pattern}_in_file"],
+      source  => $package_url,
+      creates => $package_file,
+      require => Exec["find_${package_pattern}_in_file"],
     }
 
+    # Determine the install command based on the package type.
     $install_command = $package_type ? {
       'rpm' => "/bin/rpm -ivh ${package_file}",
       'deb' => "/usr/bin/dpkg -i ${package_file}",
     }
 
+    # Install the package.
     exec { "install_${package_pattern}":
-      command  => $install_command,
-      path     => ['/bin', '/usr/bin'],
-      require  => Archive[$package_file],
-      unless   => $check_command,
+      command   => $install_command,
+      path      => ['/bin', '/usr/bin'],
+      require   => Archive[$package_file],
+      unless    => $check_command, # Only install if the package is not already installed
       logoutput => true,
     }
 
+    # Remove the downloaded package file.
     file { $package_file:
       ensure => absent,
       force  => true,
@@ -93,12 +114,13 @@ class wazuh::install_product2 (
     warning("URL for ${package_pattern} not found in ${destination}")
   }
 
+  # Remove the downloaded URL list file.
   file { $destination:
     ensure => absent,
     force  => true,
   }
 
-  file { "${destination}":
+  file { "${download_dir}/package_url":
     ensure => absent,
     force  => true,
   }
