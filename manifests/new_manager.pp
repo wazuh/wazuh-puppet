@@ -14,12 +14,6 @@ class wazuh_manager {
     file_type = 'xml'
   }
 
-  exec { 'configure_api_manager':
-    command => "/bin/sed -i 's/<key>: <value>/<key>: <new_value>/g' /var/ossec/etc/api.yml",
-    path    => ['/bin', '/usr/bin'],
-    onlyif  => "/bin/grep '<key>: <value>' /var/ossec/etc/api.yml",
-  }
-
   service { 'wazuh-manager':
     ensure => running,
     enable => true,
