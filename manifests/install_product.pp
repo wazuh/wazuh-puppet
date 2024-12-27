@@ -18,6 +18,7 @@ class wazuh::install_product (
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
   String $download_dir = '/tmp',
+  String $package_url = '/tmp/package_url'
 
 ) {
   # Determine the package type (rpm or deb) based on the OS family.
@@ -62,13 +63,6 @@ class wazuh::install_product (
     creates   => "${download_dir}/package_url",
     require   => Archive[$destination],
     logoutput => true,
-  }
-
-  # Read the package URL from the file.
-  if file("${download_dir}/package_url") != '' {
-    $package_url = file("${download_dir}/package_url")
-  } else {
-    $package_url = undef
   }
 
   if $package_url {
