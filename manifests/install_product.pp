@@ -1,5 +1,5 @@
 class wazuh::install_product (
-  $package_name,
+  $package_name = undef,
   $wazuh_version = '5.0.0',
   $prod_url       = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
   $expected_checksum = undef,
