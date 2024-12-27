@@ -1,9 +1,9 @@
 #
-class wazuh::install_product2 (
-  String $package_name,
+class wazuh::install_product (
+  String $package_name = 'wazuh-manager',
   String $wazuh_version = '4.9.2',
   String $prod_url = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
-  String $source_url = "puppet:///modules/archive/packages_url.txt",
+  String $source_url = 'puppet:///modules/archive/packages_url.txt',
   String $destination = '/tmp/packages_url.txt', # Destination path for the downloaded file
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky', # Regex for RPM-based OS families
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian', # Regex for DEB-based OS families
