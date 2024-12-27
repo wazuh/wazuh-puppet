@@ -27,13 +27,11 @@ class wazuh::install_product (
 
   $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
-  # Determine the source of the URL file (local or remote)
   $source_url = $custom_url_file ? {
     undef   => $prod_url,
     default => $custom_url_file,
   }
 
-  # Download/copy the URL file
   if $source_url == $prod_url {
     exec { 'fetch_packages_url':
       command  => "/usr/bin/curl --fail --location -o ${destination} ${prod_url}",
@@ -49,7 +47,6 @@ class wazuh::install_product (
     }
   }
 
-  # Find the package URL
   exec { "find_${package_pattern}_in_file":
     command  => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${download_dir}/package_url",
     path     => ['/bin', '/usr/bin'],
@@ -58,13 +55,16 @@ class wazuh::install_product (
     logoutput => true,
   }
 
-  # Read the URL from the temporary file
-  $package_url = file("${download_dir}/package_url")
+  # Refactor para leer archivo condicionalmente
+  if file("${download_dir}/package_url") != '' {
+    $package_url = file("${download_dir}/package_url")
+  } else {
+    $package_url = undef
+  }
 
-  if $package_url != '' {
+  if $package_url != undef {
     $package_file = "${download_dir}/${package_pattern}"
 
-    # Download the package
     archive { $package_file:
       source          => $package_url,
       checksum        => $expected_checksum ? { undef => undef, default => 'sha256' },
@@ -73,7 +73,6 @@ class wazuh::install_product (
       require         => Exec["find_${package_pattern}_in_file"],
     }
 
-    # Install the package
     $install_command = $package_type ? {
       'rpm' => "/bin/rpm -ivh ${package_file}",
       'deb' => "/usr/bin/dpkg -i ${package_file}",
@@ -87,7 +86,6 @@ class wazuh::install_product (
       logoutput => true,
     }
 
-    # Clean up the downloaded package file
     file { $package_file:
       ensure => absent,
       force  => true,
@@ -96,13 +94,11 @@ class wazuh::install_product (
     warning("URL for ${package_pattern} not found in ${destination}")
   }
 
-  # Clean up the URL file
   file { $destination:
     ensure => absent,
     force  => true,
   }
 
-  # Clean up the temporary package URL file
   file { "${download_dir}/package_url":
     ensure => absent,
     force  => true,
