@@ -1,12 +1,12 @@
 class wazuh::install_product (
-  String $package_name,
-  String $wazuh_version = '5.0.0',
-  String $prod_url       = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
-  Optional[String] $expected_checksum = undef,
-  Optional[String] $custom_url_file = undef,
-  String $destination = "/tmp/packages_url.txt",
-  String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
-  String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
+  $package_name,
+  $wazuh_version = '5.0.0',
+  $prod_url       = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
+  $expected_checksum = undef,
+  $custom_url_file = undef,
+  $destination = "/tmp/packages_url.txt",
+  $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
+  $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
 ) {
 
   if $facts['os']['family'] =~ Regexp($rpm_based) {
