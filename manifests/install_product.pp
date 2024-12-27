@@ -8,7 +8,7 @@
 # @param destination Destination path for the downloaded file
 # @param rpm_based Regex for RPM-based OS families
 # @param deb_based Regex for DEB-based OS families
-# @param download_dir Optional parameter for download directory
+# @param download_dir parameter for download directory
 class wazuh::install_product (
   String $package_name = 'wazuh-manager',
   String $wazuh_version = '4.9.2',
@@ -17,7 +17,7 @@ class wazuh::install_product (
   String $destination = '/tmp/packages_url.txt',
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
-  Optional[String] $download_dir = undef,
+  String $download_dir = '/tmp',
 
 ) {
   # Determine the package type (rpm or deb) based on the OS family.
@@ -35,16 +35,6 @@ class wazuh::install_product (
   $package_arch = $facts['os']['architecture'] ? {
     'x86_64' => 'amd64',
     default  => $facts['os']['architecture'],
-  }
-
-  if $download_dir {
-    create_resources('file', {
-        $download_dir => {
-          ensure => directory,
-        }
-    })
-  } else {
-    $download_dir = '/tmp'
   }
 
   # Construct the package filename.
