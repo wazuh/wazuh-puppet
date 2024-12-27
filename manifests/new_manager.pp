@@ -4,7 +4,7 @@ class wazuh_manager {
 
   install_product { 'wazuh-manager':
     package_name    => 'wazuh-manager',
-    desired_version => '5.0.0',
+    wazuh_version => '5.0.0',
   }
 
   # Configure specific files for Wazuh Manager

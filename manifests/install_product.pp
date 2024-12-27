@@ -1,6 +1,6 @@
 class install_product (
   String $package_name,
-  String $desired_version = '5.0.0',
+  String $wazuh_version = '5.0.0',
   String $prod_url       = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
   Optional[String] $expected_checksum = undef, # Optional checksum for package verification
   String $download_dir    = '/tmp', # Configurable download directory
@@ -25,7 +25,7 @@ class install_product (
     default  => $facts['architecture'],
   }
 
-  $package_pattern = "${package_name}-${desired_version}-${package_arch}.${package_type}"
+  $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
   # Determine the source of the URL file (local or remote)
   $source_url = $custom_url_file ? {
