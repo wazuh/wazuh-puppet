@@ -47,22 +47,22 @@ class wazuh::install_product (
   }
 
   exec { "find_${package_pattern}_in_file":
-    command  => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${download_dir}/package_url",
+    command  => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > /tmp/package_url",
     path     => ['/bin', '/usr/bin'],
-    creates  => "${download_dir}/package_url",
+    creates  => "/tmp/package_url",
     require  => File[$destination],
     logoutput => true,
   }
 
   # Refactor para leer archivo condicionalmente
-  if file("${download_dir}/package_url") != '' {
-    $package_url = file("${download_dir}/package_url")
+  if file("/tmp/package_url") != '' {
+    $package_url = file("/tmp/package_url")
   } else {
     $package_url = undef
   }
 
   if $package_url != undef {
-    $package_file = "${download_dir}/${package_pattern}"
+    $package_file = "/tmp/${package_pattern}"
 
     archive { $package_file:
       source          => $package_url,
@@ -98,7 +98,7 @@ class wazuh::install_product (
     force  => true,
   }
 
-  file { "${download_dir}/package_url":
+  file { "/tmp/package_url":
     ensure => absent,
     force  => true,
   }
