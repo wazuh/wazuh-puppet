@@ -1,7 +1,7 @@
 class wazuh::wazuh_manager(
 ){
 
-  waazuh::install_product { 'wazuh-manager':
+  wazuh::install_product { 'wazuh-manager':
     package_name    => 'wazuh-manager',
     wazuh_version => '5.0.0',
   }
