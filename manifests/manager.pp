@@ -2,7 +2,7 @@
 # Main ossec server config
 class wazuh::manager (
 
-  $version = '4.9.2'
+  $version = '4.9.2',
 ){
 
   wazuh::install_product { 'wazuh-manager':
