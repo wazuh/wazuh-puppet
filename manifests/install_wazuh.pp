@@ -2,61 +2,82 @@ class install_product (
   String $package_name,
   String $desired_version = '5.0.0'
 ) {
-  $json_file = '/tmp/package_urls.json'
+  String $custom_url_file = 'puppet:///modules/archive/url_list/packages_url.txt',
+  String $prod_url  = 'https://packages.wazuh.com/packages_url.txt',
+  String $destination = '/tmp/packages_url.txt',
+  String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
+  String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
 
   # Determine the package type (rpm or deb) based on the operating system family
   # This is necessary because different Linux distributions use different package formats.
   # The correct package type must be identified to download and install the appropriate package.
-  $package_type = $facts['os']['family'] ? {
-    /(RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky)/ => 'rpm',
-    /(Debian|Ubuntu|Mint|Kali|Raspbian)/               => 'deb',
-    default                                            => fail("Unsupported operating system"),
+  if $facts['os']['family'] =~ Regexp($rpm_based) {
+    $package_type = 'rpm'
+    $install_command = "/bin/rpm -ivh ${download_dir}/${package_name}-${package_version}-${package_arch}.${package_type}"
+    $check_command = "/bin/rpm -q ${package_name}"
+  } elsif $facts['os']['family'] =~ Regexp($deb_based) {
+    $package_type = 'deb'
+    $install_command = "/usr/bin/dpkg -i ${download_dir}/${package_name}-${package_version}-${package_arch}.${package_type}"
+    $check_command = "/usr/bin/dpkg-query -l ${package_name}"
+  } else {
+    fail("Unsupported OS family: ${facts['os']['family']}")
   }
 
-  $package_arch = $facts['os']['architecture']
+  $package_arch = $facts['architecture'] ? {
+    'x86_64' => 'amd64',
+    default  => $facts['architecture'],
+  }
 
-  # Download the JSON file
-  file { $json_file:
+  # Check if the file exists in the remote location..
+  file { $destination:
     ensure => file,
-    source => 'http://example.com/package_urls.json',
+    source => $remote_path,
     mode   => '0644',
+    notify => Exec['fetch_backup_file'],
   }
 
-  # Read and parse the JSON
-  $packages = parsejson(file($json_file))
-
-  # Filter the correct package
-  $selected_package = $packages.filter |$pkg| {
-    ($pkg['package_type'] == $package_type) and
-    ($pkg['package_arch'] == $package_arch) and
-    ($pkg['version'] == $desired_version) and
-    ($pkg['name'] == $package_name)
+  # If the file cannot be copied from the module, it is downloaded from the prod URL.
+  exec { 'fetch_backup_file':
+    command     => "/usr/bin/curl -o ${destination} ${prod_url}",
+    path        => ['/usr/bin', '/bin'],
+    refreshonly => true,
+    creates     => $destination,
   }
 
-  # Ensure a package was found
-  if empty($selected_package) {
-    fail("No package found matching the criteria: type=${package_type}, architecture=${package_arch}, version=${desired_version}, name=${package_name}")
+  # Build a pattern to find the package
+  $package_pattern = "${package_name}-${package_version}-${package_arch}.${package_type}"
+
+  # Read the file to obtain the package URL
+  exec { "find_${package_pattern}_in_file":
+    command     => "/bin/grep -E '^${package_pattern}:' ${key_value_file} | cut -d':' -f2 > $destination",
+    path        => ['/bin', '/usr/bin'],
+    logoutput   => true,
+    returns     => [0],
   }
 
-  # Extract the URL of the selected package
-  $package_url = $selected_package[0]['url']
+  # Read the URL from the temp file
+  file_line { 'read_package_url':
+    path    => $destination,
+    require => Exec["find_${package_pattern}_in_file"],
+    match   => '.*',
+    line    => $package_url,
+  }
 
-  # Check if the package is already installed
+  # Check that the package is installed
   exec { "check_${package_name}_installed":
-    command => "/bin/rpm -q ${package_name} || /usr/bin/dpkg-query -l ${package_name}",
-    path    => ['/bin', '/usr/bin'],
-    returns => [0],
-    onlyif  => "/bin/true", # Always executed to verify
-    logoutput => true,
+    command     => $check_command,
+    path        => ['/bin', '/usr/bin'],
+    returns     => [0],
+    unless      => $check_command,
   }
 
-  # Install the package if not already installed
-  exec { "install_${package_name}":
-    command => "/usr/bin/curl -o /tmp/${package_name}.${package_type} ${package_url} && \
-                /usr/bin/${package_type} -i /tmp/${package_name}.${package_type}",
-    path    => ['/bin', '/usr/bin'],
-    unless  => "/bin/rpm -q ${package_name} || /usr/bin/dpkg-query -l ${package_name}",
-    require => File[$json_file],
+  # Install the package if it is not installed
+  exec { "install_${package_pattern}":
+    command     => $install_command,
+    path        => ['/bin', '/usr/bin'],
+    require     => Exec["download_${package_pattern}"],
+    unless      => $check_command, # Idempotencia asegurada
+    logoutput   => true,
   }
 }
 
