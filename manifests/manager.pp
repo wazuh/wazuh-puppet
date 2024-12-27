@@ -12,9 +12,9 @@ class wazuh::manager (
 
   # Configure specific files for Wazuh Manager
   wazuh::modify_config_file {
-    config_file = '/car/ossec/etc/ossec.conf',
-    config_lines = [],
-    file_type = 'xml'
+    config_file => '/car/ossec/etc/ossec.conf',
+    config_lines => [],
+    file_type => 'xml'
   }
 
 
