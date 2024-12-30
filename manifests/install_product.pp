@@ -99,6 +99,11 @@ class wazuh::install_product (
   }
 
   # Remove the downloaded URL list file.
+  file { $destination:
+    ensure => absent,
+    force  => true,
+  }
+
   file { "${download_dir}/package_url":
     ensure => absent,
     force  => true,
