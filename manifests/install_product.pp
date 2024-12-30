@@ -73,7 +73,7 @@ class wazuh::install_product (
     # Determine the install command based on the package type.
     $install_command = $package_type ? {
       'rpm' => "/bin/rpm -ivh ${download_dir}/${package_pattern}",
-      'deb' => "dpkg -i ${download_dir}/${package_pattern}",
+      'deb' => "dpkg -i --debug=all ${download_dir}/${package_pattern} || apt-get install -f -y",
     }
 
     notify { "Command to install: ${install_command}": }
@@ -82,6 +82,7 @@ class wazuh::install_product (
     exec { "install_${package_pattern}":
       command   => $install_command,
       path      => ['/bin', '/usr/bin'],
+      onlyif    => "dpkg-deb --info ${download_dir}/${package_pattern}",
       onlyif    => "test -f ${download_dir}/${package_pattern}", # Only install if the package file exists
       unless    => $check_command, # Only install if the package is not already installed
       logoutput => true,
