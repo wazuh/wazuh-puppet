@@ -19,7 +19,7 @@ class wazuh::install_product (
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
   String $download_dir = '/tmp',
-  String $package_url =  undef,
+  Optional[String] $package_url = undef,
 ) {
   # Determine the package type (rpm or deb) based on the OS family.
   if $facts['os']['family'] =~ Regexp($rpm_based) {
