@@ -86,10 +86,10 @@ class wazuh::install_product (
     }
 
     # Remove the downloaded package file.
-    file { "${download_dir}/${package_pattern}":
-      ensure => absent,
-      force  => true,
-    }
+   # file { "${download_dir}/${package_pattern}":
+   #   ensure => absent,
+   #   force  => true,
+   # }
   } else {
     warning("URL for ${package_pattern} not found in ${destination}")
   }
