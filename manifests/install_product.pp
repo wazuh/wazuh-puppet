@@ -74,7 +74,7 @@ class wazuh::install_product (
   $file_path = "${download_dir}/package_url"
 
   if file($file_path) {
-    $package_url = trim(file($file_path))
+    $package_url = file($file_path)
   } else {
     fail("The file ${file_path} does not exist or could not be read.")
   }
