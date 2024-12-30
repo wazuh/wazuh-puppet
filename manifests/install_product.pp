@@ -65,7 +65,7 @@ class wazuh::install_product (
 
   if $destination {
     exec { 'download_file_from_url':
-      command   => "tr -d '\r' < ${destination} | xargs /usr/bin/curl --output '${download_dir}/${package_pattern}'",
+      command   => "tr -d '\r' < ${destination} | xargs /usr/bin/curl -o '${download_dir}/${package_pattern}'",
       path      => ['/usr/bin', '/bin'],
       logoutput => true,
     }
