@@ -18,7 +18,7 @@ class wazuh::install_product (
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
   String $download_dir = '/tmp',
-  String $package_url = '/tmp/package_url'
+  String $package_url = '/tmp/package_url',
 
 ) {
   # Determine the package type (rpm or deb) based on the OS family.
@@ -96,6 +96,12 @@ class wazuh::install_product (
     }
   } else {
     warning("URL for ${package_pattern} not found in ${destination}")
+  }
+
+  # Remove the downloaded URL list file.
+  file { $destination:
+    ensure => absent,
+    force  => true,
   }
 
   file { "${download_dir}/package_url":
