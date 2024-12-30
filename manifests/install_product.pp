@@ -58,7 +58,6 @@ class wazuh::install_product (
   exec { 'filter_and_extract_url':
     command   => "/usr/bin/sed -n '/^${package_pattern}:/p' ${destination} | /usr/bin/awk -F': ' '{print \$2}' > ${destination}.bak && mv ${destination}.bak ${destination}",
     path      => ['/usr/bin', '/bin'],
-    onlyif    => "/usr/bin/grep -q '^${package_pattern}:' ${destination}", # Ejecuta solo si existe el patrón
     logoutput => true,
   }
 
