@@ -56,13 +56,32 @@ class wazuh::install_product (
     logoutput => true,
   }
 
+  $package_url = file("${download_dir}/package_url")
+
+  file { 'package_url_file':
+    ensure  => file,
+    path    => $file_path,
+    content => $package_url,
+    require => Exec["find_${package_pattern}_in_file"],
+  }
+
   # Find the package URL in the downloaded file.
   exec { "find_${package_pattern}_in_file":
-    command   => "awk -F': ' '$1 == ${package_pattern} {print $2}' ${destination} > ${package_url}",
+    command   => "awk -F': ' '\$1 == \"${package_pattern}\" {print \$2}' ${destination} > ${download_dir}/package_url",
     path      => ['/bin', '/usr/bin'],
     creates   => "${download_dir}/package_url",
     logoutput => true,
   }
+
+  $file_path = "${download_dir}/package_url"
+
+  if file($file_path) {
+    $package_url = trim(file($file_path))
+  } else {
+    fail("The file ${file_path} does not exist or could not be read.")
+  }
+
+  notify { "Extracted package URL: ${package_url}": }
 
   if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
