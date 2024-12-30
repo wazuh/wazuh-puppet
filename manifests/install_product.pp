@@ -56,35 +56,20 @@ class wazuh::install_product (
   }
 
   # Find the package URL in the downloaded file.
-  exec { "find_${package_pattern}_in_file":
-    command   => "awk -F': ' '\$1 == \"${package_pattern}\" {print \$2}' ${destination} > ${download_dir}/package_url",
-    path      => ['/bin', '/usr/bin'],
-    creates   => "${download_dir}/package_url",
+  exec { 'filter_and_extract_url':
+    command   => "/usr/bin/sed -n '/^${package_pattern}:/p' ${destination} | /usr/bin/awk -F': ' '{print \$2}' > ${destination}",
+    path      => ['/usr/bin', '/bin'],
+    onlyif    => "/usr/bin/grep -q '^${package_pattern}:' ${destination}", # Ejecuta solo si existe el patrón
     logoutput => true,
   }
 
-  $file_path = "${download_dir}/package_url"
+  notify { "Extracted package URL: ${destination}": }
 
-  if file($file_path) {
-    $package_url = file($file_path)
-  } else {
-    fail("The file ${file_path} does not exist or could not be read.")
-  }
-
-  notify { "Extracted package URL: ${package_url}": }
-
-  file { 'package_url_file':
-    ensure  => file,
-    path    => $file_path,
-    content => $package_url,
-    require => Exec["find_${package_pattern}_in_file"],
-  }
-
-  if $package_url {
+  if $destination {
     $package_file = "${download_dir}/${package_pattern}"
 
     exec { 'download_packages':
-      command   => "/usr/bin/curl --fail --location -o ${package_file} ${package_url}",
+      command   => "/usr/bin/curl --fail --location -o ${package_file} ${destination}",
       path      => ['/usr/bin', '/bin'],
       logoutput => true,
     }
