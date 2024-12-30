@@ -63,13 +63,6 @@ class wazuh::install_product (
     logoutput => true,
   }
 
-  file { 'package_url_file':
-    ensure  => file,
-    path    => $file_path,
-    content => $package_url,
-    require => Exec["find_${package_pattern}_in_file"],
-  }
-
   $file_path = "${download_dir}/package_url"
 
   if file($file_path) {
@@ -79,6 +72,13 @@ class wazuh::install_product (
   }
 
   notify { "Extracted package URL: ${package_url}": }
+
+  file { 'package_url_file':
+    ensure  => file,
+    path    => $file_path,
+    content => $package_url,
+    require => Exec["find_${package_pattern}_in_file"],
+  }
 
   if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
