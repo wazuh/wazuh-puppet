@@ -76,6 +76,8 @@ class wazuh::install_product (
       'deb' => "/usr/bin/dpkg -i ${download_dir}/${package_pattern}",
     }
 
+    notify { "Command to install: ${install_command}": }
+
     # Install the package.
     exec { "install_${package_pattern}":
       command   => $install_command,
