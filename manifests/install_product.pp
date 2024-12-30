@@ -59,7 +59,7 @@ class wazuh::install_product (
 
   # Find the package URL in the downloaded file.
   exec { "find_${package_pattern}_in_file":
-    command   => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${download_dir}/package_url",
+    command   => "awk -F': ' '$1 == ${package_pattern} {print $2}' ${destination} > ${download_dir}/package_url",
     path      => ['/bin', '/usr/bin'],
     creates   => "${download_dir}/package_url",
     logoutput => true,
