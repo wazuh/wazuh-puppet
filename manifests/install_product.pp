@@ -65,7 +65,7 @@ class wazuh::install_product (
 
   if $destination {
     exec { 'download_file_from_url':
-      command   => "tr -d '\r' < ${destination} | xargs /usr/bin/curl -o '${download_dir}/${package_pattern}'",
+      command   => "tr -d '\r' < ${destination} | xargs /usr/bin/curl --output '${download_dir}/${package_pattern}'",
       path      => ['/usr/bin', '/bin'],
       logoutput => true,
     }
@@ -82,15 +82,16 @@ class wazuh::install_product (
     exec { "install_${package_pattern}":
       command   => $install_command,
       path      => ['/bin', '/usr/bin'],
+      onlyif    => "test -f ${download_dir}/${package_pattern}", # Only install if the package file exists
       unless    => $check_command, # Only install if the package is not already installed
       logoutput => true,
     }
 
     # Remove the downloaded package file.
-   # file { "${download_dir}/${package_pattern}":
-   #   ensure => absent,
-   #   force  => true,
-   # }
+    file { "${download_dir}/${package_pattern}":
+      ensure => absent,
+      force  => true,
+    }
   } else {
     warning("URL for ${package_pattern} not found in ${destination}")
   }
