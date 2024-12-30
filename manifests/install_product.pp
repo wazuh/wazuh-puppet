@@ -67,7 +67,7 @@ class wazuh::install_product (
   if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
 
-    exec { 'download_packages_url_from_url':
+    exec { 'download_packages':
       command   => "/usr/bin/curl --fail --location -o ${package_file} ${package_file}",
       path      => ['/usr/bin', '/bin'],
       creates   => $destination, # is created when the file does not exist
