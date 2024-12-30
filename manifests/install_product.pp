@@ -19,7 +19,6 @@ class wazuh::install_product (
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
   String $download_dir = '/tmp',
-  String $package_url = '/tmp/package_url',
 
 ) {
   # Determine the package type (rpm or deb) based on the OS family.
@@ -59,19 +58,19 @@ class wazuh::install_product (
 
   # Find the package URL in the downloaded file.
   exec { "find_${package_pattern}_in_file":
-    command   => "awk -F': ' '$1 == ${package_pattern} {print $2}' ${destination} > ${download_dir}/package_url",
+    command   => "awk -F': ' '$1 == ${package_pattern} {print $2}' ${destination} > $package_url",
     path      => ['/bin', '/usr/bin'],
-    creates   => "${download_dir}/package_url",
     logoutput => true,
   }
 
   if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
 
-    archive { $package_file:
-      source  => $package_url,
-      creates => $package_file,
-      require => Exec["find_${package_pattern}_in_file"],
+    exec { 'download_packages_url_from_url':
+      command   => "/usr/bin/curl --fail --location -o ${package_file} $package_url",
+      path      => ['/usr/bin', '/bin'],
+      unless    => "test -f ${package_file}", # not executed if file exists.
+      logoutput => true,
     }
 
     # Determine the install command based on the package type.
