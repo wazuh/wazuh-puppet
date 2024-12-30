@@ -25,7 +25,7 @@ class wazuh::install_product (
     $check_command = "/bin/rpm -q ${package_name}" # Command to check if the package is installed (RPM)
   } elsif $facts['os']['family'] =~ Regexp($deb_based) {
     $package_type = 'deb'
-    $check_command = "/usr/bin/dpkg-query -l ${package_name}" # Command to check if the package is installed (DEB)
+    $check_command = "/usr/bin/dpkg-query -l ${package_name} | grep '^ii'" # Command to check if the package is installed (DEB)
   } else {
     fail("Unsupported OS family: ${facts['os']['family']}") # Fail if the OS family is not supported
   }
