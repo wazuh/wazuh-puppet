@@ -83,7 +83,6 @@ class wazuh::install_product (
       command   => $install_command,
       path      => ['/bin', '/usr/bin'],
       onlyif    => "dpkg-deb --info ${download_dir}/${package_pattern}",
-      onlyif    => "test -f ${download_dir}/${package_pattern}", # Only install if the package file exists
       unless    => $check_command, # Only install if the package is not already installed
       logoutput => true,
     }
