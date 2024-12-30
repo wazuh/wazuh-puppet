@@ -66,18 +66,18 @@ class wazuh::install_product (
   notify { "Extracted package URL: ${destination}": }
 
   if $destination {
-    $package_file = "${download_dir}/${package_pattern}"
 
-    exec { 'download_packages':
-      command   => "/usr/bin/curl --fail --location -o ${package_file} ${destination}",
+    exec { 'download_file_from_url':
+      command   => "/usr/bin/curl --fail --location -o ${download_dir}/${package_pattern} $(cat ${destination})",
       path      => ['/usr/bin', '/bin'],
+      onlyif    => "/bin/test -s ${destination}",
       logoutput => true,
     }
 
     # Determine the install command based on the package type.
     $install_command = $package_type ? {
-      'rpm' => "/bin/rpm -ivh ${package_file}",
-      'deb' => "/usr/bin/dpkg -i ${package_file}",
+      'rpm' => "/bin/rpm -ivh ${download_dir}/${package_pattern}",
+      'deb' => "/usr/bin/dpkg -i ${download_dir}/${package_pattern}",
     }
 
     # Install the package.
@@ -89,7 +89,7 @@ class wazuh::install_product (
     }
 
     # Remove the downloaded package file.
-    file { $package_file:
+    file { ${download_dir}/${package_pattern}:
       ensure => absent,
       force  => true,
     }
