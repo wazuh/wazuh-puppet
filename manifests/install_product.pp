@@ -9,6 +9,7 @@
 # @param rpm_based Regex for RPM-based OS families
 # @param deb_based Regex for DEB-based OS families
 # @param download_dir parameter for download directory
+# @param package_url parameter for package URL
 class wazuh::install_product (
   String $package_name = 'wazuh-manager',
   String $wazuh_version = '4.9.2',
@@ -99,11 +100,6 @@ class wazuh::install_product (
   }
 
   # Remove the downloaded URL list file.
-  file { $destination:
-    ensure => absent,
-    force  => true,
-  }
-
   file { "${download_dir}/package_url":
     ensure => absent,
     force  => true,
