@@ -56,8 +56,6 @@ class wazuh::install_product (
     logoutput => true,
   }
 
-  $package_url = file("${download_dir}/package_url")
-
   file { 'package_url_file':
     ensure  => file,
     path    => $file_path,
