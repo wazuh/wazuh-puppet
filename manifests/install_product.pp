@@ -73,7 +73,7 @@ class wazuh::install_product (
     # Determine the install command based on the package type.
     $install_command = $package_type ? {
       'rpm' => "/bin/rpm -ivh ${download_dir}/${package_pattern}",
-      'deb' => "/usr/bin/dpkg -i ${download_dir}/${package_pattern}",
+      'deb' => "dpkg -i ${download_dir}/${package_pattern}",
     }
 
     notify { "Command to install: ${install_command}": }
