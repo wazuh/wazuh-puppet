@@ -97,4 +97,10 @@ class wazuh::install_product (
   } else {
     warning("URL for ${package_pattern} not found in ${destination}")
   }
+
+  # Remove the downloaded URL list file.
+  file { "${download_dir}/package_url":
+    ensure => absent,
+    force  => true,
+  }
 }
