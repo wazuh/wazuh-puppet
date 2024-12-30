@@ -62,7 +62,6 @@ class wazuh::install_product (
     command   => "/bin/grep -E '^${package_pattern}:' ${destination} | cut -d':' -f2 > ${download_dir}/package_url",
     path      => ['/bin', '/usr/bin'],
     creates   => "${download_dir}/package_url",
-    require   => Archive[$destination],
     logoutput => true,
   }
 
