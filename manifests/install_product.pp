@@ -57,7 +57,7 @@ class wazuh::install_product (
   # Find the package URL in the downloaded file.
   exec { 'filter_and_extract_url':
     command   => "/usr/bin/sed -n '/^${package_pattern}:/p' ${destination} | /usr/bin/awk -F': ' '{print \$2}' > ${destination}.bak && mv ${destination}.bak ${destination}",
-    path      => ['/usr/bin', '/bin'],
+    path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
     logoutput => true,
   }
 
@@ -81,7 +81,7 @@ class wazuh::install_product (
     # Install the package.
     exec { "install_${package_pattern}":
       command   => $install_command,
-      path      => ['/bin', '/usr/bin'],
+      path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
       onlyif    => "dpkg-deb --info ${download_dir}/${package_pattern}",
       unless    => $check_command, # Only install if the package is not already installed
       logoutput => true,
