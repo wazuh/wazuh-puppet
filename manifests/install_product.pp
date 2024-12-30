@@ -84,7 +84,7 @@ class wazuh::install_product (
     $package_file = "${download_dir}/${package_pattern}"
 
     exec { 'download_packages':
-      command   => "/usr/bin/curl -o ${package_file} ${package_url}",
+      command   => "curl -o ${package_file} ${package_url}",
       path      => ['/usr/bin', '/bin'],
       logoutput => true,
     }
