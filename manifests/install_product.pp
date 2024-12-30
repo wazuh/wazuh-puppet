@@ -9,7 +9,6 @@
 # @param rpm_based Regex for RPM-based OS families
 # @param deb_based Regex for DEB-based OS families
 # @param download_dir parameter for download directory
-# @param package_url parameter for package URL
 class wazuh::install_product (
   String $package_name = 'wazuh-manager',
   String $wazuh_version = '4.9.2',
@@ -66,7 +65,6 @@ class wazuh::install_product (
   notify { "Extracted package URL: ${destination}": }
 
   if $destination {
-
     exec { 'download_file_from_url':
       command   => "/usr/bin/curl --fail --location -o ${download_dir}/${package_pattern} $(cat ${destination})",
       path      => ['/usr/bin', '/bin'],
@@ -89,7 +87,7 @@ class wazuh::install_product (
     }
 
     # Remove the downloaded package file.
-    file { ${download_dir}/${package_pattern}:
+    file { "${download_dir}/${package_pattern}":
       ensure => absent,
       force  => true,
     }
