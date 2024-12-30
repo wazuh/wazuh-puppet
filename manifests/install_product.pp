@@ -101,7 +101,6 @@ class wazuh::install_product (
     exec { "install_${package_pattern}":
       command   => $install_command,
       path      => ['/bin', '/usr/bin'],
-      require   => Archive[$package_file],
       unless    => $check_command, # Only install if the package is not already installed
       logoutput => true,
     }
