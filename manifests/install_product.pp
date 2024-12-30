@@ -58,7 +58,7 @@ class wazuh::install_product (
 
   # Find the package URL in the downloaded file.
   exec { "find_${package_pattern}_in_file":
-    command   => "awk -F': ' '$1 == ${package_pattern} {print $2}' ${destination} > $package_url",
+    command   => "awk -F': ' '$1 == ${package_pattern} {print $2}' ${destination} > package_url",
     path      => ['/bin', '/usr/bin'],
     logoutput => true,
   }
@@ -66,7 +66,7 @@ class wazuh::install_product (
   if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
 
-    exec { 'download_packages_url_from_url':
+    exec { 'download_packages':
       command   => "/usr/bin/curl --fail --location -o ${package_file} $package_url",
       path      => ['/usr/bin', '/bin'],
       unless    => "test -f ${package_file}", # not executed if file exists.
