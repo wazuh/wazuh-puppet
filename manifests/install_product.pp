@@ -64,11 +64,12 @@ class wazuh::install_product (
     logoutput => true,
   }
 
-  if file(${download_dir}/package_url) {
-    $package_url = file(${download_dir}/package_url)
+  if file("${download_dir}/package_url") {
+    $package_url = file("${download_dir}/package_url")
   } else {
     fail("The file ${download_dir}/package_url does not exist or could not be read.")
   }
+
 
   if $package_url {
     $package_file = "${download_dir}/${package_pattern}"
