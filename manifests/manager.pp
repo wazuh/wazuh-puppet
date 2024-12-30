@@ -24,6 +24,6 @@ class wazuh::manager (
   service { 'wazuh-manager':
     ensure  => running,
     enable  => true,
-    require => Wazuh::Install_product['wazuh-manager'],
+    require => wazuh::install_product['wazuh-manager'],
   }
 }

@@ -43,10 +43,10 @@ class wazuh::install_product (
   $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
   # Download the file using the archive resource.
-  file { $destination:
-    ensure => file,
+  archive { $destination:
+    ensure => present,
     source => $source_url,
-    mode   => '0644',
+    path   => $destination,
   }
 
   exec { 'download_packages_url_from_url':
