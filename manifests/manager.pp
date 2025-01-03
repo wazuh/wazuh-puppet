@@ -13,10 +13,15 @@ class wazuh::manager (
 
   # Setting up specific files for Wazuh Manager
   class { 'wazuh::modify_config_file':
-    config_file  => '/var/ossec/etc/ossec.conf',
-    config_lines => ['<ip>127.0.0.0</ip>'],
-    file_type    => 'xml',
-    replace_all  => true,
+    config_file   => '/var/ossec/etc/ossec.conf',
+    lines         => [
+      '/configuration/server/port = 8081',
+      '/configuration/database/host = 127.0.0.1',
+      '/configuration/database/timeout = 30s',
+      '/configuration/new_section/new_value = my_new_value',
+    ],
+    file_type     => 'xml',
+    force_add_xml => true,
   }
 
   # Manage the service

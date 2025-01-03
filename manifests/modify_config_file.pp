@@ -1,43 +1,60 @@
+# Class to modify configuration files (YAML or XML)
+#
 class wazuh::modify_config_file (
-  String $config_file,                     # Path to the configuration file
-  Array[String] $config_lines,             # Array of configurations to modify or add
-  Enum['yaml', 'xml'] $file_type,          # File type: yaml or xml
-  Boolean $replace_all = true              # Replace entire content (default true)
+  Enum['yaml', 'xml'] $file_type,
+  Array[String] $lines, # Now required
+  String $config_path = '/path/to/config',
+  Boolean $force_add_xml = false
 ) {
-
-  # Convert all configuration keys to lowercase
-  $normalized_config_lines = $config_lines.map |$line| {
-    regsubst($line, '^([^:]+):', '\l\1:', 'G') # Convert parameter names to lowercase
+  if $lines.empty {
+    fail('No configuration lines provided for processing.')
   }
 
-  if $replace_all {
-    # Replace the entire file content
-    replace { "replace_all_${config_file}":
-      path    => $config_file,
-      pattern => '.*', # Match the entire file content
-      replace => $normalized_config_lines.join("\n"), # Replace with normalized lines
-    }
-  } else {
-    # Add configurations at the end of the file
-    $normalized_config_lines.each |$line| {
-      replace { "add_line_${line}":
-        path             => $config_file,
-        pattern          => "^${regsubst($line, '^([^:]+):.*$', '\\1', 'G')}.*$", # Match the key
-        replace          => $line, # Replace the line if it exists
-        append_on_no_match => true, # Add the line if it does not exist
+  if $file_type == 'yaml' {
+    # Process configuration lines as YAML (key: value pairs)
+    $lines.each |$line| {
+      # Validate line format (key: value)
+      if $line =~ /^([\w\.\-]+):\s*(.*)$/ {
+        $key   = $1
+        $value = $line
+
+        file_line { "configure_yaml_${config_path}_${key}":
+          ensure            => present,
+          path              => $config_path,
+          match             => "^${key}:",
+          line              => $value,
+          append_on_no_match => true,
+        }
+      } else {
+        fail("Invalid YAML line format: '${line}'. Expected 'key: value'.")
       }
     }
-  }
+  } elsif $file_type == 'xml' {
+    # Process configuration lines as XML (XPath = value pairs)
+    $lines.each |$line| {
+      # Validate XML line format (XPath = value)
+      if $line =~ /^(.+?)\s*=\s*(.+)$/ {
+        $xpath = $1
+        $value = $2
 
-  # Specific handling for XML files
-  if $file_type == 'xml' {
-    $normalized_config_lines.each |$line| {
-      $key = regsubst($line, '^<([^>]+)>.*$', '\\1', 'G') # Extract the XML tag
-      replace { "modify_xml_${key}":
-        path    => $config_file,
-        pattern => "<${key}>.*?</${key}>", # Match the complete XML block
-        replace => $line, # Replace the entire block if it exists
-        append_on_no_match => true, # Add the XML block if it does not exist
+        augeas { "configure_xml_${config_path}_${xpath}":
+          context => "/files${config_path}",
+          changes => [
+            "set ${xpath} ${value}",
+          ],
+        }
+
+        if $force_add_xml {
+          augeas { "force_add_xml_${config_path}_${xpath}":
+            context => "/files${config_path}",
+            changes => [
+              "create ${xpath}",
+              "set ${xpath} ${value}",
+            ],
+          }
+        }
+      } else {
+        fail("Invalid XML line format: '${line}'. Expected 'XPath = value'.")
       }
     }
   }
