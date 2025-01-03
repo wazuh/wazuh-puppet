@@ -15,10 +15,10 @@ class wazuh::manager (
   class { 'wazuh::modify_config_file':
     config_path   => '/var/ossec/etc/ossec.conf',
     lines         => [
-      '/configuration/server/port = 8081',
-      '/configuration/database/host = 127.0.0.1',
-      '/configuration/database/timeout = 30s',
-      '/configuration/new_section/new_value = my_new_value',
+      '/ossec_config/localfile/log_format = journald',
+      '/ossec_config/localfile/location = journald',
+      '/ossec_config/global/logall = yes',
+      '/ossec_config/global/logall_new = abracadabra',
     ],
     file_type     => 'xml',
     force_add_xml => true,
