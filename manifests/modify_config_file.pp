@@ -40,22 +40,30 @@ class wazuh::modify_config_file (
         augeas { "configure_xml_${config_path}_${xpath}":
           context => "/files${config_path}",
           changes => [
-            "set ${xpath} ${value}",
+            "set ${xpath} ${value}", # Establece el valor en el xpath (crea si no existe)
           ],
+          require => Package['augeas-tools'],
         }
-
         if $force_add_xml {
-          augeas { "force_add_xml_${config_path}_${xpath}":
+          augeas { "ensure_xml_${config_path}_${xpath}":
             context => "/files${config_path}",
             changes => [
-              "create ${xpath}",
               "set ${xpath} ${value}",
             ],
+            onlyif  => "get ${xpath} != '${value}'", # Solo ejecuta si el valor es diferente o el nodo no existe
+            require => Package['augeas-tools'],
+            # require => Augeas["configure_xml_${config_path}_${xpath}"], # For order if needed
           }
         }
+
       } else {
         fail("Invalid XML line format: '${line}'. Expected 'XPath = value'.")
       }
     }
+
+    package { 'augeas-tools':
+      ensure => present,
+    }
+    Class['::augeas_core::params'] -> Package['augeas-tools']
   }
 }
