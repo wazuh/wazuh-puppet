@@ -12,11 +12,11 @@ class wazuh::manager (
   }
 
   # Setting up specific files for Wazuh Manager
-  wazuh::modify_config_file { 'ossec_conf':
+  class { 'wazuh::modify_config_file':
     config_file  => '/var/ossec/etc/ossec.conf',
-    config_lines => ['<server>enabled</server>'],
+    config_lines => ['<ip>127.0.0.0</ip>'],
     file_type    => 'xml',
-    replace_all  => false,
+    replace_all  => true,
   }
 
   # Manage the service
