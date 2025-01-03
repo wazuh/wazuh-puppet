@@ -64,6 +64,5 @@ class wazuh::modify_config_file (
     package { 'augeas-tools':
       ensure => present,
     }
-    Class['::augeas_core::params'] -> Package['augeas-tools']
   }
 }
