@@ -13,7 +13,7 @@ class wazuh::manager (
 
   # Setting up specific files for Wazuh Manager
   class { 'wazuh::modify_config_file':
-    config_file   => '/var/ossec/etc/ossec.conf',
+    config_path   => '/var/ossec/etc/ossec.conf',
     lines         => [
       '/configuration/server/port = 8081',
       '/configuration/database/host = 127.0.0.1',
