@@ -6,10 +6,9 @@ class wazuh::manager (
   String $version = '4.9.2',
 ) {
   # Install Wazuh Manager
-  class { wazuh::install_product { 'wazuh-manager':
-      package_name  => 'wazuh-manager',
-      wazuh_version => $version,
-    }
+  class { 'wazuh::install_product':
+    package_name  => 'wazuh-manager',
+    wazuh_version => $version,
   }
 
   # Setting up specific files for Wazuh Manager
