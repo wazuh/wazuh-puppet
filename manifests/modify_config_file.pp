@@ -2,8 +2,8 @@
 #
 class wazuh::modify_config_file (
   Enum['yaml', 'xml'] $file_type,
-  Array[String] $lines, # Now required
-  String $config_path = '/path/to/config',
+  Array[String] $lines,
+  String $config_path,
   Boolean $force_add_xml = false
 ) {
   if $lines.empty {
@@ -19,10 +19,10 @@ class wazuh::modify_config_file (
         $value = $line
 
         file_line { "configure_yaml_${config_path}_${key}":
-          ensure            => present,
-          path              => $config_path,
-          match             => "^${key}:",
-          line              => $value,
+          ensure             => present,
+          path               => $config_path,
+          match              => "^${key}:",
+          line               => $value,
           append_on_no_match => true,
         }
       } else {
