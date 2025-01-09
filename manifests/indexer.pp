@@ -77,8 +77,8 @@ class wazuh::indexer (
 
 
   class { 'wazuh::modify_config_file':
-    file_path => '/etc/wazuh-indexer/opensearch.yml',
-    array     => ['network.host: $$indexer_network_host',
+    file_path       => '/etc/wazuh-indexer/opensearch.yml',
+    key_value_pairs => ['network.host: $$indexer_network_host',
       'node.name: $indexer_node_name',
       'path.data: $indexer_path_data',
       'path.logs: $indexer_path_logs',
