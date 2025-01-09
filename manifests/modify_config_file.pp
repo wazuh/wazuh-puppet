@@ -1,68 +1,39 @@
 # Class to modify configuration files (YAML or XML)
 #
+# @param file_path The path to the configuration file to be modified
+# @param key_value_pairs An array of key-value pairs to be updated in the configuration file
 class wazuh::modify_config_file (
-  Enum['yaml', 'xml'] $file_type,
-  Array[String] $lines,
-  String $config_path,
-  Boolean $force_add_xml = false
+  String $file_path,
+  Array $key_value_pairs,
 ) {
-  if $lines.empty {
-    fail('No configuration lines provided for processing.')
-  }
+  validate_absolute_path($file_path)
 
-  if $file_type == 'yaml' {
-    # Process configuration lines as YAML (key: value pairs)
-    $lines.each |$line| {
-      # Validate line format (key: value)
-      if $line =~ /^([\w\.\-]+):\s*(.*)$/ {
-        $key   = $1
-        $value = $line
+  # Load the stdlib module for escaping special characters
+  include stdlib
 
-        file_line { "configure_yaml_${config_path}_${key}":
-          ensure             => present,
-          path               => $config_path,
-          match              => "^${key}:",
-          line               => $value,
-          append_on_no_match => true,
+  $key_value_pairs.each |$pair| {
+    if ($pair =~ /^([^:]+):\s*(.+)$/) {
+      $key = $1
+      $value = $2
+
+      $escaped_key = escape_regex($key)
+
+      $escaped_key = escape($key)
+
+      if ($file_content =~ /^${escaped_key}:\s*(.+)?$/) {
+        $new_content = regsubst($file_content, /^${escaped_key}:\s*(.+)?$/, "${key}: ${value}")
+        file { $file_path:
+          ensure  => file,
+          content => $new_content,
         }
       } else {
-        fail("Invalid YAML line format: '${line}'. Expected 'key: value'.")
-      }
-    }
-  } elsif $file_type == 'xml' {
-    # Process configuration lines as XML (XPath = value pairs)
-    $lines.each |$line| {
-      # Validate XML line format (XPath = value)
-      if $line =~ /^(.+?)\s*=\s*(.+)$/ {
-        $xpath = $1
-        $value = $2
-
-        augeas { "configure_xml_${config_path}_${xpath}":
-          context => "/files${config_path}",
-          changes => [
-            "set ${xpath} ${value}", # Establece el valor en el xpath (crea si no existe)
-          ],
-          require => Package['augeas-tools'],
+        file { $file_path:
+          ensure  => file,
+          content => "${file_content}\n${key}: ${value}\n",
         }
-        if $force_add_xml {
-          augeas { "ensure_xml_${config_path}_${xpath}":
-            context => "/files${config_path}",
-            changes => [
-              "set ${xpath} ${value}",
-            ],
-            onlyif  => "get ${xpath} != '${value}'", # Solo ejecuta si el valor es diferente o el nodo no existe
-            require => Package['augeas-tools'],
-            # require => Augeas["configure_xml_${config_path}_${xpath}"], # For order if needed
-          }
-        }
-
-      } else {
-        fail("Invalid XML line format: '${line}'. Expected 'XPath = value'.")
       }
-    }
-
-    package { 'augeas-tools':
-      ensure => present,
+    } else {
+      fail("The line format '${pair}' is incorrect. It should be 'key: value'")
     }
   }
 }
