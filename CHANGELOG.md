@@ -19,6 +19,24 @@ All notable changes to this project will be documented in this file.
 
 - None
 
+## [4.11.0]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## Wazuh Puppet v4.10.1
 
 ### Added
