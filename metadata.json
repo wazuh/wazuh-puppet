@@ -9,8 +9,7 @@
   "issues_url": "https://github.com/wazuh/wazuh-puppet/issues",
   "dependencies": [
     {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.0"
+      "name": "puppetlabs/stdlib"
     },
     {
       "name": "puppetlabs/concat",
