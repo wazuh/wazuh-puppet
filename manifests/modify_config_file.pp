@@ -11,16 +11,18 @@ class wazuh::modify_config_file (
   # Load the stdlib module for escaping special characters
   include stdlib
 
+  # Read the current content of the file
+  $file_content = file($file_path)
+
   $key_value_pairs.each |$pair| {
     if ($pair =~ /^([^:]+):\s*(.+)$/) {
       $key = $1
       $value = $2
 
-      $escaped_key = escape_regex($key)
+      # Escape regex special characters
+      $escaped_key = $key.gsub(/([.*+?^${}()|\[\]\\])/, '\\\\\1')
 
-      $escaped_key = escape($key)
-
-      if ($file_content =~ /^${escaped_key}:\s*(.+)?$/) {
+      if $file_content =~ /^${escaped_key}:\s*(.+)?$/ {
         $new_content = regsubst($file_content, /^${escaped_key}:\s*(.+)?$/, "${key}: ${value}")
         file { $file_path:
           ensure  => file,
