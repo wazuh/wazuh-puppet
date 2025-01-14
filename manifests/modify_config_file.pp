@@ -10,12 +10,7 @@ class wazuh::modify_config_file (
   # Load the stdlib module for escaping special characters
   include stdlib
 
-  # Check if the file exists
-  if file_exists($file_path) {
-    $file_content = file($file_path)
-  } else {
-    $file_content = ''
-  }
+  $file_content = file($file_path)
 
   $key_value_pairs.each |$pair| {
     if ($pair =~ /^([^:]+):\s*(.+)$/) {
