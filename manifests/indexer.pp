@@ -73,7 +73,7 @@ class wazuh::indexer (
     }
   }
 
-/* class { 'wazuh::modify_config_file':
+ class { 'wazuh::modify_config_file':
     file_path       => '/etc/wazuh-indexer/opensearch.yml',
     key_value_pairs => ['network.host: $$indexer_network_host',
       'node.name: $indexer_node_name',
@@ -83,11 +83,11 @@ class wazuh::indexer (
       'http.port: 9200-9299',
       'transport.tcp.port: 9300-9399',
       'compatibility.override_main_response_version: true',
-      'plugins.security.ssl.http.pemcert_filepath: $indexer_path_certs/wazuh.indexer.pem',
-      'plugins.security.ssl.http.pemkey_filepath: $indexer_path_certs/wazuh.indexer.key',
+      'plugins.security.ssl.http.pemcert_filepath: $indexer_path_certs/indexer-$indexer_node_name.pem',
+      'plugins.security.ssl.http.pemkey_filepath: $indexer_path_certs/indexer-node-1-key.pem',
       'plugins.security.ssl.http.pemtrustedcas_filepath: $indexer_path_certs/root-ca.pem',
-      'plugins.security.ssl.transport.pemcert_filepath: $indexer_path_certs/wazuh.indexer.pem',
-      'plugins.security.ssl.transport.pemkey_filepath: $indexer_path_certs/wazuh.indexer.key',
+      'plugins.security.ssl.transport.pemcert_filepath: $indexer_path_certs/indexer-$indexer_node_name.pem',
+      'plugins.security.ssl.transport.pemkey_filepath: $indexer_path_certs/indexer-node-1-key.pem',
       'plugins.security.ssl.transport.pemtrustedcas_filepath: $indexer_path_certs/root-ca.pem',
       'plugins.security.ssl.http.enabled: true',
       'plugins.security.ssl.transport.enforce_hostname_verification: false',
@@ -105,7 +105,7 @@ class wazuh::indexer (
       'plugins.security.system_indices.indices: [".opendistro-alerting-config", ".opendistro-alerting-alert*", ".opendistro-anomaly-results*", ".opendistro-anomaly-detector*", "."opendistro-anomaly-checkpoints", ".opendistro-anomaly-detection-state", ".opendistro-reports-*", ".opendistro-notifications-*", ".opendistro-notebooks", ".opensearch-observability", "."opendistro-asynchronous-search-response*", ".replication-metadata-store"]',
       'plugins.security.allow_default_init_securityindex: true',
       'cluster.routing.allocation.disk.threshold_enabled: false'],
-  }*/
+  }
 
   file_line { 'Insert line initial size of total heap space':
     path    => '/etc/wazuh-indexer/jvm.options',
