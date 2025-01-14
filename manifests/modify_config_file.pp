@@ -7,41 +7,43 @@ class wazuh::modify_config_file (
   Array $key_value_pairs,
 ) {
 
-  # Asegura que el archivo existe antes de modificarlo
+  # Asegura que el archivo exista con contenido inicial si no existe
   file { $file_path:
     ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => "# Initial content\n", # Contenido inicial si no existe
+    content => "# Initial content\n",
   }
+
+  # Leer contenido actual del archivo
+  $current_content = file($file_path)
 
   # Genera contenido actualizado basado en las claves y valores
   $new_content = inline_template(@(END))
 <% |
-  String $current_content,
-  Array $key_value_pairs
+  String current_content,
+  Array key_value_pairs
 | -%>
 <%- # Divide el contenido actual en líneas -%>
-<%- $lines = $current_content.split("\n") -%>
+<%- lines = current_content.split("\n") -%>
 <%- # Convierte pares clave-valor en un hash -%>
-<%- $pairs = $key_value_pairs.map |$pair| { split($pair, ':', 2) } -%>
-<%- $hash = $pairs.reduce({}) |$acc, $item| { $acc + { $item[0] => $item[1] } } -%>
+<%- pairs = key_value_pairs.map { |pair| pair.split(":", 2) } -%>
+<%- hash = pairs.reduce({}) { |acc, item| acc.merge({ item[0].strip => item[1].strip }) } -%>
 <%- # Modifica líneas existentes o agrega nuevas líneas -%>
-<%- $result = $lines.map |$line| {
-  if $hash.has_key($line.split(':')[0]) {
-    $line.split(':')[0] + ": " + $hash.delete($line.split(':')[0])
-  } else {
-    $line
-  }
-} + $hash.map |$key, $value| { $key + ": " + $value } -%>
-<%= $result.join("\n") -%>
+<%- result = lines.map { |line|
+  key = line.split(":")[0].strip
+  if hash.key?(key)
+    "#{key}: #{hash.delete(key)}"
+  else
+    line
+  end
+} + hash.map { |key, value| "#{key}: #{value}" } -%>
+<%= result.join("\n") %>
 END
-    $current_content => file($file_path),
-    $key_value_pairs => $key_value_pairs,
   )
 
-  # Aplica el contenido modificado al archivo
+  # Aplica el contenido actualizado al archivo
   file { $file_path:
     ensure  => file,
     content => $new_content,
