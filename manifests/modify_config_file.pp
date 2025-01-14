@@ -7,9 +7,7 @@ class wazuh::modify_config_file (
   Array $key_value_pairs,
 ) {
 
-  # Load the stdlib module for escaping special characters
-  include stdlib
-
+  # Define a function to check if a file exists
   file { $file_path:
     ensure  => file,
     content => "# Initial content\n",
@@ -18,21 +16,24 @@ class wazuh::modify_config_file (
     mode    => '0644',
   }
 
-  if file($file_path, ignore => true) {
+  # Read the file content
+  if file_exists($file_path) {
     $file_content = file($file_path)
   } else {
-    notice("The file ${file_path} does not exist. Creating a new file.")
+    notice("The file ${file_path} does not exist. Initializing as empty.")
     $file_content = ''
   }
 
+  # Iterate over the key-value pairs
   $key_value_pairs.each |$pair| {
     if ($pair =~ /^([^:]+):\s*(.+)$/) {
       $key = $1
       $value = $2
 
-      # Escape regex special characters
+      # Escape the key to use it in a regular expression
       $escaped_key = $key.gsub(/([.*+?^${}()|\[\]\\])/, '\\\\\1')
 
+      # Check if the key already exists in the file
       if $file_content =~ /^${escaped_key}:\s*(.+)?$/ {
         $new_content = regsubst($file_content, /^${escaped_key}:\s*(.+)?$/, "${key}: ${value}")
         file { $file_path:
