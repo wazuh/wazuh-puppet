@@ -17,12 +17,7 @@ class wazuh::modify_config_file (
   }
 
   # Read the file content
-  if file_exists($file_path) {
-    $file_content = file($file_path)
-  } else {
-    notice("The file ${file_path} does not exist. Initializing as empty.")
-    $file_content = ''
-  }
+  $file_content = file($file_path)
 
   # Iterate over the key-value pairs
   $key_value_pairs.each |$pair| {
