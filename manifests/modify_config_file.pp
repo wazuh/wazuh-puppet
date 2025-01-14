@@ -18,7 +18,12 @@ class wazuh::modify_config_file (
     mode    => '0644',
   }
 
-  $file_content = file($file_path)
+  if file($file_path, ignore => true) {
+    $file_content = file($file_path)
+  } else {
+    notice("The file ${file_path} does not exist. Creating a new file.")
+    $file_content = ''
+  }
 
   $key_value_pairs.each |$pair| {
     if ($pair =~ /^([^:]+):\s*(.+)$/) {
