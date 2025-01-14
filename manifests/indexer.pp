@@ -47,7 +47,6 @@ class wazuh::indexer (
     path    => '/usr/bin:/bin',
     command => "mkdir -p ${indexer_path_certs}",
     creates => $indexer_path_certs,
-    require => Package['wazuh-indexer'],
   }
   -> file { $indexer_path_certs:
     ensure => directory,
