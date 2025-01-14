@@ -6,7 +6,6 @@ class wazuh::modify_config_file (
   String $file_path,
   Array $key_value_pairs,
 ) {
-  validate_absolute_path($file_path)
 
   # Load the stdlib module for escaping special characters
   include stdlib
