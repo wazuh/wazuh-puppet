@@ -10,6 +10,14 @@ class wazuh::modify_config_file (
   # Load the stdlib module for escaping special characters
   include stdlib
 
+  file { $file_path:
+    ensure  => file,
+    content => "# Initial content\n",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+  }
+
   $file_content = file($file_path)
 
   $key_value_pairs.each |$pair| {
