@@ -111,7 +111,6 @@ class wazuh::indexer (
     path    => '/etc/wazuh-indexer/jvm.options',
     line    => "-Xms${jvm_options_memory}",
     match   => '^-Xms',
-    require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }
 
@@ -119,7 +118,6 @@ class wazuh::indexer (
     path    => '/etc/wazuh-indexer/jvm.options',
     line    => "-Xmx${jvm_options_memory}",
     match   => '^-Xmx',
-    require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }
 
@@ -127,7 +125,6 @@ class wazuh::indexer (
     ensure  => running,
     enable  => true,
     name    => $indexer_service,
-    require => Package['wazuh-indexer'],
   }
 
   file_line { "Insert line limits nofile for ${indexer_fileuser}":
@@ -153,7 +150,6 @@ class wazuh::indexer (
       path        => '/usr/bin:/bin',
       command     => "chown ${indexer_fileuser}:${indexer_filegroup} -R ${file}",
       refreshonly => true,  # only run when package is installed or updated
-      subscribe   => Package['wazuh-indexer'],
       notify      => Service['wazuh-indexer'],
     }
   }
@@ -161,7 +157,6 @@ class wazuh::indexer (
   if $full_indexer_reinstall {
     file { $indexer_security_init_lockfile:
       ensure  => absent,
-      require => Package['wazuh-indexer'],
       before  => Exec['Initialize the Opensearch security index in Wazuh indexer'],
     }
   }
