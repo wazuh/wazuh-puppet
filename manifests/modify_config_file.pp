@@ -17,7 +17,7 @@ class wazuh::modify_config_file (
   }
 
   # Read the file content
-  $file_content = file($file_path, 'default' => '')
+  $file_content = file($file_path)
 
   # Iterate over the key-value pairs
   $key_value_pairs.each |$pair| {
