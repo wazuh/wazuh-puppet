@@ -7,42 +7,43 @@ class wazuh::modify_config_file (
   Array $key_value_pairs,
 ) {
 
-  # Define a function to check if a file exists
+  # Asegura que el archivo existe antes de modificarlo
   file { $file_path:
     ensure  => file,
-    content => "# Initial content\n",
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
+    content => "# Initial content\n", # Contenido inicial si no existe
   }
 
-  # Read the file content
-  $file_content = file($file_path)
+  # Genera contenido actualizado basado en las claves y valores
+  $new_content = inline_template(@(END))
+<% |
+  String $current_content,
+  Array $key_value_pairs
+| -%>
+<%- # Divide el contenido actual en líneas -%>
+<%- $lines = $current_content.split("\n") -%>
+<%- # Convierte pares clave-valor en un hash -%>
+<%- $pairs = $key_value_pairs.map |$pair| { split($pair, ':', 2) } -%>
+<%- $hash = $pairs.reduce({}) |$acc, $item| { $acc + { $item[0] => $item[1] } } -%>
+<%- # Modifica líneas existentes o agrega nuevas líneas -%>
+<%- $result = $lines.map |$line| {
+  if $hash.has_key($line.split(':')[0]) {
+    $line.split(':')[0] + ": " + $hash.delete($line.split(':')[0])
+  } else {
+    $line
+  }
+} + $hash.map |$key, $value| { $key + ": " + $value } -%>
+<%= $result.join("\n") -%>
+END
+    $current_content => file($file_path),
+    $key_value_pairs => $key_value_pairs,
+  )
 
-  # Iterate over the key-value pairs
-  $key_value_pairs.each |$pair| {
-    if ($pair =~ /^([^:]+):\s*(.+)$/) {
-      $key = $1
-      $value = $2
-
-      # Escape the key to use it in a regular expression
-      $escaped_key = $key.gsub(/([.*+?^${}()|\[\]\\])/, '\\\\\1')
-
-      # Check if the key already exists in the file
-      if $file_content =~ /^${escaped_key}:\s*(.+)?$/ {
-        $new_content = regsubst($file_content, /^${escaped_key}:\s*(.+)?$/, "${key}: ${value}")
-        file { $file_path:
-          ensure  => file,
-          content => $new_content,
-        }
-      } else {
-        file { $file_path:
-          ensure  => file,
-          content => "${file_content}\n${key}: ${value}\n",
-        }
-      }
-    } else {
-      fail("The line format '${pair}' is incorrect. It should be 'key: value'")
-    }
+  # Aplica el contenido modificado al archivo
+  file { $file_path:
+    ensure  => file,
+    content => $new_content,
   }
 }
