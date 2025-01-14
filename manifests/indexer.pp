@@ -74,7 +74,13 @@ class wazuh::indexer (
     }
   }
 
-
+  file { '/etc/wazuh-indexer/opensearch.yml':
+    ensure  => file,
+    content => "# Initial content\n",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+  }
 
   class { 'wazuh::modify_config_file':
     file_path       => '/etc/wazuh-indexer/opensearch.yml',
