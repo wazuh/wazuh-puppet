@@ -14,7 +14,7 @@ class wazuh::repo (
       }
       exec { 'import-wazuh-key':
         path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
-        command => 'curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
+        command => 'curl -s https://packages-dev.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
         unless  => 'gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --list-keys | grep -q 29111145',
       }
 
@@ -69,11 +69,11 @@ class wazuh::repo (
           /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky|SLES)$/: {
 
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
-              $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH'
+              $baseurl  = 'https://packages-dev.wazuh.com/idr1887/pre-release/yum/5/'
+              $gpgkey   = 'http://packages-dev.wazuh.com/key/GPG-KEY-WAZUH'
             } else {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/'
-              $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
+              $baseurl  = 'https://packages-dev.wazuh.com/idr1887/pre-release/yum/'
+              $gpgkey   = 'https://packages-dev.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }
           default: { fail('This ossec module has not been tested on your distribution.') }
