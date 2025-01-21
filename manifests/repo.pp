@@ -5,8 +5,8 @@ class wazuh::repo (
 
   case $::osfamily {
     'Debian' : {
-      $wazuh_repo_url = 'https://packages.wazuh.com/4.x/apt'
-      $repo_release = 'stable'
+      $wazuh_repo_url = 'https://packages-dev.wazuh.com/idr1887/pre-release/apt'
+      $repo_release = 'unstable'
 
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
       and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) {
