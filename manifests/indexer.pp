@@ -38,7 +38,7 @@ class wazuh::indexer (
     }
   }
 
-  class { 'wazuh::install_product':
+  wazuh::install_product { 'Wazuh indexer':
     package_name  => $indexer_package,
     wazuh_version => $indexer_version_install,
   }

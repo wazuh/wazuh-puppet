@@ -4,24 +4,12 @@
 # @param version The version of Wazuh Manager to install
 class wazuh::manager (
   String $version = '4.9.2',
+  String $manager_package = 'wazuh-manager',
 ) {
   # Install Wazuh Manager
-  class { 'wazuh::install_product':
-    package_name  => 'wazuh-manager',
+  wazuh::install_product { 'Wazuh manager':
+    package_name  => $manager_package,
     wazuh_version => $version,
-  }
-
-  # Setting up specific files for Wazuh Manager
-  class { 'wazuh::modify_config_file':
-    config_path   => '/var/ossec/etc/ossec.conf',
-    lines         => [
-      '/ossec_config/localfile/log_format = journald',
-      '/ossec_config/localfile/location = journald',
-      '/ossec_config/global/logall = yes',
-      '/ossec_config/global/logall_new = abracadabra',
-    ],
-    file_type     => 'xml',
-    force_add_xml => true,
   }
 
   # Manage the service

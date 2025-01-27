@@ -9,7 +9,7 @@
 # @param rpm_based Regex for RPM-based OS families
 # @param deb_based Regex for DEB-based OS families
 # @param download_dir parameter for download directory
-class wazuh::install_product (
+define wazuh::install_product (
   String $package_name = 'wazuh-manager',
   String $wazuh_version = '4.9.2',
   String $prod_url = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
