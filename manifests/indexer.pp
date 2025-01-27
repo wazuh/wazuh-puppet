@@ -73,38 +73,34 @@ class wazuh::indexer (
     }
   }
 
- class { 'wazuh::modify_config_file':
-    file_path       => '/etc/wazuh-indexer/opensearch.yml',
-    key_value_pairs => ['network.host: $$indexer_network_host',
-      'node.name: $indexer_node_name',
-      'path.data: $indexer_path_data',
-      'path.logs: $indexer_path_logs',
-      'discovery.type: single-node',
-      'http.port: 9200-9299',
-      'transport.tcp.port: 9300-9399',
-      'compatibility.override_main_response_version: true',
-      'plugins.security.ssl.http.pemcert_filepath: $indexer_path_certs/indexer-$indexer_node_name.pem',
-      'plugins.security.ssl.http.pemkey_filepath: $indexer_path_certs/indexer-node-1-key.pem',
-      'plugins.security.ssl.http.pemtrustedcas_filepath: $indexer_path_certs/root-ca.pem',
-      'plugins.security.ssl.transport.pemcert_filepath: $indexer_path_certs/indexer-$indexer_node_name.pem',
-      'plugins.security.ssl.transport.pemkey_filepath: $indexer_path_certs/indexer-node-1-key.pem',
-      'plugins.security.ssl.transport.pemtrustedcas_filepath: $indexer_path_certs/root-ca.pem',
-      'plugins.security.ssl.http.enabled: true',
-      'plugins.security.ssl.transport.enforce_hostname_verification: false',
-      'plugins.security.ssl.transport.resolve_hostname: false',
-      'plugins.security.authcz.admin_dn:
-  - "CN=admin,OU=Wazuh,O=Wazuh,L=California,C=US"',
-      'plugins.security.check_snapshot_restore_write_privileges: true',
-      'plugins.security.enable_snapshot_restore_privilege: true',
-      'plugins.security.nodes_dn:
-      - "CN=wazuh.indexer,OU=Wazuh,O=Wazuh,L=California,C=US"',
-      'plugins.security.restapi.roles_enabled:
-  - "all_access"
-  - "security_rest_api_access"',
-      'plugins.security.system_indices.enabled: true',
-      'plugins.security.system_indices.indices: [".opendistro-alerting-config", ".opendistro-alerting-alert*", ".opendistro-anomaly-results*", ".opendistro-anomaly-detector*", "."opendistro-anomaly-checkpoints", ".opendistro-anomaly-detection-state", ".opendistro-reports-*", ".opendistro-notifications-*", ".opendistro-notebooks", ".opensearch-observability", "."opendistro-asynchronous-search-response*", ".replication-metadata-store"]',
-      'plugins.security.allow_default_init_securityindex: true',
-      'cluster.routing.allocation.disk.threshold_enabled: false'],
+  $opensearch_parameters = [
+    "network.host: ${indexer_network_host}",
+    "node.name: ${indexer_node_name}",
+    "plugins.security.ssl.http.pemcert_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}.pem",
+    "plugins.security.ssl.http.pemkey_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}-key.pem",
+    "plugins.security.ssl.http.pemtrustedcas_filepath: ${indexer_path_certs}/root-ca.pem",
+    "plugins.security.ssl.transport.pemcert_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}.pem",
+    "plugins.security.ssl.transport.pemkey_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}-key.pem",
+    "plugins.security.ssl.transport.pemtrustedcas_filepath: ${indexer_path_certs}/root-ca.pem",
+  ]
+
+  $opensearch_parameters.each |$update| {
+    $parts = split($update, ': ')
+    $key = $parts[0]
+    $value = $parts[1]
+
+    augeas { "yaml_config_${key}":
+      context => '/etc/wazuh-indexer/opensearch.yml',
+      changes => [
+        "set ${key} '${value}'",
+      ],
+      onlyif  => "match /files/etc/wazuh-indexer/opensearch.yml/${key} size == 0",
+      require => File['/etc/wazuh-indexer/opensearch.yml'],
+    }
+  }
+
+  file { '/etc/wazuh-indexer/opensearch.yml':
+    ensure  => file,
   }
 
   file_line { 'Insert line initial size of total heap space':

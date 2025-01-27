@@ -16,7 +16,7 @@ class wazuh::modify_config_file (
 
   # Iterate through the key-value pairs and handle each entry
   $key_value_pairs.each |$pair| {
-    if $pair =~ /^([^:]+):\s*(.+)$/ {
+    if $pair =~ /^([^:]+): \s*(.+)$/ {
       $key   = $1   # Extract the key
       $value = $2   # Extract the value
 
