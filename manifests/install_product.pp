@@ -12,8 +12,6 @@
 define wazuh::install_product (
   String $package_name = 'wazuh-manager',
   String $wazuh_version = '4.9.2',
-  String $prod_url = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
-  String $source_url = 'puppet:///modules/archive/packages_url.txt',
   String $destination = '/tmp/packages_url.txt',
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
   String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
@@ -39,23 +37,8 @@ define wazuh::install_product (
   # Construct the package filename.
   $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
-  # Download the file using the archive resource.
-  archive { $destination:
-    ensure => present,
-    source => $source_url,
-    path   => $destination,
-  }
-
-  exec { 'download_packages_url_from_url':
-    command   => "/usr/bin/curl --fail --location -o ${destination} ${prod_url}",
-    path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
-    creates   => $destination, # is created when the file does not exist
-    unless    => "test -f ${destination}", # not executed if file exists.
-    logoutput => true,
-  }
-
   # Find the package URL in the downloaded file.
-  exec { 'filter_and_extract_url':
+  exec { 'filter_and_extract_${package_name}_url':
     command   => "/usr/bin/sed -n '/^${package_pattern}:/p' ${destination} | /usr/bin/awk -F': ' '{print \$2}' > ${destination}.bak && mv ${destination}.bak ${destination}",
     path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
     logoutput => true,
