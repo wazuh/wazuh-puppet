@@ -38,13 +38,11 @@ define wazuh::install_product (
   $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
 
   # Find the package URL in the downloaded file.
-  exec { "filter_and_extract_${package_name}__${title}"":
+  exec { "filter_and_extract_${package_name}__${title}":
     command   => "/usr/bin/sed -n '/^${package_pattern}:/p' ${destination} | /usr/bin/awk -F': ' '{print \$2}' > ${destination}.bak && mv ${destination}.bak ${destination}",
     path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
     logoutput => true,
   }
-
-  notify { "Extracted package URL: ${destination}": }
 
   if $destination {
     exec { 'download_file_from_url':
