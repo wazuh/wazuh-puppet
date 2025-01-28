@@ -10,7 +10,7 @@
 # @param deb_based Regex for DEB-based OS families
 # @param download_dir parameter for download directory
 define wazuh::install_product (
-  String $package_name = 'wazuh-manager',
+  String $package_name,
   String $wazuh_version = '4.9.2',
   String $destination = '/tmp/packages_url.txt',
   String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
