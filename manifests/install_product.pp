@@ -32,7 +32,7 @@ define wazuh::install_product (
 
   # Download specific package using extracted URL
   exec { "download_${key}":
-    command   => "sh -c 'url=$(grep -F \"${key}:\" /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -sSf -o /tmp/${key} \"$url\"'",
+    command   => "url=$(grep -F \"${key}:\" /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -sSf -o /tmp/${key} $url",
     unless    => "test -f /tmp/${key} && dpkg -I /tmp/${key} >/dev/null 2>&1",
     path      => ['/usr/bin', '/bin', '/sbin'],
     timeout   => 600,
