@@ -41,7 +41,7 @@ define wazuh::install_product (
       | EOT
     path      => ['/usr/bin', '/bin', '/usr/sbin'],
     unless    => "test -f /tmp/${key} && dpkg -I /tmp/${key} >/dev/null 2>&1",  # Verifica integridad
-    require   => Exec['download_packages_catalog'],
+    require   => Exec['download_packages_url_from_url'],
     logoutput => true,
     timeout   => 600,  # Aumentar tiempo para paquetes grandes
   }
