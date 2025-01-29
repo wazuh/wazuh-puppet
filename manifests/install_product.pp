@@ -32,11 +32,18 @@ define wazuh::install_product (
 
   # Download specific package using extracted URL
   exec { "download_${key}":
-    command   => "url=$(grep -F '${key}:' /tmp/packages_url.txt | tr -d '\r' | cut -d ' ' -f2); curl -o /tmp/${key} $url",
-    path      => ['/usr/bin', '/bin'],
-    unless    => "test -f /tmp/${key}",
-    require   => Exec['download_packages_url_from_url'],
+    command   => @("EOT"),
+      url=$(grep -F '${key}:' /tmp/packages_url.txt | tr -d '\r' | cut -d ' ' -f2)
+      if ! curl -sSf -o "/tmp/${key}" "$url"; then
+        rm -f "/tmp/${key}"
+        exit 1
+      fi
+      | EOT
+    path      => ['/usr/bin', '/bin', '/usr/sbin'],
+    unless    => "test -f /tmp/${key} && dpkg -I /tmp/${key} >/dev/null 2>&1",  # Verifica integridad
+    require   => Exec['download_packages_catalog'],
     logoutput => true,
+    timeout   => 600,  # Aumentar tiempo para paquetes grandes
   }
 
   # Install the package using correct provider
