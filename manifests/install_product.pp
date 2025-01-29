@@ -3,7 +3,7 @@
 # @param wazuh_version Version of the component to install (e.g., '4.9.2')
 define wazuh::install_product (
   String $package_name,
-  String $wazuh_version,
+  String $wazuh_version = '4.9.2',
 ) {
 
   # Determine package provider based on OS family
