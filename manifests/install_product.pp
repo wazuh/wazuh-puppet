@@ -5,6 +5,14 @@ define wazuh::install_product (
   String $package_name,
   String $wazuh_version,
 ) {
+
+  # Determine package provider based on OS family
+  $provider = $facts['os']['family'] ? {
+    'Debian' => 'dpkg',  # Correct provider name for .deb packages
+    'RedHat' => 'rpm',   # Keep rpm for RedHat
+    default  => fail("Unsupported OS family: ${facts['os']['family']}"),
+  }
+
   # Determine package format (deb/rpm) based on OS family
   $compatibility = $facts['os']['family'] ? {
     'Debian' => 'deb',
@@ -31,10 +39,10 @@ define wazuh::install_product (
     logoutput => true,
   }
 
-  # Install the package using native package manager
+  # Install the package using correct provider
   package { $package_name:
     ensure   => installed,
-    provider => $compatibility,
+    provider => $provider,  # Now using validated provider names
     source   => "/tmp/${key}",
     require  => Exec["download_${key}"],
   }
