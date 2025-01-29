@@ -93,6 +93,10 @@ class wazuh::indexer (
 
   file { '/etc/wazuh-indexer/opensearch.yml':
     ensure  => file,
+    require => [
+      Wazuh::Install_product['Wazuh indexer'],
+      File['/etc/wazuh-indexer']
+    ],
   }
 
   file_line { 'Insert line initial size of total heap space':
