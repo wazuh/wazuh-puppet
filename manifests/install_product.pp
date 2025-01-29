@@ -1,79 +1,41 @@
-#
-# Class to install Wazuh product
-#
-# @param package_name The name of the package to be installed.
-# @param wazuh_version The version of the Wazuh package to be installed.
-# @param prod_url The URL to download the package list from.
-# @param source_url The Puppet URL to download the package list from.
-# @param destination Destination path for the downloaded file
-# @param rpm_based Regex for RPM-based OS families
-# @param deb_based Regex for DEB-based OS families
-# @param download_dir parameter for download directory
+# Defined type to install Wazuh components from custom URLs
+# @param package_name Name of the Wazuh component (e.g., 'wazuh-manager')
+# @param wazuh_version Version of the component to install (e.g., '4.9.2')
 define wazuh::install_product (
   String $package_name,
-  String $wazuh_version = '4.9.2',
-  String $destination = '/tmp/packages_url.txt',
-  String $rpm_based = 'RedHat|Suse|Amazon|OracleLinux|AlmaLinux|Rocky',
-  String $deb_based = 'Debian|Ubuntu|Mint|Kali|Raspbian',
-  String $download_dir = '/tmp',
+  String $wazuh_version,
 ) {
-  # Determine the package type (rpm or deb) based on the OS family.
-  if $facts['os']['family'] =~ Regexp($rpm_based) {
-    $package_type = 'rpm'
-    $check_command = "/bin/rpm -q ${package_name}" # Command to check if the package is installed (RPM)
-  } elsif $facts['os']['family'] =~ Regexp($deb_based) {
-    $package_type = 'deb'
-    $check_command = "/usr/bin/dpkg-query -l ${package_name} | grep '^ii'" # Command to check if the package is installed (DEB)
-  } else {
-    fail("Unsupported OS family: ${facts['os']['family']}") # Fail if the OS family is not supported
+  # Determine package format (deb/rpm) based on OS family
+  $compatibility = $facts['os']['family'] ? {
+    'Debian' => 'deb',
+    'RedHat' => 'rpm',
+    default  => fail("Unsupported OS family: ${facts['os']['family']}"),
   }
 
-  # Determine the package architecture.
-  $package_arch = $facts['os']['architecture'] ? {
-    'x86_64' => 'amd64',
-    default  => $facts['os']['architecture'],
+  # Normalize architecture naming conventions
+  $architecture = $facts['os']['architecture'] ? {
+    'x86_64'  => 'amd64',   # Convert x86_64 to amd64
+    'aarch64' => 'arm64',   # Convert aarch64 to arm64
+    default   => $facts['os']['architecture'],
   }
 
-  # Construct the package filename.
-  $package_pattern = "${package_name}-${wazuh_version}-${package_arch}.${package_type}"
+  # Generate package identifier key
+  $key = "${package_name}-${wazuh_version}-${architecture}.${compatibility}"
 
-  # Find the package URL in the downloaded file.
-  exec { "filter_and_extract_${package_name}__${title}":
-    command   => "/usr/bin/sed -n '/^${package_pattern}:/p' ${destination} | /usr/bin/awk -F': ' '{print \$2}' > ${destination}.bak && mv ${destination}.bak ${destination}",
-    path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
+  # Download specific package using extracted URL
+  exec { "download_${key}":
+    command   => "url=$(grep -F '${key}:' /tmp/packages_url.txt | tr -d '\r' | cut -d ' ' -f2); curl -o /tmp/${key} \$url",
+    path      => ['/usr/bin', '/bin'],
+    unless    => "test -f /tmp/${key}",
+    require   => Exec['download_packages_catalog'],
     logoutput => true,
   }
 
-  if $destination {
-    exec { "download_file_from_url_${package_name}__${title}":
-      command   => "tr -d '\r' < ${destination} | xargs /usr/bin/curl -o '${download_dir}/${package_pattern}'",
-      path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
-      logoutput => true,
-    }
-
-    # Determine the install command based on the package type.
-    $install_command = $package_type ? {
-      'rpm' => "/bin/rpm -ivh ${download_dir}/${package_pattern}",
-      'deb' => "dpkg -i ${download_dir}/${package_pattern} || apt-get install -f -y",
-    }
-
-    notify { "Command to install: ${install_command}": }
-
-    # Install the package.
-    exec { "install_${package_pattern}":
-      command   => $install_command,
-      path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
-      onlyif    => "dpkg-deb --info ${download_dir}/${package_pattern}",
-      unless    => $check_command, # Only install if the package is not already installed
-      logoutput => true,
-    }
-
-    # Remove the downloaded package file.
-    file { "${download_dir}/${package_pattern}":
-      ensure => absent,
-      force  => true,
-    }
-  } else {
-    warning("URL for ${package_pattern} not found in ${destination}")
+  # Install the package using native package manager
+  package { $package_name:
+    ensure   => installed,
+    provider => $compatibility,
+    source   => "/tmp/${key}",
+    require  => Exec["download_${key}"],
   }
 }
