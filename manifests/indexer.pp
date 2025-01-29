@@ -29,19 +29,21 @@ class wazuh::indexer (
 ) {
   wazuh::install_product { 'Wazuh indexer':
     package_name  => $indexer_package,
-    wazuh_version => $indexer_version_install,
+    wazuh_version => $indexer_version,
   }
 
   exec { "ensure full path of ${indexer_path_certs}":
     path    => '/usr/bin:/bin',
     command => "mkdir -p ${indexer_path_certs}",
     creates => $indexer_path_certs,
+    require => Wazuh::Install_product['Wazuh indexer'],
   }
   -> file { $indexer_path_certs:
-    ensure => directory,
-    owner  => $indexer_fileuser,
-    group  => $indexer_filegroup,
-    mode   => '0500',
+    ensure  => directory,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0500',
+    require => Wazuh::Install_product['Wazuh indexer'],
   }
 
   [
@@ -59,6 +61,7 @@ class wazuh::indexer (
       replace => true,
       recurse => remote,
       source  => "puppet:///modules/archive/${certfile}",
+      require => Wazuh::Install_product['Wazuh indexer'],
     }
   }
 
@@ -110,6 +113,7 @@ class wazuh::indexer (
     ensure  => running,
     enable  => true,
     name    => $indexer_service,
+    require => Wazuh::Install_product['Wazuh indexer'],
   }
 
   file_line { "Insert line limits nofile for ${indexer_fileuser}":
