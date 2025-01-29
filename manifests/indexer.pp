@@ -100,6 +100,7 @@ class wazuh::indexer (
     line    => "-Xms${jvm_options_memory}",
     match   => '^-Xms',
     notify  => Service['wazuh-indexer'],
+    require => Wazuh::Install_product['Wazuh indexer'],
   }
 
   file_line { 'Insert line maximum size of total heap space':
@@ -107,6 +108,7 @@ class wazuh::indexer (
     line    => "-Xmx${jvm_options_memory}",
     match   => '^-Xmx',
     notify  => Service['wazuh-indexer'],
+    require => Wazuh::Install_product['Wazuh indexer'],
   }
 
   service { 'wazuh-indexer':
@@ -121,12 +123,14 @@ class wazuh::indexer (
     line   => "${indexer_fileuser} - nofile  65535",
     match  => "^${indexer_fileuser} - nofile\s",
     notify => Service['wazuh-indexer'],
+    require => Wazuh::Install_product['Wazuh indexer'],
   }
   file_line { "Insert line limits memlock for ${indexer_fileuser}":
     path   => '/etc/security/limits.conf',
     line   => "${indexer_fileuser} - memlock unlimited",
     match  => "^${indexer_fileuser} - memlock\s",
     notify => Service['wazuh-indexer'],
+    require => Wazuh::Install_product['Wazuh indexer'],
   }
 
   # TODO: this should be done by the package itself and not by puppet at all
@@ -140,6 +144,7 @@ class wazuh::indexer (
       command     => "chown ${indexer_fileuser}:${indexer_filegroup} -R ${file}",
       refreshonly => true,  # only run when package is installed or updated
       notify      => Service['wazuh-indexer'],
+      require => Wazuh::Install_product['Wazuh indexer'],
     }
   }
 
