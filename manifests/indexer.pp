@@ -94,8 +94,7 @@ class wazuh::indexer (
   file { '/etc/wazuh-indexer/opensearch.yml':
     ensure  => file,
     require => [
-      Wazuh::Install_product['Wazuh indexer'],
-      File['/etc/wazuh-indexer']
+      Wazuh::Install_product['Wazuh indexer']
     ],
   }
 
