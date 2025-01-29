@@ -82,12 +82,17 @@ class wazuh::indexer (
     $value = $parts[1]
 
     augeas { "yaml_config_${key}":
-      context => '/etc/wazuh-indexer/opensearch.yml',
+      lens    => 'Yaml.lns',  # Especificar el lens YAML
+      incl    => '/etc/wazuh-indexer/opensearch.yml',
       changes => [
         "set ${key} '${value}'",
       ],
-      onlyif  => "match /files/etc/wazuh-indexer/opensearch.yml/${key} size == 0",
-      require => File['/etc/wazuh-indexer/opensearch.yml'],
+      onlyif  => "get ${key} != '${value}'",  # Verificar valor actual
+      require => [
+        File['/etc/wazuh-indexer/opensearch.yml'],
+        Package['wazuh-indexer']
+      ],
+      notify  => Service['wazuh-indexer'],
     }
   }
 
