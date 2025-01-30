@@ -88,10 +88,10 @@ class wazuh::indexer (
       onlyif  => "get ${key} != '${value}'",
       require => [
         File['/etc/wazuh-indexer/opensearch.yml'],
+        Wazuh::Install_product['Wazuh indexer'],
         Package['wazuh-indexer']
       ],
       notify  => Service['wazuh-indexer'],
-      require => Wazuh::Install_product['Wazuh indexer'],
     }
   }
 
