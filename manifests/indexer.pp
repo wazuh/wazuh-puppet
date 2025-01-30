@@ -91,6 +91,7 @@ class wazuh::indexer (
         Package['wazuh-indexer']
       ],
       notify  => Service['wazuh-indexer'],
+      require => Wazuh::Install_product['Wazuh indexer'],
     }
   }
 
