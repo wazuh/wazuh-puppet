@@ -65,33 +65,27 @@ class wazuh::indexer (
     }
   }
 
-  $opensearch_parameters = [
-    "network.host: ${indexer_network_host}",
-    "node.name: ${indexer_node_name}",
-    "plugins.security.ssl.http.pemcert_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}.pem",
-    "plugins.security.ssl.http.pemkey_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}-key.pem",
-    "plugins.security.ssl.http.pemtrustedcas_filepath: ${indexer_path_certs}/root-ca.pem",
-    "plugins.security.ssl.transport.pemcert_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}.pem",
-    "plugins.security.ssl.transport.pemkey_filepath: ${indexer_path_certs}/indexer-${indexer_node_name}-key.pem",
-    "plugins.security.ssl.transport.pemtrustedcas_filepath: ${indexer_path_certs}/root-ca.pem",
-  ]
+  $config = {
+    'network.host'                                          => $indexer_network_host,
+    'node.name'                                             => $indexer_node_name,
+    'plugins.security.ssl.http.pemcert_filepath'            => "${indexer_path_certs}/indexer-${indexer_node_name}.pem",
+    'plugins.security.ssl.http.pemkey_filepath'             => "${indexer_path_certs}/indexer-${indexer_node_name}-key.pem",
+    'plugins.security.ssl.http.pemtrustedcas_filepath'      => "${indexer_path_certs}/root-ca.pem",
+    'plugins.security.ssl.transport.pemcert_filepath'       => "${indexer_path_certs}/indexer-${indexer_node_name}.pem",
+    'plugins.security.ssl.transport.pemkey_filepath'        => "${indexer_path_certs}/indexer-${indexer_node_name}-key.pem",
+    'plugins.security.ssl.transport.pemtrustedcas_filepath' => "${indexer_path_certs}/root-ca.pem"
+  }
 
-  $opensearch_parameters.each |$update| {
-    $parts = split($update, ': ')
-    $key = $parts[0]
-    $value = $parts[1]
-
-    augeas { "yaml_config_${key}":
-      lens    => 'Yaml.lns',
-      incl    => '/etc/wazuh-indexer/opensearch.yml',
-      changes => "set ${key} '${value}'",
-      onlyif  => "get ${key} != '${value}'",
+  $config.each |$key, $value| {
+    file_line { "opensearch_${key}":
+      path    => '/etc/wazuh-indexer/opensearch.yml',
+      line    => "${key}: \"${value}\"",
+      match   => "^${key}:",
+      notify  => Service['wazuh-indexer'],
       require => [
         File['/etc/wazuh-indexer/opensearch.yml'],
-        Wazuh::Install_product['Wazuh indexer'],
-        Package['wazuh-indexer']
+        Wazuh::Install_product['Wazuh indexer']
       ],
-      notify  => Service['wazuh-indexer'],
     }
   }
 
@@ -100,22 +94,6 @@ class wazuh::indexer (
     require => [
       Wazuh::Install_product['Wazuh indexer']
     ],
-  }
-
-  file_line { 'Insert line initial size of total heap space':
-    path    => '/etc/wazuh-indexer/jvm.options',
-    line    => "-Xms${jvm_options_memory}",
-    match   => '^-Xms',
-    notify  => Service['wazuh-indexer'],
-    require => Wazuh::Install_product['Wazuh indexer'],
-  }
-
-  file_line { 'Insert line maximum size of total heap space':
-    path    => '/etc/wazuh-indexer/jvm.options',
-    line    => "-Xmx${jvm_options_memory}",
-    match   => '^-Xmx',
-    notify  => Service['wazuh-indexer'],
-    require => Wazuh::Install_product['Wazuh indexer'],
   }
 
   service { 'wazuh-indexer':
@@ -138,21 +116,6 @@ class wazuh::indexer (
     match  => "^${indexer_fileuser} - memlock\s",
     notify => Service['wazuh-indexer'],
     require => Wazuh::Install_product['Wazuh indexer'],
-  }
-
-  # TODO: this should be done by the package itself and not by puppet at all
-  [
-    '/etc/wazuh-indexer',
-    '/usr/share/wazuh-indexer',
-    '/var/lib/wazuh-indexer',
-  ].each |String $file| {
-    exec { "set recusive ownership of ${file}":
-      path        => '/usr/bin:/bin',
-      command     => "chown ${indexer_fileuser}:${indexer_filegroup} -R ${file}",
-      refreshonly => true,  # only run when package is installed or updated
-      notify      => Service['wazuh-indexer'],
-      require => Wazuh::Install_product['Wazuh indexer'],
-    }
   }
 
   if $full_indexer_reinstall {

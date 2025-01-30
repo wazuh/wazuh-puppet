@@ -27,13 +27,13 @@ define wazuh::install_product (
     default   => $facts['os']['architecture'],
   }
 
-  # Generate package identifier key
-  $key = "${package_name}-${wazuh_version}-${architecture}.${compatibility}"
+  # Generate package identifier package
+  $package = "${package_name}-${wazuh_version}-${architecture}.${compatibility}"
 
   # Download specific package using extracted URL
-  exec { "download_${key}":
-    command => "sh -c 'url=\$(grep -F '${key}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${key} \$url'",
-    unless  => "test -f /tmp/${key} && dpkg -I /tmp/${key} >/dev/null 2>&1",
+  exec { "download_${package}":
+    command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \$url'",
+    unless  => "test -f /tmp/${package} && dpkg -I /tmp/${package} >/dev/null 2>&1",
     path    => ['/usr/bin', '/bin', '/sbin'],
     timeout => 600,
     require => [
@@ -45,7 +45,7 @@ define wazuh::install_product (
   package { $package_name:
     ensure   => installed,
     provider => $provider,  # Now using validated provider names
-    source   => "/tmp/${key}",
-    require  => Exec["download_${key}"],
+    source   => "/tmp/${package}",
+    require  => Exec["download_${package}"],
   }
 }
