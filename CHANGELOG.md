@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Modify the version used into the Wazuh indexer and Wazuh manager deployment ([#1229](https://github.com/wazuh/wazuh-puppet/pull/1229))
 
 ### Deleted
 
