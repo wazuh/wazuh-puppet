@@ -36,9 +36,6 @@ define wazuh::install_product (
     unless  => "test -f /tmp/${package} && dpkg -I /tmp/${package} >/dev/null 2>&1",
     path    => ['/usr/bin', '/bin', '/sbin'],
     timeout => 600,
-    require => [
-      File['/tmp/packages_url.txt'],
-    ],
   }
 
   # Install the package using correct provider
