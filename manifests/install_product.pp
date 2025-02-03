@@ -37,7 +37,7 @@ define wazuh::install_product (
     path    => ['/usr/bin', '/bin', '/sbin'],
     timeout => 600,
     require => [
-      Exec['download_packages_url_from_url'],
+      File['/tmp/packages_url.txt'],
     ],
   }
 
