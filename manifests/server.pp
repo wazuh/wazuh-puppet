@@ -19,7 +19,7 @@ class wazuh::server (
    "server-${server_node_name}.pem",
    "server-${server_node_name}-key.pem",
    'root-ca.pem',
-   'admin.pemuuu',
+   'admin.pem',
    'admin-key.pem',
   ].each |String $certfile| {
     file { "${server_path_certs}/${certfile}":
