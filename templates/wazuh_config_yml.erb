@@ -7,7 +7,7 @@ nodes:
   server:
 <% if @manager_certs -%>
 <% @manager_certs.each do |node| -%>
-      - name: manager-<%= node[0] %>
+      - name: server-<%= node[0] %>
         ip: <%= node[1] %>
 <% end -%>
 <% end -%>
