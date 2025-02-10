@@ -39,7 +39,7 @@ define wazuh::install_product (
   }
 
   # Install the package using correct provider
-  package { $package_name:
+  package { "${package_name}":
     ensure   => installed,
     provider => $provider,  # Now using validated provider names
     source   => "/tmp/${package}",

@@ -2,8 +2,8 @@
 # Main Wazuh server config
 #
 class wazuh::server (
-  String $version = '4.9.2',
-  String $server_package = 'wazuh-manager',
+  String $server_version = '4.9.2',
+  String $server_package = 'wazuh-server',
   String $server_node_name = 'node-1',
   String $server_path_certs = '/etc/wazuh-server/certs',
   String $server_fileuser = 'wazuh-server',
@@ -12,7 +12,7 @@ class wazuh::server (
   # Install Wazuh Manager
   wazuh::install_product { 'Wazuh server':
     package_name  => $server_package,
-    wazuh_version => $version,
+    wazuh_version => $server_version,
   }
 
   [
@@ -30,7 +30,10 @@ class wazuh::server (
       replace => true,
       recurse => remote,
       source  => "puppet:///modules/archive/${certfile}",
-      require => Wazuh::Install_product['Wazuh server'],
+      require => [
+        package["${package_name}"],
+        Wazuh::Install_product['Wazuh server']
+      ]
     }
   }
 
