@@ -10,7 +10,7 @@ class wazuh::server (
   String $server_filegroup = 'wazuh-server',
 ) {
   # Install Wazuh Manager
-  wazuh::install_product { 'Wazuh manager':
+  wazuh::install_product { 'Wazuh server':
     package_name  => $server_package,
     wazuh_version => $version,
   }
@@ -30,7 +30,7 @@ class wazuh::server (
       replace => true,
       recurse => remote,
       source  => "puppet:///modules/archive/${certfile}",
-      require => Wazuh::Install_product['Wazuh manager'],
+      require => Wazuh::Install_product['Wazuh server'],
     }
   }
 
@@ -39,7 +39,7 @@ class wazuh::server (
     command => "openssl ecparam -name secp256k1 -genkey -noout -out ${server_path_certs}/private-key.pem",
     creates => "${server_path_certs}/private-key.pem",
     path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
-    require => Wazuh::Install_product['Wazuh manager'],
+    require => Wazuh::Install_product['Wazuh server'],
   }
 
   # Generate public key
