@@ -38,7 +38,7 @@ class wazuh::server (
   exec { 'generate-private-key':
     command => "openssl ecparam -name secp256k1 -genkey -noout -out ${server_path_certs}/private-key.pem",
     creates => "${server_path_certs}/private-key.pem",
-    require => File[$server_path_certs],
+    require => Wazuh::Install_product['Wazuh manager'],
   }
 
   # Generate public key
