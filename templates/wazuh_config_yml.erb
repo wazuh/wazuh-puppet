@@ -13,12 +13,12 @@ nodes:
 <% end -%>
 <% if @manager_master_certs -%>
 <% @manager_master_certs.each do |node| -%>
-      - name: manager-<%= node[0] %>
+      - name: server-<%= node[0] %>
         ip: <%= node[1] %>
         node_type: master
 <% end -%>
 <% @manager_worker_certs.each do |node| -%>
-      - name: manager-<%= node[0] %>
+      - name: server-<%= node[0] %>
         ip: <%= node[1] %>
         node_type: worker
 <% end -%>
