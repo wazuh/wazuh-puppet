@@ -30,10 +30,7 @@ class wazuh::server (
       replace => true,
       recurse => remote,
       source  => "puppet:///modules/archive/${certfile}",
-      require => [
-        package["${package_name}"],
-        Wazuh::Install_product['Wazuh server']
-      ]
+      require => Wazuh::Install_product['Wazuh server'],
     }
   }
 
