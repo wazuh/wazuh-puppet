@@ -8,6 +8,7 @@ class wazuh::server (
   String $server_path_certs = '/etc/wazuh-server/certs',
   String $server_fileuser = 'wazuh-server',
   String $server_filegroup = 'wazuh-server',
+  String $server_indexer_node_host = 'localhost',
 ) {
   # Install Wazuh Manager
   wazuh::install_product { 'Wazuh server':
@@ -62,6 +63,24 @@ class wazuh::server (
     owner   => $server_fileuser,
     group   => $server_filegroup,
     require => Exec['generate-public-key'],
+  }
+
+  augeas { 'wazuh_server_yaml_config':
+    context => '/files/etc/wazuh-server/wazuh-server.yml',
+    lens    => 'Yaml.lns',
+    changes => [
+      "set server/node/name '${server_node_name}'",
+      "set indexer/hosts/0/host '${server_indexer_node_host}'",
+      "set server/node/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
+      "set server/node/ssl/cert '/ruta/personalizada/certs/server-${server_node_name}.pem'",
+      "set indexer/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
+      "set indexer/ssl/certificate '/ruta/personalizada/certs/server-${server_node_name}.pem'",
+      "set communications_api/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
+      "set communications_api/ssl/cert '/ruta/personalizada/certs/server-${server_node_name}.pem'",
+      "set management_api/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
+      "set management_api/ssl/cert '/ruta/personalizada/certs/server-${server_node_name}.pem'",
+    ],
+    require => File['/etc/wazuh-server/wazuh-server.yml'],
   }
 
   # Manage the service
