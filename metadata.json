@@ -41,8 +41,8 @@
       "version_requirement": ">= 0.4.8"
     },
     {
-      "name": "puppetlabs/yaml",
-      "version_requirement": ">= 0.0.8"
+      "name": "cataphract-yaml_settings",
+      "version_requirement": ">= 0.1.0"
     }
   ],
   "operatingsystem_support": [
