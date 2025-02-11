@@ -66,24 +66,81 @@ class wazuh::server (
     require => Exec['generate-public-key'],
   }
 
-  augeas { 'wazuh_server_yaml_config':
-    context => '/files/etc/wazuh-server/wazuh-server.yml',
-    lens    => 'Yaml.lns',
-    incl    => '/etc/wazuh-server/wazuh-server.yml',
-    changes => [
-      "set server/node/name '${server_node_name}'",
-      "set indexer/hosts/0/host '${server_indexer_node_host}'",
-      "set server/node/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
-      "set server/node/ssl/cert '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
-      "set indexer/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
-      "set indexer/ssl/certificate '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
-      "set communications_api/host '${server_api_host}'",
-      "set communications_api/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
-      "set communications_api/ssl/cert '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
-      "set management_api/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
-      "set management_api/ssl/cert '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
-    ],
-    require => Wazuh::Install_product['Wazuh server'],
+  yaml_setting { 'server_node_name':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'server.node.name',
+    value  => $server_node_name,
+  }
+
+  yaml_setting { 'indexer_hosts_0_host':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'indexer.hosts.0.host',
+    value  => $server_indexer_node_host,
+  }
+
+  yaml_setting { 'server_node_ssl_key':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'server.node.ssl.key',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+  }
+
+  yaml_setting { 'server_node_ssl_cert':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'server.node.ssl.cert',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
+  }
+
+  yaml_setting { 'indexer_ssl_key':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'indexer.ssl.key',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+  }
+
+  yaml_setting { 'indexer_ssl_certificate':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'indexer.ssl.certificate',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
+  }
+
+  yaml_setting { 'communications_api_host':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'communications_api.host',
+    value  => $server_api_host,
+  }
+
+  yaml_setting { 'communications_api_ssl_key':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'communications_api.ssl.key',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+  }
+
+  yaml_setting { 'communications_api_ssl_cert':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'communications_api.ssl.cert',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
+  }
+
+  yaml_setting { 'management_api_ssl_key':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'management_api.ssl.key',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+  }
+
+  yaml_setting { 'management_api_ssl_cert':
+    ensure => present,
+    target => '/etc/wazuh-server/wazuh-server.yml',
+    key    => 'management_api.ssl.cert',
+    value  => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
   }
 
   # Manage the service
