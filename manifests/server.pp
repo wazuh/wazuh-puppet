@@ -69,7 +69,7 @@ class wazuh::server (
   augeas { 'wazuh_server_yaml_config':
     context => '/files/etc/wazuh-server/wazuh-server.yml',
     lens    => 'Yaml.lns',
-    incl    => '/etc/wazuh-server/wazuh-server.yml'
+    incl    => '/etc/wazuh-server/wazuh-server.yml',
     changes => [
       "set server/node/name '${server_node_name}'",
       "set indexer/hosts/0/host '${server_indexer_node_host}'",
