@@ -9,6 +9,7 @@ class wazuh::server (
   String $server_fileuser = 'wazuh-server',
   String $server_filegroup = 'wazuh-server',
   String $server_indexer_node_host = 'localhost',
+  String $server_api_host = 'localhost',
 ) {
   # Install Wazuh Manager
   wazuh::install_product { 'Wazuh server':
@@ -71,14 +72,15 @@ class wazuh::server (
     changes => [
       "set server/node/name '${server_node_name}'",
       "set indexer/hosts/0/host '${server_indexer_node_host}'",
-      "set server/node/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
-      "set server/node/ssl/cert '/ruta/personalizada/certs/server-${server_node_name}.pem'",
-      "set indexer/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
-      "set indexer/ssl/certificate '/ruta/personalizada/certs/server-${server_node_name}.pem'",
-      "set communications_api/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
-      "set communications_api/ssl/cert '/ruta/personalizada/certs/server-${server_node_name}.pem'",
-      "set management_api/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
-      "set management_api/ssl/cert '/ruta/personalizada/certs/server-${server_node_name}.pem'",
+      "set server/node/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
+      "set server/node/ssl/cert '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
+      "set indexer/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
+      "set indexer/ssl/certificate '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
+      "set communications_api/host '${server_api_host}'",
+      "set communications_api/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
+      "set communications_api/ssl/cert '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
+      "set management_api/ssl/key '/etc/wazuh-server/certs/server-${server_node_name}-key.pem'",
+      "set management_api/ssl/cert '/etc/wazuh-server/certs/server-${server_node_name}.pem'",
     ],
     require => Wazuh::Install_product['Wazuh server'],
   }
