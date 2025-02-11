@@ -80,7 +80,7 @@ class wazuh::server (
       "set management_api/ssl/key '/ruta/personalizada/certs/server-${server_node_name}-key.pem'",
       "set management_api/ssl/cert '/ruta/personalizada/certs/server-${server_node_name}.pem'",
     ],
-    require => File['/etc/wazuh-server/wazuh-server.yml'],
+    require => Wazuh::Install_product['Wazuh server'],
   }
 
   # Manage the service
