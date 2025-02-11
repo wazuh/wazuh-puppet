@@ -11,6 +11,7 @@ class wazuh::server (
   String $server_indexer_node_host = 'localhost',
   String $server_api_host = 'localhost',
 ) {
+  include yaml
   # Install Wazuh Manager
   wazuh::install_product { 'Wazuh server':
     package_name  => $server_package,
