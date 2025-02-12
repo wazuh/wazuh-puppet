@@ -33,20 +33,10 @@ class wazuh::dashboard (
 
 ) {
 
-  # assign version according to the package manager
-  case $facts['os']['family'] {
-    'Debian': {
-      $dashboard_version_install = "${dashboard_version}-*"
-    }
-    'Linux', 'RedHat', default: {
-      $dashboard_version_install = $dashboard_version
-    }
-  }
-
-  # install package
-  package { 'wazuh-dashboard':
-    ensure => $dashboard_version_install,
-    name   => $dashboard_package,
+ # Install Wazuh Manager
+  wazuh::install_product { 'Wazuh dashboard':
+    package_name  => $dashboard_package,
+    wazuh_version => $dashboard_version,
   }
 
   exec { "ensure full path of ${dashboard_path_certs}":

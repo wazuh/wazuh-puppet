@@ -67,46 +67,6 @@ class wazuh::server (
     require => Exec['generate-public-key'],
   }
 
-  $changes = {
-    'server' => {
-      'node' => {
-        'name' => $server_node_name,
-        'ssl' => {
-          'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-          'cert' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-        },
-      },
-    },
-    'indexer' => {
-      'hosts' => {
-        0 => {
-          'host' => $server_indexer_node_host,
-        },
-      },
-      'ssl' => {
-        'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-        'certificate' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-      },
-    },
-    'communications_api' => {
-      'host' => $server_api_host,
-      'ssl' => {
-        'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-        'cert' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-      },
-    },
-    'management_api' => {
-      'ssl' => {
-        'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-        'cert' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-      },
-    },
-  }
-
-  create_resources('yaml_entry', {
-      $yaml_file => $changes,
-  })
-
   # Manage the service
   service { 'wazuh-manager':
     ensure => running,
