@@ -10,6 +10,7 @@ class wazuh::server (
   String $server_filegroup = 'wazuh-server',
   String $server_indexer_node_host = 'localhost',
   String $server_api_host = 'localhost',
+  String $yaml_file = '/etc/wazuh-server/wazuh-server.yml',
 ) {
   # Install Wazuh Manager
   wazuh::install_product { 'Wazuh server':
@@ -66,68 +67,45 @@ class wazuh::server (
     require => Exec['generate-public-key'],
   }
 
-  yamlfile { '/etc/wazuh-server/wazuh-server.yml':
-    ensure => present,
-    data   => {
-      # Sección "server"
-      'server' => {
-        'nodes' => ['master'],
-        'node' => {
-          'name' => $server_node_name,
-          'type' => 'master',
-          'ssl' => {
-            'key'  => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-            'cert' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-            'ca'   => '/etc/wazuh-server/certs/root-ca.pem',
-          }
+  $changes = {
+    'server' => {
+      'node' => {
+        'name' => $server_node_name,
+        'ssl' => {
+          'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+          'cert' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
         },
-        'jwt' => {
-          'private_key' => '/etc/wazuh-server/certs/private-key.pem',
-          'public_key'  => '/etc/wazuh-server/certs/public-key.pem',
-        }
       },
-      # Sección "indexer"
-      'indexer' => {
-        'hosts' => [
-          {
-            'host' => $server_indexer_node_host,
-            'port' => 9200,
-          }
-        ],
-        'username' => 'admin',
-        'password' => 'admin',
-        'ssl' => {
-          'use_ssl'              => true,
-          'key'                  => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-          'certificate'          => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-          'certificate_authorities' => ['/etc/wazuh-server/certs/root-ca.pem'],
-        }
-      },
-      # Sección "communications_api"
-      'communications_api' => {
-        'host' => $server_api_host,
-        'port' => 27000,
-        'ssl' => {
-          'key'    => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-          'cert'   => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-          'use_ca' => false,
-          'ca'     => '/etc/wazuh-server/certs/root-ca.pem',
-        }
-      },
-      # Sección "management_api"
-      'management_api' => {
-        'host' => ['localhost', '::1'],  # ¡IPv6 entre comillas si es necesario!
-        'port' => 55000,
-        'ssl' => {
-          'key'    => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
-          'cert'   => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
-          'use_ca' => false,
-          'ca'     => '/etc/wazuh-server/certs/root-ca.pem',
-        }
-      }
     },
-    require => Wazuh::Install_product['Wazuh server'],
+    'indexer' => {
+      'hosts' => {
+        0 => {
+          'host' => $server_indexer_node_host,
+        },
+      },
+      'ssl' => {
+        'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+        'certificate' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
+      },
+    },
+    'communications_api' => {
+      'host' => $server_api_host,
+      'ssl' => {
+        'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+        'cert' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
+      },
+    },
+    'management_api' => {
+      'ssl' => {
+        'key' => "/etc/wazuh-server/certs/server-${server_node_name}-key.pem",
+        'cert' => "/etc/wazuh-server/certs/server-${server_node_name}.pem",
+      },
+    },
   }
+
+  create_resources('yaml_entry', {
+      $yaml_file => $changes,
+  })
 
   # Manage the service
   service { 'wazuh-manager':
