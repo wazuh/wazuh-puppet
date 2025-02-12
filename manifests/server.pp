@@ -68,7 +68,7 @@ class wazuh::server (
   }
 
   # Manage the service
-  service { 'wazuh-manager':
+  service { 'wazuh-server':
     ensure => running,
     enable => true,
   }
