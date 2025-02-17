@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- None
+- Standardize version file format ([#1251](https://github.com/wazuh/wazuh-puppet/pull/1251))
 
 ### Fixed
 
