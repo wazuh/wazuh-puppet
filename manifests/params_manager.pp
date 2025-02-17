@@ -313,7 +313,7 @@ class wazuh::params_manager {
 
       #API
 
-      $wazuh_api_host = '0.0.0.0'
+      $wazuh_api_host = ['0.0.0.0']
       $wazuh_api_port = '55000'
 
       $wazuh_api_file =  undef
@@ -339,10 +339,6 @@ class wazuh::params_manager {
       $wazuh_api_cors_expose_headers = '"*"'
       $wazuh_api_cors_allow_headers = '"*"'
       $wazuh_api_cors_allow_credentials = 'no'
-
-      # Cache (time in seconds)
-      $wazuh_api_cache_enabled = 'yes'
-      $wazuh_api_cache_time = '0.750'
 
       # Access parameters
       $wazuh_api_access_max_login_attempts = 5

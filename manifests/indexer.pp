@@ -28,9 +28,19 @@ class wazuh::indexer (
   $jvm_options_memory = '1g',
 ) {
 
+  # assign version according to the package manager
+  case $facts['os']['family'] {
+    'Debian': {
+      $indexer_version_install = "${indexer_version}-*"
+    }
+    'Linux', 'RedHat', default: {
+      $indexer_version_install = $indexer_version
+    }
+  }
+
   # install package
   package { 'wazuh-indexer':
-    ensure => $indexer_version,
+    ensure => $indexer_version_install,
     name   => $indexer_package,
   }
 

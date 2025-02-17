@@ -114,7 +114,7 @@ This module installs and configure Wazuh agent and manager.
 
 ## Branches
 
-* `master` branch contains the latest code, be aware of possible bugs on this branch.
+* `main` branch contains the latest code, be aware of possible bugs on this branch.
 * `stable` branch on correspond to the last Wazuh-Puppet stable version.
 
 ## Contribute
