@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Add condition to execute apt update ([#1256](https://github.com/wazuh/wazuh-puppet/pull/1256))
 - Fix certificates.pp ([#1255](https://github.com/wazuh/wazuh-puppet/pull/1255))
 - Modify the version used into the Wazuh indexer and Wazuh manager deployment ([#1229](https://github.com/wazuh/wazuh-puppet/pull/1229))
 
