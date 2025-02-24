@@ -1,7 +1,7 @@
 # Defined type to install Wazuh components from custom URLs
 # @param package_name Name of the Wazuh component (e.g., 'wazuh-manager')
 # @param wazuh_version Version of the component to install (e.g., '4.9.2')
-define wazuh::install_product (
+define wazuh::install_package (
   String $package_name,
   String $wazuh_version = '4.9.2',
 ) {
