@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Add refreshonly option ([#1265](https://github.com/wazuh/wazuh-puppet/pull/1265))
 
 ### Deleted
 
