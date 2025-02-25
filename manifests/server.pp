@@ -2,7 +2,7 @@
 # Main Wazuh server config
 #
 class wazuh::server (
-  String $server_version = '4.9.2',
+  String $server_version = '5.0.0',
   String $server_package = 'wazuh-server',
   String $server_node_name = 'node-1',
   String $server_path_certs = '/etc/wazuh-server/certs',
