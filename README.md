@@ -6,7 +6,7 @@
 [![Web](https://img.shields.io/badge/web-view-green.svg)](https://wazuh.com)
 ![Kitchen tests for Wazuh Puppet](https://github.com/wazuh/wazuh-puppet/workflows/Kitchen%20tests%20for%20Wazuh%20Puppet/badge.svg)
 
-This module installs and configure Wazuh agent and manager.
+This module installs and configure Wazuh server, indexer, dashboard and agent.
 
 ## Documentation
 
@@ -115,7 +115,6 @@ This module installs and configure Wazuh agent and manager.
 ## Branches
 
 * `master` branch contains the latest code, be aware of possible bugs on this branch.
-* `stable` branch on correspond to the last Wazuh-Puppet stable version.
 
 ## Contribute
 

@@ -1,7 +1,7 @@
 {
   "name": "wazuh-wazuh",
   "version": "5.0.0",
-  "author": "WAZUH",
+  "author": "Wazuh Inc.",
   "summary": "Install and configure Wazuh-HIDS client and server",
   "license": "Apache-2.0",
   "source": "https://github.com/wazuh/wazuh-puppet",
@@ -9,120 +9,89 @@
   "issues_url": "https://github.com/wazuh/wazuh-puppet/issues",
   "dependencies": [
     {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.0 < 7.0.0"
+      "name": "puppetlabs/stdlib"
     },
     {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.0.0 < 7.0.0"
+      "name": "puppetlabs/concat"
     },
     {
-      "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.0.0 < 8.0.0"
+      "name": "puppetlabs/apt"
     },
     {
-      "name": "puppet/selinux",
-      "version_requirement": ">= 0.8.0 < 4.0.0"
+      "name": "puppet/selinux"
     },
     {
-      "name": "puppet/nodejs",
-      "version_requirement": ">= 3.0.0 < 8.0.0"
+      "name": "puppet/nodejs"
     },
     {
-      "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.7.0 < 3.0.0"
+      "name": "puppetlabs/firewall"
     },
     {
-      "name": "puppetlabs/powershell",
-      "version_requirement": ">= 2.0.0 < 5.0.0"
+      "name": "puppetlabs/powershell"
     },
     {
-      "name": "puppet/zypprepo",
-      "version_requirement": "= 4.0.1"
-    },
-    {
-      "name": "puppet/archive",
-      "version_requirement": ">= 0.4.8 < 7.0.0"
+      "name": "puppet/archive"
     }
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "Windows",
+      "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "Server 2003 R2",
-        "Server 2008 R2",
-        "Server 2012",
-        "Server 2016",
-        "Server 2012 R2",
-        "Windows 2008",
-        "Windows 10"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
-      "operatingsystem": "CentOS",
+      "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "5",
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5",
-        "6",
         "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
         "8"
       ]
     },
     {
-      "operatingsystem": "Fedora",
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "22",
-        "23",
-        "24",
-        "25"
-      ]
-    },
-    {
-      "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [
-        "Precise",
-        "Trusty",
-        "Vivid",
-        "Wily",
-        "Xenial",
-        "Yakketi",
-        "Bionic",
-        "focal",
-        "jammy"
+        "8"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "Wheezy",
-        "Jessie",
-        "Stretch",
-        "buster",
-        "bullseye",
-        "bookworm"
+        "10",
+        "11",
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04",
+        "22.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 7.24 < 9.0.0"
     }
   ],
-  "tags": [
-    "ossec",
-    "hids",
-    "4.8",
-    "wazuh"
-  ],
-  "pdk-version": "1.14.1",
-  "template-url": "pdk-default#1.10.0",
-  "template-ref": "1.10.0-0-gbba9ac3"
+  "pdk-version": "3.4.0",
+  "template-url": "pdk-default#3.4.0",
+  "template-ref": "heads/main-0-g8fb22fc"
 }

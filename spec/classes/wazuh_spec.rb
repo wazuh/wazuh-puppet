@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'wazuh::server' do
+describe 'wazuh' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
