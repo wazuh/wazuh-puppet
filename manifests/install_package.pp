@@ -42,6 +42,7 @@ define wazuh::install_package (
     ensure   => installed,
     provider => $provider,  # Now using validated provider names
     source   => "/tmp/${package}",
+    timeout  => 300,
     require  => Exec["download_${package}"],
   }
 }
