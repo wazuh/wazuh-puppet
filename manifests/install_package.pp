@@ -45,7 +45,6 @@ define wazuh::install_package (
   # Install the package using correct provider
   package { "Isntall_${package_name}":
     ensure   => installed,
-    enable   => true,
     provider => $provider,  # Now using validated provider names
     source   => "/tmp/${package}",
     require  => Exec["download_${package}"],
