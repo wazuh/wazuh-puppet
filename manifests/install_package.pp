@@ -29,17 +29,23 @@ define wazuh::install_package (
   # Generate package identifier package
   $package = "${package_name}-${wazuh_version}-${architecture}.${compatibility}"
 
+  package { $package_name:
+    ensure => installed,
+  }
+
   # Download specific package using extracted URL
   exec { "download_${package}":
     command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'",
     unless  => "test -f /tmp/${package} && dpkg -I /tmp/${package} >/dev/null 2>&1",
     path    => ['/usr/bin', '/bin', '/sbin'],
     timeout => 1200,
+    require    => Package[$package_name],
   }
 
   # Install the package using correct provider
-  package { "${package_name}":
+  package { "Isntall_${package_name}":
     ensure   => installed,
+    enable   => true,
     provider => $provider,  # Now using validated provider names
     source   => "/tmp/${package}",
     require  => Exec["download_${package}"],
