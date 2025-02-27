@@ -48,6 +48,6 @@ define wazuh::install_package (
     ensure   => installed,
     provider => $provider,
     source   => "/tmp/${package}",
-    unless   => $package_installed,
+    require  => Exec["download_${package}"],
   }
 }
