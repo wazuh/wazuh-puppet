@@ -36,18 +36,18 @@ define wazuh::install_package (
 
   # Download specific package using extracted URL
   exec { "download_${package}":
-    command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'",
+    command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'", # Command to extract URL and download package using curl
     path    => ['/usr/bin', '/bin', '/sbin'],
     unless  => $package_installed,
     timeout => 1200,
-    before  => Package["Isntall_${package_name}"],
+    before  => Package["Install_${package_name}"],
   }
 
   # Install the package using correct provider
-  package { "Isntall_${package_name}":
+  package { "Install_${package_name}":
     ensure   => installed,
-    unless  => $package_installed,
-    provider => $provider,  # Now using validated provider names
+    provider => $provider,
     source   => "/tmp/${package}",
+    unless   => $package_installed,
   }
 }
