@@ -33,7 +33,7 @@ class wazuh::dashboard (
 
 ) {
   # Install Wazuh Manager
-  wazuh::install_package { 'Wazuh dashboard':
+  Wazuh::Install_package { 'Wazuh dashboard':
     package_name  => $dashboard_package,
     wazuh_version => $dashboard_version,
   }
