@@ -40,7 +40,6 @@ define wazuh::install_package (
     path    => ['/usr/bin', '/bin', '/sbin'],
     unless  => $package_installed,
     timeout => 1200,
-    before  => Package["Install_${package_name}"],
   }
 
   # Install the package using correct provider
