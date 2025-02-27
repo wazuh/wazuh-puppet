@@ -46,6 +46,7 @@ define wazuh::install_package (
   # Install the package using correct provider
   package { "Isntall_${package_name}":
     ensure   => installed,
+    unless  => $package_installed,
     provider => $provider,  # Now using validated provider names
     source   => "/tmp/${package}",
   }
