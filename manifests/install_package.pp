@@ -39,7 +39,7 @@ define wazuh::install_package (
   exec { "download_${package}":
     command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'",
     path    => ['/usr/bin', '/bin', '/sbin'],
-    unless  => "${package_installed}",
+    unless  => ${package_installed},
     timeout => 1200,
     before  => Package[Isntall_${package_name}],
   }
