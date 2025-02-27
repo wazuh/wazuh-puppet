@@ -3,7 +3,7 @@
 # @param wazuh_version Version of the component to install (e.g., '4.9.2')
 define wazuh::install_package (
   String $package_name,
-  String $wazuh_version = '4.9.2',
+  String $wazuh_version = '5.0.0',
 ) {
   # Determine package provider based on OS family
   $provider = $facts['os']['family'] ? {
@@ -32,16 +32,15 @@ define wazuh::install_package (
   $package_installed = $compatibility ? {
     'deb'   => "dpkg-query -W '${package_name}' 2>/dev/null | grep -q '${wazuh_version}'",
     'rpm'   => "rpm -q '${package_name}' | grep -q '${wazuh_version}'",
-    default => fail("Formato inválido"),
   }
 
   # Download specific package using extracted URL
   exec { "download_${package}":
     command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'",
     path    => ['/usr/bin', '/bin', '/sbin'],
-    unless  => ${package_installed},
+    unless  => $package_installed,
     timeout => 1200,
-    before  => Package[Isntall_${package_name}],
+    before  => Package["Isntall_${package_name}"],
   }
 
   # Install the package using correct provider
