@@ -3,7 +3,7 @@
 class wazuh::indexer (
   # opensearch.yml configuration
   $indexer_network_host = '0.0.0.0',
-  $indexer_node_name = 'node01',
+  $indexer_node_name = 'node-1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
   $indexer_version = '5.0.0',
@@ -77,12 +77,6 @@ class wazuh::indexer (
     }
   }
 
-  file { '/etc/wazuh-indexer/opensearch.yml':
-    ensure  => file,
-    require => [
-      Wazuh::Install_package['Wazuh indexer']
-    ],
-  }
 
   service { 'wazuh-indexer':
     ensure  => running,
