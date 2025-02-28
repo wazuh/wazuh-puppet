@@ -34,6 +34,8 @@ define wazuh::install_package (
     'rpm'   => "rpm -q '${package_name}' | grep -q '${wazuh_version}'",
   }
 
+  notify { "package_installed: ${package_installed}": }
+
   # Download specific package using extracted URL
   exec { "download_${package}":
     command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'", # Command to extract URL and download package using curl
