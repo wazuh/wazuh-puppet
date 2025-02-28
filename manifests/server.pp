@@ -4,7 +4,7 @@
 class wazuh::server (
   String $server_version = '5.0.0',
   String $server_package = 'wazuh-server',
-  String $server_node_name = 'node-1',
+  String $server_node_name = 'node01',
   String $server_path_certs = '/etc/wazuh-server/certs',
   String $server_fileuser = 'wazuh-server',
   String $server_filegroup = 'wazuh-server',
@@ -36,6 +36,8 @@ class wazuh::server (
       require => Wazuh::Install_package['Wazuh server'],
     }
   }
+
+
 
   # Generate private key
   exec { 'generate-private-key':
