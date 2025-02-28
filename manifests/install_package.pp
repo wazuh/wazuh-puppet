@@ -34,7 +34,7 @@ define wazuh::install_package (
     'rpm'   => "rpm -q '${package_name}' | grep -q '${wazuh_version}'",
   }
 
-  notify { "package_installed: ${package_installed}": }
+  notice { "package_installed: ${package_installed}": }
 
   # Download specific package using extracted URL
   exec { "download_${package}":
