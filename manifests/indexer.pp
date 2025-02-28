@@ -17,11 +17,13 @@ class wazuh::indexer (
 ) {
   package { "${indexer_package}":
     ensure => present,
+    noop   => true,
   }
-  wazuh::install_package { 'Wazuh indexer':
-    package_name  => $indexer_package,
-    wazuh_version => $indexer_version,
-    unless        => Package["${indexer_package}"]
+  if ! defined(Package[ "${indexer_package}"]) {
+    wazuh::install_package { 'Wazuh indexer':
+      package_name  => $indexer_package,
+      wazuh_version => $indexer_version,
+    }
   }
 
   exec { "ensure full path of ${indexer_path_certs}":
