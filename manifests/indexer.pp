@@ -71,12 +71,10 @@ class wazuh::indexer (
       match   => "^${key}:",
       notify  => Service['wazuh-indexer'],
       require => [
-        File['/etc/wazuh-indexer/opensearch.yml'],
         Wazuh::Install_package['Wazuh indexer']
       ],
     }
   }
-
 
   service { 'wazuh-indexer':
     ensure  => running,
