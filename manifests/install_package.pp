@@ -43,12 +43,10 @@ define wazuh::install_package (
   }
 
   # Install the package using correct provider
-  if $package_installed == true {
-    package { "Install_${package_name}":
-      ensure   => installed,
-      provider => $provider,
-      source   => "/tmp/${package}",
-      require  => Exec["download_${package}"],
-    }
+  package { "Install_${package_name}":
+    ensure   => installed,
+    provider => $provider,
+    source   => "/tmp/${package}",
+    require  => Exec["download_${package}"],
   }
 }
