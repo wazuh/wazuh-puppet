@@ -43,7 +43,7 @@ define wazuh::install_package (
   }
 
   # Install the package using correct provider
-  if $package_installed == false {
+  if $package_installed == true {
     package { "Install_${package_name}":
       ensure   => installed,
       provider => $provider,
