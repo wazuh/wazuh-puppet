@@ -4,9 +4,9 @@ class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
   $wazuh_version = '4.8',
   $indexer_certs = [],
-  $manager_certs = [],
-  $manager_master_certs = [],
-  $manager_worker_certs = [],
+  $server_certs = [],
+  $server_master_certs = [],
+  $server_worker_certs = [],
   $dashboard_certs = []
 ) {
   file { 'Configure Wazuh Certificates config.yml':
