@@ -15,9 +15,13 @@ class wazuh::indexer (
   $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 
 ) {
+  package { "${indexer_package}":
+    ensure => present,
+  }
   wazuh::install_package { 'Wazuh indexer':
     package_name  => $indexer_package,
     wazuh_version => $indexer_version,
+    unless        => Package["${indexer_package}"]
   }
 
   exec { "ensure full path of ${indexer_path_certs}":
