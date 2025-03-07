@@ -61,6 +61,7 @@ class wazuh::repo (
       # Define an exec resource to run 'apt-get update'
       exec { 'apt-update':
         command => 'apt-get update',
+        refreshonly => true,
         path    => ['/bin', '/usr/bin'],
       }
     }
