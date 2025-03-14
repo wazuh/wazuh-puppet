@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Modify dependencies version ([#1277](https://github.com/wazuh/wazuh-puppet/pull/1277))
 
 ### Deleted
 
