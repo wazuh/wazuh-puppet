@@ -12,6 +12,12 @@ class wazuh::indexer (
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
+  $indexer_node_cert_content = 'puppet:///modules/archive/indexer-node.pem',
+  $indexer_node_certkey_content = 'puppet:///modules/archive/indexer-node-key.pem',
+  $indexer_node_rootca_content = 'puppet:///modules/archive/root-ca.pem',
+  $indexer_node_admincert_content = 'puppet:///modules/archive/admin.pem',
+  $indexer_node_adminkey_content = 'puppet:///modules/archive/admin-key.pem',
+
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
@@ -22,12 +28,11 @@ class wazuh::indexer (
   $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_cluster_initial_master_nodes = ['node-1'],
-  $indexer_cluster_CN = ['node-1'],
+  $indexer_cluster_cn = ['node-1'],
 
   # JVM options
   $jvm_options_memory = '1g',
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -57,25 +62,55 @@ class wazuh::indexer (
     mode   => '0500',
   }
 
-  [
-   "indexer-$indexer_node_name.pem",
-   "indexer-$indexer_node_name-key.pem",
-   'root-ca.pem',
-   'admin.pem',
-   'admin-key.pem',
-  ].each |String $certfile| {
-    file { "${indexer_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $indexer_fileuser,
-      group   => $indexer_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
-    }
+  file { "${indexer_path_certs}/indexer-${indexer_node_name}.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_cert_content,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
   }
 
+  file { "${indexer_path_certs}/indexer-${indexer_node_name}-key.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_certkey_content,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
 
+  file { "${indexer_path_certs}/root-ca.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_rootca_content,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file { "${indexer_path_certs}/admin.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_admincert_content,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file { "${indexer_path_certs}/admin-key.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_adminkey_content,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
 
   file { 'configuration file':
     path    => '/etc/wazuh-indexer/opensearch.yml',
