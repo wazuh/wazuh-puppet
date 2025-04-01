@@ -1,6 +1,25 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [4.13.0]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- Modify dependencies version ([#1277](https://github.com/wazuh/wazuh-puppet/pull/1277))
+
+### Deleted
+
+- Remove default puppet reference version from workflow ([#1284](https://github.com/wazuh/wazuh-puppet/pull/1284))
+- Remove 'stable' branch ocurrencies ([#1281](https://github.com/wazuh/wazuh-puppet/pull/1281))
+
 ## [4.12.0]
 
 ### Added
