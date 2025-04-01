@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [4.12.0]
+
+### Added
+
+- None
+
+### Changed
+
+- Standardize version file format ([#1251](https://github.com/wazuh/wazuh-puppet/pull/1251))
+
+### Fixed
+
+- Fix s3 uri printed into the execution log ([#1233](https://github.com/wazuh/wazuh-puppet/pull/1233)) \- (Puppet Module Builder)
+
+### Deleted
+
+- None
+
 ## [4.11.2]
 
 ### Added

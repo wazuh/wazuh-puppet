@@ -110,7 +110,7 @@ This module installs and configure Wazuh agent and manager.
     │   ├── wazuh_config_yml.erb
     │   ├── wazuh_manager.conf.erb
     │   └── wazuh_yml.erb
-    └── VERSION
+    └── VERSION.json
 
 ## Branches
 
