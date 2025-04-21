@@ -10,7 +10,7 @@ LOG_FILE="${DIR}/tools/repository_bumper_$(date +"%Y-%m-%d_%H-%M-%S-%3N").log"
 VERSION=""
 STAGE=""
 FILES_EDITED=()
-FILES_EXCLUDED='--exclude="repository_bumper_*.log" --exclude="CHANGELOG.md" --exclude="metadata.json"'
+FILES_EXCLUDED='--exclude="repository_bumper_*.log" --exclude="CHANGELOG.md" --exclude="metadata.json" --exclude="repository_bumper.sh" --exclude="Puppetfile" --exclude=".travis.yml" --exclude="Gemfile"'
 
 get_old_version_and_stage() {
     local VERSION_FILE="${DIR}/VERSION.json"
@@ -38,15 +38,7 @@ update_version_in_files() {
     local NEW_PATCH="$(echo "${VERSION}" | cut -d '.' -f 3)"
     m_m_p_files=( $(grep_command "${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}" "${DIR}") )
     for file in "${m_m_p_files[@]}"; do
-        # This if was the implementation for the CHANGELOG.md file
-        # It was commented because it is not added in the issue https://github.com/wazuh/wazuh-automation/issues/2280
-        #if [[ "${file}" == *"CHANGELOG.md"* ]]; then
-        #    if ! sed -i "/^All notable changes to this project will be documented in this file.$/a \\\n## [${VERSION}]\\n\\n### Added\\n\\n- None\\n\\n### Changed\\n\\n- None\\n\\n### Fixed\\n\\n- None\\n\\n### Deleted\\n\\n- None" "${file}"; then
-        #        echo "Error: Failed to update CHANGELOG.md" | tee -a "${LOG_FILE}"
-        #    fi
-        #else
-        sed -i "s/${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}/${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}/g" "${file}"
-        #fi
+        sed -i "s/^${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}^/${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}/g" "${file}"
         if [[ $(git diff --name-only "${file}") ]]; then
             FILES_EDITED+=("${file}")
         fi
@@ -58,13 +50,16 @@ update_version_in_files() {
             FILES_EDITED+=("${file}")
         fi
     done
-    m_x_files=( $(grep_command "${OLD_MAYOR}\.x" "${DIR}") )
+    m_x_files=( $(grep_command "${OLD_MAYOR}\.x" "${DIR}" | grep -v "${DIR}/kitchen/README.md") )
     for file in "${m_x_files[@]}"; do
         sed -i "s/\b${OLD_MAYOR}\.x\b/${NEW_MAYOR}\.x/g" "${file}"
         if [[ $(git diff --name-only "${file}") ]]; then
             FILES_EDITED+=("${file}")
         fi
     done
+    if ! sed -i "/^All notable changes to this project will be documented in this file.$/a \\\n## [${VERSION}]\\n\\n### Added\\n\\n- None\\n\\n### Changed\\n\\n- None\\n\\n### Fixed\\n\\n- None\\n\\n### Deleted\\n\\n- None" "${DIR}/CHANGELOG.md"; then
+        echo "Error: Failed to update CHANGELOG.md" | tee -a "${LOG_FILE}"
+    fi
     # Exceptions for this repository
     if ! sed -i "s/\"version\": \"${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}\"/\"version\": \"${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}\"/g" "${DIR}/metadata.json"; then
         echo "Error: Failed to update metadata.json" | tee -a "${LOG_FILE}"
