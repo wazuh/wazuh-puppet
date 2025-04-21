@@ -38,7 +38,7 @@ update_version_in_files() {
     local NEW_PATCH="$(echo "${VERSION}" | cut -d '.' -f 3)"
     m_m_p_files=( $(grep_command "${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}" "${DIR}") )
     for file in "${m_m_p_files[@]}"; do
-        sed -i "s/^${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}^/${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}/g" "${file}"
+        sed -i "s/\bv${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}\b/v${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}/g; s/\b${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}\b/${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}/g" "${file}"
         if [[ $(git diff --name-only "${file}") ]]; then
             FILES_EDITED+=("${file}")
         fi
