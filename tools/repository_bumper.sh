@@ -61,12 +61,13 @@ update_version_in_files() {
         echo "Error: Failed to update CHANGELOG.md" | tee -a "${LOG_FILE}"
     fi
     # Exceptions for this repository
-    if ! sed -i "s/\"version\": \"${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}\"/\"version\": \"${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}\"/g; s/\"tags\": \[.*\"${OLD_MAYOR}\.${OLD_MINOR}\"/\"tags\": \[.*\"${NEW_MAYOR}\.${NEW_MINOR}\"/g" "${DIR}/metadata.json"; then
-        echo "Error: Failed to update metadata.json" | tee -a "${LOG_FILE}"
-    else
+    if sed -i "s/\"version\": \"${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}\"/\"version\": \"${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}\"/g" "${DIR}/metadata.json"; then
+        awk -v new_tag="${NEW_MAYOR}.${NEW_MINOR}" -v old_tag="${OLD_MAYOR}.${OLD_MINOR}" '{gsub(old_tag, new_tag)}1' "${DIR}/metadata.json" > "${DIR}/metadata.json.tmp" && mv "${DIR}/metadata.json.tmp" "${DIR}/metadata.json"
         if [[ $(git diff --name-only "${DIR}/metadata.json") ]]; then
             FILES_EDITED+=("${DIR}/metadata.json")
         fi
+    else
+        echo "Error: Failed to update metadata.json" | tee -a "${LOG_FILE}"
     fi
 
 }
