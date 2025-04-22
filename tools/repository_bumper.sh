@@ -45,7 +45,7 @@ update_version_in_files() {
     done
     m_m_files=( $(grep_command "${OLD_MAYOR}\.${OLD_MINOR}" "${DIR}") )
     for file in "${m_m_files[@]}"; do
-        sed -i "/^${OLD_MAYOR}\.${OLD_MINOR}./!s/\\b${OLD_MAYOR}\.${OLD_MINOR}\b/${NEW_MAYOR}\.${NEW_MINOR}/g" "${file}"
+        sed -i -E "/[0-9]+\.[0-9]+\.[0-9]+/! s/(^|[^0-9.])(${OLD_MAYOR}\.${OLD_MINOR})([^0-9.]|$)/\1${NEW_MAYOR}.${NEW_MINOR}\3/g" "$file"
         if [[ $(git diff --name-only "${file}") ]]; then
             FILES_EDITED+=("${file}")
         fi
@@ -60,9 +60,12 @@ update_version_in_files() {
     if ! sed -i "/^All notable changes to this project will be documented in this file.$/a \\\n## [${VERSION}]\\n\\n### Added\\n\\n- None\\n\\n### Changed\\n\\n- None\\n\\n### Fixed\\n\\n- None\\n\\n### Deleted\\n\\n- None" "${DIR}/CHANGELOG.md"; then
         echo "Error: Failed to update CHANGELOG.md" | tee -a "${LOG_FILE}"
     fi
+    if [[ $(git diff --name-only "${DIR}/CHANGELOG.md") ]]; then
+        FILES_EDITED+=("${DIR}/CHANGELOG.md")
+    fi
     # Exceptions for this repository
-    if sed -i "s/\"version\": \"${OLD_MAYOR}\.${OLD_MINOR}\.${OLD_PATCH}\"/\"version\": \"${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}\"/g" "${DIR}/metadata.json"; then
-        awk -v new_tag="${NEW_MAYOR}.${NEW_MINOR}" -v old_tag="${OLD_MAYOR}.${OLD_MINOR}" '{gsub(old_tag, new_tag)}1' "${DIR}/metadata.json" > "${DIR}/metadata.json.tmp" && mv "${DIR}/metadata.json.tmp" "${DIR}/metadata.json"
+    if sed -i "s/\"version\": \".*\"/\"version\": \"${NEW_MAYOR}\.${NEW_MINOR}\.${NEW_PATCH}\"/"  "${DIR}/metadata.json"; then
+        awk -v new_tag="${NEW_MAYOR}.${NEW_MINOR}" -v old_tag="${OLD_MAYOR}.${OLD_MINOR}" 'BEGIN { in_tags = 0 } /"tags": \[/ { in_tags = 1 } in_tags && $0 ~ old_tag { gsub("\"" old_tag "\"", "\"" new_tag "\"") }  in_tags && /\]/ { in_tags = 0 }  { print }' "${DIR}/metadata.json" > "${DIR}/metadata.json.tmp" && mv "${DIR}/metadata.json.tmp" "${DIR}/metadata.json"
         if [[ $(git diff --name-only "${DIR}/metadata.json") ]]; then
             FILES_EDITED+=("${DIR}/metadata.json")
         fi
