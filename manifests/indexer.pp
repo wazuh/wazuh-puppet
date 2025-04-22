@@ -6,7 +6,7 @@ class wazuh::indexer (
   $indexer_node_name = 'node-1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.9.2',
+  $indexer_version = '5.0.0',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
@@ -82,12 +82,12 @@ class wazuh::indexer (
     ],
   }
 
-  service { 'wazuh-indexer':
-    ensure  => running,
-    enable  => true,
-    name    => $indexer_service,
-    require => Wazuh::Install_package['Wazuh indexer'],
-  }
+  #service { 'wazuh-indexer':
+  #  ensure  => running,
+  #  enable  => true,
+  #  name    => $indexer_service,
+  #  require => Wazuh::Install_package['Wazuh indexer'],
+  #}
 
   file_line { "Insert line limits nofile for ${indexer_fileuser}":
     path    => '/etc/security/limits.conf',
@@ -104,10 +104,10 @@ class wazuh::indexer (
     require => Wazuh::Install_package['Wazuh indexer'],
   }
 
-  if $full_indexer_reinstall {
-    file { $indexer_security_init_lockfile:
-      ensure => absent,
-      before => Exec['Initialize the Opensearch security index in Wazuh indexer'],
-    }
+  #if $full_indexer_reinstall {
+  #  file { $indexer_security_init_lockfile:
+  #    ensure => absent,
+  #    before => Exec['Initialize the Opensearch security index in Wazuh indexer'],
+  #  }
   }
 }
