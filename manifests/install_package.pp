@@ -27,11 +27,11 @@ define wazuh::install_package (
   }
 
   # Generate package identifier package
-  $package = "${package_name}-${wazuh_version}-${architecture}.${compatibility}"
+  $package = "${package_name}_url_${architecture}_${compatibility}"
 
   # Download specific package using extracted URL
   exec { "download_${package}":
-    command => "sh -c 'url=\$(grep -F '${package}:' /tmp/packages_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'",
+    command => "sh -c 'url=\$(grep -F '${package}:' /tmp/arrtifacts_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'",
     unless  => "test -f /tmp/${package} && dpkg -I /tmp/${package} >/dev/null 2>&1",
     path    => ['/usr/bin', '/bin', '/sbin'],
     timeout => 600,
