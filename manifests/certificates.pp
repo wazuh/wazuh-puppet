@@ -12,7 +12,7 @@ class wazuh::certificates (
 
   # Download Wazuh cert tool script
   exec { "download_${cert_tool_script}":
-    command => "sh -c 'url=\$(grep -F '${cert_tool_script}:' /tmp/arrtifacts_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${cert_tool_script_name} \"\$url\"'",
+    command => "sh -c 'url=\$(grep -F '${cert_tool_script}:' /tmp/artifacts_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${cert_tool_script_name} \"\$url\"'",
     path    => ['/usr/bin', '/bin', '/sbin', '/usr/sbin'],
     timeout => 600,
   }
