@@ -100,7 +100,7 @@ class wazuh::indexer (
     path    => '/etc/security/limits.conf',
     line    => "${indexer_fileuser} - memlock unlimited",
     match   => "^${indexer_fileuser} - memlock\s",
-    notify  => Service['wazuh-indexer'],
+    #notify  => Service['wazuh-indexer'],
     require => Wazuh::Install_package['Wazuh indexer'],
   }
 
