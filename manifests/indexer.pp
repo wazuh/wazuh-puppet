@@ -67,7 +67,7 @@ class wazuh::indexer (
       path    => '/etc/wazuh-indexer/opensearch.yml',
       line    => "${key}: \"${value}\"",
       match   => "^${key}:",
-      #notify  => Service['wazuh-indexer'],
+      notify  => Service['wazuh-indexer'],
       require => [
         File['/etc/wazuh-indexer/opensearch.yml'],
         Wazuh::Install_package['Wazuh indexer']
@@ -82,32 +82,32 @@ class wazuh::indexer (
     ],
   }
 
-  #service { 'wazuh-indexer':
-  #  ensure  => running,
-  #  enable  => true,
-  #  name    => $indexer_service,
-  #  require => Wazuh::Install_package['Wazuh indexer'],
-  #}
+  service { 'wazuh-indexer':
+    ensure  => running,
+    enable  => true,
+    name    => $indexer_service,
+    require => Wazuh::Install_package['Wazuh indexer'],
+  }
 
   file_line { "Insert line limits nofile for ${indexer_fileuser}":
     path    => '/etc/security/limits.conf',
     line    => "${indexer_fileuser} - nofile  65535",
     match   => "^${indexer_fileuser} - nofile\s",
-    #notify  => Service['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
     require => Wazuh::Install_package['Wazuh indexer'],
   }
   file_line { "Insert line limits memlock for ${indexer_fileuser}":
     path    => '/etc/security/limits.conf',
     line    => "${indexer_fileuser} - memlock unlimited",
     match   => "^${indexer_fileuser} - memlock\s",
-    #notify  => Service['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
     require => Wazuh::Install_package['Wazuh indexer'],
   }
 
-  #if $full_indexer_reinstall {
-  #  file { $indexer_security_init_lockfile:
-  #    ensure => absent,
-  #    before => Exec['Initialize the Opensearch security index in Wazuh indexer'],
-  #  }
-  #}
+  if $full_indexer_reinstall {
+    file { $indexer_security_init_lockfile:
+      ensure => absent,
+      before => Exec['Initialize the Opensearch security index in Wazuh indexer'],
+    }
+  }
 }
