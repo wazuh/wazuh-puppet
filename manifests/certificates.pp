@@ -30,7 +30,7 @@ class wazuh::certificates (
     command => "bash /tmp/${cert_tool_script_name} --all",
     creates => '/tmp/wazuh-certificates',
     require => [
-      File['/tmp/wazuh-certs-tool.sh'],
+      Exec["download_${cert_tool_script}"],
       File['/tmp/config.yml'],
     ],
   }
