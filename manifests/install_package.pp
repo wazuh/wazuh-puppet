@@ -31,7 +31,7 @@ define wazuh::install_package (
 
   # Download specific package using extracted URL
   exec { "download_${package}":
-    command => "sh -c 'url=\$(grep -F '${package}:' /tmp/artifacts_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); mv ${package} ${package}.${compatibility};curl -o /tmp/${package}.${compatibility} \"\$url\"'",
+    command => "sh -c 'url=\$(grep -F '${package}:' /tmp/arsstifacts_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package}.${compatibility} \"\$url\"'",
     unless  => "test -f /tmp/${package} && dpkg -I /tmp/${package} >/dev/null 2>&1",
     path    => ['/usr/bin', '/bin', '/sbin', '/usr/sbin'],
     timeout => 600,
