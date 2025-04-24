@@ -93,7 +93,7 @@ class wazuh::indexer (
     path    => '/etc/security/limits.conf',
     line    => "${indexer_fileuser} - nofile  65535",
     match   => "^${indexer_fileuser} - nofile\s",
-    notify  => Service['wazuh-indexer'],
+    #notify  => Service['wazuh-indexer'],
     require => Wazuh::Install_package['Wazuh indexer'],
   }
   file_line { "Insert line limits memlock for ${indexer_fileuser}":
