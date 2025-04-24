@@ -5,7 +5,7 @@ class wazuh::indexer (
   $indexer_network_host = '0.0.0.0',
   $indexer_node_name = 'node-1',
   $indexer_service = 'wazuh-indexer',
-  $indexer_package = 'wazuh-indexer',
+  $indexer_package = 'wazuh_indexer',
   $indexer_version = '5.0.0',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',

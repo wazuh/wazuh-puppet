@@ -1,7 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Setup for Wazuh Dashboard
 class wazuh::dashboard (
-  $dashboard_package = 'wazuh-dashboard',
+  $dashboard_package = 'wazuh_dashboard',
   $dashboard_service = 'wazuh-dashboard',
   $dashboard_version = '5.0.0',
   $indexer_server_ip = 'localhost',
