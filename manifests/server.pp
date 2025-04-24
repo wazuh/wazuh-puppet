@@ -71,5 +71,5 @@ class wazuh::server (
   #service { 'wazuh-server':
   #  ensure => running,
   #  enable => true,
-  }
+  #}
 }
