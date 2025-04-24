@@ -109,5 +109,5 @@ class wazuh::indexer (
   #    ensure => absent,
   #    before => Exec['Initialize the Opensearch security index in Wazuh indexer'],
   #  }
-  }
+  #}
 }
