@@ -25,14 +25,6 @@ class wazuh::certificates (
     content => template('wazuh/wazuh_config_yml.erb'),
   }
 
-  file { '/tmp/wazuh-certs-tool.sh':
-    ensure => file,
-    source => "https://${wazuh_repository}/${wazuh_version}/wazuh-certs-tool.sh",
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0740',
-  }
-
   exec { 'Create Wazuh Certificates':
     path    => '/usr/bin:/bin',
     command => "bash /tmp/${cert_tool_script_name} --all",
