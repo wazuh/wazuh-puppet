@@ -67,7 +67,7 @@ class wazuh::indexer (
       path    => '/etc/wazuh-indexer/opensearch.yml',
       line    => "${key}: \"${value}\"",
       match   => "^${key}:",
-      notify  => Service['wazuh-indexer'],
+      #notify  => Service['wazuh-indexer'],
       require => [
         File['/etc/wazuh-indexer/opensearch.yml'],
         Wazuh::Install_package['Wazuh indexer']
