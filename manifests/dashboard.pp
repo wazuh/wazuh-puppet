@@ -99,10 +99,10 @@ class wazuh::dashboard (
     }
   }
 
-  service { 'wazuh-dashboard':
-    ensure     => running,
-    enable     => true,
-    hasrestart => true,
-    name       => $dashboard_service,
-  }
+  #service { 'wazuh-dashboard':
+  #  ensure     => running,
+  #  enable     => true,
+  #  hasrestart => true,
+  #  name       => $dashboard_service,
+  #}
 }

@@ -1,0 +1,16 @@
+server.host: <%= @dashboard_server_host %>
+server.port: <%= @dashboard_server_port %>
+opensearch.hosts: <%= @dashboard_server_hosts %>
+opensearch.ssl.verificationMode: certificate
+<% if @dashboard_user and @dashboard_password -%>
+opensearch.username: <%= @dashboard_user %>
+opensearch.password: <%= @dashboard_password %>
+<% end -%>
+opensearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
+opensearch_security.multitenancy.enabled: false
+opensearch_security.readonly_mode.roles: ["kibana_read_only"]
+server.ssl.enabled: true
+server.ssl.key: "<%= @dashboard_path_certs %>/dashboard-key.pem"
+server.ssl.certificate: "<%= @dashboard_path_certs %>/dashboard.pem"
+opensearch.ssl.certificateAuthorities: ["<%= @dashboard_path_certs %>/root-ca.pem"]
+uiSettings.overrides.defaultRoute: /app/wz-home

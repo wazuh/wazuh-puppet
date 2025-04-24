@@ -1,14 +1,22 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Wazuh repository installation
 class wazuh::certificates (
-  $wazuh_repository = 'packages.wazuh.com',
-  $wazuh_version = '4.8',
   $indexer_certs = [],
   $server_certs = [],
   $server_master_certs = [],
   $server_worker_certs = [],
-  $dashboard_certs = []
+  $dashboard_certs = [],
+  $cert_tool_script = 'wazuh_certs_tool_script_url',
+  $cert_tool_script_name = 'wazuh-certs-tool.sh'
 ) {
+
+  # Download Wazuh cert tool script
+  exec { "download_${cert_tool_script}":
+    command => "sh -c 'url=\$(grep -F '${cert_tool_script}:' /tmp/arrtifacts_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${cert_tool_script_name} \"\$url\"'",
+    path    => ['/usr/bin', '/bin', '/sbin'],
+    timeout => 600,
+  }
+
   file { 'Configure Wazuh Certificates config.yml':
     owner   => 'root',
     path    => '/tmp/config.yml',
@@ -27,7 +35,7 @@ class wazuh::certificates (
 
   exec { 'Create Wazuh Certificates':
     path    => '/usr/bin:/bin',
-    command => 'bash /tmp/wazuh-certs-tool.sh --all',
+    command => "bash /tmp/${cert_tool_script_name} --all",
     creates => '/tmp/wazuh-certificates',
     require => [
       File['/tmp/wazuh-certs-tool.sh'],

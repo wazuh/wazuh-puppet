@@ -1,0 +1,30 @@
+nodes:
+  indexer:
+<% @indexer_certs.each do |node| -%>
+      - name: indexer-<%= node[0] %>
+        ip: <%= node[1] %>
+<% end -%>
+  server:
+<% if @server_certs -%>
+<% @server_certs.each do |node| -%>
+      - name: server-<%= node[0] %>
+        ip: <%= node[1] %>
+<% end -%>
+<% end -%>
+<% if @server_master_certs -%>
+<% @server_master_certs.each do |node| -%>
+      - name: server-<%= node[0] %>
+        ip: <%= node[1] %>
+        node_type: master
+<% end -%>
+<% @server_worker_certs.each do |node| -%>
+      - name: server-<%= node[0] %>
+        ip: <%= node[1] %>
+        node_type: worker
+<% end -%>
+<% end -%>
+  dashboard:
+<% @dashboard_certs.each do |node| -%>
+      - name: dashboard
+        ip: <%= node %>
+<% end -%>
