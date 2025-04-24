@@ -12,6 +12,7 @@ class wazuh::indexer (
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
   # JVM options
   $jvm_options_memory = '1g',
+  $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 ) {
   wazuh::install_package { 'Wazuh indexer':
     package_name  => $indexer_package,
