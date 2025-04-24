@@ -33,7 +33,7 @@ class wazuh::dashboard (
 
 ) {
   # Install Wazuh Manager
-  wazuh::install_package { 'Wazuh dashboard':
+  Wazuh::Install_package { 'Wazuh dashboard':
     package_name  => $dashboard_package,
     wazuh_version => $dashboard_version,
   }
@@ -42,13 +42,14 @@ class wazuh::dashboard (
     path    => '/usr/bin:/bin',
     command => "mkdir -p ${dashboard_path_certs}",
     creates => $dashboard_path_certs,
-    require => Package['wazuh-dashboard'],
+    require => Wazuh::Install_package['Wazuh dashboard'],
   }
   -> file { $dashboard_path_certs:
     ensure => directory,
     owner  => $dashboard_fileuser,
     group  => $dashboard_filegroup,
     mode   => '0500',
+    require => Wazuh::Install_package['Wazuh dashboard'],
   }
 
   [
@@ -64,6 +65,7 @@ class wazuh::dashboard (
       replace => true,
       recurse => remote,
       source  => "puppet:///modules/archive/${certfile}",
+      require => Wazuh::Install_package['Wazuh dashboard'],
     }
   }
 
@@ -72,7 +74,7 @@ class wazuh::dashboard (
     group   => $dashboard_filegroup,
     mode    => '0640',
     owner   => $dashboard_fileuser,
-    require => Package['wazuh-dashboard'],
+    require => Wazuh::Install_package['Wazuh dashboard'],
     #notify  => Service['wazuh-dashboard'],
   }
 
@@ -81,7 +83,7 @@ class wazuh::dashboard (
     group   => $dashboard_filegroup,
     mode    => '0755',
     owner   => $dashboard_fileuser,
-    require => Package['wazuh-dashboard'],
+    require => Wazuh::Install_package['Wazuh dashboard'],
   }
   -> file { '/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml':
     content => template('wazuh/wazuh_yml.erb'),
@@ -89,12 +91,13 @@ class wazuh::dashboard (
     mode    => '0600',
     owner   => $dashboard_fileuser,
     #notify  => Service['wazuh-dashboard'],
+    require => Wazuh::Install_package['Wazuh dashboard'],
   }
 
   unless $use_keystore {
     file { '/etc/wazuh-dashboard/opensearch_dashboards.keystore':
       ensure  => absent,
-      require => Package['wazuh-dashboard'],
+      require => Wazuh::Install_package['Wazuh dashboard'],
       before  => Service['wazuh-dashboard'],
     }
   }
