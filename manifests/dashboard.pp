@@ -73,7 +73,7 @@ class wazuh::dashboard (
     mode    => '0640',
     owner   => $dashboard_fileuser,
     require => Package['wazuh-dashboard'],
-    notify  => Service['wazuh-dashboard'],
+    #notify  => Service['wazuh-dashboard'],
   }
 
   file { [ '/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config' ]:
@@ -88,7 +88,7 @@ class wazuh::dashboard (
     group   => $dashboard_filegroup,
     mode    => '0600',
     owner   => $dashboard_fileuser,
-    notify  => Service['wazuh-dashboard'],
+    #notify  => Service['wazuh-dashboard'],
   }
 
   unless $use_keystore {
