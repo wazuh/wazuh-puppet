@@ -33,7 +33,7 @@ define wazuh::install_package (
   exec { "download_${package}":
     command => "sh -c 'url=\$(grep -F '${package}:' /tmp/arrtifacts_url.txt | tr -d \"\\r\" | cut -d \" \" -f2); curl -o /tmp/${package} \"\$url\"'",
     unless  => "test -f /tmp/${package} && dpkg -I /tmp/${package} >/dev/null 2>&1",
-    path    => ['/usr/bin', '/bin', '/sbin'],
+    path    => ['/usr/bin', '/bin', '/sbin', '/usr/sbin'],
     timeout => 600,
   }
 
