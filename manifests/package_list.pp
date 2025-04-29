@@ -4,14 +4,26 @@
 #   $prod_url: The URL to download the package list from.
 #   $destination: The file path where the package list will be saved.
 class wazuh::package_list (
-  $prod_url = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
-  $destination = '/tmp/packages_url.txt',
+  $prod_url    = 'https://devops-wazuh-artifacts-pub.s3.us-west-1.amazonaws.com/devops-overhaul/packages_url.txt',
+  $destination = undef,
 ) {
-  exec { 'download_packages_url_from_url':
-    command   => "/usr/bin/curl --fail --location -o ${destination} ${prod_url}",
-    path      => ['/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/local/sbin', '/usr/local/bin'],
-    creates   => $destination, # is created when the file does not exist
-    unless    => "test -f ${destination}", # not executed if file exists.
-    logoutput => true,
+
+  $default_destination = $facts['kernel'] ? {
+    'windows' => 'C:\Windows\Temp\packages_url.txt',
+    default   => '/tmp/packages_url.txt',
+  }
+
+  $actual_destination = pick($destination, $default_destination)
+
+  file { dirname($actual_destination):
+    ensure => directory,
+  }
+
+  archive { $actual_destination:
+    ensure  => present,
+    source  => $prod_url,
+    extract => false,
+    cleanup => false,
+    require => File[dirname($actual_destination)],
   }
 }
