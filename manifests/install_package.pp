@@ -5,7 +5,7 @@ define wazuh::install_package (
   $package_name   = $wazuh::param_install_package::package_name,
   $wazuh_version  = $wazuh::param_install_package::package_version,
   $download_path  = $wazuh::param_install_package::download_path,
-  $package_msi_key = $wazuh::param_install_package::package_msi_key
+  $package_msi_key = $wazuh::param_install_package::package_msi_key,
   $package_list_path = $wazuh::param_install_package::package_list_path,
   $msi_download_location = $wazuh::param_install_package::msi_download_location,
   $install_options = $wazuh::param_install_package::install_options,
