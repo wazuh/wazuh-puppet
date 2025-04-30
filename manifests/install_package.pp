@@ -50,8 +50,8 @@ define wazuh::install_package (
       $package_msi_key = 'wazuh_agent_url_i386_msi'
       $package_list_path = 'C:/Windows/Temp/packages_url.txt'
       $msi_download_location = 'C:/Windows/Temp/wazuh-agent-installer.msi'
-      Array[String] $install_options = ['/qn']
-      Boolean $cleanup_msi = true
+      $install_options = ['/qn']
+      $cleanup_msi = true
 
       file { $download_path:
         ensure => directory,
