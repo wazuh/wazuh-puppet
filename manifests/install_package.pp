@@ -8,7 +8,7 @@ define wazuh::install_package (
   case $facts['kernel'] {
     'Linux': {
       $download_path = '/tmp'
-      $package_list_path = '/tmp/packages_url.txt',
+      $package_list_path = '/tmp/packages_url.txt'
       # Determine package provider based on OS family
       $provider = $facts['os']['family'] ? {
         'Debian' => 'dpkg',  # Correct provider name for .deb packages
@@ -47,11 +47,11 @@ define wazuh::install_package (
     }
     'windows': {
       $download_path = 'C:\\Temp'
-      $package_msi_key = 'wazuh_agent_url_i386_msi',
-      $package_list_path = 'C:/Windows/Temp/packages_url.txt',
-      $msi_download_location = 'C:/Windows/Temp/wazuh-agent-installer.msi',
-      Array[String] $install_options = ['/qn'],
-      Boolean $cleanup_msi = true,
+      $package_msi_key = 'wazuh_agent_url_i386_msi'
+      $package_list_path = 'C:/Windows/Temp/packages_url.txt'
+      $msi_download_location = 'C:/Windows/Temp/wazuh-agent-installer.msi'
+      Array[String] $install_options = ['/qn']
+      Boolean $cleanup_msi = true
       file { $download_path:
         ensure => directory,
       }
