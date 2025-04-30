@@ -52,45 +52,26 @@ define wazuh::install_package (
       $msi_download_location = 'C:/Windows/Temp/wazuh-agent-installer.msi'
       Array[String] $install_options = ['/qn']
       Boolean $cleanup_msi = true
+
       file { $download_path:
         ensure => directory,
       }
 
-      file { $download_dir:
-        ensure => directory,
+      exec { "extract_url${package_msi_key}":
+        command   => "powershell -NoProfile -Command \"(Get-Content ${$package_list_path}) | `
+                    Where-Object { \$_ -match '^${package_msi_key}:' } | `
+                    ForEach-Object { (\$_ -split ':',2)[1].Trim() }\"",
+        provider  => powershell,
+        logoutput => true,
       }
 
-      exec { 'download_wazuh_msi':
-        command  => "powershell.exe -Command \"
-          \$packageListPath = \\\"${package_list_path}\\\";
-          \$packageMsiKey = \\\"${package_msi_key}\\\";
-          \$msiDownloadLocation = \\\"${msi_download_location}\\\";
-
-          \$fileContent = Get-Content -Path \$packageListPath | Out-String;
-
-          \$url = \$fileContent |
-                Select-String -Pattern \\\"^\$packageMsiKey:\\\" |
-                ForEach-Object { \$_.ToString().Split(':', 2)[1].Trim() };
-
-          if (\$null -ne \$url -and \$url -ne '') {
-            Write-Host \\\"URL found: \$url\\\";
-            # Descargar el archivo
-            try {
-              Invoke-WebRequest -Uri \$url -OutFile \$msiDownloadLocation -UseBasicParsing;
-              Write-Host \\\"Successfully downloaded \$url to \$msiDownloadLocation\\\";
-            } catch {
-              Write-Error \\\"Error downloading file from \$url: \$\_.Exception.Message\\\";
-              exit 1; # Salir con código de error para que Puppet falle
-            }
-          } else {
-            Write-Error \\\"Keyword '\$packageMsiKey' not found in \$packageListPath or URL is empty\\\";
-            exit 1; # Salir con código de error si no se encuentra la clave
-          }
-        \"",
-        provider => powershell,
-        logoutput => true,
-        subscribe => File[$download_dir],
-        refreshonly => true,
+      archive { 'download_msi_package':
+        ensure  => present,
+        path    => $msi_download_location,
+        source  => $package_msi_url,
+        extract => false,
+        cleanup => false,
+        before  => Package["install_${package_name}"],
       }
 
       package { "install_${package_name}":
