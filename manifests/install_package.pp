@@ -56,37 +56,45 @@ define wazuh::install_package (
         ensure => directory,
       }
 
-      $deferred_content = Deferred('file', [$package_list_path])
-
-      $package_msi_url = inline_epp(@(END_EPP), {
-          content     => $deferred_content,
-          key_to_find => $agent_msi_key,
-          filepath    => $package_list_path,
-      })
-      <%- | Deferred $content, String $key_to_find, String $filepath | -%>
-      <% $lines = $content.split("\n") %>
-      <% $matching_lines = $lines.filter |$line| { $line =~ /^${key_to_find}:/ } %>
-      <% if $matching_lines.length == 1 { %>
-      <%   $match_result = $matching_lines[0].match(/^${key_to_find}:\s*(.*)\s*$/) %>
-      <%   if $match_result and $match_result.length > 0 { $match_result[0] } %>
-      <%   else { fail("Error parsing line for key '${key_to_find}' in file '${filepath}'. Line: ${matching_lines[0]}") } %>
-      <% } elsif $matching_lines.length > 1 { %>
-      <%   fail("Found multiple lines for key '${key_to_find}' in file '${filepath}'") %>
-      <% } else { %>
-      <%   fail("Key '${key_to_find}' not found in file '${filepath}'") %>
-      <% } -%>
-      END_EPP
-
-      archive { 'download_msi_package':
-        ensure  => present,
-        path    => $msi_download_location,
-        source  => $package_msi_url,
-        extract => false,
-        cleanup => false,
-        before  => Package[$package_name],
+      $download_dir = split($msi_download_location, /\\/)[0..-2].join('\\')
+      file { $download_dir:
+        ensure => directory,
       }
 
-      package { $package_name:
+      exec { 'download_wazuh_msi':
+        command  => "powershell.exe -Command \"
+          \$packageListPath = \\\"${package_list_path}\\\";
+          \$packageMsiKey = \\\"${package_msi_key}\\\";
+          \$msiDownloadLocation = \\\"${msi_download_location}\\\";
+
+          \$fileContent = Get-Content -Path \$packageListPath | Out-String;
+
+          \$url = \$fileContent |
+                Select-String -Pattern \\\"^\$packageMsiKey:\\\" |
+                ForEach-Object { \$_.ToString().Split(':', 2)[1].Trim() };
+
+          if (\$null -ne \$url -and \$url -ne '') {
+            Write-Host \\\"URL found: \$url\\\";
+            # Descargar el archivo
+            try {
+              Invoke-WebRequest -Uri \$url -OutFile \$msiDownloadLocation -UseBasicParsing;
+              Write-Host \\\"Successfully downloaded \$url to \$msiDownloadLocation\\\";
+            } catch {
+              Write-Error \\\"Error downloading file from \$url: \$\_.Exception.Message\\\";
+              exit 1; # Salir con código de error para que Puppet falle
+            }
+          } else {
+            Write-Error \\\"Keyword '\$packageMsiKey' not found in \$packageListPath or URL is empty\\\";
+            exit 1; # Salir con código de error si no se encuentra la clave
+          }
+        \"",
+        provider => powershell,
+        logoutput => true,
+        subscribe => File[$download_dir],
+        refreshonly => true,
+      }
+
+      package { "install_${package_name}":
         ensure          => installed,
         provider        => 'msi',
         source          => $msi_download_location,
