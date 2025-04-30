@@ -56,7 +56,6 @@ define wazuh::install_package (
         ensure => directory,
       }
 
-      $download_dir = split($msi_download_location, /\\/)[0..-2].join('\\')
       file { $download_dir:
         ensure => directory,
       }
