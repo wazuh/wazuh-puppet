@@ -2,17 +2,13 @@
 # @param package_name Name of the Wazuh component (e.g., 'wazuh-manager')
 # @param wazuh_version Version of the component to install (e.g., '4.9.2')
 define wazuh::install_package (
-  $package_name   = $wazuh::param_install_package::package_name,
-  $wazuh_version  = $wazuh::param_install_package::package_version,
-  $download_path  = $wazuh::param_install_package::download_path,
-  $package_msi_key = $wazuh::param_install_package::package_msi_key,
-  $package_list_path = $wazuh::param_install_package::package_list_path,
-  $msi_download_location = $wazuh::param_install_package::msi_download_location,
-  $install_options = $wazuh::param_install_package::install_options,
-  $cleanup_msi = $wazuh::param_install_package::cleanup_msi,
-) inherits wazuh::param_install_package {
+  $package_name   = undef,
+  $wazuh_version  = 5.0.0
+) {
   case $facts['kernel'] {
     'Linux': {
+      $download_path = '/tmp'
+      $package_list_path = '/tmp/packages_url.txt',
       # Determine package provider based on OS family
       $provider = $facts['os']['family'] ? {
         'Debian' => 'dpkg',  # Correct provider name for .deb packages
@@ -50,6 +46,12 @@ define wazuh::install_package (
       }
     }
     'windows': {
+      $download_path = 'C:\\Temp'
+      $package_msi_key = 'wazuh_agent_url_i386_msi',
+      $package_list_path = 'C:/Windows/Temp/packages_url.txt',
+      $msi_download_location = 'C:/Windows/Temp/wazuh-agent-installer.msi',
+      Array[String] $install_options = ['/qn'],
+      Boolean $cleanup_msi = true,
       file { $download_path:
         ensure => directory,
       }
