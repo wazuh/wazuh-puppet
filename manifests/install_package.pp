@@ -3,7 +3,7 @@
 # @param wazuh_version Version of the component to install (e.g., '4.9.2')
 define wazuh::install_package (
   $package_name   = undef,
-  $wazuh_version  = 5.0.0
+  $wazuh_version  = '5.0.0'
 ) {
   case $facts['kernel'] {
     'Linux': {
