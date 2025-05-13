@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Wazuh Puppet v6.0.0
+
+### Added
+
+- Support to 6.0.0 Wazuh release.
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## Wazuh Puppet v5.0.0
 
 ### Added
