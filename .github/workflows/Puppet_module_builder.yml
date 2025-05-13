@@ -19,7 +19,7 @@ on:
       wazuh_puppet_reference:
         description: "wazuh-puppet reference"
         type: string
-        default: "4.13.0"
+        default: "5.0.0"
         required: false
       id:
         description: "ID used to identify the workflow uniquely."
@@ -42,7 +42,7 @@ on:
       wazuh_puppet_reference:
         description: "wazuh-puppet reference"
         type: string
-        default: "4.13.0"
+        default: "5.0.0"
         required: false
       id:
         type: string
@@ -53,7 +53,7 @@ permissions:
   contents: read    # This is required for actions/checkout
 
 env:
-  S3_PATH: "development/wazuh/4.x/secondary/puppet-module/"
+  S3_PATH: "development/wazuh/5.x/secondary/puppet-module/"
 
 jobs:
   build_module:
