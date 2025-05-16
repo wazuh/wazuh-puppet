@@ -7,7 +7,8 @@ class wazuh::certificates (
   $manager_certs = [],
   $manager_master_certs = [],
   $manager_worker_certs = [],
-  $dashboard_certs = []
+  $dashboard_certs = [],
+  $archive_file_path = "/etc/puppetlabs/code/environments/${environment}/modules/archive/files"
 ) {
   file { 'Configure Wazuh Certificates config.yml':
     owner   => 'root',
@@ -38,7 +39,7 @@ class wazuh::certificates (
     ensure => 'directory',
     source => '/tmp/wazuh-certificates/',
     recurse => 'remote',
-    path => '/etc/puppetlabs/code/environments/production/modules/archive/files/',
+    path => $archive_file_path,
     owner => 'root',
     group => 'root',
     mode  => '0755',
