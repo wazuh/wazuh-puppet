@@ -110,7 +110,7 @@
   "tags": [
     "ossec",
     "hids",
-    "4.13",
+    "5.0",
     "wazuh"
   ],
   "pdk-version": "1.14.1",
