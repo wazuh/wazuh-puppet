@@ -2,7 +2,7 @@
 # Wazuh repository installation
 class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
-  $wazuh_version = '4.12',
+  $wazuh_version = '4.13',
   $indexer_certs = [],
   $manager_certs = [],
   $manager_master_certs = [],
