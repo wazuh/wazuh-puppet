@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- None
+- Change dependencies versions ([#1307](https://github.com/wazuh/wazuh-puppet/pull/1307))
 
 ### Fixed
 
@@ -37,24 +37,6 @@ All notable changes to this project will be documented in this file.
 
 - Remove default puppet reference version from workflow ([#1284](https://github.com/wazuh/wazuh-puppet/pull/1284))
 - Remove 'stable' branch ocurrencies ([#1281](https://github.com/wazuh/wazuh-puppet/pull/1281))
-
-## [4.12.1]
-
-### Added
-
-- None
-
-### Changed
-
-- Change dependencies versions ([#1307](https://github.com/wazuh/wazuh-puppet/pull/1307))
-
-### Fixed
-
-- None
-
-### Deleted
-
-- None
 
 ## [4.12.0]
 
