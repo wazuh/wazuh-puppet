@@ -6,7 +6,6 @@ class wazuh::params_manager {
 
     # Installation
       $server_package_version                          = '6.0.0-1'
-
       $manage_firewall                                 = false
 
     ### Ossec.conf blocks
@@ -247,6 +246,9 @@ class wazuh::params_manager {
       $ossec_ruleset_list = [ 'etc/lists/audit-keys',
         'etc/lists/amazon/aws-eventnames',
         'etc/lists/security-eventchannel',
+        'etc/lists/malicious-ioc/malicious-ip',
+        'etc/lists/malicious-ioc/malicious-domains',
+        'etc/lists/malicious-ioc/malware-hashes',
       ]
 
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'

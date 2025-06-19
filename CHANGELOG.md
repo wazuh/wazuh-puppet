@@ -15,15 +15,56 @@ All notable changes to this project will be documented in this file.
 
 - None
 
-### Deleted
-
-- None
-
 ## Wazuh Puppet v5.0.0
 
 ### Added
 
 - Support to 5.0.0 Wazuh release.
+
+## [4.13.0]
+
+### Added
+
+- Add missing malicious-ioc ruleset lists ([#1352](https://github.com/wazuh/wazuh-puppet/pull/1352))
+- Integrate bumper script via GitHub action. ([#1344](https://github.com/wazuh/wazuh-puppet/pull/1344))
+- Added repository_bumper script. ([#1302](https://github.com/wazuh/wazuh-puppet/pull/1302))
+
+### Changed
+
+- Change dependencies versions ([#1307](https://github.com/wazuh/wazuh-puppet/pull/1307))
+
+### Fixed
+
+- Modify dependencies version ([#1277](https://github.com/wazuh/wazuh-puppet/pull/1277))
+
+### Deleted
+
+- Remove default puppet reference version from workflow ([#1284](https://github.com/wazuh/wazuh-puppet/pull/1284))
+- Remove 'stable' branch ocurrencies ([#1281](https://github.com/wazuh/wazuh-puppet/pull/1281))
+
+## [4.12.0]
+
+### Added
+
+- None
+
+### Changed
+
+- Standardize version file format ([#1251](https://github.com/wazuh/wazuh-puppet/pull/1251))
+
+### Fixed
+
+- Fix s3 uri printed into the execution log ([#1233](https://github.com/wazuh/wazuh-puppet/pull/1233)) \- (Puppet Module Builder)
+
+### Deleted
+
+- None
+
+## [4.11.2]
+
+### Added
+
+- None
 
 ### Changed
 
@@ -32,6 +73,44 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - None
+
+### Deleted
+
+- None
+
+## [4.11.1]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- Add refreshonly option ([#1265](https://github.com/wazuh/wazuh-puppet/pull/1265))
+
+### Deleted
+
+- None
+
+## [4.11.0]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- Add condition to execute apt update ([#1256](https://github.com/wazuh/wazuh-puppet/pull/1256))
+- Fix certificates.pp ([#1255](https://github.com/wazuh/wazuh-puppet/pull/1255))
+- Modify the version used into the Wazuh indexer and Wazuh manager deployment ([#1229](https://github.com/wazuh/wazuh-puppet/pull/1229))
 
 ### Deleted
 
@@ -41,21 +120,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- None
+- Support to 4.10.2 Wazuh release.
 
-### Changed
 
-- None
-
-### Fixed
-
-- None
-
-### Deleted
-
-- None
-
-## Wazuh Puppet v4.10.1
+## [4.10.1]
 
 ### Added
 
