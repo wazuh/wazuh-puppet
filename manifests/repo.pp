@@ -5,7 +5,7 @@ class wazuh::repo (
 
   case $::osfamily {
     'Debian' : {
-      $wazuh_repo_url = 'https://packages.wazuh.com/4.x/apt'
+      $wazuh_repo_url = 'https://packages.wazuh.com/6.x/apt'
       $repo_release = 'stable'
 
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
@@ -70,10 +70,10 @@ class wazuh::repo (
           /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky|SLES)$/: {
 
             if ( $::operatingsystemrelease =~ /^5.*/ ) {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
+              $baseurl  = 'https://packages.wazuh.com/6.x/yum/5/'
               $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH'
             } else {
-              $baseurl  = 'https://packages.wazuh.com/4.x/yum/'
+              $baseurl  = 'https://packages.wazuh.com/6.x/yum/'
               $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
             }
           }

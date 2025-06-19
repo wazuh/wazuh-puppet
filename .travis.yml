@@ -39,7 +39,7 @@ matrix:
       stage: deploy
 branches:
   only:
-    - master
+    - main
     - /^v\d/
 notifications:
   email: false

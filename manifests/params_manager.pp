@@ -5,8 +5,7 @@ class wazuh::params_manager {
     'Linux': {
 
     # Installation
-      $server_package_version                          = '4.13.0'
-
+      $server_package_version                          = '6.0.0-1'
       $manage_firewall                                 = false
 
     ### Ossec.conf blocks
@@ -556,7 +555,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.13.0'
+      $agent_package  = 'Wazuh Agent 6.0.0'
       $server_service = ''
       $server_package = ''
       $api_service = ''
