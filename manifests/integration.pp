@@ -9,6 +9,7 @@ define wazuh::integration(
   $in_location = '',
   $in_format = '',
   $in_max_log = '',
+  $options = '',
 ) {
 
   require wazuh::params_manager
