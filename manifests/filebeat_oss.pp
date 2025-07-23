@@ -12,6 +12,8 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
   $wazuh_app_version = '5.0.0_7.10.2',
+  String $module_baseurl = 'packages.wazuh.com',
+  String $module_version = '5.x',
   $wazuh_extensions_version = 'v5.0.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
   $wazuh_node_name = 'master',
@@ -19,8 +21,13 @@ class wazuh::filebeat_oss (
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
+  String $cert_filebucket_path = 'puppet:///modules/archive',
+  Hash $certfiles = {
+    "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
+    "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
+    'root-ca.pem'    => 'root-ca.pem',
+  },
 ) {
-
   package { 'filebeat':
     ensure => $filebeat_oss_version,
     name   => $filebeat_oss_package,
@@ -58,7 +65,7 @@ class wazuh::filebeat_oss (
 
   archive { "/tmp/${$wazuh_filebeat_module}":
     ensure       => present,
-    source       => "https://packages.wazuh.com/5.x/filebeat/${$wazuh_filebeat_module}",
+    source       => "https://${module_baseurl}/${module_version}/filebeat/${$wazuh_filebeat_module}",
     extract      => true,
     extract_path => '/usr/share/filebeat/module',
     creates      => '/usr/share/filebeat/module/wazuh',
@@ -86,20 +93,14 @@ class wazuh::filebeat_oss (
     mode   => '0500',
   }
 
-  $_certfiles = {
-    "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
-    "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
-    'root-ca.pem'    => 'root-ca.pem',
-  }
-  $_certfiles.each |String $certfile_source, String $certfile_target| {
+  $certfiles.each |String $certfile_source, String $certfile_target| {
     file { "${filebeat_path_certs}/${certfile_target}":
       ensure  => file,
       owner   => $filebeat_fileuser,
       group   => $filebeat_filegroup,
       mode    => '0400',
       replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile_source}",
+      source  => "${cert_filebucket_path}/${certfile_source}",
     }
   }
 

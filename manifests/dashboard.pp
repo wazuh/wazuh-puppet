@@ -1,5 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Setup for Wazuh Dashboard
+# @param cert_filebucket_path Prefix for the certificate files, allowing for legacy and new filebucket
+# usage.
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
@@ -30,9 +32,14 @@ class wazuh::dashboard (
       'password' => 'wazuh-wui',
     },
   ],
+  String $cert_filebucket_path = 'puppet:///modules/archive',
+  Variant[Hash, Array] $certfiles = [
+    'dashboard.pem',
+    'dashboard-key.pem',
+    'root-ca.pem',
+  ],
 
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -61,20 +68,21 @@ class wazuh::dashboard (
     group  => $dashboard_filegroup,
     mode   => '0500',
   }
-
-  [
-    'dashboard.pem',
-    'dashboard-key.pem',
-    'root-ca.pem',
-  ].each |String $certfile| {
-    file { "${dashboard_path_certs}/${certfile}":
+  if $certfiles =~ Hash {
+    $_certfiles = $certfiles
+  } else {
+    $_certfiles = $certfiles.map |String $certfile| {
+      { "${certfile}" => $certfile }
+    }
+  }
+  $_certfiles.each |String $certfile_source, String $certfile_target| {
+    file { "${dashboard_path_certs}/${certfile_target}":
       ensure  => file,
       owner   => $dashboard_fileuser,
       group   => $dashboard_filegroup,
       mode    => '0400',
       replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
+      source  => "${cert_filebucket_path}/${certfile_source}",
     }
   }
 
@@ -87,7 +95,7 @@ class wazuh::dashboard (
     notify  => Service['wazuh-dashboard'],
   }
 
-  file { [ '/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config' ]:
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config']:
     ensure  => 'directory',
     group   => $dashboard_filegroup,
     mode    => '0755',

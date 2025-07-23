@@ -22,12 +22,19 @@ class wazuh::indexer (
   $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_initial_cluster_manager_nodes = ['node-1'],
-  $indexer_cluster_CN = ['node-1'],
+  $indexer_cluster_cn = ['node-1'],
+  String $cert_filebucket_path = 'puppet:///modules/archive',
+  Variant[Hash, Array] $certfiles = [
+    "indexer-${indexer_node_name}.pem",
+    "indexer-${indexer_node_name}-key.pem",
+    'root-ca.pem',
+    'admin.pem',
+    'admin-key.pem',
+  ],
 
   # JVM options
   $jvm_options_memory = '1g',
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -57,25 +64,23 @@ class wazuh::indexer (
     mode   => '0500',
   }
 
-  [
-   "indexer-$indexer_node_name.pem",
-   "indexer-$indexer_node_name-key.pem",
-   'root-ca.pem',
-   'admin.pem',
-   'admin-key.pem',
-  ].each |String $certfile| {
-    file { "${indexer_path_certs}/${certfile}":
+  if $certfiles =~ Hash {
+    $_certfiles = $certfiles
+  } else {
+    $_certfiles = $certfiles.map |String $certfile| {
+      { "${certfile}" => $certfile }
+    }
+  }
+  $_certfiles.each |String $certfile_source, String $certfile_target| {
+    file { "${indexer_path_certs}/${certfile_target}":
       ensure  => file,
       owner   => $indexer_fileuser,
       group   => $indexer_filegroup,
       mode    => '0400',
       replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
+      source  => "${cert_filebucket_path}/${certfile_source}",
     }
   }
-
-
 
   file { 'configuration file':
     path    => '/etc/wazuh-indexer/opensearch.yml',
