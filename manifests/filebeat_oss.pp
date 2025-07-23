@@ -22,7 +22,7 @@ class wazuh::filebeat_oss (
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
   String $cert_filebucket_path = 'puppet:///modules/archive',
-  Hash $certfiles = {
+  Variant[Hash, Array] $certfiles = {
     "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
     "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
     'root-ca.pem'    => 'root-ca.pem',
@@ -93,7 +93,14 @@ class wazuh::filebeat_oss (
     mode   => '0500',
   }
 
-  $certfiles.each |String $certfile_source, String $certfile_target| {
+  if $certfiles =~ Hash {
+    $_certfiles = $certfiles
+  } else {
+    $_certfiles = $certfiles.map |String $certfile| {
+      { "${certfile}" => $certfile }
+    }
+  }
+  $_certfiles.each |String $certfile_source, String $certfile_target| {
     file { "${filebeat_path_certs}/${certfile_target}":
       ensure  => file,
       owner   => $filebeat_fileuser,
