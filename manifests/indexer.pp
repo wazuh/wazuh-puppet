@@ -23,7 +23,7 @@ class wazuh::indexer (
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_initial_cluster_manager_nodes = ['node-1'],
   $indexer_cluster_cn = ['node-1'],
-  String $cert_filebucket_path = 'puppet:///modules/archive',
+  String $cert_source_basepath = 'puppet:///modules/archive',
   Variant[Hash, Array] $certfiles = [
     "indexer-${indexer_node_name}.pem",
     "indexer-${indexer_node_name}-key.pem",
@@ -31,6 +31,10 @@ class wazuh::indexer (
     'admin.pem',
     'admin-key.pem',
   ],
+  Boolean $generate_certs = false,
+  Array[Regexp[/(?:indexer(.*)|admin)/]] $certs_to_generate = ['indexer', 'admin'],
+  Boolean $use_puppet_ca = false,
+  Boolean $use_puppet_certs = false,
 
   # JVM options
   $jvm_options_memory = '1g',
@@ -64,24 +68,67 @@ class wazuh::indexer (
     mode   => '0500',
   }
 
-  if $certfiles =~ Hash {
-    $_certfiles = $certfiles
+  if $use_puppet_certs or $generate_certs {
+    file { "${indexer_path_certs}/root-ca.pem":
+      ensure => file,
+      owner  => $indexer_fileuser,
+      group  => $indexer_filegroup,
+      mode   => '0400',
+      source => "${settings::ssldir}/certs/ca.pem",
+    }
+  }
+  if $use_puppet_certs {
+    file { "${indexer_path_certs}/indexer.pem":
+      ensure => file,
+      owner  => $indexer_fileuser,
+      group  => $indexer_filegroup,
+      mode   => '0400',
+      source => "${settings::ssldir}/indexer-${facts['networking']['fqdn']}.pem",
+    }
+  }
+  if $generate_certs {
+    $certs_to_generate.each |String $cert| {
+      $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
+      @@openssl::certificate::x509 { $_certname:
+        ensure      => present,
+        altnames    => [$facts['networking']['ip']],
+        extkeyusage => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        commonname  => $facts['networking']['fqdn'],
+      }
+      File {
+        ensure  => file,
+        owner   => $indexer_fileuser,
+        group   => $indexer_filegroup,
+        mode    => '0400',
+        replace => true,
+      }
+      file {
+        "${indexer_path_certs}/${cert}.pem":
+          source => "${cert_source_basepath}/${_certname}.crt";
+        "${indexer_path_certs}/${cert}-key.pem":
+          source => "${cert_source_basepath}/${_certname}.key";
+      }
+    }
   } else {
-    $_certfiles = $certfiles.map |String $certfile| {
-      { "${certfile}" => $certfile }
+    # Old certificate workflow, with support for arbitrary source path
+    if $certfiles =~ Hash {
+      $_certfiles = $certfiles
+    } else {
+      $_certfiles = $certfiles.map |String $certfile| {
+        { "${certfile}" => $certfile }
+      }
+    }
+    $_certfiles.each |String $certfile_source, String $certfile_target| {
+      file { "${indexer_path_certs}/${certfile_target}":
+        ensure  => file,
+        owner   => $indexer_fileuser,
+        group   => $indexer_filegroup,
+        mode    => '0400',
+        replace => true,
+        source  => "${cert_source_basepath}/${certfile_source}",
+      }
     }
   }
-  $_certfiles.each |String $certfile_source, String $certfile_target| {
-    file { "${indexer_path_certs}/${certfile_target}":
-      ensure  => file,
-      owner   => $indexer_fileuser,
-      group   => $indexer_filegroup,
-      mode    => '0400',
-      replace => true,
-      source  => "${cert_filebucket_path}/${certfile_source}",
-    }
-  }
-
   file { 'configuration file':
     path    => '/etc/wazuh-indexer/opensearch.yml',
     content => template('wazuh/wazuh_indexer_yml.erb'),
