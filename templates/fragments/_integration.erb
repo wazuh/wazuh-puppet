@@ -21,9 +21,12 @@
     <% if @in_format != '' -%>
     <alert_format><%= @in_format %></alert_format>
     <% end %>
+    <% if @options != '' -%>
+      <options><%= @options %></options>
+    <% end %>
     <% if @in_max_log != '' -%>
       <max_log><%= @in_max_log %></max_log>
     <% end %>
   </integration>
 
-  
+
