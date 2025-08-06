@@ -32,7 +32,7 @@ class wazuh::indexer (
     'admin-key.pem',
   ],
   Boolean $generate_certs = false,
-  Array[Regexp[/(?:indexer(.*)|admin)/]] $certs_to_generate = ['indexer', 'admin'],
+  Array[Pattern[/(?:indexer(.*)|admin)/]] $certs_to_generate = ['indexer', 'admin'],
   Boolean $use_puppet_ca = false,
   Boolean $use_puppet_certs = false,
 
@@ -95,7 +95,7 @@ class wazuh::indexer (
         extkeyusage => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
         commonname  => $facts['networking']['fqdn'],
       }
-      File {
+      $_attrs = {
         ensure  => file,
         owner   => $indexer_fileuser,
         group   => $indexer_filegroup,
@@ -104,9 +104,12 @@ class wazuh::indexer (
       }
       file {
         "${indexer_path_certs}/${cert}.pem":
-          source => "${cert_source_basepath}/${_certname}.crt";
+          source => "${cert_source_basepath}/${_certname}.crt",
+          *      => $_attrs;
+
         "${indexer_path_certs}/${cert}-key.pem":
-          source => "${cert_source_basepath}/${_certname}.key";
+          source => "${cert_source_basepath}/${_certname}.key",
+          *      => $_attrs;
       }
     }
   } else {
@@ -114,9 +117,7 @@ class wazuh::indexer (
     if $certfiles =~ Hash {
       $_certfiles = $certfiles
     } else {
-      $_certfiles = $certfiles.map |String $certfile| {
-        { "${certfile}" => $certfile }
-      }
+      $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
     }
     $_certfiles.each |String $certfile_source, String $certfile_target| {
       file { "${indexer_path_certs}/${certfile_target}":
@@ -191,10 +192,14 @@ class wazuh::indexer (
   }
 
   if $full_indexer_reinstall {
+    $_before = defined(Exec['Initialize the Opensearch security index in Wazuh indexer']) ? {
+      true    => Exec['Initialize the Opensearch security index in Wazuh indexer'],
+      default => undef,
+    }
     file { $indexer_security_init_lockfile:
       ensure  => absent,
       require => Package['wazuh-indexer'],
-      before  => Exec['Initialize the Opensearch security index in Wazuh indexer'],
+      before  => $_before,
     }
   }
 }

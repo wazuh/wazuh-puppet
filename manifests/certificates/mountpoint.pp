@@ -36,11 +36,17 @@ class wazuh::certificates::mountpoint (
     }
   }
 
+  $_tonotify = defined(Service['puppetserver']) ? {
+    true    => Service['puppetserver'],
+    default => undef,
+  }
+
   ini_setting { 'wazuh certificates mountpoint':
     ensure  => present,
     path    => "${filebucket_path}/${bucket_name}/wazuh_certificates.ini",
     section => $bucket_name,
     setting => 'path',
     value   => "${filebucket_path}/${bucket_name}",
+    notify  => $_tonotify,
   }
 }

@@ -71,9 +71,7 @@ class wazuh::dashboard (
   if $certfiles =~ Hash {
     $_certfiles = $certfiles
   } else {
-    $_certfiles = $certfiles.map |String $certfile| {
-      { "${certfile}" => $certfile }
-    }
+    $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
   }
   $_certfiles.each |String $certfile_source, String $certfile_target| {
     file { "${dashboard_path_certs}/${certfile_target}":

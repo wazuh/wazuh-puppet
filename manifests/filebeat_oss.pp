@@ -96,9 +96,7 @@ class wazuh::filebeat_oss (
   if $certfiles =~ Hash {
     $_certfiles = $certfiles
   } else {
-    $_certfiles = $certfiles.map |String $certfile| {
-      { "${certfile}" => $certfile }
-    }
+    $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
   }
   $_certfiles.each |String $certfile_source, String $certfile_target| {
     file { "${filebeat_path_certs}/${certfile_target}":
