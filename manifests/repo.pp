@@ -54,16 +54,18 @@ class wazuh::repo (
             content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] ${wazuh_repo_url} ${repo_release} main\n",
             order   => '01',
             require => File['/usr/share/keyrings/wazuh.gpg'],
-            before  => Exec['apt-update'],
+            notify  => Exec['apt-update'],
           }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
       }
       # Define an exec resource to run 'apt-get update'
-      exec { 'apt-update':
-        command     => 'apt-get update',
-        refreshonly => true,
-        path        => ['/bin', '/usr/bin'],
+      if !defined(Exec['apt-update']) {
+        exec { 'apt-update':
+          command     => 'apt-get update',
+          refreshonly => true,
+          path        => ['/bin', '/usr/bin'],
+        }
       }
     }
     'Linux', 'RedHat', 'Suse' : {

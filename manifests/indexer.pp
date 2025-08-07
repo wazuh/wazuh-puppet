@@ -1,5 +1,7 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Setup for Wazuh Indexer
+# @summary Setup for Wazuh Indexer
+# @param indexer_hostname_validation
+#   Whether OpenSearch requires the host to match the certificate CN
 class wazuh::indexer (
   # opensearch.yml configuration
   $indexer_network_host = '0.0.0.0',
@@ -21,8 +23,9 @@ class wazuh::indexer (
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
-  $indexer_initial_cluster_manager_nodes = ['node-1'],
-  $indexer_cluster_cn = ['node-1'],
+  $indexer_initial_cluster_manager_nodes = [$indexer_node_name],
+  $indexer_cluster_cn = ["indexer-${indexer_node_name}"],
+  Boolean $indexer_hostname_validation = false,
   String $cert_source_basepath = 'puppet:///modules/archive',
   Variant[Hash, Array] $certfiles = [
     "indexer-${indexer_node_name}.pem",
@@ -33,7 +36,6 @@ class wazuh::indexer (
   ],
   Boolean $generate_certs = false,
   Array[Pattern[/(?:indexer(.*)|admin)/]] $certs_to_generate = ['indexer', 'admin'],
-  Boolean $use_puppet_ca = false,
   Boolean $use_puppet_certs = false,
 
   # JVM options
@@ -83,17 +85,18 @@ class wazuh::indexer (
       owner  => $indexer_fileuser,
       group  => $indexer_filegroup,
       mode   => '0400',
-      source => "${settings::ssldir}/indexer-${facts['networking']['fqdn']}.pem",
+      source => "${settings::ssldir}/certs/${facts['networking']['fqdn']}.pem",
     }
   }
   if $generate_certs {
     $certs_to_generate.each |String $cert| {
       $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
-      @@openssl::certificate::x509 { $_certname:
-        ensure      => present,
-        altnames    => [$facts['networking']['ip']],
-        extkeyusage => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
-        commonname  => $facts['networking']['fqdn'],
+      @@wazuh::certificate { $_certname:
+        ensure       => present,
+        altnames     => [$facts['networking']['ip']],
+        extkeyusage  => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        commonname   => $facts['networking']['fqdn'],
+        export_pkcs8 => true,
       }
       $_attrs = {
         ensure  => file,
@@ -108,7 +111,7 @@ class wazuh::indexer (
           *      => $_attrs;
 
         "${indexer_path_certs}/${cert}-key.pem":
-          source => "${cert_source_basepath}/${_certname}.key",
+          source => "${cert_source_basepath}/${_certname}.key.pk8",
           *      => $_attrs;
       }
     }

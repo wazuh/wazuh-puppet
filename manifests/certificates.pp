@@ -61,7 +61,7 @@ class wazuh::certificates (
   else {
     contain wazuh::certificates::mountpoint
     if $manage_certs {
-      Openssl::Certificate::X509 <<| tag == 'wazuh' |>> {
+      Wazuh::Certificate <<| tag == 'wazuh' |>> {
         ensure       => present,
         country      => 'US',
         locality     => 'California',
