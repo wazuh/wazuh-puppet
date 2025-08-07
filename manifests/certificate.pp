@@ -17,6 +17,7 @@ define wazuh::certificate (
   Optional[String]               $commonname = undef,
   Optional[String]               $locality = undef,
   Array                          $altnames = [],
+  Array                          $keyusage = [],
   Array                          $extkeyusage = [],
   Optional[String]               $email = undef,
   Integer                        $days = 365,

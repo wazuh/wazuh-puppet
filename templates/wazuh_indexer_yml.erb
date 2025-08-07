@@ -29,7 +29,7 @@ plugins.security.check_snapshot_restore_write_privileges: true
 plugins.security.enable_snapshot_restore_privilege: true
 plugins.security.nodes_dn:
 <% @indexer_cluster_cn.each do |cn| -%>
-- "CN=indexer-<%= cn %>,OU=Wazuh,O=Wazuh,L=California,C=US"
+- "CN=<%= cn %>,OU=Wazuh,O=Wazuh,L=California,C=US"
 <% end -%>
 plugins.security.restapi.roles_enabled:
 - "all_access"
