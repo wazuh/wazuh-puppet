@@ -43,12 +43,13 @@ class wazuh::certificates::mountpoint (
   }
 
   ini_setting { 'wazuh certificates mountpoint':
-    ensure       => present,
-    path         => $fileserver_conf,
-    section      => $bucket_name,
-    setting      => 'path',
-    value        => "${filebucket_path}/${bucket_name}",
-    indent_width => 4,
-    notify       => $_tonotify,
+    ensure            => present,
+    path              => $fileserver_conf,
+    section           => $bucket_name,
+    setting           => 'path',
+    value             => "${filebucket_path}/${bucket_name}",
+    indent_width      => 4,
+    key_val_separator => ' ',
+    notify            => $_tonotify,
   }
 }
