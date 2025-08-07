@@ -104,6 +104,7 @@ class wazuh::indexer (
         group   => $indexer_filegroup,
         mode    => '0400',
         replace => true,
+        before  => Service['wazuh-indexer'],
       }
       file {
         "${indexer_path_certs}/${cert}.pem":
