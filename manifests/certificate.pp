@@ -56,6 +56,7 @@ define wazuh::certificate (
     commonname     => $commonname,
     locality       => $locality,
     altnames       => $altnames,
+    keyusage       => $keyusage,
     extkeyusage    => $extkeyusage,
     email          => $email,
     days           => $days,

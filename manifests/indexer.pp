@@ -94,7 +94,7 @@ class wazuh::indexer (
       @@wazuh::certificate { $_certname:
         ensure       => present,
         altnames     => [$facts['networking']['ip']],
-        extkeyusage  => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
         commonname   => $facts['networking']['fqdn'],
         export_pkcs8 => true,
       }

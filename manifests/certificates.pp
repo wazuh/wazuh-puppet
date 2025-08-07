@@ -67,7 +67,7 @@ class wazuh::certificates (
         locality     => 'California',
         organization => 'Wazuh',
         unit         => 'Wazuh',
-        extkeyusage  => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
         base_dir     => "${filebucket_path}/${bucket_name}",
         ca           => $ca_cert_path,
         cakey        => $ca_key_path,
