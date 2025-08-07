@@ -48,7 +48,7 @@ class wazuh::certificates::mountpoint (
     section      => $bucket_name,
     setting      => 'path',
     value        => "${filebucket_path}/${bucket_name}",
-    indent_width => 2,
+    indent_width => 4,
     notify       => $_tonotify,
   }
 }
