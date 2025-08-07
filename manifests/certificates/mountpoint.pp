@@ -13,6 +13,7 @@ class wazuh::certificates::mountpoint (
   String $owner = 'puppet',
   String $group = 'puppet',
 ) {
+  assert_private()
   $_dirs = $manage_bucket_dir ? {
     true => [
       $filebucket_path,

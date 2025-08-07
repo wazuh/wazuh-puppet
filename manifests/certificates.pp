@@ -15,6 +15,7 @@ class wazuh::certificates (
   $manager_master_certs = [],
   $manager_worker_certs = [],
   $dashboard_certs = [],
+  Boolean $manage_certs = true,
   Stdlib::Absolutepath $ca_cert_path = $settings::cacert,
   Stdlib::Absolutepath $ca_key_path = $settings::cakey,
   String $bucket_name = 'wazuh',
@@ -59,16 +60,18 @@ class wazuh::certificates (
   }
   else {
     contain wazuh::certificates::mountpoint
-    Openssl::Certificate::X509 <<| tag == 'wazuh' |>> {
-      ensure       => present,
-      country      => 'US',
-      locality     => 'California',
-      organization => 'Wazuh',
-      unit         => 'Wazuh',
-      extkeyusage  => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
-      base_dir     => "${filebucket_path}/${bucket_name}",
-      ca           => $ca_cert_path,
-      cakey        => $ca_key_path,
+    if $manage_certs {
+      Openssl::Certificate::X509 <<| tag == 'wazuh' |>> {
+        ensure       => present,
+        country      => 'US',
+        locality     => 'California',
+        organization => 'Wazuh',
+        unit         => 'Wazuh',
+        extkeyusage  => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        base_dir     => "${filebucket_path}/${bucket_name}",
+        ca           => $ca_cert_path,
+        cakey        => $ca_key_path,
+      }
     }
   }
 }
