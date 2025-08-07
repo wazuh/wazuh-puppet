@@ -44,7 +44,7 @@ class wazuh::certificates::mountpoint (
 
   ini_setting { 'wazuh certificates mountpoint':
     ensure  => present,
-    path    => "${filebucket_path}/${bucket_name}/wazuh_certificates.ini",
+    path    => $fileserver_conf,
     section => $bucket_name,
     setting => 'path',
     value   => "${filebucket_path}/${bucket_name}",
