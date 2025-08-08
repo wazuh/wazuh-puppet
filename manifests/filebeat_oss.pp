@@ -21,12 +21,14 @@ class wazuh::filebeat_oss (
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
-  String $cert_filebucket_path = 'puppet:///modules/archive',
+  String $cert_source_basepath = 'puppet:///modules/archive',
   Variant[Hash, Array] $certfiles = {
     "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
     "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
     'root-ca.pem'    => 'root-ca.pem',
   },
+  Boolean $generate_certs = false,
+  Array[String] $certs_to_generate = ['filebeat'],
 ) {
   package { 'filebeat':
     ensure => $filebeat_oss_version,
@@ -93,22 +95,58 @@ class wazuh::filebeat_oss (
     mode   => '0500',
   }
 
-  if $certfiles =~ Hash {
-    $_certfiles = $certfiles
+  if $generate_certs {
+    file { "${filebeat_path_certs}/root-ca.pem":
+      ensure => file,
+      owner  => $filebeat_fileuser,
+      group  => $filebeat_filegroup,
+      mode   => '0400',
+      source => "${settings::ssldir}/certs/ca.pem",
+    }
+    $certs_to_generate.each |String $cert| {
+      $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
+      @@wazuh::certificate { $_certname:
+        ensure       => present,
+        altnames     => [$facts['networking']['ip']],
+        keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        commonname   => $facts['networking']['fqdn'],
+        export_pkcs8 => false,
+      }
+      $_attrs = {
+        ensure  => file,
+        owner   => $filebeat_fileuser,
+        group   => $filebeat_filegroup,
+        mode    => '0400',
+        replace => true,
+        before  => Service['wazuh-indexer'],
+      }
+      file {
+        "${filebeat_path_certs}/${cert}.pem":
+          source => "${cert_source_basepath}/${_certname}.crt",
+          *      => $_attrs;
+
+        "${filebeat_path_certs}/${cert}-key.pem":
+          source => "${cert_source_basepath}/${_certname}.key",
+          *      => $_attrs;
+      }
+    }
   } else {
-    $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
-  }
-  $_certfiles.each |String $certfile_source, String $certfile_target| {
-    file { "${filebeat_path_certs}/${certfile_target}":
-      ensure  => file,
-      owner   => $filebeat_fileuser,
-      group   => $filebeat_filegroup,
-      mode    => '0400',
-      replace => true,
-      source  => "${cert_filebucket_path}/${certfile_source}",
+    if $certfiles =~ Hash {
+      $_certfiles = $certfiles
+    } else {
+      $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
+    }
+    $_certfiles.each |String $certfile_source, String $certfile_target| {
+      file { "${filebeat_path_certs}/${certfile_target}":
+        ensure  => file,
+        owner   => $filebeat_fileuser,
+        group   => $filebeat_filegroup,
+        mode    => '0400',
+        replace => true,
+        source  => "${cert_source_basepath}/${certfile_source}",
+      }
     }
   }
-
   service { 'filebeat':
     ensure  => running,
     enable  => true,
