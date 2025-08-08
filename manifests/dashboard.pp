@@ -32,12 +32,14 @@ class wazuh::dashboard (
       'password' => 'wazuh-wui',
     },
   ],
-  String $cert_filebucket_path = 'puppet:///modules/archive',
+  String $cert_source_basepath = 'puppet:///modules/archive',
   Variant[Hash, Array] $certfiles = [
     'dashboard.pem',
     'dashboard-key.pem',
     'root-ca.pem',
   ],
+  Boolean $generate_certs = false,
+  Array[String] $certs_to_generate = ['dashboard'],
 
 ) {
   # assign version according to the package manager
@@ -68,22 +70,59 @@ class wazuh::dashboard (
     group  => $dashboard_filegroup,
     mode   => '0500',
   }
-  if $certfiles =~ Hash {
-    $_certfiles = $certfiles
+  if $generate_certs {
+    file { "${dashboard_path_certs}/root-ca.pem":
+      ensure => file,
+      owner  => $dashboard_fileuser,
+      group  => $dashboard_filegroup,
+      mode   => '0400',
+      source => "${settings::ssldir}/certs/ca.pem",
+    }
+    $certs_to_generate.each |String $cert| {
+      $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
+      @@wazuh::certificate { $_certname:
+        ensure       => present,
+        altnames     => [$facts['networking']['ip']],
+        keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        commonname   => $facts['networking']['fqdn'],
+        export_pkcs8 => false,
+      }
+      $_attrs = {
+        ensure  => file,
+        owner   => $dashboard_fileuser,
+        group   => $dashboard_filegroup,
+        mode    => '0400',
+        replace => true,
+        before  => Service['wazuh-dashboard'],
+      }
+      file {
+        "${dashboard_path_certs}/${cert}.pem":
+          source => "${cert_source_basepath}/${_certname}.crt",
+          *      => $_attrs;
+
+        "${dashboard_path_certs}/${cert}-key.pem":
+          source => "${cert_source_basepath}/${_certname}.key",
+          *      => $_attrs;
+      }
+    }
   } else {
-    $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
-  }
-  $_certfiles.each |String $certfile_source, String $certfile_target| {
-    file { "${dashboard_path_certs}/${certfile_target}":
-      ensure  => file,
-      owner   => $dashboard_fileuser,
-      group   => $dashboard_filegroup,
-      mode    => '0400',
-      replace => true,
-      source  => "${cert_filebucket_path}/${certfile_source}",
+    if $certfiles =~ Hash {
+      $_certfiles = $certfiles
+    } else {
+      $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
+    }
+    $_certfiles.each |String $certfile_source, String $certfile_target| {
+      file { "${dashboard_path_certs}/${certfile_target}":
+        ensure  => file,
+        owner   => $dashboard_fileuser,
+        group   => $dashboard_filegroup,
+        mode    => '0400',
+        replace => true,
+        source  => "${cert_source_basepath}/${certfile_source}",
+        notify  => Service['wazuh-dashboard'],
+      }
     }
   }
-
   file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
     content => template('wazuh/wazuh_dashboard_yml.erb'),
     group   => $dashboard_filegroup,
