@@ -41,7 +41,6 @@ class wazuh::indexer (
   },
   Boolean $generate_certs = false,
   Array[Pattern[/(?:indexer(.*)|admin)/]] $certs_to_generate = ['indexer', 'admin'],
-  Boolean $use_puppet_certs = false,
   String $admin_cn = 'admin',
 
   # JVM options
@@ -76,24 +75,6 @@ class wazuh::indexer (
     mode   => '0500',
   }
 
-  if $use_puppet_certs or $generate_certs {
-    file { "${indexer_path_certs}/root-ca.pem":
-      ensure => file,
-      owner  => $indexer_fileuser,
-      group  => $indexer_filegroup,
-      mode   => '0400',
-      source => "${settings::ssldir}/certs/ca.pem",
-    }
-  }
-  if $use_puppet_certs {
-    file { "${indexer_path_certs}/indexer.pem":
-      ensure => file,
-      owner  => $indexer_fileuser,
-      group  => $indexer_filegroup,
-      mode   => '0400',
-      source => "${settings::ssldir}/certs/${facts['networking']['fqdn']}.pem",
-    }
-  }
   if $generate_certs {
     # If we're generating certs, the CN will always be the node name (which should be FQDN)
     $_indexer_cluster_cn = [$indexer_node_name]
@@ -103,6 +84,13 @@ class wazuh::indexer (
     } else {
       # We might be a multi-node setup, so use the provided admin CN
       $_admin_cn = $admin_cn
+    }
+    file { "${indexer_path_certs}/root-ca.pem":
+      ensure => file,
+      owner  => $indexer_fileuser,
+      group  => $indexer_filegroup,
+      mode   => '0400',
+      source => "${settings::ssldir}/certs/ca.pem",
     }
     $certs_to_generate.each |String $cert| {
       $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"

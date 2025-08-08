@@ -117,7 +117,7 @@ class wazuh::filebeat_oss (
         group   => $filebeat_filegroup,
         mode    => '0400',
         replace => true,
-        before  => Service['wazuh-indexer'],
+        before  => Service['filebeat'],
       }
       file {
         "${filebeat_path_certs}/${cert}.pem":
