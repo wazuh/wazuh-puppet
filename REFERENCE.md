@@ -18,7 +18,7 @@
 * [`wazuh::params_agent`](#wazuh--params_agent): Wazuh-Agent configuration parameters
 * [`wazuh::params_manager`](#wazuh--params_manager): Paramas file
 * [`wazuh::repo`](#wazuh--repo): Wazuh repository installation
-* [`wazuh::securityadmin`](#wazuh--securityadmin): Wazuh repository installation
+* [`wazuh::securityadmin`](#wazuh--securityadmin): Wazuh OpenSearch security index init
 
 ### Defined types
 
@@ -44,6 +44,8 @@ Copyright (C) 2015, Wazuh Inc.
 
 The following parameters are available in the `wazuh::agent` class:
 
+* [`use_puppet_cert`](#-wazuh--agent--use_puppet_cert)
+* [`use_manager_validation`](#-wazuh--agent--use_manager_validation)
 * [`agent_package_version`](#-wazuh--agent--agent_package_version)
 * [`agent_package_revision`](#-wazuh--agent--agent_package_revision)
 * [`agent_package_name`](#-wazuh--agent--agent_package_name)
@@ -220,6 +222,22 @@ The following parameters are available in the `wazuh::agent` class:
 * [`download_path`](#-wazuh--agent--download_path)
 * [`logging_log_format`](#-wazuh--agent--logging_log_format)
 
+##### <a name="-wazuh--agent--use_puppet_cert"></a>`use_puppet_cert`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-wazuh--agent--use_manager_validation"></a>`use_manager_validation`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
 ##### <a name="-wazuh--agent--agent_package_version"></a>`agent_package_version`
 
 Data type: `Any`
@@ -302,7 +320,7 @@ Default value: `$wazuh::params_agent::agent_address`
 
 ##### <a name="-wazuh--agent--wazuh_agent_cert"></a>`wazuh_agent_cert`
 
-Data type: `Any`
+Data type: `String`
 
 
 
@@ -310,7 +328,7 @@ Default value: `$wazuh::params_agent::wazuh_agent_cert`
 
 ##### <a name="-wazuh--agent--wazuh_agent_key"></a>`wazuh_agent_key`
 
-Data type: `Any`
+Data type: `String`
 
 
 
@@ -318,7 +336,7 @@ Default value: `$wazuh::params_agent::wazuh_agent_key`
 
 ##### <a name="-wazuh--agent--wazuh_agent_cert_path"></a>`wazuh_agent_cert_path`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
 
 
@@ -326,7 +344,7 @@ Default value: `$wazuh::params_agent::wazuh_agent_cert_path`
 
 ##### <a name="-wazuh--agent--wazuh_agent_key_path"></a>`wazuh_agent_key_path`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
 
 
@@ -342,7 +360,7 @@ Default value: `$wazuh::params_agent::agent_auth_password`
 
 ##### <a name="-wazuh--agent--wazuh_manager_root_ca_pem"></a>`wazuh_manager_root_ca_pem`
 
-Data type: `Any`
+Data type: `String`
 
 
 
@@ -350,7 +368,7 @@ Default value: `$wazuh::params_agent::wazuh_manager_root_ca_pem`
 
 ##### <a name="-wazuh--agent--wazuh_manager_root_ca_pem_path"></a>`wazuh_manager_root_ca_pem_path`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
 
 
@@ -734,7 +752,7 @@ Default value: `$wazuh::params_agent::wazuh_enrollment_ssl_cipher`
 
 ##### <a name="-wazuh--agent--wazuh_enrollment_server_ca_path"></a>`wazuh_enrollment_server_ca_path`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
 
 
@@ -742,7 +760,7 @@ Default value: `$wazuh::params_agent::wazuh_enrollment_server_ca_path`
 
 ##### <a name="-wazuh--agent--wazuh_enrollment_agent_cert_path"></a>`wazuh_enrollment_agent_cert_path`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
 
 
@@ -750,7 +768,7 @@ Default value: `$wazuh::params_agent::wazuh_enrollment_agent_cert_path`
 
 ##### <a name="-wazuh--agent--wazuh_enrollment_agent_key_path"></a>`wazuh_enrollment_agent_key_path`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
 
 
@@ -2555,6 +2573,7 @@ Copyright (C) 2015, Wazuh Inc.
 
 The following parameters are available in the `wazuh::manager` class:
 
+* [`use_puppet_certs`](#-wazuh--manager--use_puppet_certs)
 * [`server_package_version`](#-wazuh--manager--server_package_version)
 * [`manage_firewall`](#-wazuh--manager--manage_firewall)
 * [`ossec_logall`](#-wazuh--manager--ossec_logall)
@@ -2698,6 +2717,7 @@ The following parameters are available in the `wazuh::manager` class:
 * [`ossec_auth_use_password`](#-wazuh--manager--ossec_auth_use_password)
 * [`ossec_auth_limit_maxagents`](#-wazuh--manager--ossec_auth_limit_maxagents)
 * [`ossec_auth_ciphers`](#-wazuh--manager--ossec_auth_ciphers)
+* [`ossec_auth_ssl_agent_ca`](#-wazuh--manager--ossec_auth_ssl_agent_ca)
 * [`ossec_auth_ssl_verify_host`](#-wazuh--manager--ossec_auth_ssl_verify_host)
 * [`ossec_auth_ssl_manager_cert`](#-wazuh--manager--ossec_auth_ssl_manager_cert)
 * [`ossec_auth_ssl_manager_key`](#-wazuh--manager--ossec_auth_ssl_manager_key)
@@ -2745,6 +2765,8 @@ The following parameters are available in the `wazuh::manager` class:
 * [`wazuh_manager_verify_manager_ssl`](#-wazuh--manager--wazuh_manager_verify_manager_ssl)
 * [`wazuh_manager_server_crt`](#-wazuh--manager--wazuh_manager_server_crt)
 * [`wazuh_manager_server_key`](#-wazuh--manager--wazuh_manager_server_key)
+* [`wazuh_manager_server_crt_path`](#-wazuh--manager--wazuh_manager_server_crt_path)
+* [`wazuh_manager_server_key_path`](#-wazuh--manager--wazuh_manager_server_key_path)
 * [`ossec_local_files`](#-wazuh--manager--ossec_local_files)
 * [`wazuh_api_host`](#-wazuh--manager--wazuh_api_host)
 * [`wazuh_api_port`](#-wazuh--manager--wazuh_api_port)
@@ -2773,6 +2795,14 @@ The following parameters are available in the `wazuh::manager` class:
 * [`remote_commands_wodle_exceptions`](#-wazuh--manager--remote_commands_wodle_exceptions)
 * [`limits_eps`](#-wazuh--manager--limits_eps)
 * [`wazuh_api_template`](#-wazuh--manager--wazuh_api_template)
+
+##### <a name="-wazuh--manager--use_puppet_certs"></a>`use_puppet_certs`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
 
 ##### <a name="-wazuh--manager--server_package_version"></a>`server_package_version`
 
@@ -3918,6 +3948,14 @@ Data type: `Any`
 
 Default value: `$wazuh::params_manager::ossec_auth_ciphers`
 
+##### <a name="-wazuh--manager--ossec_auth_ssl_agent_ca"></a>`ossec_auth_ssl_agent_ca`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$wazuh::params_manager::ossec_auth_ssl_agent_ca`
+
 ##### <a name="-wazuh--manager--ossec_auth_ssl_verify_host"></a>`ossec_auth_ssl_verify_host`
 
 Data type: `Any`
@@ -4280,7 +4318,7 @@ Default value: `$wazuh::params_manager::wazuh_manager_verify_manager_ssl`
 
 ##### <a name="-wazuh--manager--wazuh_manager_server_crt"></a>`wazuh_manager_server_crt`
 
-Data type: `Any`
+Data type: `String`
 
 
 
@@ -4288,11 +4326,27 @@ Default value: `$wazuh::params_manager::wazuh_manager_server_crt`
 
 ##### <a name="-wazuh--manager--wazuh_manager_server_key"></a>`wazuh_manager_server_key`
 
-Data type: `Any`
+Data type: `String`
 
 
 
 Default value: `$wazuh::params_manager::wazuh_manager_server_key`
+
+##### <a name="-wazuh--manager--wazuh_manager_server_crt_path"></a>`wazuh_manager_server_crt_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$wazuh::params_manager::wazuh_manager_server_crt_path`
+
+##### <a name="-wazuh--manager--wazuh_manager_server_key_path"></a>`wazuh_manager_server_key_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$wazuh::params_manager::wazuh_manager_server_key_path`
 
 ##### <a name="-wazuh--manager--ossec_local_files"></a>`ossec_local_files`
 

@@ -191,7 +191,7 @@ class wazuh::manager (
   $ossec_auth_use_password              = $wazuh::params_manager::ossec_auth_use_password,
   $ossec_auth_limit_maxagents           = $wazuh::params_manager::ossec_auth_limit_maxagents,
   $ossec_auth_ciphers                   = $wazuh::params_manager::ossec_auth_ciphers,
-  $ossec_auth_ssl_agent_ca              = $wazuh::params_manager::ossec_auth_ssl_agent_ca,
+  Stdlib::Absolutepath $ossec_auth_ssl_agent_ca              = $wazuh::params_manager::ossec_auth_ssl_agent_ca,
   $ossec_auth_ssl_verify_host           = $wazuh::params_manager::ossec_auth_ssl_verify_host,
   $ossec_auth_ssl_manager_cert          = $wazuh::params_manager::ossec_auth_ssl_manager_cert,
   $ossec_auth_ssl_manager_key           = $wazuh::params_manager::ossec_auth_ssl_manager_key,
