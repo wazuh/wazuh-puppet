@@ -1,5 +1,5 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Paramas file
+# @summary Paramas file
 class wazuh::params_manager {
   case $facts['kernel'] {
     'Linux': {

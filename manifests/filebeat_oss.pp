@@ -1,5 +1,12 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Setup for Filebeat_oss
+# @summary Setup for Filebeat_oss
+# @param cert_source_basepath
+#   Prefix for the certificate file source, allowing for legacy and new filebucket workflows.
+# @param generate_certs
+#   Whether to generate certificates with the exported resources + Puppet CA workflow in `wazuh::certificates`
+#   They will be generated using the node FQDN as the common name and IP as the alternative name.
+# @param certs_to_generate
+#   Array of certificate names to generate when `generate_certs` is true.
 class wazuh::filebeat_oss (
   $filebeat_oss_indexer_ip = '127.0.0.1',
   $filebeat_oss_indexer_port = '9200',
@@ -104,7 +111,7 @@ class wazuh::filebeat_oss (
     }
     $certs_to_generate.each |String $cert| {
       $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
-      @@wazuh::certificate { $_certname:
+      @@wazuh::certificates::certificate { $_certname:
         ensure       => present,
         altnames     => [$facts['networking']['ip']],
         keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],

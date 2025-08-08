@@ -1,5 +1,5 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Wazuh repository installation
+# @summary Wazuh repository installation
 class wazuh::repo (
   String $repo_baseurl = 'packages.wazuh.com',
   String $repo_version = '5.x',

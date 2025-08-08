@@ -1,5 +1,5 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Main ossec server config
+# @summary Main ossec server config
 class wazuh::manager (
 
   # Installation

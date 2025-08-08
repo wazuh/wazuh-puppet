@@ -1,5 +1,5 @@
 # Copyright (C) 2015, Wazuh Inc.
-#Define for a Reports section
+# @summary Define for a Reports section
 define wazuh::reports (
   Optional[String] $r_group               = undef,
   Optional[String] $r_category            = undef,

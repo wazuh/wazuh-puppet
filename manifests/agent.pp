@@ -1,6 +1,5 @@
 # Copyright (C) 2015, Wazuh Inc.
-
-# Puppet class that installs and manages the Wazuh agent
+# @summary Puppet class that installs and manages the Wazuh agent
 class wazuh::agent (
 
   # Versioning and package names

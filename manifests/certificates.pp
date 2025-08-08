@@ -5,9 +5,12 @@
 # (This is less than ideal.)
 # If `$use_legacy_workflow` is false, it will use the openssl module and the Puppet CA 
 # to generate certificates.
+# @param use_legacy_workflow
+#   If true, use the legacy workflow to generate certificates. Use Puppet CA otherwise.
+
 class wazuh::certificates (
   Boolean $use_legacy_workflow = true,
-  String $puppet_code_path = '/etc/puppetlabs/code/environments/production/modules/archive/files',
+  String $puppet_code_path = "/etc/puppetlabs/code/environments/${server_facts['environment']}/modules/archive/files",
   String $wazuh_repository = 'packages.wazuh.com',
   String $wazuh_version = '5.0',
   $indexer_certs = [],
@@ -61,7 +64,7 @@ class wazuh::certificates (
   else {
     contain wazuh::certificates::mountpoint
     if $manage_certs {
-      Wazuh::Certificate <<| tag == 'wazuh' |>> {
+      Wazuh::Certificates::Certificate <<| tag == 'wazuh' |>> {
         ensure       => present,
         country      => 'US',
         locality     => 'California',

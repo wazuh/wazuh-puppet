@@ -7,7 +7,7 @@
 # @param algo
 #   The encryption algorithm to use for the PKCS8 key, for use in Java
 #
-define wazuh::certificate (
+define wazuh::certificates::certificate (
   # All necessary params for openssl::certificate::x509
   Enum['present', 'absent']      $ensure = present,
   Optional[String]               $country = undef,

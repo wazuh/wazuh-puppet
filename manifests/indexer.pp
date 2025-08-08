@@ -2,12 +2,14 @@
 # @summary Setup for Wazuh Indexer
 # @param indexer_hostname_validation
 #   Whether OpenSearch requires the host to match the certificate CN
+# @param cert_source_basepath
+#   Prefix for the certificate file source, allowing for legacy and new filebucket workflows.
 # @param generate_certs
 #   Whether to generate certificates with the exported resources + Puppet CA workflow in `wazuh::certificates`
 #   They will be generated using the node FQDN as the common name and IP as the alternative name.
-# @param $certs_to_generate
+# @param certs_to_generate
 #   Array of certificate names to generate when `generate_certs` is true. On a single-node setup, this should be `['indexer', 'admin']`.
-# @param $admin_cn
+# @param admin_cn
 #   The common name for the admin certificate, defaults to the indexer node name.
 class wazuh::indexer (
   # opensearch.yml configuration
@@ -94,7 +96,7 @@ class wazuh::indexer (
     }
     $certs_to_generate.each |String $cert| {
       $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
-      @@wazuh::certificate { $_certname:
+      @@wazuh::certificates::certificate { $_certname:
         ensure       => present,
         altnames     => [$facts['networking']['ip']],
         keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],

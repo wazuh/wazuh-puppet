@@ -1,7 +1,12 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Setup for Wazuh Dashboard
-# @param cert_filebucket_path Prefix for the certificate files, allowing for legacy and new filebucket
-# usage.
+# @summary Setup for Wazuh Dashboard
+# @param cert_source_basepath
+#   Prefix for the certificate file source, allowing for legacy and new filebucket workflows.
+# @param generate_certs
+#   Whether to generate certificates with the exported resources + Puppet CA workflow in `wazuh::certificates`
+#   They will be generated using the node FQDN as the common name and IP as the alternative name.
+# @param certs_to_generate
+#   Array of certificate names to generate when `generate_certs` is true.
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
@@ -80,7 +85,7 @@ class wazuh::dashboard (
     }
     $certs_to_generate.each |String $cert| {
       $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
-      @@wazuh::certificate { $_certname:
+      @@wazuh::certificates::certificate { $_certname:
         ensure       => present,
         altnames     => [$facts['networking']['ip']],
         keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],

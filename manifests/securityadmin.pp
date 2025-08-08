@@ -1,5 +1,5 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Wazuh repository installation
+# @summary Wazuh OpenSearch security index init
 class wazuh::securityadmin (
   $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
   $indexer_network_host = '127.0.0.1',
