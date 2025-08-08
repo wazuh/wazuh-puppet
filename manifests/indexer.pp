@@ -2,11 +2,18 @@
 # @summary Setup for Wazuh Indexer
 # @param indexer_hostname_validation
 #   Whether OpenSearch requires the host to match the certificate CN
+# @param generate_certs
+#   Whether to generate certificates with the exported resources + Puppet CA workflow in `wazuh::certificates`
+#   They will be generated using the node FQDN as the common name and IP as the alternative name.
+# @param $certs_to_generate
+#   Array of certificate names to generate when `generate_certs` is true. On a single-node setup, this should be `['indexer', 'admin']`.
+# @param $admin_cn
+#   The common name for the admin certificate, defaults to the indexer node name.
 class wazuh::indexer (
   # opensearch.yml configuration
   $indexer_network_host = '0.0.0.0',
   $indexer_cluster_name = 'wazuh-cluster',
-  $indexer_node_name = 'node-1',
+  $indexer_node_name = $facts['networking']['fqdn'],
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
@@ -20,23 +27,22 @@ class wazuh::indexer (
   $indexer_security_init_lockfile = '/var/tmp/indexer-security-init.lock',
   $full_indexer_reinstall = false, # Change to true when whant a full reinstall of Wazuh indexer
 
-  $indexer_ip = 'localhost',
-  $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
   $indexer_initial_cluster_manager_nodes = [$indexer_node_name],
   $indexer_cluster_cn = ["indexer-${indexer_node_name}"],
   Boolean $indexer_hostname_validation = false,
   String $cert_source_basepath = 'puppet:///modules/archive',
-  Variant[Hash, Array] $certfiles = [
-    "indexer-${indexer_node_name}.pem",
-    "indexer-${indexer_node_name}-key.pem",
-    'root-ca.pem',
-    'admin.pem',
-    'admin-key.pem',
-  ],
+  Variant[Hash, Array] $certfiles = {
+    "indexer-${indexer_node_name}.pem" => 'indexer.pem',
+    "indexer-${indexer_node_name}-key.pem" => 'indexer-key.pem',
+    'root-ca.pem' => 'root-ca.pem',
+    'admin.pem' => 'admin.pem',
+    'admin-key.pem' => 'admin-key.pem',
+  },
   Boolean $generate_certs = false,
   Array[Pattern[/(?:indexer(.*)|admin)/]] $certs_to_generate = ['indexer', 'admin'],
   Boolean $use_puppet_certs = false,
+  String $admin_cn = 'admin',
 
   # JVM options
   $jvm_options_memory = '1g',
@@ -89,6 +95,15 @@ class wazuh::indexer (
     }
   }
   if $generate_certs {
+    # If we're generating certs, the CN will always be the node name (which should be FQDN)
+    $_indexer_cluster_cn = [$indexer_node_name]
+    if $admin_cn == 'admin' {
+      # Presumably we're a single-node setup, so use the indexer node name as the admin CN
+      $_admin_cn = $indexer_node_name
+    } else {
+      # We might be a multi-node setup, so use the provided admin CN
+      $_admin_cn = $admin_cn
+    }
     $certs_to_generate.each |String $cert| {
       $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
       @@wazuh::certificate { $_certname:
@@ -118,6 +133,8 @@ class wazuh::indexer (
     }
   } else {
     # Old certificate workflow, with support for arbitrary source path
+    $_indexer_cluster_cn = $indexer_cluster_cn
+    $_admin_cn = $admin_cn
     if $certfiles =~ Hash {
       $_certfiles = $certfiles
     } else {
