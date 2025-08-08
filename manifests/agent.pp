@@ -2,6 +2,8 @@
 # @summary Puppet class that installs and manages the Wazuh agent
 class wazuh::agent (
 
+  Boolean $use_puppet_cert           = false,
+  Boolean $use_manager_validation    = false,
   # Versioning and package names
 
   $agent_package_version             = $wazuh::params_agent::agent_package_version,
@@ -239,6 +241,32 @@ class wazuh::agent (
   # Logging
   $logging_log_format                = $wazuh::params_agent::logging_log_format,
 ) inherits wazuh::params_agent {
+  if $use_puppet_cert {
+    $_wazuh_agent_cert_path            = "${settings::ssldir}/certs/${trusted['certname']}.pem"
+    $_wazuh_agent_key_path             = "${settings::ssldir}/private_keys/${trusted['certname']}.pem"
+    $_wazuh_manager_root_ca_pem_path   = "${settings::ssldir}/certs/ca.pem"
+    if $use_manager_validation {
+      case $wazuh_enrollment_agent_cert_path {
+        undef: {
+          $_wazuh_enrollment_agent_cert_path = $_wazuh_agent_cert_path
+          $_wazuh_enrollment_agent_key_path  = $_wazuh_agent_key_path
+          $_wazuh_enrollment_server_ca_path  = $_wazuh_manager_root_ca_pem_path
+        }
+        default: {
+          $_wazuh_enrollment_agent_cert_path = $wazuh_enrollment_agent_cert_path
+          $_wazuh_enrollment_agent_key_path  = $wazuh_enrollment_agent_key_path
+          $_wazuh_enrollment_server_ca_path  = $wazuh_enrollment_server_ca_path
+        }
+      }
+    }
+  } else {
+    $_wazuh_agent_cert_path            = $wazuh_agent_cert_path
+    $_wazuh_agent_key_path             = $wazuh_agent_key_path
+    $_wazuh_enrollment_agent_cert_path = $wazuh_enrollment_agent_cert_path
+    $_wazuh_enrollment_agent_key_path  = $wazuh_enrollment_agent_key_path
+    $_wazuh_manager_root_ca_pem_path   = $wazuh_manager_root_ca_pem_path
+    $_wazuh_enrollment_server_ca_path  = $wazuh_enrollment_server_ca_path
+  }
   # validate_bool(
   #   $ossec_active_response, $ossec_rootcheck,
   #   $selinux,
@@ -511,32 +539,34 @@ class wazuh::agent (
         $agent_auth_base_command = "${agent_auth_executable} -m ${wazuh_register_endpoint}"
 
         # https://documentation.wazuh.com/4.0/user-manual/registering/manager-verification/manager-verification-registration.html
-        if $wazuh_manager_root_ca_pem != undef {
-          validate_legacy(String, 'validate_string', $wazuh_manager_root_ca_pem)
+        if $wazuh_manager_root_ca_pem != undef or $_wazuh_manager_root_ca_pem_path != undef {
+          if ($wazuh_manager_root_ca_pem != undef and $_wazuh_manager_root_ca_pem_path != undef) {
+            fail('Pass either wazuh_manager_root_ca_pem or wazuh_manager_root_ca_pem_path, not both')
+          }
           file { '/var/ossec/etc/rootCA.pem':
             owner   => $wazuh::params_agent::keys_owner,
             group   => $wazuh::params_agent::keys_group,
             mode    => $wazuh::params_agent::keys_mode,
             content => $wazuh_manager_root_ca_pem,
+            source  => $_wazuh_manager_root_ca_pem_path,
             require => Package[$agent_package_name],
           }
           $agent_auth_option_manager = '-v /var/ossec/etc/rootCA.pem'
-        } elsif $wazuh_manager_root_ca_pem_path != undef {
-          validate_legacy(String, 'validate_string', $wazuh_manager_root_ca_pem)
-          $agent_auth_option_manager = "-v ${wazuh_manager_root_ca_pem_path}"
         } else {
           $agent_auth_option_manager = ''  # Avoid errors when compounding final command
         }
 
         # https://documentation.wazuh.com/4.0/user-manual/registering/manager-verification/agent-verification-registration.html
-        if ($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef) {
-          validate_legacy(String, 'validate_string', $wazuh_agent_cert)
-          validate_legacy(String, 'validate_string', $wazuh_agent_key)
+        if (($wazuh_agent_cert != undef) and ($wazuh_agent_key != undef)) or ($_wazuh_agent_cert_path != undef and $_wazuh_agent_key_path != undef) {
+          if ($wazuh_agent_cert != undef and $_wazuh_agent_cert_path != undef) or ($wazuh_agent_key != undef and $_wazuh_agent_key_path != undef) {
+            fail('Pass either wazuh_agent_cert/key or wazuh_agent_cert/key_path, not both')
+          }
           file { '/var/ossec/etc/sslagent.cert':
             owner   => $wazuh::params_agent::keys_owner,
             group   => $wazuh::params_agent::keys_group,
             mode    => $wazuh::params_agent::keys_mode,
             content => $wazuh_agent_cert,
+            source  => $_wazuh_agent_cert_path,
             require => Package[$agent_package_name],
           }
           file { '/var/ossec/etc/sslagent.key':
@@ -544,14 +574,10 @@ class wazuh::agent (
             group   => $wazuh::params_agent::keys_group,
             mode    => $wazuh::params_agent::keys_mode,
             content => $wazuh_agent_key,
+            source  => $_wazuh_agent_key_path,
             require => Package[$agent_package_name],
           }
-
           $agent_auth_option_agent = '-x /var/ossec/etc/sslagent.cert -k /var/ossec/etc/sslagent.key'
-        } elsif ($wazuh_agent_cert_path != undef) and ($wazuh_agent_key_path != undef) {
-          validate_legacy(String, 'validate_string', $wazuh_agent_cert_path)
-          validate_legacy(String, 'validate_string', $wazuh_agent_key_path)
-          $agent_auth_option_agent = "-x ${wazuh_agent_cert_path} -k ${wazuh_agent_key_path}"
         } else {
           $agent_auth_option_agent = ''
         }

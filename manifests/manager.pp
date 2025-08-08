@@ -2,6 +2,7 @@
 # @summary Main ossec server config
 class wazuh::manager (
 
+  Boolean $use_puppet_certs = true,
   # Installation
 
   $server_package_version           = $wazuh::params_manager::server_package_version,
@@ -190,6 +191,7 @@ class wazuh::manager (
   $ossec_auth_use_password              = $wazuh::params_manager::ossec_auth_use_password,
   $ossec_auth_limit_maxagents           = $wazuh::params_manager::ossec_auth_limit_maxagents,
   $ossec_auth_ciphers                   = $wazuh::params_manager::ossec_auth_ciphers,
+  $ossec_auth_ssl_agent_ca              = $wazuh::params_manager::ossec_auth_ssl_agent_ca,
   $ossec_auth_ssl_verify_host           = $wazuh::params_manager::ossec_auth_ssl_verify_host,
   $ossec_auth_ssl_manager_cert          = $wazuh::params_manager::ossec_auth_ssl_manager_cert,
   $ossec_auth_ssl_manager_key           = $wazuh::params_manager::ossec_auth_ssl_manager_key,
@@ -248,9 +250,11 @@ class wazuh::manager (
   $rule_exclude                         = $wazuh::params_manager::rule_exclude,
   $shared_agent_template                = $wazuh::params_manager::shared_agent_template,
 
-  $wazuh_manager_verify_manager_ssl     = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
-  $wazuh_manager_server_crt             = $wazuh::params_manager::wazuh_manager_server_crt,
-  $wazuh_manager_server_key             = $wazuh::params_manager::wazuh_manager_server_key,
+  $wazuh_manager_verify_manager_ssl                   = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
+  String $wazuh_manager_server_crt                    = $wazuh::params_manager::wazuh_manager_server_crt,
+  String $wazuh_manager_server_key                    = $wazuh::params_manager::wazuh_manager_server_key,
+  Stdlib::Absolutepath $wazuh_manager_server_crt_path = $wazuh::params_manager::wazuh_manager_server_crt_path,
+  Stdlib::Absolutepath $wazuh_manager_server_key_path = $wazuh::params_manager::wazuh_manager_server_key_path,
 
   $ossec_local_files                    = $wazuh::params_manager::default_local_files,
 
@@ -299,6 +303,16 @@ class wazuh::manager (
   validate_legacy(
     Array, 'validate_array', $decoder_exclude, $rule_exclude
   )
+
+  if $use_puppet_certs {
+    $_ossec_auth_ssl_agent_ca = "${settings::ssldir}/certs/ca.pem"
+    $_wazuh_manager_server_crt_path = "${settings::ssldir}/certs/${trusted['certname']}.pem"
+    $_wazuh_manager_server_key_path = "${settings::ssldir}/private_keys/${trusted['certname']}.pem"
+  } else {
+    $_ossec_auth_ssl_agent_ca = $ossec_auth_ssl_agent_ca
+    $_wazuh_manager_server_crt_path = $wazuh_manager_server_crt_path
+    $_wazuh_manager_server_key_path = $wazuh_manager_server_key_path
+  }
 
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
 
@@ -615,13 +629,13 @@ class wazuh::manager (
 
   # https://documentation.wazuh.com/current/user-manual/registering/use-registration-service.html#verify-manager-via-ssl
   if $wazuh_manager_verify_manager_ssl {
-    if ($wazuh_manager_server_crt != undef) and ($wazuh_manager_server_key != undef) {
-      validate_legacy(
-        String, 'validate_string', $wazuh_manager_server_crt, $wazuh_manager_server_key
-      )
-
+    if (($wazuh_manager_server_crt != undef) and ($wazuh_manager_server_key != undef)) or ($_wazuh_manager_server_crt_path != undef and $_wazuh_manager_server_key_path != undef) {
+      if ($wazuh_manager_server_crt != undef and $_wazuh_manager_server_crt_path != undef) or ($wazuh_manager_server_key != undef and $_wazuh_manager_server_key_path != undef) {
+        fail('You cannot use both $wazuh_manager_server_crt and $_wazuh_manager_server_crt_path or $wazuh_manager_server_key and $_wazuh_manager_server_key_path simultaneously.')
+      }
       file { '/var/ossec/etc/sslmanager.key':
         content => $wazuh_manager_server_key,
+        source  => $_wazuh_manager_server_key_path,
         owner   => 'root',
         group   => 'wazuh',
         mode    => '0640',
@@ -631,6 +645,7 @@ class wazuh::manager (
 
       file { '/var/ossec/etc/sslmanager.cert':
         content => $wazuh_manager_server_crt,
+        source  => $_wazuh_manager_server_crt_path,
         owner   => 'root',
         group   => 'wazuh',
         mode    => '0640',
