@@ -31,8 +31,8 @@ define wazuh::certificate (
   Stdlib::Absolutepath           $csr = "${csr_dir}/${name}.csr",
   Stdlib::Absolutepath           $key = "${key_dir}/${name}.key",
   Integer                        $key_size = 3072,
-  Variant[String, Integer]       $owner = 'root',
-  Variant[String, Integer]       $group = 'root',
+  Variant[String, Integer]       $owner = 'puppet',
+  Variant[String, Integer]       $group = 'puppet',
   Variant[String, Integer]       $key_owner = $owner,
   Variant[String, Integer]       $key_group = $group,
   Stdlib::Filemode               $key_mode = '0600',
@@ -95,6 +95,7 @@ define wazuh::certificate (
     ]
     exec { "export ${name} key to pkcs8":
       command     => $_cmd,
+      user        => $owner,
       path        => $facts['path'],
       subscribe   => OpenSSL::Certificate::X509[$name],
       refreshonly => true,
