@@ -20,11 +20,11 @@ class wazuh::agent (
   $agent_address                     = $wazuh::params_agent::agent_address,
   String $wazuh_agent_cert                  = $wazuh::params_agent::wazuh_agent_cert,
   String $wazuh_agent_key                   = $wazuh::params_agent::wazuh_agent_key,
-  Stdlib::Absolutepath $wazuh_agent_cert_path             = $wazuh::params_agent::wazuh_agent_cert_path,
-  Stdlib::Absolutepath $wazuh_agent_key_path              = $wazuh::params_agent::wazuh_agent_key_path,
+  Optional[Stdlib::Absolutepath] $wazuh_agent_cert_path             = $wazuh::params_agent::wazuh_agent_cert_path,
+  Optional[Stdlib::Absolutepath] $wazuh_agent_key_path              = $wazuh::params_agent::wazuh_agent_key_path,
   $agent_auth_password               = $wazuh::params_agent::agent_auth_password,
   String $wazuh_manager_root_ca_pem         = $wazuh::params_agent::wazuh_manager_root_ca_pem,
-  Stdlib::Absolutepath $wazuh_manager_root_ca_pem_path    = $wazuh::params_agent::wazuh_manager_root_ca_pem_path,
+  Optional[Stdlib::Absolutepath] $wazuh_manager_root_ca_pem_path    = $wazuh::params_agent::wazuh_manager_root_ca_pem_path,
 
   ## ossec.conf generation parameters
   # Generation variables
@@ -83,9 +83,9 @@ class wazuh::agent (
   $wazuh_enrollment_groups           = $wazuh::params_agent::wazuh_enrollment_groups,
   $wazuh_enrollment_agent_address    = $wazuh::params_agent::wazuh_enrollment_agent_address,
   $wazuh_enrollment_ssl_cipher       = $wazuh::params_agent::wazuh_enrollment_ssl_cipher,
-  Stdlib::Absolutepath $wazuh_enrollment_server_ca_path   = $wazuh::params_agent::wazuh_enrollment_server_ca_path,
-  Stdlib::Absolutepath $wazuh_enrollment_agent_cert_path  = $wazuh::params_agent::wazuh_enrollment_agent_cert_path,
-  Stdlib::Absolutepath $wazuh_enrollment_agent_key_path   = $wazuh::params_agent::wazuh_enrollment_agent_key_path,
+  Optional[Stdlib::Absolutepath] $wazuh_enrollment_server_ca_path   = $wazuh::params_agent::wazuh_enrollment_server_ca_path,
+  Optional[Stdlib::Absolutepath] $wazuh_enrollment_agent_cert_path  = $wazuh::params_agent::wazuh_enrollment_agent_cert_path,
+  Optional[Stdlib::Absolutepath] $wazuh_enrollment_agent_key_path   = $wazuh::params_agent::wazuh_enrollment_agent_key_path,
   $wazuh_enrollment_auth_pass        = $wazuh::params_agent::wazuh_enrollment_auth_pass,
   $wazuh_enrollment_auth_pass_path   = $wazuh::params_agent::wazuh_enrollment_auth_pass_path,
   $wazuh_enrollment_auto_method      = $wazuh::params_agent::wazuh_enrollment_auto_method,

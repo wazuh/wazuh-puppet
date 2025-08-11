@@ -19,11 +19,11 @@ class wazuh::certificates (
   $manager_worker_certs = [],
   $dashboard_certs = [],
   Boolean $manage_certs = true,
-  Stdlib::Absolutepath $ca_cert_path = $settings::cacert,
-  Stdlib::Absolutepath $ca_key_path = $settings::cakey,
+  Optional[Stdlib::Absolutepath] $ca_cert_path = $settings::cacert,
+  Optional[Stdlib::Absolutepath] $ca_key_path = $settings::cakey,
   String $bucket_name = 'wazuh',
-  Stdlib::Absolutepath $filebucket_path = "${settings::confdir}/filebucket",
-  Stdlib::Absolutepath $fileserver_conf = "${settings::confdir}/fileserver.conf",
+  Optional[Stdlib::Absolutepath] $filebucket_path = "${settings::confdir}/filebucket",
+  Optional[Stdlib::Absolutepath] $fileserver_conf = "${settings::confdir}/fileserver.conf",
 ) {
   if $use_legacy_workflow {
     file { 'Configure Wazuh Certificates config.yml':

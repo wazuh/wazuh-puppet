@@ -191,7 +191,7 @@ class wazuh::manager (
   $ossec_auth_use_password              = $wazuh::params_manager::ossec_auth_use_password,
   $ossec_auth_limit_maxagents           = $wazuh::params_manager::ossec_auth_limit_maxagents,
   $ossec_auth_ciphers                   = $wazuh::params_manager::ossec_auth_ciphers,
-  Stdlib::Absolutepath $ossec_auth_ssl_agent_ca              = $wazuh::params_manager::ossec_auth_ssl_agent_ca,
+  Optional[Stdlib::Absolutepath] $ossec_auth_ssl_agent_ca              = $wazuh::params_manager::ossec_auth_ssl_agent_ca,
   $ossec_auth_ssl_verify_host           = $wazuh::params_manager::ossec_auth_ssl_verify_host,
   $ossec_auth_ssl_manager_cert          = $wazuh::params_manager::ossec_auth_ssl_manager_cert,
   $ossec_auth_ssl_manager_key           = $wazuh::params_manager::ossec_auth_ssl_manager_key,
@@ -253,8 +253,8 @@ class wazuh::manager (
   $wazuh_manager_verify_manager_ssl                   = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
   String $wazuh_manager_server_crt                    = $wazuh::params_manager::wazuh_manager_server_crt,
   String $wazuh_manager_server_key                    = $wazuh::params_manager::wazuh_manager_server_key,
-  Stdlib::Absolutepath $wazuh_manager_server_crt_path = $wazuh::params_manager::wazuh_manager_server_crt_path,
-  Stdlib::Absolutepath $wazuh_manager_server_key_path = $wazuh::params_manager::wazuh_manager_server_key_path,
+  Optional[Stdlib::Absolutepath] $wazuh_manager_server_crt_path = $wazuh::params_manager::wazuh_manager_server_crt_path,
+  Optional[Stdlib::Absolutepath] $wazuh_manager_server_key_path = $wazuh::params_manager::wazuh_manager_server_key_path,
 
   $ossec_local_files                    = $wazuh::params_manager::default_local_files,
 
