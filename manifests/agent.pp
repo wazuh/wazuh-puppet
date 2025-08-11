@@ -18,12 +18,12 @@ class wazuh::agent (
   $agent_name                        = $wazuh::params_agent::agent_name,
   $agent_group                       = $wazuh::params_agent::agent_group,
   $agent_address                     = $wazuh::params_agent::agent_address,
-  String $wazuh_agent_cert                  = $wazuh::params_agent::wazuh_agent_cert,
-  String $wazuh_agent_key                   = $wazuh::params_agent::wazuh_agent_key,
+  Optional[String] $wazuh_agent_cert                  = $wazuh::params_agent::wazuh_agent_cert,
+  Optional[String] $wazuh_agent_key                   = $wazuh::params_agent::wazuh_agent_key,
   Optional[Stdlib::Absolutepath] $wazuh_agent_cert_path             = $wazuh::params_agent::wazuh_agent_cert_path,
   Optional[Stdlib::Absolutepath] $wazuh_agent_key_path              = $wazuh::params_agent::wazuh_agent_key_path,
   $agent_auth_password               = $wazuh::params_agent::agent_auth_password,
-  String $wazuh_manager_root_ca_pem         = $wazuh::params_agent::wazuh_manager_root_ca_pem,
+  Optional[String] $wazuh_manager_root_ca_pem         = $wazuh::params_agent::wazuh_manager_root_ca_pem,
   Optional[Stdlib::Absolutepath] $wazuh_manager_root_ca_pem_path    = $wazuh::params_agent::wazuh_manager_root_ca_pem_path,
 
   ## ossec.conf generation parameters

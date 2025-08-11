@@ -251,8 +251,8 @@ class wazuh::manager (
   $shared_agent_template                = $wazuh::params_manager::shared_agent_template,
 
   $wazuh_manager_verify_manager_ssl                   = $wazuh::params_manager::wazuh_manager_verify_manager_ssl,
-  String $wazuh_manager_server_crt                    = $wazuh::params_manager::wazuh_manager_server_crt,
-  String $wazuh_manager_server_key                    = $wazuh::params_manager::wazuh_manager_server_key,
+  Optional[String] $wazuh_manager_server_crt                    = $wazuh::params_manager::wazuh_manager_server_crt,
+  Optional[String] $wazuh_manager_server_key                    = $wazuh::params_manager::wazuh_manager_server_key,
   Optional[Stdlib::Absolutepath] $wazuh_manager_server_crt_path = $wazuh::params_manager::wazuh_manager_server_crt_path,
   Optional[Stdlib::Absolutepath] $wazuh_manager_server_key_path = $wazuh::params_manager::wazuh_manager_server_key_path,
 
