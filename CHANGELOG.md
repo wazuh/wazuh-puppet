@@ -1,11 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [4.14.1]
+## [5.0.0]
 
 ### Added
 
-- None
+- Fix OpenSearch deprecated settings ([#1372](https://github.com/wazuh/wazuh-puppet/pull/1372))
 
 ### Changed
 
