@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Fix S3 URI ([#1418](https://github.com/wazuh/wazuh-puppet/pull/1418)) \- (Puppet Module Builder)
 
 ### Deleted
 
