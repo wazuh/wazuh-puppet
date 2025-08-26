@@ -628,7 +628,8 @@ class wazuh::manager (
       state  => [
         'NEW',
         'RELATED',
-      'ESTABLISHED'],
+        'ESTABLISHED',
+      ],
     }
   }
   if $ossec_cluster_enable_firewall == 'yes' {
@@ -640,7 +641,8 @@ class wazuh::manager (
       state  => [
         'NEW',
         'RELATED',
-      'ESTABLISHED'],
+        'ESTABLISHED',
+      ],
     }
   }
 

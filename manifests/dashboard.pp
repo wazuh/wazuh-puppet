@@ -11,9 +11,9 @@ class wazuh::dashboard (
   $dashboard_fileuser = 'wazuh-dashboard',
   $dashboard_filegroup = 'wazuh-dashboard',
 
-  $dashboard_cert_content = 'puppet:///modules/archive/dashboard.pem',
-  $dashboard_certkey_content = 'puppet:///modules/archive/dashboard-key.pem',
-  $dashboard_rootca_content = 'puppet:///modules/archive/root-ca.pem',
+  $dashboard_cert_source = 'puppet:///modules/archive/dashboard.pem',
+  $dashboard_certkey_source = 'puppet:///modules/archive/dashboard-key.pem',
+  $dashboard_rootca_source = 'puppet:///modules/archive/root-ca.pem',
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
@@ -69,7 +69,7 @@ class wazuh::dashboard (
     owner   => $dashboard_fileuser,
     group   => $dashboard_filegroup,
     mode    => '0400',
-    source  => $dashboard_cert_content,
+    source  => $dashboard_cert_source,
     require => Package['wazuh-dashboard'],
     notify  => Service['wazuh-dashboard'],
   }
@@ -79,7 +79,7 @@ class wazuh::dashboard (
     owner   => $dashboard_fileuser,
     group   => $dashboard_filegroup,
     mode    => '0400',
-    source  => $dashboard_certkey_content,
+    source  => $dashboard_certkey_source,
     require => Package['wazuh-dashboard'],
     notify  => Service['wazuh-dashboard'],
   }
@@ -89,7 +89,7 @@ class wazuh::dashboard (
     owner   => $dashboard_fileuser,
     group   => $dashboard_filegroup,
     mode    => '0400',
-    source  => $dashboard_rootca_content,
+    source  => $dashboard_rootca_source,
     require => Package['wazuh-dashboard'],
     notify  => Service['wazuh-dashboard'],
   }
