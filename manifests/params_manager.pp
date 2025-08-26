@@ -4,7 +4,7 @@ class wazuh::params_manager {
   case $facts['kernel'] {
     'Linux': {
       # Installation
-      $server_package_version                          = '4.14.0-1'
+      $server_package_version                          = '4.14.0'
 
       $manage_firewall                                 = false
 
