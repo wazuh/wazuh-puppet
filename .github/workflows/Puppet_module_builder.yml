@@ -53,7 +53,7 @@ permissions:
   contents: read    # This is required for actions/checkout
 
 env:
-  S3_PATH: "development/wazuh/5.x/secondary/puppet-module/"
+  S3_PATH: "development/wazuh/4.x/secondary/puppet-module/"
 
 jobs:
   build_module:
