@@ -139,10 +139,11 @@ class wazuh::indexer (
   }
 
   service { 'wazuh-indexer':
-    ensure  => running,
-    enable  => true,
-    name    => $indexer_service,
-    require => Package['wazuh-indexer'],
+    ensure   => running,
+    enable   => true,
+    name     => $indexer_service,
+    provider => 'systemd',
+    require  => Package['wazuh-indexer'],
   }
 
   file_line { "Insert line limits nofile for ${indexer_fileuser}":
