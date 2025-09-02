@@ -15,6 +15,9 @@ class wazuh::filebeat_oss (
   $wazuh_extensions_version = 'v4.12.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
   $wazuh_node_name = 'master',
+  $filebeat_cert_source = "puppet:///modules/archive/manager-${wazuh_node_name}.pem",
+  $filebeat_certkey_source = "puppet:///modules/archive/manager-${wazuh_node_name}-key.pem",
+  $filebeat_node_rootca_source = 'puppet:///modules/archive/root-ca.pem',
 
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
