@@ -38,6 +38,7 @@ class wazuh::repo (
               'deb' => true,
             },
             require  => File['/usr/share/keyrings/wazuh.gpg'],
+            notify   => Exec['apt-update'],
           }
           # Manage the APT source list file content using concat
           concat { '/etc/apt/sources.list.d/wazuh.list':
@@ -45,6 +46,7 @@ class wazuh::repo (
             owner  => 'root',
             group  => 'root',
             mode   => '0644',
+            notify => Exec['apt-update'],
           }
 
           concat::fragment { 'wazuh-source':
@@ -52,6 +54,7 @@ class wazuh::repo (
             content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] ${wazuh_repo_url} ${repo_release} main\n",
             order   => '01',
             require => File['/usr/share/keyrings/wazuh.gpg'],
+            notify  => Exec['apt-update'],
           }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
