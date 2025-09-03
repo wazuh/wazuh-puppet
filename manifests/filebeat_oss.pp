@@ -17,6 +17,7 @@ class wazuh::filebeat_oss (
   $wazuh_node_name = 'master',
   $filebeat_cert_source = "puppet:///modules/archive/manager-${wazuh_node_name}.pem",
   $filebeat_certkey_source = "puppet:///modules/archive/manager-${wazuh_node_name}-key.pem",
+  $filebeat_node_rootca_source = 'puppet:///modules/archive/root-ca.pem',
 
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
@@ -93,8 +94,6 @@ class wazuh::filebeat_oss (
     group   => $filebeat_filegroup,
     mode    => '0400',
     source  => $filebeat_cert_source,
-    require => Package['wazuh-indexer'],
-    notify  => Service['wazuh-indexer'],
   }
 
   file { "${filebeat_path_certs}/filebeat-key.pem":
@@ -103,8 +102,14 @@ class wazuh::filebeat_oss (
     group   => $filebeat_filegroup,
     mode    => '0400',
     source  => $filebeat_certkey_source,
-    require => Package['wazuh-indexer'],
-    notify  => Service['wazuh-indexer'],
+  }
+
+  file { "${filebeat_path_certs}/root-ca.pem":
+    ensure  => file,
+    owner   => $filebeat_fileuser,
+    group   => $filebeat_filegroup,
+    mode    => '0400',
+    source  => $filebeat_node_rootca_source,
   }
 
   service { 'filebeat':
