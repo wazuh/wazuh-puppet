@@ -1,7 +1,7 @@
 network.host: "<%= @indexer_network_host %>"
 node.name: "<%= @indexer_node_name %>"
-cluster.initial_cluster_manager_nodes:
-<% @indexer_initial_cluster_manager_nodes.each do |node| -%>
+cluster.initial_cluster_master_nodes:
+<% @indexer_cluster_initial_master_nodes.each do |node| -%>
 - "<%= node %>"
 <% end -%>
 cluster.name: "<%= @indexer_cluster_name %>"
