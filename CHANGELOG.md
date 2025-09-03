@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Puppet 8 compatibility with Wazuh deployment ([#1424](https://github.com/wazuh/wazuh-puppet/pull/1424))
+- Puppet 8 compatibility with Wazuh deployment. Thanks [@pearsondavid](https://github.com/pearsondavid) for [your contribution.](https://github.com/wazuh/wazuh-puppet/pull/1285) ([#1424](https://github.com/wazuh/wazuh-puppet/pull/1424))
 
 ### Changed
 
