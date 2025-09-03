@@ -289,6 +289,9 @@ class wazuh::params_agent {
       $ossec_ruleset_list = ['etc/lists/audit-keys',
         'etc/lists/amazon/aws-eventnames',
         'etc/lists/security-eventchannel',
+        'etc/lists/malicious-ioc/malicious-ip',
+        'etc/lists/malicious-ioc/malicious-domains',
+        'etc/lists/malicious-ioc/malware-hashes',
       ]
 
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
