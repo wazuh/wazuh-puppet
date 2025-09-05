@@ -14,3 +14,7 @@ server.ssl.key: "<%= @dashboard_path_certs %>/dashboard-key.pem"
 server.ssl.certificate: "<%= @dashboard_path_certs %>/dashboard.pem"
 opensearch.ssl.certificateAuthorities: ["<%= @dashboard_path_certs %>/root-ca.pem"]
 uiSettings.overrides.defaultRoute: /app/wz-home
+# Session expiration settings
+opensearch_security.cookie.ttl: 900000
+opensearch_security.session.ttl: 900000
+opensearch_security.session.keepalive: true
