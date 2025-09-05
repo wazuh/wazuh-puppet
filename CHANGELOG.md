@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Add opensearch_dashboard.yml parameters. ([#1423](https://github.com/wazuh/wazuh-puppet/pull/1423))
 - Add missing malicious-ioc ruleset lists ([#1352](https://github.com/wazuh/wazuh-puppet/pull/1352))
 - Integrate bumper script via GitHub action. ([#1344](https://github.com/wazuh/wazuh-puppet/pull/1344))
 - Added repository_bumper script. ([#1302](https://github.com/wazuh/wazuh-puppet/pull/1302))
