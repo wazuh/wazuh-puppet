@@ -4,6 +4,7 @@
 .yardoc
 .yardwarns
 *.iml
+.vendor/
 /.bundle/
 /.idea/
 /.vagrant/

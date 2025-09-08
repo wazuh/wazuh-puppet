@@ -4,3 +4,15 @@ fixtures:
     stdlib:
       repo: "puppetlabs/stdlib"
       ref: "5.0.0"
+    inifile:
+      repo: "puppetlabs/inifile"
+      ref: "6.1.1"
+    concat:
+      repo: "puppetlabs/concat"
+      ref: "7.0.0"
+    apt:
+      repo: "puppetlabs/apt"
+      ref: "8.0.0"
+    openssl:
+      repo: "puppet/openssl"
+      ref: "4.2.0"

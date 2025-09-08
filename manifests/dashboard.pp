@@ -1,5 +1,12 @@
 # Copyright (C) 2015, Wazuh Inc.
-# Setup for Wazuh Dashboard
+# @summary Setup for Wazuh Dashboard
+# @param cert_source_basepath
+#   Prefix for the certificate file source, allowing for legacy and new filebucket workflows.
+# @param generate_certs
+#   Whether to generate certificates with the exported resources + Puppet CA workflow in `wazuh::certificates`
+#   They will be generated using the node FQDN as the common name and IP as the alternative name.
+# @param certs_to_generate
+#   Array of certificate names to generate when `generate_certs` is true.
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
@@ -30,9 +37,16 @@ class wazuh::dashboard (
       'password' => 'wazuh-wui',
     },
   ],
+  String $cert_source_basepath = 'puppet:///modules/archive',
+  Variant[Hash, Array] $certfiles = [
+    'dashboard.pem',
+    'dashboard-key.pem',
+    'root-ca.pem',
+  ],
+  Boolean $generate_certs = false,
+  Array[String] $certs_to_generate = ['dashboard'],
 
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -61,23 +75,59 @@ class wazuh::dashboard (
     group  => $dashboard_filegroup,
     mode   => '0500',
   }
+  if $generate_certs {
+    file { "${dashboard_path_certs}/root-ca.pem":
+      ensure => file,
+      owner  => $dashboard_fileuser,
+      group  => $dashboard_filegroup,
+      mode   => '0400',
+      source => "${settings::ssldir}/certs/ca.pem",
+    }
+    $certs_to_generate.each |String $cert| {
+      $_certname = "wazuh_${cert}_cert_${facts['networking']['fqdn']}"
+      @@wazuh::certificates::certificate { $_certname:
+        ensure       => present,
+        altnames     => [$facts['networking']['ip']],
+        keyusage     => ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment'],
+        commonname   => $facts['networking']['fqdn'],
+        export_pkcs8 => false,
+      }
+      $_attrs = {
+        ensure  => file,
+        owner   => $dashboard_fileuser,
+        group   => $dashboard_filegroup,
+        mode    => '0400',
+        replace => true,
+        before  => Service['wazuh-dashboard'],
+      }
+      file {
+        "${dashboard_path_certs}/${cert}.pem":
+          source => "${cert_source_basepath}/${_certname}.crt",
+          *      => $_attrs;
 
-  [
-    'dashboard.pem',
-    'dashboard-key.pem',
-    'root-ca.pem',
-  ].each |String $certfile| {
-    file { "${dashboard_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $dashboard_fileuser,
-      group   => $dashboard_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
+        "${dashboard_path_certs}/${cert}-key.pem":
+          source => "${cert_source_basepath}/${_certname}.key",
+          *      => $_attrs;
+      }
+    }
+  } else {
+    if $certfiles =~ Hash {
+      $_certfiles = $certfiles
+    } else {
+      $_certfiles = $certfiles.map |String $certfile| { [$certfile, $certfile] }.convert_to(Hash)
+    }
+    $_certfiles.each |String $certfile_source, String $certfile_target| {
+      file { "${dashboard_path_certs}/${certfile_target}":
+        ensure  => file,
+        owner   => $dashboard_fileuser,
+        group   => $dashboard_filegroup,
+        mode    => '0400',
+        replace => true,
+        source  => "${cert_source_basepath}/${certfile_source}",
+        notify  => Service['wazuh-dashboard'],
+      }
     }
   }
-
   file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
     content => template('wazuh/wazuh_dashboard_yml.erb'),
     group   => $dashboard_filegroup,
@@ -87,7 +137,7 @@ class wazuh::dashboard (
     notify  => Service['wazuh-dashboard'],
   }
 
-  file { [ '/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config' ]:
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config']:
     ensure  => 'directory',
     group   => $dashboard_filegroup,
     mode    => '0755',

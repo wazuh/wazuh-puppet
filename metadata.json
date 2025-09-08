@@ -34,6 +34,14 @@
     },
     {
       "name": "puppet/archive"
+    },
+    {
+      "name": "puppet/openssl",
+      "version_requirement": ">= 4.1.0 < 5.0.0"
+    },
+    {
+      "name": "puppetlabs/inifile",
+      "version_requirement": ">=6.1.0 < 7.0.0"
     }
   ],
   "operatingsystem_support": [

@@ -48,14 +48,14 @@
     <%- if @wazuh_enrollment_ssl_cipher then -%>
     <ssl_cipher><%= @wazuh_enrollment_ssl_cipher %></ssl_cipher>
     <%- end -%>
-    <%- if @wazuh_enrollment_server_ca_path then -%>
-    <server_ca_path><%= @wazuh_enrollment_server_ca_path %></server_ca_path>
+    <%- if @_wazuh_enrollment_server_ca_path then -%>
+    <server_ca_path><%= @_wazuh_enrollment_server_ca_path %></server_ca_path>
     <%- end -%>
-    <%- if @wazuh_enrollment_agent_cert_path then -%>
-    <agent_certificate_path><%= @wazuh_enrollment_agent_cert_path %></agent_certificate_path>
+    <%- if @_wazuh_enrollment_agent_cert_path then -%>
+    <agent_certificate_path><%= @_wazuh_enrollment_agent_cert_path %></agent_certificate_path>
     <%- end -%>
-    <%- if @wazuh_enrollment_agent_key_path then -%>
-    <agent_key_path><%= @wazuh_enrollment_agent_key_path %></agent_key_path>
+    <%- if @_wazuh_enrollment_agent_key_path then -%>
+    <agent_key_path><%= @_wazuh_enrollment_agent_key_path %></agent_key_path>
     <%- end -%>
     <%- if @wazuh_enrollment_auth_pass_path then -%>
     <authorization_pass_path><%= @wazuh_enrollment_auth_pass_path %></authorization_pass_path>
