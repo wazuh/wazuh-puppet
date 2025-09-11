@@ -97,7 +97,8 @@
         "Stretch",
         "buster",
         "bullseye",
-        "bookworm"
+        "bookworm",
+        "trixie"
       ]
     }
   ],
