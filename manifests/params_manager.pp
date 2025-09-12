@@ -508,6 +508,20 @@ class wazuh::params_manager {
                 $api_service_provider = 'redhat'
               }
             }
+            'Rocky': {
+              if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
+                $ossec_service_provider = 'redhat'
+                $api_service_provider = 'redhat'
+              }
+              if ( $facts['os']['release']['full'] =~ /^9.*/ ) {
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'redhat'
+              }
+              if ( $facts['os']['release']['full'] =~ /^10.*/ ) {
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'redhat'
+              }
+            }
             default: { fail('This ossec module has not been tested on your distribution') }
           }
         }
