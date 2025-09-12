@@ -4,7 +4,7 @@ class wazuh::params_manager {
   case $facts['kernel'] {
     'Linux': {
       # Installation
-      $server_package_version                          = '4.14.0'
+      $server_package_version                          = '4.14.1'
 
       $manage_firewall                                 = false
 
@@ -566,7 +566,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.14.0'
+      $agent_package  = 'Wazuh Agent 4.14.1'
       $server_service = ''
       $server_package = ''
       $api_service = ''
