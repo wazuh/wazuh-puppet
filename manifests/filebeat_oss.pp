@@ -113,9 +113,10 @@ class wazuh::filebeat_oss (
   }
 
   service { 'filebeat':
-    ensure  => running,
-    enable  => true,
-    name    => $filebeat_oss_service,
-    require => Package['filebeat'],
+    ensure   => running,
+    enable   => true,
+    name     => $filebeat_oss_service,
+    require  => Package['filebeat'],
+    provider => 'systemd',
   }
 }

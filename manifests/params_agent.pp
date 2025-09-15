@@ -457,6 +457,12 @@ class wazuh::params_agent {
               if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
                 $ossec_service_provider = 'redhat'
               }
+              if ( $facts['os']['release']['full'] =~ /^9.*/ ) {
+                $ossec_service_provider = 'systemd'
+              }
+              if ( $facts['os']['release']['full'] =~ /^10.*/ ) {
+                $ossec_service_provider = 'systemd'
+              }
             }
             default: { fail('This ossec module has not been tested on your distribution') }
           }
