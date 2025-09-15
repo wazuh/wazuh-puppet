@@ -450,12 +450,12 @@ class wazuh::params_agent {
             }
             'AlmaLinux': {
               if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
-                $ossec_service_provider = 'redhat'
+                $ossec_service_provider = 'systemd'
               }
             }
             'Rocky': {
               if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
-                $ossec_service_provider = 'redhat'
+                $ossec_service_provider = 'systemd'
               }
               if ( $facts['os']['release']['full'] =~ /^9.*/ ) {
                 $ossec_service_provider = 'systemd'
