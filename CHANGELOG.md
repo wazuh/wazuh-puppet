@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- None
+- Add Rocky Linux support. ([#1438](https://github.com/wazuh/wazuh-puppet/pull/1438))
 
 ### Changed
 
