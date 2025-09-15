@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- None
+- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
 
 ### Fixed
 
