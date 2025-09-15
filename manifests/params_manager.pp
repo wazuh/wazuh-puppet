@@ -464,8 +464,8 @@ class wazuh::params_manager {
             }
             /^(RedHat|OracleLinux)$/: {
               if ( $::operatingsystemrelease =~ /^6.*/ ) {
-                $ossec_service_provider = 'redhat'
-                $api_service_provider = 'redhat'
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
                 $wodle_openscap_content = {
                   'ssg-rhel-6-ds.xml' => {
                     'type' => 'xccdf',
@@ -504,14 +504,14 @@ class wazuh::params_manager {
             }
             'AlmaLinux': {
               if ( $::operatingsystemrelease =~ /^8.*/ ) {
-                $ossec_service_provider = 'redhat'
-                $api_service_provider = 'redhat'
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
               }
             }
             'Rocky': {
               if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
-                $ossec_service_provider = 'redhat'
-                $api_service_provider = 'redhat'
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
               }
               if ( $facts['os']['release']['full'] =~ /^9.*/ ) {
                 $ossec_service_provider = 'systemd'
