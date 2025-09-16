@@ -26,7 +26,7 @@ class wazuh::repo (
         require => Exec['import-wazuh-key'],
       }
       case $facts['os']['distro']['codename'] {
-        /(jessie|wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/: {
+        /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/: {
           apt::source { 'wazuh':
             ensure   => present,
             comment  => 'This is the WAZUH Ubuntu repository',
