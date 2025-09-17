@@ -39,7 +39,7 @@ class wazuh::repo (
       }
 
       case $::lsbdistcodename {
-        /(jessie|wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/: {
+        /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/: {
 
           # Manage the APT source list file content using concat
           concat { '/etc/apt/sources.list.d/wazuh.list':
