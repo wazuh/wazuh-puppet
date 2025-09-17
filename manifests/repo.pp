@@ -46,7 +46,7 @@ class wazuh::repo (
             owner  => 'root',
             group  => 'root',
             mode   => '0644',
-            notify   => Exec['apt-update'],
+            notify => Exec['apt-update'],
           }
 
           concat::fragment { 'wazuh-source':
@@ -54,7 +54,7 @@ class wazuh::repo (
             content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] ${wazuh_repo_url} ${repo_release} main\n",
             order   => '01',
             require => File['/usr/share/keyrings/wazuh.gpg'],
-            notify   => Exec['apt-update'],
+            notify  => Exec['apt-update'],
           }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
@@ -102,7 +102,9 @@ class wazuh::repo (
             baseurl       => $baseurl,
           }
         }
+        default: { fail('This ossec module has not been tested on your Operating System)') }
       }
     }
+    default: { fail('This ossec module has not been tested on your Operating System)') }
   }
 }
