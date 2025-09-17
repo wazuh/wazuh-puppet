@@ -9,8 +9,8 @@ class wazuh::repo (
       $repo_release = 'stable'
 
       if $::lsbdistcodename =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy)/
-      and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) {
-        ensure_packages(['apt-transport-https', 'gnupg'], { 'ensure' => 'present' })
+      and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) and ! defined(Package['gpg']) {
+        ensure_packages(['apt-transport-https', 'gnupg', 'gpg'], { 'ensure' => 'present' })
       }
 
       # Create keyring directory if it doesn't exist
