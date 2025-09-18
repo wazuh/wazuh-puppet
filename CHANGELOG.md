@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Metadata versions update ([#1445](https://github.com/wazuh/wazuh-puppet/pull/1445))
 - Modify dependencies version ([#1277](https://github.com/wazuh/wazuh-puppet/pull/1277))
 
 ### Deleted
