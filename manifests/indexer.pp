@@ -8,7 +8,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.14.0',
+  $indexer_version = '4.14.1',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -139,10 +139,11 @@ class wazuh::indexer (
   }
 
   service { 'wazuh-indexer':
-    ensure  => running,
-    enable  => true,
-    name    => $indexer_service,
-    require => Package['wazuh-indexer'],
+    ensure   => running,
+    enable   => true,
+    name     => $indexer_service,
+    require  => Package['wazuh-indexer'],
+    provider => 'systemd',
   }
 
   file_line { "Insert line limits nofile for ${indexer_fileuser}":

@@ -1,11 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [4.14.0]
+## [4.14.1]
 
 ### Added
 
-- Puppet 8 compatibility with Wazuh deployment. Thanks [@pearsondavid](https://github.com/pearsondavid) for [your contribution.](https://github.com/wazuh/wazuh-puppet/pull/1285) ([#1424](https://github.com/wazuh/wazuh-puppet/pull/1424))
+- Add Rocky Linux support. ([#1438](https://github.com/wazuh/wazuh-puppet/pull/1438))
 
 ### Changed
 
@@ -20,11 +20,11 @@ All notable changes to this project will be documented in this file.
 
 - None
 
-## [4.13.1]
+## [4.14.0]
 
 ### Added
 
-- None
+- Puppet 8 compatibility with Wazuh deployment. Thanks [@pearsondavid](https://github.com/pearsondavid) for [your contribution.](https://github.com/wazuh/wazuh-puppet/pull/1285) ([#1424](https://github.com/wazuh/wazuh-puppet/pull/1424))
 
 ### Changed
 
