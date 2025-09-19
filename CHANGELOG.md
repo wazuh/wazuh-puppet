@@ -9,8 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
-- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
+- None
 
 ### Fixed
 
@@ -28,7 +27,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- None
+- Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
+- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
 
 ### Fixed
 
