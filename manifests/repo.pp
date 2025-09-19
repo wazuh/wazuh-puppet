@@ -2,19 +2,31 @@
 # Wazuh repository installation
 class wazuh::repo (
 ) {
-  case $facts['os']['family'] {
+
+  case $::osfamily {
     'Debian' : {
       $wazuh_repo_url = 'https://packages.wazuh.com/4.x/apt'
       $repo_release = 'stable'
 
-      if $facts['os']['distro']['codename'] =~ /(jessie|wheezy|stretch|precise|trusty|vivid|wily|xenial|yakketi|groovy|jammy|noble)/
-      and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) {
-        ensure_packages(['apt-transport-https', 'gnupg'], { 'ensure' => 'present' })
+      if $::lsbdistcodename =~ /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/
+      and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) and ! defined(Package['gpg']) {
+        ensure_packages(['apt-transport-https', 'gnupg', 'gpg'], { 'ensure' => 'present' })
       }
-      exec { 'import-wazuh-key':
+
+      # Create keyring directory if it doesn't exist
+      file { '/usr/share/keyrings':
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+      }
+
+      # Download and import GPG key using curl and gpg
+      exec { 'download-wazuh-key':
         path    => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'],
-        command => 'curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
-        unless  => 'gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --list-keys | grep -q 29111145',
+        command => 'curl -fsSL https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --dearmor -o /usr/share/keyrings/wazuh.gpg',
+        creates => '/usr/share/keyrings/wazuh.gpg',
+        require => File['/usr/share/keyrings'],
       }
 
       # Ensure permissions on the keyring
@@ -23,30 +35,19 @@ class wazuh::repo (
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        require => Exec['import-wazuh-key'],
+        require => Exec['download-wazuh-key'],
       }
-      case $facts['os']['distro']['codename'] {
+
+      case $::lsbdistcodename {
         /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/: {
-          apt::source { 'wazuh':
-            ensure   => present,
-            comment  => 'This is the WAZUH Ubuntu repository',
-            location => $wazuh_repo_url,
-            release  => $repo_release,
-            repos    => 'main',
-            include  => {
-              'src' => false,
-              'deb' => true,
-            },
-            require  => File['/usr/share/keyrings/wazuh.gpg'],
-            notify   => Exec['apt-update'],
-          }
+
           # Manage the APT source list file content using concat
           concat { '/etc/apt/sources.list.d/wazuh.list':
-            ensure => present,
-            owner  => 'root',
-            group  => 'root',
-            mode   => '0644',
-            notify   => Exec['apt-update'],
+            ensure  => present,
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0644',
+            notify  => Exec['apt-update'],
           }
 
           concat::fragment { 'wazuh-source':
@@ -54,22 +55,24 @@ class wazuh::repo (
             content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] ${wazuh_repo_url} ${repo_release} main\n",
             order   => '01',
             require => File['/usr/share/keyrings/wazuh.gpg'],
-            notify   => Exec['apt-update'],
+            notify  => Exec['apt-update'],
           }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
       }
+
       # Define an exec resource to run 'apt-get update'
       exec { 'apt-update':
-        command     => '/usr/bin/apt-get update',
+        command     => 'apt-get update',
         refreshonly => true,
         path        => ['/bin', '/usr/bin'],
+        require     => Concat['/etc/apt/sources.list.d/wazuh.list'],
       }
     }
     'Linux', 'RedHat', 'Suse' : {
-      case $facts['os'][name] {
+      case $::os[name] {
         /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky|SLES)$/: {
-          if ( $facts['os']['release']['full'] =~ /^5.*/ ) {
+          if ( $::operatingsystemrelease =~ /^5.*/ ) {
             $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
             $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH'
           } else {
@@ -79,15 +82,15 @@ class wazuh::repo (
         }
         default: { fail('This ossec module has not been tested on your distribution.') }
       }
-      # Set up OSSEC repo
-      case $facts['os'][name] {
-        /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky)$/: {
+      # Set up Wazuh repo
+      case $::os[name] {
+        /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux)$/: {
           yumrepo { 'wazuh':
-            descr    => 'WAZUH OSSEC Repository - www.wazuh.com',
+            descr    => 'WAZUH Repository - www.wazuh.com',
             enabled  => true,
             gpgcheck => 1,
             gpgkey   => $gpgkey,
-            baseurl  => $baseurl,
+            baseurl  => $baseurl
           }
         }
         /^(SLES)$/: {
@@ -99,7 +102,7 @@ class wazuh::repo (
             repo_gpgcheck => 0,
             pkg_gpgcheck  => 0,
             gpgkey        => $gpgkey,
-            baseurl       => $baseurl,
+            baseurl       => $baseurl
           }
         }
       }
