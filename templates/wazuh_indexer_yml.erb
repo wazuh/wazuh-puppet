@@ -1,7 +1,7 @@
 network.host: "<%= @indexer_network_host %>"
 node.name: "<%= @indexer_node_name %>"
-cluster.initial_cluster_manager_nodes:
-<% @indexer_initial_cluster_manager_nodes.each do |node| -%>
+cluster.initial_cluster_master_nodes:
+<% @indexer_cluster_initial_master_nodes.each do |node| -%>
 - "<%= node %>"
 <% end -%>
 cluster.name: "<%= @indexer_cluster_name %>"
@@ -28,7 +28,7 @@ plugins.security.authcz.admin_dn:
 plugins.security.check_snapshot_restore_write_privileges: true
 plugins.security.enable_snapshot_restore_privilege: true
 plugins.security.nodes_dn:
-<% @indexer_cluster_CN.each do |cn| -%>
+<% @indexer_cluster_cn.each do |cn| -%>
 - "CN=indexer-<%= cn %>,OU=Wazuh,O=Wazuh,L=California,C=US"
 <% end -%>
 plugins.security.restapi.roles_enabled:

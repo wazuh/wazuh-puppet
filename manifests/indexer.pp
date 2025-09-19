@@ -12,6 +12,12 @@ class wazuh::indexer (
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
+  $indexer_node_cert_source = "puppet:///modules/archive/indexer-${indexer_node_name}.pem",
+  $indexer_node_certkey_source = "puppet:///modules/archive/indexer-${indexer_node_name}-key.pem",
+  $indexer_node_rootca_source = 'puppet:///modules/archive/root-ca.pem',
+  $indexer_node_admincert_source = 'puppet:///modules/archive/admin.pem',
+  $indexer_node_adminkey_source = 'puppet:///modules/archive/admin-key.pem',
+
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
   $indexer_path_certs = '/etc/wazuh-indexer/certs',
@@ -21,13 +27,12 @@ class wazuh::indexer (
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
-  $indexer_initial_cluster_manager_nodes = ['node-1'],
-  $indexer_cluster_CN = ['node-1'],
+  $indexer_cluster_initial_master_nodes = ['node-1'],
+  $indexer_cluster_cn = ['node-1'],
 
   # JVM options
   $jvm_options_memory = '1g',
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -57,25 +62,55 @@ class wazuh::indexer (
     mode   => '0500',
   }
 
-  [
-   "indexer-$indexer_node_name.pem",
-   "indexer-$indexer_node_name-key.pem",
-   'root-ca.pem',
-   'admin.pem',
-   'admin-key.pem',
-  ].each |String $certfile| {
-    file { "${indexer_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $indexer_fileuser,
-      group   => $indexer_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
-    }
+  file { "${indexer_path_certs}/indexer-${indexer_node_name}.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_cert_source,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
   }
 
+  file { "${indexer_path_certs}/indexer-${indexer_node_name}-key.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_certkey_source,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
 
+  file { "${indexer_path_certs}/root-ca.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_rootca_source,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file { "${indexer_path_certs}/admin.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_admincert_source,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
+
+  file { "${indexer_path_certs}/admin-key.pem":
+    ensure  => file,
+    owner   => $indexer_fileuser,
+    group   => $indexer_filegroup,
+    mode    => '0400',
+    source  => $indexer_node_adminkey_source,
+    require => Package['wazuh-indexer'],
+    notify  => Service['wazuh-indexer'],
+  }
 
   file { 'configuration file':
     path    => '/etc/wazuh-indexer/opensearch.yml',
@@ -104,10 +139,11 @@ class wazuh::indexer (
   }
 
   service { 'wazuh-indexer':
-    ensure  => running,
-    enable  => true,
-    name    => $indexer_service,
-    require => Package['wazuh-indexer'],
+    ensure   => running,
+    enable   => true,
+    name     => $indexer_service,
+    require  => Package['wazuh-indexer'],
+    provider => 'systemd',
   }
 
   file_line { "Insert line limits nofile for ${indexer_fileuser}":
@@ -121,21 +157,6 @@ class wazuh::indexer (
     line   => "${indexer_fileuser} - memlock unlimited",
     match  => "^${indexer_fileuser} - memlock\s",
     notify => Service['wazuh-indexer'],
-  }
-
-  # TODO: this should be done by the package itself and not by puppet at all
-  [
-    '/etc/wazuh-indexer',
-    '/usr/share/wazuh-indexer',
-    '/var/lib/wazuh-indexer',
-  ].each |String $file| {
-    exec { "set recusive ownership of ${file}":
-      path        => '/usr/bin:/bin',
-      command     => "chown ${indexer_fileuser}:${indexer_filegroup} -R ${file}",
-      refreshonly => true,  # only run when package is installed or updated
-      subscribe   => Package['wazuh-indexer'],
-      notify      => Service['wazuh-indexer'],
-    }
   }
 
   if $full_indexer_reinstall {

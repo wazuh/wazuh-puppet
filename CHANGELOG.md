@@ -19,11 +19,11 @@ All notable changes to this project will be documented in this file.
 
 - None
 
-## [4.14.0]
+## [4.14.1]
 
 ### Added
 
-- None
+- Add Rocky Linux support. ([#1438](https://github.com/wazuh/wazuh-puppet/pull/1438))
 
 ### Changed
 
@@ -37,15 +37,16 @@ All notable changes to this project will be documented in this file.
 
 - None
 
-## [4.13.1]
+## [4.14.0]
 
 ### Added
 
-- None
+- Puppet 8 compatibility with Wazuh deployment. Thanks [@pearsondavid](https://github.com/pearsondavid) for [your contribution.](https://github.com/wazuh/wazuh-puppet/pull/1285) ([#1424](https://github.com/wazuh/wazuh-puppet/pull/1424))
 
 ### Changed
 
-- None
+- Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
+- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
 
 ### Fixed
 
@@ -66,10 +67,12 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Syscollector configuration change ([#1432](https://github.com/wazuh/wazuh-puppet/pull/1432))
 - Change dependencies versions ([#1307](https://github.com/wazuh/wazuh-puppet/pull/1307))
 
 ### Fixed
 
+- Metadata versions update ([#1445](https://github.com/wazuh/wazuh-puppet/pull/1445))
 - Modify dependencies version ([#1277](https://github.com/wazuh/wazuh-puppet/pull/1277))
 
 ### Deleted
