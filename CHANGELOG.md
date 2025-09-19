@@ -49,10 +49,12 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Syscollector configuration change ([#1432](https://github.com/wazuh/wazuh-puppet/pull/1432))
 - Change dependencies versions ([#1307](https://github.com/wazuh/wazuh-puppet/pull/1307))
 
 ### Fixed
 
+- Metadata versions update ([#1445](https://github.com/wazuh/wazuh-puppet/pull/1445))
 - Modify dependencies version ([#1277](https://github.com/wazuh/wazuh-puppet/pull/1277))
 
 ### Deleted
