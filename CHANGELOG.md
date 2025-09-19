@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [5.0.0]
+
+### Added
+
+- Fix OpenSearch deprecated settings ([#1372](https://github.com/wazuh/wazuh-puppet/pull/1372))
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## [4.14.1]
 
 ### Added
@@ -9,8 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
-- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
+- None
 
 ### Fixed
 
@@ -28,7 +45,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- None
+- Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
+- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
 
 ### Fixed
 
