@@ -9,31 +9,40 @@
   "issues_url": "https://github.com/wazuh/wazuh-puppet/issues",
   "dependencies": [
     {
-      "name": "puppetlabs/stdlib"
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.0 < 9.7.0"
     },
     {
-      "name": "puppetlabs/concat"
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.0.0 < 9.1.0"
     },
     {
-      "name": "puppetlabs/apt"
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 2.0.0 < 11.0.0"
     },
     {
-      "name": "puppet/selinux"
+      "name": "puppet/selinux",
+      "version_requirement": ">= 0.8.0 < 5.0.0"
     },
     {
-      "name": "puppet/nodejs"
+      "name": "puppet/nodejs",
+      "version_requirement": ">= 3.0.0 < 11.0.0"
     },
     {
-      "name": "puppetlabs/firewall"
+      "name": "puppetlabs/firewall",
+      "version_requirement": ">= 1.7.0 < 8.2.0"
     },
     {
-      "name": "puppetlabs/powershell"
+      "name": "puppetlabs/powershell",
+      "version_requirement": ">= 2.0.0 < 6.0.2"
     },
     {
-      "name": "puppet/zypprepo"
+      "name": "puppet/zypprepo",
+      "version_requirement": "= 5.0.0"
     },
     {
-      "name": "puppet/archive"
+      "name": "puppet/archive",
+      "version_requirement": ">= 0.4.8 < 8.1.0"
     }
   ],
   "operatingsystem_support": [
