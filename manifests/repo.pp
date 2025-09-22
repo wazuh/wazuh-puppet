@@ -84,7 +84,7 @@ class wazuh::repo (
       }
       # Set up Wazuh repo
       case $::os[name] {
-        /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux)$/: {
+        /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky)$/: {
           yumrepo { 'wazuh':
             descr    => 'WAZUH Repository - www.wazuh.com',
             enabled  => true,
