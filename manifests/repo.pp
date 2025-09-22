@@ -3,12 +3,12 @@
 class wazuh::repo (
 ) {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : {
       $wazuh_repo_url = 'https://packages.wazuh.com/4.x/apt'
       $repo_release = 'stable'
 
-      if $::lsbdistcodename =~ /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/
+      if $facts['os']['distro']['codename'] =~ /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/
       and ! defined(Package['apt-transport-https']) and ! defined(Package['gnupg']) and ! defined(Package['gpg']) {
         ensure_packages(['apt-transport-https', 'gnupg', 'gpg'], { 'ensure' => 'present' })
       }
@@ -38,7 +38,7 @@ class wazuh::repo (
         require => Exec['download-wazuh-key'],
       }
 
-      case $::lsbdistcodename {
+      case $facts['os']['distro']['codename'] {
         /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/: {
 
           # Manage the APT source list file content using concat
