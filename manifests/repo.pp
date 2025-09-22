@@ -70,9 +70,9 @@ class wazuh::repo (
       }
     }
     'Linux', 'RedHat', 'Suse' : {
-      case $::os[name] {
+      case $facts['os'][name] {
         /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky|SLES)$/: {
-          if ( $::operatingsystemrelease =~ /^5.*/ ) {
+          if ( $facts['os']['release']['full'] =~ /^5.*/ ) {
             $baseurl  = 'https://packages.wazuh.com/4.x/yum/5/'
             $gpgkey   = 'http://packages.wazuh.com/key/GPG-KEY-WAZUH'
           } else {
@@ -80,17 +80,17 @@ class wazuh::repo (
             $gpgkey   = 'https://packages.wazuh.com/key/GPG-KEY-WAZUH'
           }
         }
-        default: { fail('This ossec module has not been tested on your distribution.') }
+        default: { fail('This Wazuh module has not been tested on your distribution.') }
       }
       # Set up Wazuh repo
-      case $::os[name] {
+      case $facts['os'][name] {
         /^(CentOS|RedHat|OracleLinux|Fedora|Amazon|AlmaLinux|Rocky)$/: {
           yumrepo { 'wazuh':
             descr    => 'WAZUH Repository - www.wazuh.com',
             enabled  => true,
             gpgcheck => 1,
             gpgkey   => $gpgkey,
-            baseurl  => $baseurl
+            baseurl  => $baseurl,
           }
         }
         /^(SLES)$/: {
@@ -102,7 +102,7 @@ class wazuh::repo (
             repo_gpgcheck => 0,
             pkg_gpgcheck  => 0,
             gpgkey        => $gpgkey,
-            baseurl       => $baseurl
+            baseurl       => $baseurl,
           }
         }
       }
