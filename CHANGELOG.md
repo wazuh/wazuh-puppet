@@ -1,6 +1,25 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [4.14.1]
+
+### Added
+
+- Add debian13 support. ([#1450](https://github.com/wazuh/wazuh-puppet/pull/1450))
+- Add Rocky Linux support. ([#1438](https://github.com/wazuh/wazuh-puppet/pull/1438))
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## [4.14.0]
 
 ### Added
@@ -11,24 +30,6 @@ All notable changes to this project will be documented in this file.
 
 - Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
 - Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
-
-### Fixed
-
-- None
-
-### Deleted
-
-- None
-
-## [4.13.1]
-
-### Added
-
-- None
-
-### Changed
-
-- None
 
 ### Fixed
 

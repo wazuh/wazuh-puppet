@@ -4,7 +4,7 @@ class wazuh::params_manager {
   case $facts['kernel'] {
     'Linux': {
       # Installation
-      $server_package_version                          = '4.14.0'
+      $server_package_version                          = '4.14.1'
 
       $manage_firewall                                 = false
 
@@ -394,7 +394,7 @@ class wazuh::params_manager {
                 },
               }
             }
-            /^(wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy|noble)$/: {
+            /^(wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy|noble)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
@@ -518,8 +518,22 @@ class wazuh::params_manager {
             }
             'AlmaLinux': {
               if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
-                $ossec_service_provider = 'redhat'
-                $api_service_provider = 'redhat'
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
+              }
+            }
+            'Rocky': {
+              if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
+              }
+              if ( $facts['os']['release']['full'] =~ /^9.*/ ) {
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
+              }
+              if ( $facts['os']['release']['full'] =~ /^10.*/ ) {
+                $ossec_service_provider = 'systemd'
+                $api_service_provider = 'systemd'
               }
             }
             default: { fail('This ossec module has not been tested on your distribution') }
@@ -566,7 +580,7 @@ class wazuh::params_manager {
       $keys_group = 'Administrators'
 
       $agent_service  = 'WazuhSvc'
-      $agent_package  = 'Wazuh Agent 4.14.0'
+      $agent_package  = 'Wazuh Agent 4.14.1'
       $server_service = ''
       $server_package = ''
       $api_service = ''
