@@ -1,6 +1,25 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [4.14.0]
+
+### Added
+
+- Puppet 8 compatibility with Wazuh deployment. Thanks [@pearsondavid](https://github.com/pearsondavid) for [your contribution.](https://github.com/wazuh/wazuh-puppet/pull/1285) ([#1424](https://github.com/wazuh/wazuh-puppet/pull/1424))
+
+### Changed
+
+- Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
+- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## [4.13.1]
 
 ### Added

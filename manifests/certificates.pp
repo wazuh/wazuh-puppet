@@ -2,7 +2,7 @@
 # Wazuh repository installation
 class wazuh::certificates (
   $wazuh_repository = 'packages.wazuh.com',
-  $wazuh_version = '4.13',
+  $wazuh_version = '4.14',
   $indexer_certs = [],
   $manager_certs = [],
   $manager_master_certs = [],
@@ -35,12 +35,12 @@ class wazuh::certificates (
     ],
   }
   file { 'Copy all certificates into module':
-    ensure => 'directory',
-    source => '/tmp/wazuh-certificates/',
+    ensure  => 'directory',
+    source  => '/tmp/wazuh-certificates/',
     recurse => 'remote',
-    path => '/etc/puppetlabs/code/environments/production/modules/archive/files/',
-    owner => 'root',
-    group => 'root',
-    mode  => '0755',
+    path    => '/etc/puppetlabs/code/environments/production/modules/archive/files/',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
   }
 }

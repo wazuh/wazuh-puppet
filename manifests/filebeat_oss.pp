@@ -11,16 +11,18 @@ class wazuh::filebeat_oss (
   $filebeat_oss_elastic_user = 'admin',
   $filebeat_oss_elastic_password = 'admin',
   $filebeat_oss_version = '7.10.2',
-  $wazuh_app_version = '4.13.1_7.10.2',
-  $wazuh_extensions_version = 'v4.13.1',
+  $wazuh_app_version = '4.14.0_7.10.2',
+  $wazuh_extensions_version = 'v4.14.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
   $wazuh_node_name = 'master',
+  $filebeat_cert_source = "puppet:///modules/archive/manager-${wazuh_node_name}.pem",
+  $filebeat_certkey_source = "puppet:///modules/archive/manager-${wazuh_node_name}-key.pem",
+  $filebeat_node_rootca_source = 'puppet:///modules/archive/root-ca.pem',
 
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
 ) {
-
   package { 'filebeat':
     ensure => $filebeat_oss_version,
     name   => $filebeat_oss_package,
@@ -86,21 +88,28 @@ class wazuh::filebeat_oss (
     mode   => '0500',
   }
 
-  $_certfiles = {
-    "manager-${wazuh_node_name}.pem"     => 'filebeat.pem',
-    "manager-${wazuh_node_name}-key.pem" => 'filebeat-key.pem',
-    'root-ca.pem'    => 'root-ca.pem',
+  file { "${filebeat_path_certs}/filebeat.pem":
+    ensure  => file,
+    owner   => $filebeat_fileuser,
+    group   => $filebeat_filegroup,
+    mode    => '0400',
+    source  => $filebeat_cert_source,
   }
-  $_certfiles.each |String $certfile_source, String $certfile_target| {
-    file { "${filebeat_path_certs}/${certfile_target}":
-      ensure  => file,
-      owner   => $filebeat_fileuser,
-      group   => $filebeat_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile_source}",
-    }
+
+  file { "${filebeat_path_certs}/filebeat-key.pem":
+    ensure  => file,
+    owner   => $filebeat_fileuser,
+    group   => $filebeat_filegroup,
+    mode    => '0400',
+    source  => $filebeat_certkey_source,
+  }
+
+  file { "${filebeat_path_certs}/root-ca.pem":
+    ensure  => file,
+    owner   => $filebeat_fileuser,
+    group   => $filebeat_filegroup,
+    mode    => '0400',
+    source  => $filebeat_node_rootca_source,
   }
 
   service { 'filebeat':

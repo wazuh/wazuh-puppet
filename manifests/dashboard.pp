@@ -3,7 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '4.13.1',
+  $dashboard_version = '4.14.0',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $manager_api_host = '127.0.0.1',
@@ -11,6 +11,9 @@ class wazuh::dashboard (
   $dashboard_fileuser = 'wazuh-dashboard',
   $dashboard_filegroup = 'wazuh-dashboard',
 
+  $dashboard_cert_source = 'puppet:///modules/archive/dashboard.pem',
+  $dashboard_certkey_source = 'puppet:///modules/archive/dashboard-key.pem',
+  $dashboard_rootca_source = 'puppet:///modules/archive/root-ca.pem',
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
@@ -32,7 +35,6 @@ class wazuh::dashboard (
   ],
 
 ) {
-
   # assign version according to the package manager
   case $facts['os']['family'] {
     'Debian': {
@@ -62,20 +64,34 @@ class wazuh::dashboard (
     mode   => '0500',
   }
 
-  [
-    'dashboard.pem',
-    'dashboard-key.pem',
-    'root-ca.pem',
-  ].each |String $certfile| {
-    file { "${dashboard_path_certs}/${certfile}":
-      ensure  => file,
-      owner   => $dashboard_fileuser,
-      group   => $dashboard_filegroup,
-      mode    => '0400',
-      replace => true,
-      recurse => remote,
-      source  => "puppet:///modules/archive/${certfile}",
-    }
+  file { "${dashboard_path_certs}/dashboard.pem":
+    ensure  => file,
+    owner   => $dashboard_fileuser,
+    group   => $dashboard_filegroup,
+    mode    => '0400',
+    source  => $dashboard_cert_source,
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+
+  file { "${dashboard_path_certs}/dashboard-key.pem":
+    ensure  => file,
+    owner   => $dashboard_fileuser,
+    group   => $dashboard_filegroup,
+    mode    => '0400',
+    source  => $dashboard_certkey_source,
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
+  }
+
+  file { "${dashboard_path_certs}/root-ca.pem":
+    ensure  => file,
+    owner   => $dashboard_fileuser,
+    group   => $dashboard_filegroup,
+    mode    => '0400',
+    source  => $dashboard_rootca_source,
+    require => Package['wazuh-dashboard'],
+    notify  => Service['wazuh-dashboard'],
   }
 
   file { '/etc/wazuh-dashboard/opensearch_dashboards.yml':
@@ -87,7 +103,7 @@ class wazuh::dashboard (
     notify  => Service['wazuh-dashboard'],
   }
 
-  file { [ '/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config' ]:
+  file { ['/usr/share/wazuh-dashboard/data/wazuh/', '/usr/share/wazuh-dashboard/data/wazuh/config']:
     ensure  => 'directory',
     group   => $dashboard_filegroup,
     mode    => '0755',
