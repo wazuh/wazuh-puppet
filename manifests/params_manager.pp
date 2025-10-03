@@ -21,8 +21,6 @@ class wazuh::params_manager {
       $ossec_email_idsname                             = undef
       $ossec_email_log_source                          = 'alerts.log'
       $ossec_white_list                                = ['127.0.0.1','^localhost.localdomain$','10.0.0.2']
-      $ossec_alert_level                               = 3
-      $ossec_email_alert_level                         = 12
       $ossec_remote_connection                         = 'secure'
       $ossec_remote_port                               = 1514
       $ossec_remote_protocol                           = 'tcp'
@@ -170,12 +168,6 @@ class wazuh::params_manager {
       $vulnerability_indexer_ssl_ca                    = '/etc/filebeat/certs/root-ca.pem'
       $vulnerability_indexer_ssl_certificate           = '/etc/filebeat/certs/filebeat.pem'
       $vulnerability_indexer_ssl_key                   = '/etc/filebeat/certs/filebeat-key.pem'
-
-      $syslog_output                                   = false
-      $syslog_output_level                             = 2
-      $syslog_output_port                              = 514
-      $syslog_output_server                            = undef
-      $syslog_output_format                            = undef
 
       # Authd configuration
 
