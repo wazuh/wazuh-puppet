@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Rollback Wazuh indexer and dashboard options ([#1468](https://github.com/wazuh/wazuh-puppet/pull/1468))
 
 ### Deleted
 
