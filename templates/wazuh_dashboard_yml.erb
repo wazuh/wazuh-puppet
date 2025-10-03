@@ -6,7 +6,7 @@ opensearch.ssl.verificationMode: certificate
 opensearch.username: <%= @dashboard_user %>
 opensearch.password: <%= @dashboard_password %>
 <% end -%>
-opensearch.requestHeadersAllowlist: ["securitytenant","Authorization"]
+opensearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
 opensearch_security.multitenancy.enabled: false
 opensearch_security.readonly_mode.roles: ["kibana_read_only"]
 server.ssl.enabled: true
