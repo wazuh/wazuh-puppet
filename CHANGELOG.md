@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 - Add debian13 support. ([#1450](https://github.com/wazuh/wazuh-puppet/pull/1450))
 - Add Rocky Linux support. ([#1438](https://github.com/wazuh/wazuh-puppet/pull/1438))
+- Fix filebeat hardcoded sources. ([#1466](https://github.com/wazuh/wazuh-puppet/pull/1466))
 
 ### Changed
 
