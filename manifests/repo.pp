@@ -2,7 +2,6 @@
 # Wazuh repository installation
 class wazuh::repo (
 ) {
-
   case $facts['os']['family'] {
     'Debian' : {
       $wazuh_repo_url = 'https://packages.wazuh.com/5.x/apt'
@@ -40,14 +39,13 @@ class wazuh::repo (
 
       case $facts['os']['distro']['codename'] {
         /(jessie|wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy|noble)/: {
-
           # Manage the APT source list file content using concat
           concat { '/etc/apt/sources.list.d/wazuh.list':
-            ensure  => present,
-            owner   => 'root',
-            group   => 'root',
-            mode    => '0644',
-            notify  => Exec['apt-update'],
+            ensure => present,
+            owner  => 'root',
+            group  => 'root',
+            mode   => '0644',
+            notify => Exec['apt-update'],
           }
 
           concat::fragment { 'wazuh-source':

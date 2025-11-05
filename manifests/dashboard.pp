@@ -1,6 +1,9 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Setup for Wazuh Dashboard
 class wazuh::dashboard (
+  $dashboard_cert_content,
+  $dashboard_certkey_content,
+  $dashboard_rootca_content,
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
   $dashboard_version = '5.0.0',
@@ -10,10 +13,6 @@ class wazuh::dashboard (
   $dashboard_path_certs = '/etc/wazuh-dashboard/certs',
   $dashboard_fileuser = 'wazuh-dashboard',
   $dashboard_filegroup = 'wazuh-dashboard',
-
-  $dashboard_cert_source = 'puppet:///modules/archive/dashboard.pem',
-  $dashboard_certkey_source = 'puppet:///modules/archive/dashboard-key.pem',
-  $dashboard_rootca_source = 'puppet:///modules/archive/root-ca.pem',
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
@@ -33,7 +32,6 @@ class wazuh::dashboard (
       'password' => 'wazuh-wui',
     },
   ],
-
 ) {
   # assign version according to the package manager
   case $facts['os']['family'] {
@@ -69,7 +67,7 @@ class wazuh::dashboard (
     owner   => $dashboard_fileuser,
     group   => $dashboard_filegroup,
     mode    => '0400',
-    source  => $dashboard_cert_source,
+    content => $dashboard_cert_content,
     require => Package['wazuh-dashboard'],
     notify  => Service['wazuh-dashboard'],
   }
@@ -79,7 +77,7 @@ class wazuh::dashboard (
     owner   => $dashboard_fileuser,
     group   => $dashboard_filegroup,
     mode    => '0400',
-    source  => $dashboard_certkey_source,
+    content => $dashboard_certkey_content,
     require => Package['wazuh-dashboard'],
     notify  => Service['wazuh-dashboard'],
   }
@@ -89,7 +87,7 @@ class wazuh::dashboard (
     owner   => $dashboard_fileuser,
     group   => $dashboard_filegroup,
     mode    => '0400',
-    source  => $dashboard_rootca_source,
+    content => $dashboard_rootca_content,
     require => Package['wazuh-dashboard'],
     notify  => Service['wazuh-dashboard'],
   }
