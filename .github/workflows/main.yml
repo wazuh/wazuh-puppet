@@ -1,6 +1,8 @@
 name: Kitchen tests for Wazuh Puppet
 
 on: [pull_request, workflow_dispatch, release]
+permissions:
+  contents: read
 
 jobs:
 
@@ -11,7 +13,7 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION >> $GITHUB_ENV
+        echo "VERSION=$(cat VERSION.json | jq -r '.version')" >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
         WAZUH_VERSION=$VER >> $GITHUB_ENV
 
@@ -45,7 +47,7 @@ jobs:
         }
         if compare_versions "{{ env.VERSION }}" -gt "{{ env.WAZUH_VERSION }}"; then
           sed -i 's/packages.wazuh.com/packages-dev.wazuh.com/' manifests/repo.pp
-          sed -i 's/4.x/pre-release/' manifests/repo.pp
+          sed -i 's/5.x/pre-release/' manifests/repo.pp
           sed -i "s/'stable'/'unstable'/" manifests/repo.pp
         fi
 
@@ -53,7 +55,7 @@ jobs:
       run: pdk build
 
     - name: Create artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: wazuh-module
         path: ./pkg/wazuh-wazuh-${{ env.VERSION }}.tar.gz
@@ -66,7 +68,7 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION >> $GITHUB_ENV
+        echo "VERSION=$(cat VERSION.json | jq -r '.version')" >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
         WAZUH_VERSION=$VER >> $GITHUB_ENV
 
@@ -77,7 +79,7 @@ jobs:
       uses: ./.github/configure
 
     - name: Retrieve saved Wazuh module
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: wazuh-module
 
@@ -99,7 +101,7 @@ jobs:
 
     - name: Create enviroment variables
       run: |
-        cat VERSION >> $GITHUB_ENV
+        echo "VERSION=$(cat VERSION.json | jq -r '.version')" >> $GITHUB_ENV
         VER=`curl -s https://api.github.com/repos/wazuh/wazuh/releases/latest | grep '\"tag_name\":' | sed -E 's/.*\"([^\"]+)\".*/\1/' | cut -c 2-`
         WAZUH_VERSION=$VER >> $GITHUB_ENV
 
@@ -110,7 +112,7 @@ jobs:
       uses: ./.github/configure
 
     - name: Retrieve saved Wazuh module
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: wazuh-module
 

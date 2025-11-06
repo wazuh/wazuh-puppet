@@ -1,11 +1,211 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## Wazuh Puppet v5.0.0
+## [5.0.0]
 
 ### Added
 
-- Support to 5.0.0 Wazuh release.
+- Fix OpenSearch deprecated settings ([#1372](https://github.com/wazuh/wazuh-puppet/pull/1372))
+
+### Changed
+
+- Wazuh server clean-up ([#1467](https://github.com/wazuh/wazuh-puppet/pull/1467))
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
+## [4.14.1]
+
+### Added
+
+- Add debian13 support. ([#1450](https://github.com/wazuh/wazuh-puppet/pull/1450))
+- Add Rocky Linux support. ([#1438](https://github.com/wazuh/wazuh-puppet/pull/1438))
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
+## [4.14.0]
+
+### Added
+
+- Puppet 8 compatibility with Wazuh deployment. Thanks [@pearsondavid](https://github.com/pearsondavid) for [your contribution.](https://github.com/wazuh/wazuh-puppet/pull/1285) ([#1424](https://github.com/wazuh/wazuh-puppet/pull/1424))
+
+### Changed
+
+- Remove dashboard chat setting ([#1462](https://github.com/wazuh/wazuh-puppet/pull/1462))
+- Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
+- Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
+
+### Fixed
+
+- Rollback Wazuh indexer and dashboard options ([#1468](https://github.com/wazuh/wazuh-puppet/pull/1468))
+
+### Deleted
+
+- None
+
+## [4.13.0]
+
+### Added
+
+- Add opensearch_dashboard.yml parameters. ([#1423](https://github.com/wazuh/wazuh-puppet/pull/1423))
+- Add missing malicious-ioc ruleset lists ([#1352](https://github.com/wazuh/wazuh-puppet/pull/1352))
+- Integrate bumper script via GitHub action. ([#1344](https://github.com/wazuh/wazuh-puppet/pull/1344))
+- Added repository_bumper script. ([#1302](https://github.com/wazuh/wazuh-puppet/pull/1302))
+
+### Changed
+
+- Syscollector configuration change ([#1432](https://github.com/wazuh/wazuh-puppet/pull/1432))
+- Change dependencies versions ([#1307](https://github.com/wazuh/wazuh-puppet/pull/1307))
+
+### Fixed
+
+- Metadata versions update ([#1445](https://github.com/wazuh/wazuh-puppet/pull/1445))
+- Modify dependencies version ([#1277](https://github.com/wazuh/wazuh-puppet/pull/1277))
+
+### Deleted
+
+- Remove default puppet reference version from workflow ([#1284](https://github.com/wazuh/wazuh-puppet/pull/1284))
+- Remove 'stable' branch ocurrencies ([#1281](https://github.com/wazuh/wazuh-puppet/pull/1281))
+
+## [4.12.0]
+
+### Added
+
+- None
+
+### Changed
+
+- Standardize version file format ([#1251](https://github.com/wazuh/wazuh-puppet/pull/1251))
+
+### Fixed
+
+- Fix s3 uri printed into the execution log ([#1233](https://github.com/wazuh/wazuh-puppet/pull/1233)) \- (Puppet Module Builder)
+
+### Deleted
+
+- None
+
+## [4.11.2]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
+## [4.11.1]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- Add refreshonly option ([#1265](https://github.com/wazuh/wazuh-puppet/pull/1265))
+
+### Deleted
+
+- None
+
+## [4.11.0]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- Add condition to execute apt update ([#1256](https://github.com/wazuh/wazuh-puppet/pull/1256))
+- Fix certificates.pp ([#1255](https://github.com/wazuh/wazuh-puppet/pull/1255))
+- Modify the version used into the Wazuh indexer and Wazuh manager deployment ([#1229](https://github.com/wazuh/wazuh-puppet/pull/1229))
+
+### Deleted
+
+- None
+
+## [4.10.1]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
+## Wazuh Puppet v4.10.0
+
+### Added
+
+- Wazuh Puppet module builder ([#1107](https://github.com/wazuh/wazuh-puppet/pull/1107)) \- (Puppet Module Builder)
+- Wazuh Puppet module builder ([#1109](https://github.com/wazuh/wazuh-puppet/pull/1109)) \- (Puppet Module Builder)
+
+### Changed
+
+- Delete API parameters from wazuh.yml template ([#1155](https://github.com/wazuh/wazuh-puppet/pull/1155)) \- (Puppet Module)
+- Add URI file after upload ([#1143](https://github.com/wazuh/wazuh-puppet/pull/1143)) \- (Puppet Module Builder)
+- Modfy Puppet module builder ([#1113](https://github.com/wazuh/wazuh-puppet/pull/1113)) \- (Puppet Module Builder)
+
+### Fixed
+
+- Changed GitHub Runner OS version to Ubuntu 22.04. ([#1142](https://github.com/wazuh/wazuh-puppet/pull/1142))
+
+### Deleted
+
+- None
+
+## Wazuh Puppet v4.9.2
+
+### Added
+
+- Support to 4.9.2 Wazuh release.
+
+## Wazuh Puppet v4.9.1
+
+### Added
+
+- Support to 4.9.1 Wazuh release.
 
 ## Wazuh Puppet v4.9.0
 
@@ -18,7 +218,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Support to 4.8.2 Wazuh release.
-- 
+
 ## Wazuh Puppet v4.8.1
 
 ### Added
@@ -30,6 +230,18 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Support to 4.8.0 Wazuh release.
+
+## Wazuh Puppet v4.7.5
+
+### Added
+
+- Support to 4.7.5 Wazuh release.
+
+## Wazuh Puppet v4.7.4
+
+### Added
+
+- Support to 4.7.4 Wazuh release.
 
 ## Wazuh Puppet v4.7.3
 

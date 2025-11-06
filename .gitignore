@@ -39,3 +39,4 @@ kitchen/.librarian/
 kitchen/.pytest_cache/
 kitchen/.*
 kitchen/modules/
+output/
