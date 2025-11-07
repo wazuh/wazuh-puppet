@@ -8,7 +8,7 @@ class wazuh::indexer (
   $indexer_node_max_local_storage_nodes = '1',
   $indexer_service = 'wazuh-indexer',
   $indexer_package = 'wazuh-indexer',
-  $indexer_version = '4.14.1',
+  $indexer_version = '5.0.0',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
 
@@ -27,7 +27,7 @@ class wazuh::indexer (
   $indexer_ip = 'localhost',
   $indexer_port = '9200',
   $indexer_discovery_hosts = [], # Empty array for single-node configuration
-  $indexer_cluster_initial_master_nodes = ['node-1'],
+  $indexer_initial_cluster_manager_nodes = ['node-1'],
   $indexer_cluster_cn = ['node-1'],
 
   # JVM options

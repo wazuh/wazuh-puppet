@@ -1,7 +1,7 @@
 network.host: "<%= @indexer_network_host %>"
 node.name: "<%= @indexer_node_name %>"
-cluster.initial_master_nodes:
-<% @indexer_cluster_initial_master_nodes.each do |node| -%>
+cluster.initial_cluster_manager_nodes:
+<% @indexer_initial_cluster_manager_nodes.each do |node| -%>
 - "<%= node %>"
 <% end -%>
 cluster.name: "<%= @indexer_cluster_name %>"
@@ -36,4 +36,3 @@ plugins.security.restapi.roles_enabled:
 - "security_rest_api_access"
 plugins.security.allow_default_init_securityindex: true
 cluster.routing.allocation.disk.threshold_enabled: false
-compatibility.override_main_response_version: true
