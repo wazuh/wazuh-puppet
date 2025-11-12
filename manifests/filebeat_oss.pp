@@ -19,6 +19,9 @@ class wazuh::filebeat_oss (
   $filebeat_certkey_source = "puppet:///modules/archive/manager-${wazuh_node_name}-key.pem",
   $filebeat_node_rootca_source = 'puppet:///modules/archive/root-ca.pem',
 
+  String $wazuh_filebeat_module_location = "https://packages.wazuh.com/4.x/filebeat/${wazuh_filebeat_module}",
+  String $wazuh_filebeat_template_source = "https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json",
+
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
@@ -45,7 +48,7 @@ class wazuh::filebeat_oss (
     path    => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
     command => 'rm -f /etc/filebeat/wazuh-template.json',
     onlyif  => 'test -f /etc/filebeat/wazuh-template.json',
-    unless  => "curl -s 'https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json' | cmp -s '/etc/filebeat/wazuh-template.json'",
+    unless  => "curl -s ${$wazuh_filebeat_template_source} | cmp -s '/etc/filebeat/wazuh-template.json'",
   }
 
   -> file { '/etc/filebeat/wazuh-template.json':
@@ -53,14 +56,14 @@ class wazuh::filebeat_oss (
     group   => 'root',
     mode    => '0440',
     replace => false,  # only copy content when file not exist
-    source  => "https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json",
+    source  => $wazuh_filebeat_template_source,
     notify  => Service['filebeat'],
     require => Package['filebeat'],
   }
 
   archive { "/tmp/${$wazuh_filebeat_module}":
     ensure       => present,
-    source       => "https://packages.wazuh.com/5.x/filebeat/${$wazuh_filebeat_module}",
+    source       => $wazuh_filebeat_module_location,
     extract      => true,
     extract_path => '/usr/share/filebeat/module',
     creates      => '/usr/share/filebeat/module/wazuh',
