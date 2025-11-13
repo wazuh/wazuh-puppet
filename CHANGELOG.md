@@ -11,6 +11,16 @@ All notable changes to this project will be documented in this file.
 
 - Wazuh server clean-up ([#1467](https://github.com/wazuh/wazuh-puppet/pull/1467))
 
+## [4.14.2]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
 ### Fixed
 
 - None
