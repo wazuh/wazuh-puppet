@@ -1,6 +1,8 @@
 name: Kitchen tests for Wazuh Puppet
 
 on: [pull_request, workflow_dispatch, release]
+permissions:
+  contents: read
 
 jobs:
 

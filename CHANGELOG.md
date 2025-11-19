@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [4.14.2]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## [4.14.1]
 
 ### Added
@@ -29,12 +47,13 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Remove dashboard chat setting ([#1462](https://github.com/wazuh/wazuh-puppet/pull/1462))
 - Rollback data source setting ([#1440](https://github.com/wazuh/wazuh-puppet/pull/1440))
 - Dashboard settings added ([#1439](https://github.com/wazuh/wazuh-puppet/pull/1439))
 
 ### Fixed
 
-- None
+- Rollback Wazuh indexer and dashboard options ([#1468](https://github.com/wazuh/wazuh-puppet/pull/1468))
 
 ### Deleted
 
