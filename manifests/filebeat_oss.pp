@@ -89,27 +89,27 @@ class wazuh::filebeat_oss (
   }
 
   file { "${filebeat_path_certs}/filebeat.pem":
-    ensure  => file,
-    owner   => $filebeat_fileuser,
-    group   => $filebeat_filegroup,
-    mode    => '0400',
-    source  => $filebeat_cert_source,
+    ensure => file,
+    owner  => $filebeat_fileuser,
+    group  => $filebeat_filegroup,
+    mode   => '0400',
+    source => $filebeat_cert_source,
   }
 
   file { "${filebeat_path_certs}/filebeat-key.pem":
-    ensure  => file,
-    owner   => $filebeat_fileuser,
-    group   => $filebeat_filegroup,
-    mode    => '0400',
-    source  => $filebeat_certkey_source,
+    ensure => file,
+    owner  => $filebeat_fileuser,
+    group  => $filebeat_filegroup,
+    mode   => '0400',
+    source => $filebeat_certkey_source,
   }
 
   file { "${filebeat_path_certs}/root-ca.pem":
-    ensure  => file,
-    owner   => $filebeat_fileuser,
-    group   => $filebeat_filegroup,
-    mode    => '0400',
-    source  => $filebeat_node_rootca_source,
+    ensure => file,
+    owner  => $filebeat_fileuser,
+    group  => $filebeat_filegroup,
+    mode   => '0400',
+    source => $filebeat_node_rootca_source,
   }
 
   service { 'filebeat':
