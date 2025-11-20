@@ -1,10 +1,12 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Setup for Filebeat_oss
 class wazuh::filebeat_oss (
+  $filebeat_cert_content,
+  $filebeat_certkey_content,
+  $filebeat_node_rootca_content,
   $filebeat_oss_indexer_ip = '127.0.0.1',
   $filebeat_oss_indexer_port = '9200',
   $indexer_server_ip = "\"${filebeat_oss_indexer_ip}:${filebeat_oss_indexer_port}\"",
-
   $filebeat_oss_archives = false,
   $filebeat_oss_package = 'filebeat',
   $filebeat_oss_service = 'filebeat',
@@ -15,10 +17,6 @@ class wazuh::filebeat_oss (
   $wazuh_extensions_version = 'v5.0.0',
   $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
   $wazuh_node_name = 'master',
-  $filebeat_cert_source = "puppet:///modules/archive/manager-${wazuh_node_name}.pem",
-  $filebeat_certkey_source = "puppet:///modules/archive/manager-${wazuh_node_name}-key.pem",
-  $filebeat_node_rootca_source = 'puppet:///modules/archive/root-ca.pem',
-
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
@@ -93,7 +91,7 @@ class wazuh::filebeat_oss (
     owner   => $filebeat_fileuser,
     group   => $filebeat_filegroup,
     mode    => '0400',
-    source  => $filebeat_cert_source,
+    content => $filebeat_cert_content,
   }
 
   file { "${filebeat_path_certs}/filebeat-key.pem":
@@ -101,7 +99,7 @@ class wazuh::filebeat_oss (
     owner   => $filebeat_fileuser,
     group   => $filebeat_filegroup,
     mode    => '0400',
-    source  => $filebeat_certkey_source,
+    content => $filebeat_certkey_content,
   }
 
   file { "${filebeat_path_certs}/root-ca.pem":
@@ -109,7 +107,7 @@ class wazuh::filebeat_oss (
     owner   => $filebeat_fileuser,
     group   => $filebeat_filegroup,
     mode    => '0400',
-    source  => $filebeat_node_rootca_source,
+    content => $filebeat_node_rootca_content,
   }
 
   service { 'filebeat':

@@ -330,7 +330,7 @@ class wazuh::manager (
   # Install and configure Wazuh-manager package
 
   package { $wazuh::params_manager::server_package:
-    ensure  => $server_version_install, # lint:ignore:security_package_pinned_version
+    ensure => $server_version_install, # lint:ignore:security_package_pinned_version
   }
 
   file {
@@ -344,11 +344,11 @@ class wazuh::manager (
       validate_cmd => $wazuh::params_manager::validate_cmd_conf,
       content      => template($shared_agent_template);
     '/var/ossec/etc/rules/local_rules.xml':
-      content      => template($local_rules_template);
+      content => template($local_rules_template);
     '/var/ossec/etc/decoders/local_decoder.xml':
-      content      => template($local_decoder_template);
+      content => template($local_decoder_template);
     $wazuh::params_manager::processlist_file:
-      content      => template('wazuh/process_list.erb');
+      content => template('wazuh/process_list.erb');
   }
 
   service { $wazuh::params_manager::server_service:

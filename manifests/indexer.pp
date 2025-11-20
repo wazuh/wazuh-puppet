@@ -1,6 +1,12 @@
 # Copyright (C) 2015, Wazuh Inc.
 # Setup for Wazuh Indexer
 class wazuh::indexer (
+  $indexer_node_cert_content,
+  $indexer_node_certkey_content,
+  $indexer_node_rootca_content,
+  $indexer_node_admincert_content,
+  $indexer_node_adminkey_content,
+
   # opensearch.yml configuration
   $indexer_network_host = '0.0.0.0',
   $indexer_cluster_name = 'wazuh-cluster',
@@ -11,12 +17,6 @@ class wazuh::indexer (
   $indexer_version = '5.0.0',
   $indexer_fileuser = 'wazuh-indexer',
   $indexer_filegroup = 'wazuh-indexer',
-
-  $indexer_node_cert_source = "puppet:///modules/archive/indexer-${indexer_node_name}.pem",
-  $indexer_node_certkey_source = "puppet:///modules/archive/indexer-${indexer_node_name}-key.pem",
-  $indexer_node_rootca_source = 'puppet:///modules/archive/root-ca.pem',
-  $indexer_node_admincert_source = 'puppet:///modules/archive/admin.pem',
-  $indexer_node_adminkey_source = 'puppet:///modules/archive/admin-key.pem',
 
   $indexer_path_data = '/var/lib/wazuh-indexer',
   $indexer_path_logs = '/var/log/wazuh-indexer',
@@ -67,7 +67,7 @@ class wazuh::indexer (
     owner   => $indexer_fileuser,
     group   => $indexer_filegroup,
     mode    => '0400',
-    source  => $indexer_node_cert_source,
+    content => $indexer_node_cert_content,
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }
@@ -77,7 +77,7 @@ class wazuh::indexer (
     owner   => $indexer_fileuser,
     group   => $indexer_filegroup,
     mode    => '0400',
-    source  => $indexer_node_certkey_source,
+    content => $indexer_node_certkey_content,
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }
@@ -87,7 +87,7 @@ class wazuh::indexer (
     owner   => $indexer_fileuser,
     group   => $indexer_filegroup,
     mode    => '0400',
-    source  => $indexer_node_rootca_source,
+    content => $indexer_node_rootca_content,
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }
@@ -97,7 +97,7 @@ class wazuh::indexer (
     owner   => $indexer_fileuser,
     group   => $indexer_filegroup,
     mode    => '0400',
-    source  => $indexer_node_admincert_source,
+    content => $indexer_node_admincert_content,
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }
@@ -107,7 +107,7 @@ class wazuh::indexer (
     owner   => $indexer_fileuser,
     group   => $indexer_filegroup,
     mode    => '0400',
-    source  => $indexer_node_adminkey_source,
+    content => $indexer_node_adminkey_content,
     require => Package['wazuh-indexer'],
     notify  => Service['wazuh-indexer'],
   }
