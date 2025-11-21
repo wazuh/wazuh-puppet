@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Fix puppet-lint errors and tidy manifests. Thanks [@pearsondavid](https://github.com/pearsondavid) for [your contribution.](https://github.com/wazuh/wazuh-puppet/pull/1441)
 - Add debian13 support. ([#1450](https://github.com/wazuh/wazuh-puppet/pull/1450))
 - Add Rocky Linux support. ([#1438](https://github.com/wazuh/wazuh-puppet/pull/1438))
 
