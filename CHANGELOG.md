@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- None
+- Add RHEL and Almalinux versions. ([#1510](https://github.com/wazuh/wazuh-puppet/pull/1510))
 
 ### Changed
 
