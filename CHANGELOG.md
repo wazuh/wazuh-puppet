@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- None
+- Filebeat version update ([#1521](https://github.com/wazuh/wazuh-puppet/pull/1521))
 
 ### Fixed
 
