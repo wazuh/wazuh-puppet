@@ -13,7 +13,7 @@ class wazuh::filebeat_oss (
   $filebeat_oss_version = '7.10.2',
   $wazuh_app_version = '5.0.0_7.10.2',
   $wazuh_extensions_version = 'v5.0.0',
-  $wazuh_filebeat_module = 'wazuh-filebeat-0.4.tar.gz',
+  $wazuh_filebeat_module = 'wazuh-filebeat-0.5.tar.gz',
   $wazuh_node_name = 'master',
   $filebeat_cert_source = "puppet:///modules/archive/manager-${wazuh_node_name}.pem",
   $filebeat_certkey_source = "puppet:///modules/archive/manager-${wazuh_node_name}-key.pem",
