@@ -17,6 +17,7 @@ class wazuh::dashboard (
   $dashboard_server_port = '443',
   $dashboard_server_host = '0.0.0.0',
   $dashboard_server_hosts = "https://${indexer_server_ip}:${indexer_server_port}",
+  $wazuh_updates_disabled = false,
 
   # If the keystore is used, the credentials are not managed by the module (TODO).
   # If use_keystore is false, the keystore is deleted, the dashboard use the credentials in the configuration file.
