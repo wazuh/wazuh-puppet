@@ -31,6 +31,7 @@ class wazuh::dashboard (
       'port'     => '55000',
       'user'     => 'wazuh-wui',
       'password' => 'wazuh-wui',
+      'run_as'   => 'true',
     },
   ],
 
