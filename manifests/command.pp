@@ -3,9 +3,10 @@
 define wazuh::command (
   $command_name,
   $command_executable,
-  $command_expect  = 'srcip',
-  $timeout_allowed = true,
-  $target_arg      = 'manager_ossec.conf',
+  $command_extra_args = '',
+  $command_expect     = 'srcip',
+  $timeout_allowed    = true,
+  $target_arg         = 'manager_ossec.conf',
 ) {
   require wazuh::params_manager
 
