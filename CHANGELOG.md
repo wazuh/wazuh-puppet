@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Add revision number ([#1469](https://github.com/wazuh/wazuh-puppet/pull/1469))
 - Fix OpenSearch deprecated settings ([#1372](https://github.com/wazuh/wazuh-puppet/pull/1372))
 
 ### Changed
