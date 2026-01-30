@@ -47,7 +47,7 @@ jobs:
         }
         if compare_versions "{{ env.VERSION }}" -gt "{{ env.WAZUH_VERSION }}"; then
           sed -i 's/packages.wazuh.com/packages-dev.wazuh.com/' manifests/repo.pp
-          sed -i 's/4.x/pre-release/' manifests/repo.pp
+          sed -i 's/5.x/pre-release/' manifests/repo.pp
           sed -i "s/'stable'/'unstable'/" manifests/repo.pp
         fi
 
