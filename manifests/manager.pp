@@ -19,8 +19,6 @@ class wazuh::manager (
   $ossec_email_log_source           = $wazuh::params_manager::ossec_email_log_source,
   $ossec_email_idsname              = $wazuh::params_manager::ossec_email_idsname,
   $ossec_white_list                 = $wazuh::params_manager::ossec_white_list,
-  $ossec_alert_level                = $wazuh::params_manager::ossec_alert_level,
-  $ossec_email_alert_level          = $wazuh::params_manager::ossec_email_alert_level,
   $ossec_remote_connection          = $wazuh::params_manager::ossec_remote_connection,
   $ossec_remote_port                = $wazuh::params_manager::ossec_remote_port,
   $ossec_remote_protocol            = $wazuh::params_manager::ossec_remote_protocol,
@@ -166,13 +164,6 @@ class wazuh::manager (
   $vulnerability_indexer_ssl_ca             = $wazuh::params_manager::vulnerability_indexer_ssl_ca,
   $vulnerability_indexer_ssl_certificate    = $wazuh::params_manager::vulnerability_indexer_ssl_certificate,
   $vulnerability_indexer_ssl_key            = $wazuh::params_manager::vulnerability_indexer_ssl_key,
-
-  # syslog
-  $syslog_output                        = $wazuh::params_manager::syslog_output,
-  $syslog_output_level                  = $wazuh::params_manager::syslog_output_level,
-  $syslog_output_port                   = $wazuh::params_manager::syslog_output_port,
-  $syslog_output_server                 = $wazuh::params_manager::syslog_output_server,
-  $syslog_output_format                 = $wazuh::params_manager::syslog_output_format,
 
   # Authd configuration
   $ossec_auth_disabled                  = $wazuh::params_manager::ossec_auth_disabled,
