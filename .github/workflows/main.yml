@@ -9,7 +9,7 @@ jobs:
   validate-and-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.3.4
+    - uses: actions/checkout@v6
 
     - name: Create enviroment variables
       run: |
@@ -55,7 +55,7 @@ jobs:
       run: pdk build
 
     - name: Create artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: wazuh-module
         path: ./pkg/wazuh-wazuh-${{ env.VERSION }}.tar.gz
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs: validate-and-build
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
 
     - name: Create enviroment variables
       run: |
@@ -79,7 +79,7 @@ jobs:
       uses: ./.github/configure
 
     - name: Retrieve saved Wazuh module
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: wazuh-module
 
@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: validate-and-build
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
 
     - name: Create enviroment variables
       run: |
@@ -112,7 +112,7 @@ jobs:
       uses: ./.github/configure
 
     - name: Retrieve saved Wazuh module
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: wazuh-module
 

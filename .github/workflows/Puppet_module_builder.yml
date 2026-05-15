@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ inputs.wazuh_puppet_reference }}
 
@@ -106,7 +106,7 @@ jobs:
 
 
       - name: Create Puppet module artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Puppet module artifact
           path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}
@@ -114,7 +114,7 @@ jobs:
 
       - name: Create Puppet module checksum artifact
         if: ${{ inputs.checksum == true }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Puppet module checksum artifact
           path: ${{ github.workspace }}/output/${{ env.PUPPET_MODULE_NAME }}.sha512
@@ -122,7 +122,7 @@ jobs:
 
       - name: Configure aws credentials
         if: ${{ inputs.upload == true }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_IAM_PUPPET_ROLE }}
           aws-region: "${{ secrets.AWS_REGION }}"
