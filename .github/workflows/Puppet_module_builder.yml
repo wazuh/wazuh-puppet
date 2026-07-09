@@ -16,6 +16,10 @@ on:
         description: "Checksum ?"
         type: boolean
         default: false
+      revision:
+        description: "Revision ?"
+        type: string
+        default: "1"
       wazuh_puppet_reference:
         description: "wazuh-puppet reference"
         type: string
@@ -39,6 +43,10 @@ on:
         description: "Checksum ?"
         type: boolean
         default: false
+      revision:
+        description: "Revision ?"
+        type: string
+        default: "1"
       wazuh_puppet_reference:
         description: "wazuh-puppet reference"
         type: string
@@ -89,6 +97,14 @@ jobs:
         run: |
             pip install sde
             PUPPET_MODULE_VERSION="${PUPPET_MODULE_VERSION}-${{ env.COMMIT_SHORT_SHA}}"
+            sde version $PUPPET_MODULE_VERSION ${{ github.workspace }}/metadata.json
+            echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
+
+      - name: Modify name for non stage build
+        if: ${{ inputs.is_stage == true }}
+        run: |
+            pip install sde
+            PUPPET_MODULE_VERSION="${PUPPET_MODULE_VERSION}-${{ inputs.revision }}"
             sde version $PUPPET_MODULE_VERSION ${{ github.workspace }}/metadata.json
             echo "PUPPET_MODULE_VERSION=$PUPPET_MODULE_VERSION" >> "$GITHUB_ENV"
 
