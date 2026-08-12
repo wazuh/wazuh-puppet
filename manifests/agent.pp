@@ -292,23 +292,8 @@ class wazuh::agent (
       case $facts['os']['name'] {
         'RedHat', 'OracleLinux', 'Suse':{
           $apply_template_os = 'rhel'
-          if ( $facts['os']['release']['full'] =~ /^10.*/ ) {
-            $rhel_version = '10'
-          }
-          elsif ( $facts['os']['release']['full'] =~ /^9.*/ ) {
-            $rhel_version = '9'
-          }
-          elsif ( $facts['os']['release']['full'] =~ /^8.*/ ) {
-            $rhel_version = '8'
-          }
-          elsif ( $facts['os']['release']['full'] =~ /^7.*/ ) {
-            $rhel_version = '7'
-          }
-          elsif ( $facts['os']['release']['full'] =~ /^6.*/ ) {
-            $rhel_version = '6'
-          }
-          elsif ( $facts['os']['release']['full'] =~ /^5.*/ ) {
-            $rhel_version = '5'
+          if ( $facts['os']['release']['full'] =~ /^(10|[5-9]).*/ ) {
+            $rhel_version = $1
           }
           else {
             fail('This ossec module has not been tested on your distribution')
@@ -326,14 +311,8 @@ class wazuh::agent (
           $apply_template_os = 'suse'
         } 'Rocky':{
           $apply_template_os = 'rhel'
-          if ( $facts['os']['release']['full'] =~ /^10.*/ ) {
-            $rhel_version = '10'
-          }
-          elsif ( $facts['os']['release']['full'] =~ /^9.*/ ) {
-            $rhel_version = '9'
-          }
-          elsif ( $facts['os']['release']['full'] =~ /^8.*/ ) {
-            $rhel_version = '8'
+          if ( $facts['os']['release']['full'] =~ /^(10|[8-9]).*/ ) {
+            $rhel_version = $1
           }
         }
         default: { fail('OS not supported') }
