@@ -25,6 +25,11 @@ class wazuh::manager (
   $ossec_remote_local_ip            = $wazuh::params_manager::ossec_remote_local_ip,
   $ossec_remote_allowed_ips         = $wazuh::params_manager::ossec_remote_allowed_ips,
   $ossec_remote_queue_size          = $wazuh::params_manager::ossec_remote_queue_size,
+  $syslog_output                    = $wazuh::params_manager::syslog_output,
+  $syslog_output_level              = $wazuh::params_manager::syslog_output_level,
+  $syslog_output_port               = $wazuh::params_manager::syslog_output_port,
+  $syslog_output_server             = $wazuh::params_manager::syslog_output_server,
+  $syslog_output_format             = $wazuh::params_manager::syslog_output_format,
 
   # ossec.conf generation parameters
   $configure_rootcheck                  = $wazuh::params_manager::configure_rootcheck,

@@ -382,6 +382,9 @@ class wazuh::params_agent {
                   },
                 }
               }
+              if ( $facts['os']['release']['full'] =~ /^(8|9|10).*/ ) {
+                $ossec_service_provider = 'systemd'
+              }
             }
             /^(RedHat|OracleLinux)$/: {
               if ( $facts['os']['release']['full'] =~ /^6.*/ ) {
