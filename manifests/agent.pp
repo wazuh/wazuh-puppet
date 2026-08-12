@@ -292,7 +292,10 @@ class wazuh::agent (
       case $facts['os']['name'] {
         'RedHat', 'OracleLinux', 'Suse':{
           $apply_template_os = 'rhel'
-          if ( $facts['os']['release']['full'] =~ /^9.*/ ) {
+          if ( $facts['os']['release']['full'] =~ /^10.*/ ) {
+            $rhel_version = '10'
+          }
+          elsif ( $facts['os']['release']['full'] =~ /^9.*/ ) {
             $rhel_version = '9'
           }
           elsif ( $facts['os']['release']['full'] =~ /^8.*/ ) {

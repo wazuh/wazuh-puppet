@@ -1,0 +1,15 @@
+
+<syslog_output>
+  <% if @syslog_output_server -%>
+  <server><%= @syslog_output_server %></server>
+  <%- end -%>
+  <% if @syslog_output_port -%>
+  <port><%= @syslog_output_port %></port>
+  <%- end -%>
+  <% if @syslog_output_level -%>
+  <level><%= @syslog_output_level %></level>
+  <%- end -%>
+  <% if @syslog_output_format -%>
+  <format><%= @syslog_output_format %></format>
+  <%- end -%>
+</syslog_output>

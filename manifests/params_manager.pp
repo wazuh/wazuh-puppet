@@ -169,6 +169,12 @@ class wazuh::params_manager {
       $vulnerability_indexer_ssl_certificate           = '/etc/filebeat/certs/filebeat.pem'
       $vulnerability_indexer_ssl_key                   = '/etc/filebeat/certs/filebeat-key.pem'
 
+      $syslog_output                                   = false
+      $syslog_output_level                             = 2
+      $syslog_output_port                              = 514
+      $syslog_output_server                            = undef
+      $syslog_output_format                            = undef
+
       # Authd configuration
 
       $ossec_auth_disabled                             = 'no'
