@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Report skipped bumps in the repository bumper workflow ([#1671](https://github.com/wazuh/wazuh-puppet/issues/1671))
 
 ### Deleted
 
