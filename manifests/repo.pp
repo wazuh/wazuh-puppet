@@ -68,6 +68,16 @@ class wazuh::repo (
         path        => ['/bin', '/usr/bin'],
         require     => Concat['/etc/apt/sources.list.d/wazuh.list'],
       }
+
+      # Make sure the repository is configured and apt-get update has run before
+      # any Wazuh component package is installed. Scoped by class tag: tagging by
+      # 'wazuh' or 'repo' would also match the packages declared in this class
+      # (apt-transport-https, gnupg, gpg) and create a dependency cycle.
+      Class['wazuh::repo'] -> Package <| tag == 'wazuh::agent'
+        or tag == 'wazuh::manager'
+        or tag == 'wazuh::indexer'
+        or tag == 'wazuh::dashboard'
+        or tag == 'wazuh::filebeat_oss' |>
     }
     'Linux', 'RedHat', 'Suse' : {
       case $facts['os'][name] {
