@@ -110,4 +110,15 @@ class wazuh::repo (
     }
     default: { fail('This ossec module has not been tested on your Operating System)') }
   }
+
+  # Make sure the repository is configured (and, on Debian, apt-get update has
+  # run) before any Wazuh component package is installed, whatever the order in
+  # which the classes are declared. Scoped by class tag: tagging by 'wazuh' or
+  # 'repo' would also match the packages declared in this class
+  # (apt-transport-https, gnupg, gpg) and create a dependency cycle.
+  Class['wazuh::repo'] -> Package <| tag == 'wazuh::agent'
+    or tag == 'wazuh::manager'
+    or tag == 'wazuh::indexer'
+    or tag == 'wazuh::dashboard'
+    or tag == 'wazuh::filebeat_oss' |>
 }

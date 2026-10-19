@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Fix `Unable to locate package` on the first run on Debian/Ubuntu when `wazuh::repo` and a Wazuh component class are declared without stages ([#1713](https://github.com/wazuh/wazuh-puppet/issues/1713))
 
 ### Deleted
 
