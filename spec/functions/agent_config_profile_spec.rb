@@ -4,6 +4,7 @@ describe 'wazuh::agent_config_profile' do
   {
     ['Ubuntu', '22.04']       => 'ubuntu, ubuntu22, ubuntu22.04',
     ['Ubuntu', '24.04']       => 'ubuntu, ubuntu24, ubuntu24.04',
+    ['Ubuntu', '26.04']       => 'ubuntu, ubuntu26, ubuntu26.04',
     ['RedHat', '9.7']         => 'rhel, rhel9, rhel9.7',
     ['RedHat', '9.0']         => 'rhel, rhel9',
     ['RedHat', '9.8']         => 'rhel, rhel9, rhel9.8',
