@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- None
+- Fix the agent `<config-profile>` in `ossec.conf`: it is now calculated from the OS facts like the Wazuh agent package does, instead of the fixed Ubuntu 18.04/CentOS 7.6 values, and it is also written on RedHat, Rocky, AlmaLinux, Oracle Linux, Amazon, Debian and others. `ossec_config_ubuntu_profiles` and `ossec_config_centos_profiles` now default to `undef` and only override the calculated value when set ([#1718](https://github.com/wazuh/wazuh-puppet/issues/1718))
 
 ### Deleted
 
