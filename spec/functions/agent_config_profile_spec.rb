@@ -30,6 +30,11 @@ describe 'wazuh::agent_config_profile' do
     it { is_expected.to run.with_params('Debian', '11.11', '11').and_return('debian, debian11') }
   end
 
+  context 'without the OS version' do
+    it { is_expected.to run.with_params('Ubuntu').and_return('ubuntu') }
+    it { is_expected.to run.with_params('Ubuntu', :undef).and_return('ubuntu') }
+  end
+
   context 'with os_name undef' do
     it { is_expected.to run.with_params(:undef).and_return(nil) }
   end
