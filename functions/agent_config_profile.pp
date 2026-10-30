@@ -1,8 +1,11 @@
 # Copyright (C) 2015, Wazuh Inc.
 
-# Builds the <config-profile> value the same way the Wazuh agent package does
-# (src/init/inst-functions.sh): the os-release ID, then the major version and,
-# unless it is absent or "0", the major.minor version. Returns undef on Windows.
+# Builds the <config-profile> value the same way the Wazuh agent package does.
+# The package takes the OS name and version from /etc/os-release
+# (src/init/dist-detect.sh, RPM) or from lsb_release (DEB postinst), gen_ossec.sh
+# splits them, and inst-functions.sh formats the value: the name, then the major
+# version and, unless it is absent or "0", the major.minor version.
+# Returns undef on Windows.
 function wazuh::agent_config_profile(
   Optional[String] $os_name,
   Optional[String] $os_full  = undef,
@@ -24,7 +27,7 @@ function wazuh::agent_config_profile(
     default       => $lower_name,
   }
 
-  # Debian: lsb_release -sr, que usa el paquete, devuelve solo la mayor
+  # Debian: the package uses lsb_release -sr, which returns the major version only
   $version = ($lower_name == 'debian' and $os_major =~ String[1]) ? {
     true    => $os_major,
     default => $os_full,
