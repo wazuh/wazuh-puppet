@@ -61,8 +61,8 @@ class wazuh::agent (
   $ossec_protocol                    = $wazuh::params_agent::ossec_protocol,
   $wazuh_max_retries                 = $wazuh::params_agent::wazuh_max_retries,
   $wazuh_retry_interval              = $wazuh::params_agent::wazuh_retry_interval,
-  $ossec_config_ubuntu_profiles      = $wazuh::params_agent::ossec_config_ubuntu_profiles,
-  $ossec_config_centos_profiles      = $wazuh::params_agent::ossec_config_centos_profiles,
+  Optional[String] $ossec_config_ubuntu_profiles = $wazuh::params_agent::ossec_config_ubuntu_profiles,
+  Optional[String] $ossec_config_centos_profiles = $wazuh::params_agent::ossec_config_centos_profiles,
   $ossec_notify_time                 = $wazuh::params_agent::ossec_notify_time,
   $ossec_time_reconnect              = $wazuh::params_agent::ossec_time_reconnect,
   $ossec_auto_restart                = $wazuh::params_agent::ossec_auto_restart,
@@ -236,6 +236,18 @@ class wazuh::agent (
   # Logging
   $logging_log_format                = $wazuh::params_agent::logging_log_format,
 ) inherits wazuh::params_agent {
+  $calculated_config_profile = wazuh::agent_config_profile(
+    $facts.dig('os', 'name'),
+    $facts.dig('os', 'release', 'full'),
+    $facts.dig('os', 'release', 'major'),
+  )
+
+  $ossec_config_profile = $facts.dig('os', 'name') ? {
+    'Ubuntu' => pick_default($ossec_config_ubuntu_profiles, $calculated_config_profile),
+    'CentOS' => pick_default($ossec_config_centos_profiles, $calculated_config_profile),
+    default  => $calculated_config_profile,
+  }
+
   if (( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' )) {
     class { 'wazuh::audit':
       audit_manage_rules      => $audit_manage_rules,

@@ -62,8 +62,8 @@ class wazuh::params_agent {
   $ossec_protocol = 'tcp'
   $wazuh_max_retries = '5'
   $wazuh_retry_interval = '5'
-  $ossec_config_ubuntu_profiles = 'ubuntu, ubuntu18, ubuntu18.04'
-  $ossec_config_centos_profiles = 'centos, centos7, centos7.6'
+  $ossec_config_ubuntu_profiles = undef
+  $ossec_config_centos_profiles = undef
   $ossec_notify_time = 10
   $ossec_time_reconnect = 60
   $ossec_auto_restart = 'yes'
