@@ -386,7 +386,7 @@ class wazuh::params_manager {
                 },
               }
             }
-            /^(wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy|noble)$/: {
+            /^(wheezy|stretch|buster|bullseye|bookworm|trixie|sid|precise|trusty|vivid|wily|xenial|bionic|focal|groovy|jammy|noble|resolute)$/: {
               $server_service = 'wazuh-manager'
               $server_package = 'wazuh-manager'
               $wodle_openscap_content = undef
